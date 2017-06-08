@@ -1,0 +1,22 @@
+{
+  "name": "nti-project-scripts",
+  "version": "1.0.0-alpha",
+  "description": "Common tasks and project management",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+  },
+  "keywords": [
+    "release"
+  ],
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "bugs": {
+    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+  },
+  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme"
+}

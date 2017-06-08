@@ -1,0 +1,24 @@
+{
+  "name": "nti-lib-scripts",
+  "version": "1.0.0-alpha",
+  "description": "library scripts & dependencies",
+  "bin": {
+    "nti-lib-scripts": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+  },
+  "keywords": [
+    "release"
+  ],
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "bugs": {
+    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+  },
+  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme"
+}
