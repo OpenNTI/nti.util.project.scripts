@@ -20,5 +20,31 @@
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
   },
-  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme"
+  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+  "dependencies": {
+    "autoprefixer": "^7.1.1",
+    "babel-loader": "^7.0.0",
+    "babel-plugin-transform-runtime": "^6.1.0",
+    "babel-preset-react": "^6.1.0",
+    "baggage-loader": "^0.3.0",
+    "css-loader": "0.x.x",
+    "eslint-config-nti-codestyle-jsx": "^1.0.0",
+    "extract-text-webpack-plugin": "^2.0.0",
+    "file-loader": "^0.11.0",
+    "node-sass": "^4.0.0",
+    "normalize.css": "^7.0.0",
+    "nti-lib-scripts": "alpha",
+    "nti-web-service": "^1.5.0",
+    "null-loader": "^0.1.1",
+    "postcss-loader": "^2.0.3",
+    "react-proxy-loader": "github:jsg2021/react-proxy-loader#react-15.5",
+    "resolve-url-loader": "^2.0.0",
+    "sass-loader": "^6.0.0",
+    "source-map-loader": "^0.2.1",
+    "stats-webpack-plugin": "^0.6.0",
+    "style-loader": "0.x.x",
+    "url-loader": "^0.5.6",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "^2.2.1"
+  }
 }

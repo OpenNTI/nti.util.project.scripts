@@ -1,0 +1,83 @@
+'use strict';
+
+const path = require('path');
+const fs = require('fs');
+const url = require('url');
+
+// Make sure any symlinks in the project folder are resolved:
+// https://github.com/facebookincubator/create-react-app/issues/637
+const appDirectory = fs.realpathSync(process.cwd());
+function resolveApp (relativePath) {
+	return path.resolve(appDirectory, relativePath);
+}
+
+// We support resolving modules according to `NODE_PATH`.
+// This lets you use absolute paths in imports inside large monorepos:
+// https://github.com/facebookincubator/create-react-app/issues/253.
+
+// It works similar to `NODE_PATH` in Node itself:
+// https://nodejs.org/api/modules.html#modules_loading_from_the_global_folders
+
+// We will export `nodePaths` as an array of absolute paths.
+// It will then be used by Webpack configs.
+// Jest doesn’t need this because it already handles `NODE_PATH` out of the box.
+
+// Note that unlike in Node, only *relative* paths from `NODE_PATH` are honored.
+// Otherwise, we risk importing Node.js core modules into an app instead of Webpack shims.
+// https://github.com/facebookincubator/create-react-app/issues/1023#issuecomment-265344421
+
+const nodePaths = (process.env.NODE_PATH || '')
+					.split(process.platform === 'win32' ? ';' : ':')
+					.filter(Boolean)
+					.filter(folder => !path.isAbsolute(folder))
+					.map(resolveApp);
+
+// const ownPackageJson = require('../package.json');
+// const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
+// const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
+
+const envPublicUrl = process.env.PUBLIC_URL;
+
+//eslint-disable-next-line no-shadow
+function ensureSlash (path, needsSlash) {
+	const hasSlash = path.endsWith('/');
+	if (hasSlash && !needsSlash) {
+		return path.substr(path, path.length - 1);
+	} else if (!hasSlash && needsSlash) {
+		return `${path}/`;
+	} else {
+		return path;
+	}
+}
+
+
+function getPublicUrl (packageJson) {
+	return envPublicUrl || require(packageJson).homepage;
+}
+
+function getServedPath (packageJson) {
+	const publicUrl = getPublicUrl(packageJson);
+	const servedUrl = envPublicUrl ||
+	(publicUrl ? url.parse(publicUrl).pathname : '/');
+	return ensureSlash(servedUrl, true);
+}
+
+function resolveOwn (relativePath) {
+	return path.resolve(__dirname, '..', relativePath);
+}
+
+// config: we're in ./node_modules/{ownPackageJson.name}/config/
+module.exports = {
+	path: resolveApp('.'),
+	packageJson: resolveApp('package.json'),
+	src: resolveApp('src'),
+	pacakgeLock: resolveApp('package-lock.json'),
+	testsSetup: resolveApp('src/__test__/setup.js'),
+	nodeModules: resolveApp('node_modules'),
+
+	nodePaths: nodePaths,
+	publicUrl: getPublicUrl(resolveApp('package.json')),
+	servedPath: getServedPath(resolveApp('package.json')),
+
+	ownPath: resolveOwn('.'),
+};

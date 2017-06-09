@@ -3,9 +3,26 @@
 		"nti-codestyle-js"
 	],
 
+	"parser": "esprima",
+
+	"parserOptions": {
+		"ecmaVersion": "ES2017",
+		"sourceType": "script",
+		"ecmaFeatures": {
+			"impliedStrict": false
+		}
+	},
+
 	"env": {
 		"es6": true,
 		"node": true,
-		"browser": false,
+		"browser": false
+	},
+
+	"rules": {
+		"import/no-unresolved": 0,
+		"import/order": 0,
+		"no-console": 0,
+		"strict": ["error", "global"]
 	}
 }
