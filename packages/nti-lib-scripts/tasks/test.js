@@ -17,7 +17,9 @@ process.env.JEST_JUNIT_OUTPUT = 'reports/test-results/index.xml';
 // terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', err => { throw err; });
 
-const argv = process.argv.slice(2);
+const isTestTask = process.argv[1] === module.filename;
+
+const argv = isTestTask ? process.argv.slice(2) : [];
 
 // // Watch unless on CI or in coverage mode
 // if (!process.env.CI && argv.indexOf('--coverage') < 0) {

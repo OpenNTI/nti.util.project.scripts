@@ -6,7 +6,7 @@ const script = process.argv[2];
 const args = process.argv.slice(3);
 
 
-if (!['test', 'build'].includes(script)) {
+if (!['build', 'check', 'init', 'release', 'test'].includes(script)) {
 	console.log('Unknown task "' + script + '".');
 	process.exit(1);
 }

@@ -1,23 +1,41 @@
-/*
-LIB = lib
+'use strict';
+const path = require('path');
 
-all: node_modules lib
+const chalk = require('chalk');
+const spawn = require('cross-spawn');
+const fs = require('fs-extra');
+const rollup = require('rollup');
 
-node_modules: package.json
-	@rm -rf node_modules
-	@npm install
-	@touch node_modules
+const paths = require('../config/paths');
+const {outputs, config} = require('../config/rollup.config');
 
-check: node_modules
-	@eslint --ext .js,.jsx ./src
+process.on('unhandledRejection', err => {
+	if (err.message === 'Warnings or errors were found') {
+		console.log(chalk.red(err.message));
+	} else {
+		console.error(chalk.red(err.stack));
+	}
+	process.exit(1);
+});
 
-test: clean check
-	@jest --coverage
 
-clean:
-	@rm -rf $(LIB)
-	@rm -rf $(REPORTS)
+const result = spawn.sync('node', [require.resolve('./test')], { stdio: 'inherit' });
+if (result.status) {
+	process.exit(result.status);
+}
 
-lib: clean
-	@rollup -c
- */
+//Blank out lib
+fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+
+rollup
+	.rollup(config)
+	.then(bundle =>
+		Promise.all(
+			outputs.map(o =>
+				bundle.write({
+					format: o.format,
+					dest: o.dest,
+					sourceMap: true
+				})
+			)))
+	.then(() => console.log(chalk.green('\nDone.\n\n')));

@@ -3,15 +3,6 @@
 		"nti-codestyle-js"
 	],
 
-	"globals": {
-		"expect": true,
-		"fetch": true,
-		"FormData": true,
-		"File": true,
-		"Blob": true,
-		"URLSearchParams": true
-	},
-
 	"env": {
 		"es6": true,
 		"node": true,
