@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs-extra');
 const paths = require('../config/paths');
+const call = require('./utils/call-cmd');
 const readPackageJson = require('./utils/read-package-json');
 const writePackageJson = require('./utils/write-package-json');
 
@@ -54,10 +55,13 @@ for (let file of ToCopy) {
 
 //Remove rollup.config.js, karma.config.js, Makefile
 //Remove './test' dir
-const ToRemove = ['rollup.config.js', 'karma.config.js', 'Makefile', 'test'];
+const ToRemove = ['rollup.config.js', 'karma.config.js', 'Makefile', 'test', 'package-lock.json', 'node_modules'];
 write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
 for (let file of ToRemove) {
 	fs.removeSync(path.resolve(paths.path, file));
 }
+
+write(`Regenerate: ${chalk.magenta('package-lock.json', 'node_modules')}...`);
+call('npm', ['install']);
 
 write('Done.');

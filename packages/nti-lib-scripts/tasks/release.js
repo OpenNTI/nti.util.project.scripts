@@ -1,11 +1,10 @@
 'use strict';
 const chalk = require('chalk');
-const spawn = require('cross-spawn');
 const gitState = require('git-state');
 const semver = require('semver');
 const paths = require('../config/paths');
+const call = require('./utils/call-cmd');
 
-const STDIO = { stdio: 'inherit' };
 const tasks = ['check', 'test'];
 const DATE = new Date().toString();
 
@@ -14,13 +13,6 @@ const pkg = require(paths.packageJson);
 const major = process.argv.includes('--major');
 
 const write = (x) => console.log(x);
-
-function call (cmd, args, opts = STDIO) {
-	const result = spawn.sync(cmd, args, opts);
-	if (result.status) {
-		process.exit(result.status);
-	}
-}
 
 if (!gitState.isGitSync(paths.path)) {
 	write('\n\n' + chalk.red(chalk.underline(paths.path) + ' is not a git repository.') + '\n\n');
