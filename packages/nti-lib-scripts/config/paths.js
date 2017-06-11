@@ -70,14 +70,15 @@ function resolveOwn (relativePath) {
 module.exports = {
 	path: resolveApp('.'),
 	packageJson: resolveApp('package.json'),
-	src: resolveApp('src'),
 	pacakgeLock: resolveApp('package-lock.json'),
-	testsSetup: resolveApp('src/__test__/setup.js'),
 	nodeModules: resolveApp('node_modules'),
+	src: resolveApp('src'),
+	testsSetup: resolveApp('src/__test__/setup.js'),
 
 	nodePaths: nodePaths,
 	publicUrl: getPublicUrl(resolveApp('package.json')),
 	servedPath: getServedPath(resolveApp('package.json')),
 
 	ownPath: resolveOwn('.'),
+	ownPackageJson: resolveOwn('package.json'),
 };
