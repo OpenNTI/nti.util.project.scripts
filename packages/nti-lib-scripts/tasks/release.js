@@ -78,7 +78,7 @@ if (branch === 'master') {
 
 write(chalk.cyan(`\n${chalk.underline('Pushing')} changes to remote...`));
 call('git', ['push']);
-call('git', ['push', 'tag', newTag]);
+call('git', ['push', 'origin', 'tag', newTag]);
 
 
 write('\n');
