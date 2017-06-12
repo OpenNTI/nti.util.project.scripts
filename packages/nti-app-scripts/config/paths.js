@@ -41,8 +41,16 @@ function resolveOwn (relativePath) {
 
 
 module.exports = Object.assign({}, paths, {
+	appModules: paths.resolveApp('src/main/js'),
+	appHtml: paths.resolveApp('src/main/page.html'),
+	appIndexJs: paths.resolveApp('src/main/js/index.js'),
 	publicUrl: getPublicUrl(paths.resolveApp('package.json')),
 	servedPath: getServedPath(paths.resolveApp('package.json')),
+
+	SRC_SERVER: resolveOwn('server'),
+	DIST_CLIENT: paths.resolveApp('dist/client'),
+	DIST_SERVER: paths.resolveApp('dist/server'),
+	PAGE: paths.resolveApp('dist/client/page.html'),
 
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
