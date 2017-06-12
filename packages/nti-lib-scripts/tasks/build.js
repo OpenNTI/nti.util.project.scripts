@@ -7,7 +7,7 @@ const fs = require('fs-extra');
 const rollup = require('rollup');
 
 const paths = require('../config/paths');
-const {outputs, config} = require('../config/rollup.config');
+const {outputs, config} = require('../config/rollup');
 
 process.on('unhandledRejection', err => {
 	if (err.message === 'Warnings or errors were found') {
