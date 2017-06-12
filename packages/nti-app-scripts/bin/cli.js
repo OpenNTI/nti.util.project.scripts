@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+require('nti-lib-scripts/bin/validate-env');
 
 const spawn = require('cross-spawn');
 const script = process.argv[2];
