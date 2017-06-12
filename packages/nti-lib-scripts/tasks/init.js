@@ -78,7 +78,7 @@ for (let file of ToCopy) {
 	const cur = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files', file);
 
 	fs.copySync(
-		fs.existsSync(lib) ? lib : cur,
+		fs.existsSync(cur) ? cur : lib,
 		path.resolve(paths.path, file)
 	);
 }
