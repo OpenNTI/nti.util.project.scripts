@@ -1,9 +1,12 @@
 'use strict';
+const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const StatsPlugin = require('stats-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const gitRevision = JSON.stringify(require('nti-util-git-rev'));
+const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
 const paths = require('./paths');
 
@@ -28,27 +31,49 @@ const NTI_PACKAGES = Object.assign(new RegExp(''), {
 
 
 exports = module.exports = {
+	bail: PROD,
 	entry: {
-		index: paths.appIndexJs
+		index: [require.resolve('./polyfills'), paths.appIndexJs]
 	},
 	output: {
 		path: paths.DIST_CLIENT,
-		filename: 'js/[name]-[chunkhash].js',
-		publicPath: '/'
+		filename: 'js/[name]-[chunkhash:8].js',
+		chunkFilename: 'static/js/[name].chunk.[chunkhash:8].js',
+		publicPath: '/',
+		// Point sourcemap entries to original disk location
+		devtoolModuleFilenameTemplate: info => path.relative(paths.src, info.absoluteResourcePath),
 	},
 
-	cache: true,
+	cache: !PROD,
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
 	target: 'web',
 
 	resolve: {
 		modules: [
+			'node_modules',
+			// paths.nodeModules,
 			paths.appModules,
 			paths.resolveApp('src/main/resources/scss'),
-			paths.nodeModules
 		],
-		extensions: ['.jsx', '.js']
+		extensions: ['.jsx', '.js'],
+		alias: {
+			// Resolve Babel runtime relative to app-scripts.
+			// It usually still works on npm 3 without this but it would be
+			// unfortunate to rely on, as app-scripts could be symlinked,
+			// and thus babel-runtime might not be resolvable from the source.
+			'babel-runtime': path.dirname(
+				require.resolve('babel-runtime/package.json')
+			),
+
+			'core-js':path.dirname(
+				require.resolve('core-js/package.json')
+			),
+
+			// Support React Native Web
+			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
+			'react-native': 'react-native-web',
+		},
 	},
 
 	node: {
@@ -63,11 +88,30 @@ exports = module.exports = {
 	],
 
 	module: {
+		strictExportPresence: true,
 		rules: [
+			// First, run the linter.
+			// It's important to do this before Babel processes the JS.
+			{
+				test: /\.(js|jsx)$/,
+				enforce: 'pre',
+				use: [
+					{
+						options: {
+							formatter: eslintFormatter,
+							ignore: false
+						},
+						loader: require.resolve('eslint-loader'),
+					},
+				],
+				include: paths.appModules,
+			},
+
+
 			{
 				test: /\.jsx?$/,
 				enforce: 'pre',
-				loader: 'baggage-loader',
+				loader: require.resolve('baggage-loader'),
 				options: {
 					'[file].scss':{}
 				}
@@ -75,20 +119,20 @@ exports = module.exports = {
 			{
 				test: /\.jsx?$/,
 				enforce: 'pre',
-				loader: 'source-map-loader'
+				loader: require.resolve('source-map-loader')
 			},
 			{
 				test: /\.async\.jsx?$/,
-				loader: 'react-proxy-loader'
+				loader: require.resolve('react-proxy-loader')
 			},
 			{
 				test: /\.jsx?$/,
-				include: paths.src,
-				loader: 'babel-loader'
+				include: [paths.src],
+				loader: require.resolve('babel-loader')
 			},
 			{
 				test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
-				loader: 'url-loader',
+				loader: require.resolve('url-loader'),
 				options: {
 					limit: 50,
 					name: 'resources/images/[hash].[ext]',
@@ -97,7 +141,7 @@ exports = module.exports = {
 			},
 			{
 				test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
-				loader: 'file-loader',
+				loader: require.resolve('file-loader'),
 				options: {
 					name: 'resources/fonts/[hash].[ext]'
 				}
@@ -106,16 +150,16 @@ exports = module.exports = {
 			{
 				test: /\.(s?)css$/,
 				use: ExtractTextPlugin.extract({
-					fallback: 'style-loader',
+					fallback: require.resolve('style-loader'),
 					use: [
 						{
-							loader: 'css-loader',
+							loader: require.resolve('css-loader'),
 							options: {
 								sourceMap: true
 							}
 						},
 						{
-							loader: 'postcss-loader',
+							loader: require.resolve('postcss-loader'),
 							options: {
 								sourceMap: true,
 								plugins: () => [
@@ -124,10 +168,10 @@ exports = module.exports = {
 							}
 						},
 						{
-							loader: 'resolve-url-loader'
+							loader: require.resolve('resolve-url-loader')
 						},
 						{
-							loader: 'sass-loader',
+							loader: require.resolve('sass-loader'),
 							options: {
 								sourceMap: true
 							}
@@ -168,9 +212,19 @@ exports = module.exports = {
 
 		PROD && new webpack.optimize.UglifyJsPlugin({
 			compress: { warnings: false },
+			output: {
+				comments: false,
+			},
 			sourceMap: true,
-			test: /\.js(x?)($|\?)/i
-		})
+			test: /\.js(x?)($|\?)/i,
+		}),
 
+		// Moment.js is an extremely popular library that bundles large locale files
+		// by default due to how Webpack interprets its code. This is a practical
+		// solution that requires the user to opt into importing specific locales.
+		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
+		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+		PROD && new CompressionPlugin(),
 	].filter(x => x)
 };
