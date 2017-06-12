@@ -42,6 +42,8 @@ function resolveOwn (relativePath) {
 
 // config: we're in ./node_modules/{ownPackageJson.name}/config/
 module.exports = {
+	resolveApp,
+
 	path: resolveApp('.'),
 	packageJson: resolveApp('package.json'),
 	pacakgeLock: resolveApp('package-lock.json'),

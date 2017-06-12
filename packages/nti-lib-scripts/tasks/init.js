@@ -12,8 +12,14 @@ const currentScriptsPaths = require(path.resolve(path.dirname(process.argv[1]), 
 const {json: pkg, indent} = readPackageJson();
 const {json: libPkg} = readPackageJson(paths.ownPackageJson);
 const {json: ownPkg} = readPackageJson(currentScriptsPaths.ownPackageJson);
-const dropDeps = ['babel-register', ...Object.keys(Object.assign({}, libPkg.dependencies, ownPkg.dependencies))];
 const scriptPackageName = ownPkg.name;
+const combindedDeps = Object.assign({}, libPkg.dependencies, ownPkg.dependencies);
+const dropDeps = [
+	'babel-register',
+	'json-loader',
+	...Object.keys(combindedDeps)
+];
+
 
 const write = x => console.log(chalk.cyan('\n' + x));
 
@@ -25,7 +31,15 @@ pkg.devDependencies[scriptPackageName] = '^' + ownPkg.version;
 for (let dep of dropDeps) {
 	delete pkg.devDependencies[dep];
 }
-// 3) remove jest, jest-junit keys.
+//keep keys sorted
+let sorted = {};
+for (let dep of Object.keys(pkg.devDependencies).sort()) {
+	sorted[dep] = pkg.devDependencies[dep];
+}
+pkg.devDependencies = sorted;
+
+// 3) remove jest, jest-junit, and other outdated keys
+delete pkg['engines'];
 delete pkg['jest'];
 delete pkg['jest-junit'];
 
@@ -78,9 +92,8 @@ const ToRemove = [
 	'test',
 	'release.sh',
 	'snapshot.sh',
-	...(global.NTI_INIT_TO_REMOVE || []),
-	'package-lock.json',
-	'node_modules',
+	'pre-commit.sample',
+	...(global.NTI_INIT_TO_REMOVE || [])
 ];
 write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
 for (let file of ToRemove) {
@@ -88,6 +101,8 @@ for (let file of ToRemove) {
 }
 
 write(`Regenerate: ${chalk.magenta('package-lock.json', 'node_modules')}...`);
-call('npm', ['install', '--no-progress'], {stdio: null});
+fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
+fs.removeSync(path.resolve(paths.path, 'node_modules'));
+call('npm', ['install', '--no-progress'], {stdio: null}, true);
 
 write('Done.');

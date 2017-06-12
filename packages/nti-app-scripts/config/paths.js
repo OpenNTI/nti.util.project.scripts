@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
 const url = require('url');
 
 const paths = require('nti-lib-scripts/config/paths');
@@ -42,8 +41,8 @@ function resolveOwn (relativePath) {
 
 
 module.exports = Object.assign({}, paths, {
-	publicUrl: getPublicUrl(resolveApp('package.json')),
-	servedPath: getServedPath(resolveApp('package.json')),
+	publicUrl: getPublicUrl(paths.resolveApp('package.json')),
+	servedPath: getServedPath(paths.resolveApp('package.json')),
 
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
