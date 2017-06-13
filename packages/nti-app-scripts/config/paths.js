@@ -41,6 +41,7 @@ function resolveOwn (relativePath) {
 
 
 module.exports = Object.assign({}, paths, {
+	assetsRoot: paths.resolveApp('src/main'),
 	appModules: paths.resolveApp('src/main/js'),
 	appHtml: paths.resolveApp('src/main/page.html'),
 	appIndexJs: paths.resolveApp('src/main/js/index.js'),
@@ -51,6 +52,9 @@ module.exports = Object.assign({}, paths, {
 	DIST_CLIENT: paths.resolveApp('dist/client'),
 	DIST_SERVER: paths.resolveApp('dist/server'),
 	PAGE: paths.resolveApp('dist/client/page.html'),
+
+	serverComponent: resolveOwn('server'),
+	baseConfig: resolveOwn('server/config/env.json'),
 
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),

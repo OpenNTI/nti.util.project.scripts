@@ -2,13 +2,12 @@
 'use strict';
 const {worker} = require('cluster');
 
-const logger = require('./logger');
-
 const first = x => Array.isArray(x) ? x[0] : x;
 
 exports.setupDeveloperMode = function setupDeveloperMode (config) {
 	const webpack = require('webpack');
-	const webpackConfigFile = require('../../../webpack.config');
+	const paths = require('../../config/paths');
+	const webpackConfigFile = require('../../config/webpack.config');
 
 	const WebpackServer = require('webpack-dev-server');
 
@@ -21,7 +20,9 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 	webpackConfig.output.publicPath = config.basepath;
 	webpackConfig.output.filename = 'js/[name].js';
 
-	const webpackServer = new WebpackServer(webpack(webpackConfig), {
+	const compiler = webpack(webpackConfig);
+
+	const webpackServer = new WebpackServer(compiler, {
 		//hot: true,
 		proxy: {
 			'*': '//localhost:' + port
@@ -66,14 +67,14 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 		start: () => {
 			webpackServer.listen(devPort, 'localhost', err => {
 				if (err) {
-					logger.error(err);
+					console.error(err);
 				}
 
-				logger.info('WebPack Dev Server Started');
+				console.info('WebPack Dev Server Started');
 			});
 
 			worker.on('disconnect', () => {
-				logger.info('Shutting down Webpack Dev Server');
+				console.info('Shutting down Webpack Dev Server');
 				webpackServer.close();
 			});
 		}
