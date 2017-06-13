@@ -1,13 +1,10 @@
 'use strict';
 
-const spawn = require('cross-spawn');
-
 const paths = require('../config/paths');
+const call = require('./utils/call-cmd');
 
 process.on('unhandledRejection', err => { throw err; });
 
+const args = process.argv.slice(2);
 
-const result = spawn.sync('eslint', ['--ext', '.js,.jsx', paths.src], { stdio: 'inherit' });
-if (result.status) {
-	process.exit(result.status);
-}
+call('eslint', ['--ext', '.js,.jsx', paths.src, ...args]);
