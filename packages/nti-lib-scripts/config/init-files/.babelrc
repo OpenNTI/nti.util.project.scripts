@@ -1,3 +1,5 @@
 {
-	"extends": "nti-lib-scripts/config/babelrc.json"
+	"presets":[
+		"./node_modules/nti-lib-scripts/config/babelrc.js"
+	]
 }
