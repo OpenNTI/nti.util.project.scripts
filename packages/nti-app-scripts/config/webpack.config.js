@@ -38,7 +38,7 @@ exports = module.exports = {
 	output: {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[chunkhash:8].js',
-		chunkFilename: 'static/js/[name].chunk.[chunkhash:8].js',
+		chunkFilename: 'js/[name].chunk.[chunkhash:8].js',
 		publicPath: '/',
 		// Point sourcemap entries to original disk location
 		devtoolModuleFilenameTemplate: info => path.relative(paths.src, info.absoluteResourcePath),
@@ -90,12 +90,18 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
-			// First, run the linter.
-			// It's important to do this before Babel processes the JS.
 			{
-				test: /\.(js|jsx)$/,
+				test: /\.jsx?$/,
 				enforce: 'pre',
-				use: [
+				use : [
+					{
+						loader: require.resolve('baggage-loader'),
+						options: {
+							'[file].scss':{}
+						}
+					},
+					// First, run the linter. (loaders are run "bottom up")
+					// It's important to do this before Babel processes the JS.
 					{
 						options: {
 							formatter: eslintFormatter,
@@ -107,15 +113,6 @@ exports = module.exports = {
 				include: paths.appModules,
 			},
 
-
-			{
-				test: /\.jsx?$/,
-				enforce: 'pre',
-				loader: require.resolve('baggage-loader'),
-				options: {
-					'[file].scss':{}
-				}
-			},
 			{
 				test: /\.jsx?$/,
 				enforce: 'pre',

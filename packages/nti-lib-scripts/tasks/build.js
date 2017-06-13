@@ -2,10 +2,10 @@
 const path = require('path');
 
 const chalk = require('chalk');
-const spawn = require('cross-spawn');
 const fs = require('fs-extra');
 const rollup = require('rollup');
 
+const call = require('./utils/call-cmd');
 const paths = require('../config/paths');
 const {outputs, config} = require('../config/rollup');
 
@@ -19,10 +19,8 @@ process.on('unhandledRejection', err => {
 });
 
 
-const result = spawn.sync('node', [require.resolve('./test')], { stdio: 'inherit' });
-if (result.status) {
-	process.exit(result.status);
-}
+call('node', [require.resolve('./check')]);
+call('node', [require.resolve('./test')]);
 
 //Blank out lib
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
