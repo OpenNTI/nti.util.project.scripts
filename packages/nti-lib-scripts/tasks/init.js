@@ -53,12 +53,12 @@ delete pkg.scripts['preversion'];
 delete pkg.scripts['postversion'];
 delete pkg.scripts['prepublish'];
 // 	b) set "test": "${scriptPackageName} test"
-pkg.scripts['test'] = `${scriptPackageName} test`;
+pkg.scripts['test'] = global.NTI_INIT_SCRIPT_TEST || `${scriptPackageName} test`;
 // 	c) set "start": "${scriptPackageName} test --watch"
-pkg.scripts['start'] = `${scriptPackageName} test --watch`;
+pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptPackageName} test --watch`;
 // 	d) set "prepublish": "${scriptPackageName} build"
-pkg.scripts['prepack'] = `${scriptPackageName} build`;
-pkg.scripts['release'] = `${scriptPackageName} release`;
+pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
+pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
 
 // save:
 writePackageJson(pkg, {spaces: indent});
