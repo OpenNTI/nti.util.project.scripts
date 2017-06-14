@@ -16,6 +16,14 @@ const merge = require('./utils/merge-config');
 const write = (...args) => console.log(...args);
 const writeHeading = x => write(`\n${chalk.underline.magenta(x)}`);
 
+
+if (paths.appBuildHook) {
+	if (DEBUG) write('Calling local app build hook: %s', chalk.magenta(paths.appBuildHook));
+
+	call(process.argv[0], [paths.appBuildHook]);
+}
+
+
 const {protocol, port} = url.parse(paths.publicUrl || 'proxy://localhost:8083/');
 
 const service = require.resolve('nti-web-service/src/index.js');

@@ -12,6 +12,7 @@ const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const paths = require('../config/paths');
 
 const copyServerCode = require('./utils/build-copy-server-code');
+const callHook = require('./utils/build-call-hook');
 const copyStaticAssets = require('./utils/build-copy-static-assets');
 const updateLibraryReferences = require('./utils/build-update-library-references');
 const recordVersions = require('./utils/build-record-versions');
@@ -33,8 +34,8 @@ fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 //Copy server code...
 copyServerCode();
 
-//Generate static assets...
-//TODO: fill in
+//call build hook
+callHook();
 
 //Copy Static assets...
 copyStaticAssets();

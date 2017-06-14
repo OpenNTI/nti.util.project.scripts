@@ -11,7 +11,7 @@ const paths = require('../../config/paths');
 const call = (cmd, ...args) => spawn.sync(cmd, args, {
 	//npm doesn't output anything when NODE_ENV = 'production'
 	env: Object.assign({}, process.env, { NODE_ENV: null }),
-	stdio: [0, 'pipe', 2],
+	stdio: [null, 'pipe', null],
 	maxBuffer: 1024 * 1024 //1MB max
 });
 
