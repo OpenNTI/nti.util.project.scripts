@@ -26,11 +26,17 @@ const write = x => console.log(chalk.cyan('\n' + x));
 write(`Updating: ${chalk.magenta.underline('pacakge.json')}`);
 //Update package.json:
 // 1) add ourselves as dev deps
+pkg.dependencies = pkg.dependencies || {};
+pkg.devDependencies = pkg.devDependencies || {};
 pkg.devDependencies[scriptPackageName] = '^' + ownPkg.version;
+
+delete pkg.dependencies[scriptPackageName]; //just incase we were added without '-D'...
+
 // 2) remove our deps from devdeps.
 for (let dep of dropDeps) {
 	delete pkg.devDependencies[dep];
 }
+
 //keep keys sorted
 let sorted = {};
 for (let dep of Object.keys(pkg.devDependencies).sort()) {
