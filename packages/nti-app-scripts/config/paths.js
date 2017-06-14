@@ -61,6 +61,7 @@ module.exports = Object.assign({}, paths, {
 
 	serverComponent: exists(resolveApp('src/server'), resolveOwn('server')),
 	baseConfig: resolveOwn('server/config/env.json'),
+	localConfig: exists(resolveApp('config/service.json')),
 
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),

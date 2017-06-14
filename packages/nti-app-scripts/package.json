@@ -37,6 +37,7 @@
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "^0.11.0",
     "fs-extra": "^3.0.1",
+    "json-colorz": "^0.2.7",
     "node-sass": "^4.0.0",
     "normalize.css": "^7.0.0",
     "nti-lib-scripts": "^1.0.0-alpha",
