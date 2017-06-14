@@ -105,7 +105,10 @@ exports = module.exports = {
 					{
 						options: {
 							formatter: eslintFormatter,
-							ignore: false
+							ignore: false,
+							failOnError: true,
+							failOnWarning: false,
+							emitWarning: false
 						},
 						loader: require.resolve('eslint-loader'),
 					},
