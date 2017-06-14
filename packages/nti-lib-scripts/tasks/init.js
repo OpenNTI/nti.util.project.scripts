@@ -58,6 +58,7 @@ pkg.scripts['test'] = global.NTI_INIT_SCRIPT_TEST || `${scriptPackageName} test`
 pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptPackageName} test --watch`;
 // 	d) set "prepublish": "${scriptPackageName} build"
 pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
+pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
 pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
 
 // save:
