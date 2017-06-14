@@ -67,6 +67,10 @@ pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName}
 pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
 pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
 
+if (global.NTI_INIT_PACKAGE_HOOK) {
+	global.NTI_INIT_PACKAGE_HOOK(pkg);
+}
+
 // save:
 writePackageJson(pkg, {spaces: indent});
 
