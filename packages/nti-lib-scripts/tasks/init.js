@@ -17,6 +17,7 @@ const combindedDeps = Object.assign({}, libPkg.dependencies, ownPkg.dependencies
 const dropDeps = [
 	'babel-register',
 	'json-loader',
+	'nti-unittesting-clientside',
 	...Object.keys(combindedDeps)
 ];
 
