@@ -117,3 +117,14 @@ fs.removeSync(path.resolve(paths.path, 'node_modules'));
 call('npm', ['install', '--no-progress'], {stdio: null}, true);
 
 write('Done.');
+
+console.log(`
+
+
+
+	${chalk.blue('npm start')}:       to start development work
+	${chalk.blue('npm test')}:        to test
+	${chalk.blue('npm run release')}: to cut a release
+	${chalk.blue('npm run build')}:   to run a build (local only)
+
+`);
