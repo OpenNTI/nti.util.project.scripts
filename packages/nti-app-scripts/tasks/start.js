@@ -6,7 +6,8 @@ const call = require('nti-lib-scripts/tasks/utils/call-cmd');
 
 const paths = require('../config/paths');
 
-const servicePath = path.join(paths.path, 'node_modules', 'nti-web-service', 'src');
+const service = require.resolve('nti-web-service/src/index.js');
+const servicePath = path.dirname(service);
 
 const tempConfig = tmp.fileSync();
 
@@ -20,4 +21,4 @@ Object.assign(config.development, {
 
 fs.writeJsonSync(tempConfig.name, config);
 
-call('web-service', ['--env', 'development', '--config', tempConfig.name]);
+call(process.argv[0], [service, '--env', 'development', '--config', tempConfig.name]);
