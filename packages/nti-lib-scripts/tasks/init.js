@@ -65,6 +65,8 @@ pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptPackageName} tes
 // 	d) set "prepublish": "${scriptPackageName} build"
 pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
 pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
+pkg.scripts['clean'] = global.NTI_INIT_SCRIPT_CLEAN || `${scriptPackageName} clean`;
+pkg.scripts['check'] = global.NTI_INIT_SCRIPT_CHECK || `${scriptPackageName} check`;
 pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
 
 if (global.NTI_INIT_PACKAGE_HOOK) {
@@ -124,7 +126,9 @@ console.log(`
 
 	${chalk.blue('npm start')}:       to start development work
 	${chalk.blue('npm test')}:        to test
+	${chalk.blue('npm run check')}:   to run a lint check
 	${chalk.blue('npm run release')}: to cut a release
-	${chalk.blue('npm run build')}:   to run a build (local only)
+	${chalk.blue('npm run build')}:   to run a build (produce artifacts only)
+	${chalk.blue('npm run clean')}:   to clean project (remove build artifacts)
 
 `);
