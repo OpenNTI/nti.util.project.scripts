@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const paths = require('../../config/paths');
 
 const {
-	SRC_SERVER,
+	serverComponent: SRC_SERVER,
 	DIST_SERVER,
 } = paths;
 

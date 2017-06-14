@@ -1,5 +1,6 @@
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
@@ -10,6 +11,8 @@ const paths = require('nti-lib-scripts/config/paths');
 // const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
 
 const envPublicUrl = process.env.PUBLIC_URL;
+
+const {resolveApp} = paths;
 
 //eslint-disable-next-line no-shadow
 function ensureSlash (path, needsSlash) {
@@ -39,21 +42,24 @@ function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
+function exists (testPath, fallback) {
+	return fs.existsSync(testPath) ? testPath : fallback;
+}
+
 
 module.exports = Object.assign({}, paths, {
-	assetsRoot: paths.resolveApp('src/main'),
-	appModules: paths.resolveApp('src/main/js'),
-	appHtml: paths.resolveApp('src/main/page.html'),
-	appIndexJs: paths.resolveApp('src/main/js/index.js'),
-	publicUrl: getPublicUrl(paths.resolveApp('package.json')),
-	servedPath: getServedPath(paths.resolveApp('package.json')),
+	assetsRoot: resolveApp('src/main'),
+	appModules: resolveApp('src/main/js'),
+	appHtml: resolveApp('src/main/page.html'),
+	appIndexJs: resolveApp('src/main/js/index.js'),
+	publicUrl: getPublicUrl(resolveApp('package.json')),
+	servedPath: getServedPath(resolveApp('package.json')),
 
-	SRC_SERVER: resolveOwn('server'),
-	DIST_CLIENT: paths.resolveApp('dist/client'),
-	DIST_SERVER: paths.resolveApp('dist/server'),
-	PAGE: paths.resolveApp('dist/client/page.html'),
+	DIST_CLIENT: resolveApp('dist/client'),
+	DIST_SERVER: resolveApp('dist/server'),
+	PAGE: resolveApp('dist/client/page.html'),
 
-	serverComponent: resolveOwn('server'),
+	serverComponent: exists(resolveApp('src/server'), resolveOwn('server')),
 	baseConfig: resolveOwn('server/config/env.json'),
 
 	ownPath: resolveOwn('.'),
