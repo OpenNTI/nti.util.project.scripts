@@ -6,10 +6,7 @@ module.exports = {
 	],
 
 	env: {
-		es6: true,
-		node: true,
-		browser: false,
-		jest: true
+		browser: false
 	},
 
 	'parser': 'babel-eslint'
