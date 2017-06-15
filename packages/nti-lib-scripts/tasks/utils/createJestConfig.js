@@ -6,7 +6,7 @@ const paths = require('../../config/paths');
 module.exports = (resolve, rootDir) => {
 
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
-		? '<rootDir>/src/setupTests.js'
+		? '<rootDir>/src/__test__/setup.js'
 		: undefined;
 
 	const config = {
