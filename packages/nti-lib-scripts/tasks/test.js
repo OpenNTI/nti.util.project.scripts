@@ -6,7 +6,7 @@ const jest = require('jest');
 
 const paths = require('../config/paths');
 
-const createJestConfig = require('./utils/createJestConfig');
+const createJestConfig = require('./utils/create-jest-config');
 
 process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';

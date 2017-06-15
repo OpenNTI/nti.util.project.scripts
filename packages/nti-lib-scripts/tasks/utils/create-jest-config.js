@@ -2,7 +2,7 @@
 const fs = require('fs');
 
 const paths = require('../../config/paths');
-
+const testEnvironment = require(paths.packageJson)['testEnvironment'];
 module.exports = (resolve, rootDir) => {
 
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
@@ -28,7 +28,7 @@ module.exports = (resolve, rootDir) => {
 		testPathIgnorePatterns: [
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
 		],
-		testEnvironment: 'node',
+		testEnvironment: testEnvironment || process.env.JEST_ENV || 'node',
 		testResultsProcessor: './node_modules/jest-junit',
 		testURL: 'http://localhost',
 		transform: {
