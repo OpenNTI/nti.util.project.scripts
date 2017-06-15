@@ -102,6 +102,7 @@ for (let file of ToCopy) {
 const ToRemove = [
 	'rollup.config.js',
 	'karma.config.js',
+	'karma.conf.js',
 	'Makefile',
 	'test',
 	'release.sh',
