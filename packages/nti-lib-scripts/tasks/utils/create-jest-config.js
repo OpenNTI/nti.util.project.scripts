@@ -29,7 +29,7 @@ module.exports = (resolve, rootDir) => {
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
 		],
 		testEnvironment: testEnvironment || process.env.JEST_ENV || 'node',
-		testResultsProcessor: './node_modules/jest-junit',
+		testResultsProcessor: process.env.CI ? './node_modules/jest-junit' : void 0,
 		testURL: 'http://localhost',
 		transform: {
 			'^.+\\.(js|jsx)$': resolve('config/jest/babelTransform.js'),
