@@ -35,7 +35,7 @@ else {
 		],
 		'plugins': [
 			'transform-decorators-legacy',
-			'transform-runtime'
+			'external-helpers'
 		]
 	});
 }
