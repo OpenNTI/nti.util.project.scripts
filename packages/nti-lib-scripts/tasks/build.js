@@ -33,7 +33,8 @@ rollup
 				bundle.write({
 					format: o.format,
 					dest: o.dest,
-					sourceMap: true
+					sourceMap: true,
+					exports: 'named'
 				})
 			)))
 	.then(() => console.log(chalk.green('\nDone.\n\n')));
