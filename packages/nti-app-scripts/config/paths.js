@@ -1,6 +1,5 @@
 'use strict';
 
-const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
@@ -12,7 +11,7 @@ const paths = require('nti-lib-scripts/config/paths');
 
 const envPublicUrl = process.env.PUBLIC_URL;
 
-const {resolveApp} = paths;
+const {exists, resolveApp} = paths;
 
 //eslint-disable-next-line no-shadow
 function ensureSlash (path, needsSlash) {
@@ -40,10 +39,6 @@ function getServedPath (packageJson) {
 
 function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
-}
-
-function exists (testPath, fallback) {
-	return fs.existsSync(testPath) ? testPath : fallback;
 }
 
 

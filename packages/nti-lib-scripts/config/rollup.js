@@ -7,7 +7,10 @@ const json = require('rollup-plugin-json');
 const eslint = require('rollup-plugin-eslint');
 
 const paths = require('./paths');
-const lintConfig = path.resolve(paths.ownPath,'./config/eslintrc.js');
+const lintConfig = paths.exists(
+	path.resolve(paths.path, '.eslintrc'),
+	path.resolve(paths.ownPath,'./config/eslintrc.js')
+);
 
 const pkg = require(paths.packageJson);
 const externals = [

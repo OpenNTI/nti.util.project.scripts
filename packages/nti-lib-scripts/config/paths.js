@@ -40,8 +40,13 @@ function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
+function exists (testPath, fallback) {
+	return fs.existsSync(testPath) ? testPath : fallback;
+}
+
 // config: we're in ./node_modules/{ownPackageJson.name}/config/
 module.exports = {
+	exists,
 	resolveApp,
 
 	path: resolveApp('.'),
