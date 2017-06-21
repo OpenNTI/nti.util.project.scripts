@@ -57,7 +57,7 @@ exports = module.exports = {
 			paths.appModules,
 			paths.resolveApp('src/main/resources/scss'),
 		],
-		extensions: ['.jsx', '.js'],
+		extensions: ['.jsx', '.async.jsx', '.js'],
 		alias: {
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be

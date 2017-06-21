@@ -15,7 +15,7 @@ module.exports = {
 							'node_modules',
 							paths.appModules,
 						],
-						'extensions': ['.js', '.jsx']
+						'extensions': ['.js', '.jsx', '.async.jsx']
 					}
 				}
 			}
