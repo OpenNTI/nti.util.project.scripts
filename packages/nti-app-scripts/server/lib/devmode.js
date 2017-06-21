@@ -1,4 +1,4 @@
-/*eslint strict:0*/
+/*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
 const {worker} = require('cluster');
 
@@ -6,7 +6,7 @@ const first = x => Array.isArray(x) ? x[0] : x;
 
 exports.setupDeveloperMode = function setupDeveloperMode (config) {
 	const webpack = require('webpack');
-	const paths = require('../../config/paths');
+	// const paths = require('../../config/paths');
 	const webpackConfigFile = require('../../config/webpack.config');
 
 	const WebpackServer = require('webpack-dev-server');

@@ -1,10 +1,6 @@
 /*eslint strict:0*/
 'use strict';
-const fs = require('fs');
 const path = require('path');
-
-const exists = f => {
-	try { fs.accessSync(f); } catch (e) { return false; } return true; };
 
 let dev;
 let assets = path.resolve(__dirname, '../client');
