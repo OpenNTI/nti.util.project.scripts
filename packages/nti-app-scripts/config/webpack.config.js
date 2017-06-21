@@ -2,6 +2,7 @@
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+// const AppCachePlugin = require('appcache-webpack-plugin');
 const StatsPlugin = require('stats-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -188,6 +189,26 @@ exports = module.exports = {
 		}),
 
 		PROD && new StatsPlugin('../compile-data.json'),
+
+		// new AppCachePlugin({
+		// 	cache: [
+		// 		'page.html',
+		// 		'offline.json',
+		// 		'resources/images/favicon.ico',
+		// 		'resources/images/app-icon.png',
+		// 		'resources/images/app-splash.png'
+		// 	],
+		// 	network: [
+		// 		'/dataserver2/',
+		// 		'/content/',
+		// 		'*'
+		// 	],
+		// 	fallback: ['/dataserver2/ offline.json', '/ page.html'],
+		// 	settings: ['prefer-online'],
+		// 	exclude: [],
+		// 	output: 'manifest.appcache'
+		// }),
+
 
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
