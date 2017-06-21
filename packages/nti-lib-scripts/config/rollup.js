@@ -12,8 +12,38 @@ const paths = require('./paths');
 // 	path.resolve(paths.ownPath,'./config/eslintrc.js')
 // );
 
+const NODE_BUILTINS = [
+	'child_process',
+	'cluster',
+	'crypto',
+	'dns',
+	'events',
+	'fs',
+	'http',
+	'https',
+	'inspector',
+	'net',
+	'os',
+	'path',
+	'querystring',
+	'readline',
+	'repl',
+	'stream',
+	'string_decoder',
+	'timers',
+	'tls',
+	'tty',
+	'dgram',
+	'url',
+	'util',
+	'v8',
+	'vm',
+	'zlib'
+];
+
 const pkg = require(paths.packageJson);
 const externals = [
+	NODE_BUILTINS,
 	Object.keys(pkg.dependencies || {}),
 	Object.keys(pkg.devDependencies || {}),
 	Object.keys(pkg.optionalDependencies || {})
