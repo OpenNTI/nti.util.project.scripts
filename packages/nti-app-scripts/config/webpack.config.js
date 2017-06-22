@@ -212,7 +212,7 @@ exports = module.exports = {
 		// 	output: 'manifest.appcache'
 		// }),
 
-
+		new webpack.optimize.ModuleConcatenationPlugin(),
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
 			// names: ['vendor', 'manifest'],
