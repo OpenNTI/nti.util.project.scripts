@@ -24,7 +24,7 @@ if (paths.appBuildHook) {
 }
 
 
-const {protocol, port} = url.parse(paths.publicUrl || 'proxy://localhost:8083/');
+const {hostname = 'localhost', protocol, port} = url.parse(paths.publicUrl || 'proxy://localhost:8083/');
 
 const service = require.resolve('nti-web-service/src/index.js');
 const servicePath = path.dirname(service);
@@ -39,12 +39,15 @@ if (DEBUG && localConfig) write('Loaded local config override.');
 if (DEBUG) write(`Loading base config: ${chalk.magenta(paths.baseConfig)}`);
 
 const config = merge(fs.readJsonSync(paths.baseConfig), localConfig);
+const server = Object.assign(url.parse(config.development.server), {hostname, host: null});
+
 if (DEBUG && localConfig) write('Merged baseConfig with local override...');
 
 if (DEBUG) write(`Setting port to ${chalk.magenta(port)}`);
 if (DEBUG) write('Appending app to config...');
 Object.assign(config.development, {
 	port,
+	server: server.format(),
 	apps:[
 		...config.development.apps,
 		{
