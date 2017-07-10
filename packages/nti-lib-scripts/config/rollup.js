@@ -4,13 +4,13 @@ const path = require('path');
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
-// const eslint = require('rollup-plugin-eslint');
+const eslint = require('rollup-plugin-eslint');
 
 const paths = require('./paths');
-// const lintConfig = paths.exists(
-// 	path.resolve(paths.path, '.eslintrc'),
-// 	path.resolve(paths.ownPath,'./config/eslintrc.js')
-// );
+const lintConfig = paths.exists(
+	path.resolve(paths.path, '.eslintrc'),
+	path.resolve(paths.ownPath,'./config/eslintrc.js')
+);
 
 const NODE_BUILTINS = [
 	'child_process',
@@ -65,11 +65,11 @@ module.exports = {
 		exports: 'named',
 		external: externals,
 		plugins: [
-			// eslint({
-			// 	baseConfig: false,
-			// 	configFile: lintConfig,
-			// 	throwError: true
-			// }),
+			eslint({
+				baseConfig: false,
+				configFile: lintConfig,
+				throwOnError: true
+			}),
 			babel({ exclude: 'node_modules/**' }),
 			commonjs({
 				ignoreGlobal: true
