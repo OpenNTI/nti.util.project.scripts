@@ -1,9 +1,9 @@
 {
   "name": "nti-cmp-scripts",
   "version": "1.0.0-alpha.0",
-  "description": "app-specific scripts & dependencies",
+  "description": "component-specific scripts & dependencies",
   "bin": {
-    "nti-app-scripts": "./bin/cli.js"
+    "nti-cmp-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"
