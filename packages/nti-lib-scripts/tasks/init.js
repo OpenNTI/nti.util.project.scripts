@@ -13,11 +13,13 @@ const {json: pkg, indent} = readPackageJson();
 const {json: libPkg} = readPackageJson(paths.ownPackageJson);
 const {json: ownPkg} = readPackageJson(currentScriptsPaths.ownPackageJson);
 const scriptPackageName = ownPkg.name;
-const combindedDeps = Object.assign({}, libPkg.dependencies, ownPkg.dependencies);
+const combindedDeps = Object.assign({}, libPkg.dependencies, ownPkg.dependencies, global.NTI_INIT_DROP_DEPENDENCIES || {});
 const dropDeps = [
 	'babel-register',
 	'json-loader',
 	'nti-unittesting-clientside',
+	'rollup-plugin-image',
+	'rollup-plugin-node-resolve',
 	...Object.keys(combindedDeps)
 ];
 
