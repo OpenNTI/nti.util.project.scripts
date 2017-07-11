@@ -7,17 +7,14 @@ module.exports = {
 	],
 
 	'settings': {
+		'import/extensions': ['.js', '.jsx', '.async.jsx'],
 		'import/resolver': {
-			'webpack': {
-				'config': {
-					'resolve': {
-						'modules': [
-							'node_modules',
-							paths.appModules,
-						],
-						'extensions': ['.js', '.jsx', '.async.jsx']
-					}
-				}
+			'node':
+				'extensions': ['.js', '.jsx', '.async.jsx'],
+				'moduleDirectory': [
+					'node_modules',
+					'src/main/js'
+				]
 			}
 		}
 	},

@@ -33,7 +33,7 @@
     "compression-webpack-plugin": "^1.0.0-beta.1",
     "cross-spawn": "*",
     "css-loader": "0.x.x",
-    "eslint-config-nti-codestyle-jsx": "^1.0.0",
+    "eslint-config-nti-codestyle-jsx": "^1.3.8",
     "eslint-loader": "^1.8.0",
     "extract-text-webpack-plugin": "^2.0.0",
     "file-loader": "0.x.x",
