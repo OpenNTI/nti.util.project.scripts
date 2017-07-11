@@ -5,8 +5,8 @@ const {outputs} = require('../config/rollup');
 
 const write = x => console.log(chalk.cyan('\n' + x));
 const dirs = outputs.map(x => x.dest)
-					.reduce((a, x) => a.includes(x) ? a : [...a, x])
-					.filter(fs.existsSync);
+	.reduce((a, x) => a.includes(x) ? a : [...a, x])
+	.filter(fs.existsSync);
 
 if (dirs.length) {
 	write(`Cleanup: removing output dirs: ${dirs.map(chalk.magenta).join(', ')}`);
