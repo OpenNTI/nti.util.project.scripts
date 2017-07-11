@@ -2,10 +2,9 @@
 const chalk = require('chalk');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const webpack = require('webpack');
-const config = require('../../config/webpack.config');
 const {ProgressPlugin} = webpack;
 
-module.exports = function build () {
+module.exports = function build (config = require('../../config/webpack.config')) {
 	console.log('Creating a production build...');
 
 	const compiler = webpack(config);
