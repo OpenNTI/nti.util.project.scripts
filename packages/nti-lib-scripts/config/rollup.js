@@ -5,6 +5,8 @@ const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
 const eslint = require('rollup-plugin-eslint');
+const string = require('rollup-plugin-string');
+const image = require('rollup-plugin-img');
 
 const paths = require('./paths');
 const lintConfig = paths.exists(
@@ -55,6 +57,11 @@ const outputs = [
 ].filter(Boolean);
 
 
+function isExternal (id) {
+	return id[0] !== '.' && externals.some(x => id.startsWith(x));
+}
+
+
 module.exports = {
 	outputs,
 	config: {
@@ -63,7 +70,7 @@ module.exports = {
 		dest: outputs[0].dest,
 		sourceMap: true,
 		exports: 'named',
-		external: externals,
+		external: isExternal,
 		plugins: [
 			eslint({
 				baseConfig: false,
@@ -74,7 +81,11 @@ module.exports = {
 			commonjs({
 				ignoreGlobal: true
 			}),
-			json()
+			json(),
+			string({
+				include: '**/*.svg',
+			}),
+			image()
 		]
 	}
 };

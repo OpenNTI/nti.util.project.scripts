@@ -26,10 +26,10 @@ function resolveApp (relativePath) {
 // https://github.com/facebookincubator/create-react-app/issues/1023#issuecomment-265344421
 
 const nodePaths = (process.env.NODE_PATH || '')
-					.split(process.platform === 'win32' ? ';' : ':')
-					.filter(Boolean)
-					.filter(folder => !path.isAbsolute(folder))
-					.map(resolveApp);
+	.split(process.platform === 'win32' ? ';' : ':')
+	.filter(Boolean)
+	.filter(folder => !path.isAbsolute(folder))
+	.map(resolveApp);
 
 // const ownPackageJson = require('../package.json');
 // const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
