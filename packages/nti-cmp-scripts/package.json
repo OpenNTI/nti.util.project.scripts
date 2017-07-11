@@ -1,0 +1,31 @@
+{
+  "name": "nti-cmp-scripts",
+  "version": "1.0.0-alpha.0",
+  "description": "app-specific scripts & dependencies",
+  "bin": {
+    "nti-app-scripts": "./bin/cli.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+  },
+  "keywords": [
+    "release"
+  ],
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "bugs": {
+    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+  },
+  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "cross-spawn": "*",
+    "nti-app-scripts": "^1.0.11",
+    "nti-lib-scripts": "^1.0.13",
+    "tmp": "0.x.x"
+  }
+}
