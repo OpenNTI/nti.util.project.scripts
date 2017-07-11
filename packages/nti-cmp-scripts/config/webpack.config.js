@@ -1,63 +1,46 @@
+/*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
+
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const webpack = require('webpack');
-// const AppCachePlugin = require('appcache-webpack-plugin');
-const StatsPlugin = require('stats-webpack-plugin');
-const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const gitRevision = JSON.stringify(require('nti-util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
 const paths = require('./paths');
+const pkg = require(paths.packageJson);
 
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
-const modules = paths.nodeModules;
-
-//fake out the plugin (it does an instanceof test)
-const NTI_PACKAGES = Object.assign(new RegExp(''), {
-	prefix: `${modules}/nti-`,
-	decendent: /node_modules/,
-
-	test (x) {
-		let str = x ? x.toString() : '';
-		if(str.startsWith(this.prefix)) {
-			str = str.substr(this.prefix.length);
-			return !this.decendent.test(str);
-		}
-	}
-});
-
 
 exports = module.exports = {
-	bail: PROD,
 	entry: {
-		index: [require.resolve('./polyfills'), paths.appIndexJs]
+		index: path.resolve(paths.src, 'index.js')
 	},
 	output: {
-		path: paths.DIST_CLIENT,
-		filename: 'js/[name]-[chunkhash:8].js',
-		chunkFilename: 'js/[name].chunk.[chunkhash:8].js',
-		publicPath: '/',
-		// Point sourcemap entries to original disk location
-		devtoolModuleFilenameTemplate: info => path.relative(paths.src, info.absoluteResourcePath),
+		path: path.join(paths.path, path.dirname(pkg.main)),
+		filename: path.basename(pkg.main),
+		library: pkg.name,
+		libraryTarget: 'commonjs-module'
 	},
 
 	cache: !PROD,
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
+
+	node: {
+		crypto: 'empty',
+		global: false,
+	},
+
 
 	target: 'web',
 
 	resolve: {
 		modules: [
 			'node_modules',
-			// paths.nodeModules,
-			paths.appModules,
-			paths.resolveApp('src/main/resources/scss'),
+			paths.nodeModules,
 		],
-		extensions: ['.jsx', '.async.jsx', '.js'],
+		extensions: ['.jsx', '.js'],
 		alias: {
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
@@ -77,14 +60,15 @@ exports = module.exports = {
 		},
 	},
 
-	node: {
-		crypto: 'empty'
-	},
 
 	externals: [
-		{
-			'react' : 'React',
-			'react-dom': 'ReactDOM'
+		// Every non-relative module is external
+		// abc -> require("abc")
+		(context, request, callback) => {
+			if (/^[a-z\-0-9]+/i.test(request)) {
+				return callback(null, 'commonjs ' + request);
+			}
+			callback();
 		}
 	],
 
@@ -114,7 +98,7 @@ exports = module.exports = {
 						loader: require.resolve('eslint-loader'),
 					},
 				],
-				include: paths.appModules,
+				include: paths.src,
 			},
 
 			{
@@ -122,29 +106,34 @@ exports = module.exports = {
 				enforce: 'pre',
 				loader: require.resolve('source-map-loader')
 			},
-			{
-				test: /\.async\.jsx?$/,
-				loader: require.resolve('react-proxy-loader')
-			},
+
 			{
 				test: /\.jsx?$/,
 				include: [paths.src],
 				loader: require.resolve('babel-loader')
 			},
+
 			{
-				test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
+				test: /-avatar.png$/,
 				loader: require.resolve('url-loader'),
 				options: {
-					limit: 50,
-					name: 'resources/images/[hash].[ext]',
 					mimeType: 'image/[ext]'
 				}
 			},
+
 			{
-				test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
-				loader: require.resolve('file-loader'),
+				test: /\.template\.svg$/,
+				loader: require.resolve('raw-loader')
+			},
+
+			{
+				test: /\.(ico|gif|png|jpg|svg)$/,
+				exclude: [/-avatar.png$/, /\.template\.svg$/],
+				loader: require.resolve('url-loader'),
 				options: {
-					name: 'resources/fonts/[hash].[ext]'
+					limit: 500,
+					name: 'assets/[name]-[hash].[ext]',
+					mimeType: 'image/[ext]'
 				}
 			},
 
@@ -174,10 +163,7 @@ exports = module.exports = {
 						{
 							loader: require.resolve('sass-loader'),
 							options: {
-								sourceMap: true,
-								includePaths: [
-									paths.resolveApp('src/main/resources/scss')
-								]
+								sourceMap: true
 							}
 						}
 					]
@@ -187,68 +173,10 @@ exports = module.exports = {
 	},
 
 	plugins: [
-		new webpack.EnvironmentPlugin({
-			NODE_ENV: PROD ? 'production' : 'development'
-		}),
-
-		PROD && new StatsPlugin('../compile-data.json'),
-
-		// new AppCachePlugin({
-		// 	cache: [
-		// 		'page.html',
-		// 		'offline.json',
-		// 		'resources/images/favicon.ico',
-		// 		'resources/images/app-icon.png',
-		// 		'resources/images/app-splash.png'
-		// 	],
-		// 	network: [
-		// 		'/dataserver2/',
-		// 		'/content/',
-		// 		'*'
-		// 	],
-		// 	fallback: ['/dataserver2/ offline.json', '/ page.html'],
-		// 	settings: ['prefer-online'],
-		// 	exclude: [],
-		// 	output: 'manifest.appcache'
-		// }),
-
-		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			// names: ['vendor', 'manifest'],
-			// children: true,
-			minChunks: (module) => (
-				module.context
-				&& /node_modules/.test(module.context)
-				&& !NTI_PACKAGES.test(module.context)
-			)
-		}),
-
 		new ExtractTextPlugin({
-			filename: 'resources/styles.css',
+			filename: 'index.css',
 			allChunks: true,
 			disable: false
 		}),
-
-		new webpack.DefinePlugin({
-			'BUILD_SOURCE': gitRevision
-		}),
-
-		PROD && new webpack.optimize.UglifyJsPlugin({
-			compress: { warnings: false },
-			output: {
-				comments: false,
-			},
-			sourceMap: true,
-			test: /\.js(x?)($|\?)/i,
-		}),
-
-		// Moment.js is an extremely popular library that bundles large locale files
-		// by default due to how Webpack interprets its code. This is a practical
-		// solution that requires the user to opt into importing specific locales.
-		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-
-		PROD && new CompressionPlugin(),
 	].filter(x => x)
 };
