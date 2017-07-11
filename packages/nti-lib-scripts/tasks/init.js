@@ -99,6 +99,8 @@ for (let file of ToCopy) {
 
 //Remove rollup.config.js, karma.config.js, Makefile
 //Remove './test' dir
+const AdditionalToRemove = (global.NTI_INIT_TO_REMOVE || []).filter(x => x[0] !== '-');
+const NotToRemove = (global.NTI_INIT_TO_REMOVE || []).filter(x => x[0] === '-').map(x => x.substr(1));
 const ToRemove = [
 	'rollup.config.js',
 	'karma.config.js',
@@ -108,8 +110,9 @@ const ToRemove = [
 	'release.sh',
 	'snapshot.sh',
 	'pre-commit.sample',
-	...(global.NTI_INIT_TO_REMOVE || [])
-];
+	...AdditionalToRemove
+].filter(x => !NotToRemove.includes(x));
+
 write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
 for (let file of ToRemove) {
 	fs.removeSync(path.resolve(paths.path, file));
