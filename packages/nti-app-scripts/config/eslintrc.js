@@ -1,5 +1,5 @@
 'use strict';
-const paths = require('./paths');
+// const paths = require('./paths');
 
 module.exports = {
 	'extends': [
@@ -9,7 +9,7 @@ module.exports = {
 	'settings': {
 		'import/extensions': ['.js', '.jsx', '.async.jsx'],
 		'import/resolver': {
-			'node':
+			'node': {
 				'extensions': ['.js', '.jsx', '.async.jsx'],
 				'moduleDirectory': [
 					'node_modules',
