@@ -123,7 +123,7 @@ for (let file of ToRemove) {
 write(`Regenerate: ${chalk.magenta('package-lock.json', 'node_modules')}...`);
 fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
 fs.removeSync(path.resolve(paths.path, 'node_modules'));
-call('npm', ['install', '--no-progress'], {stdio: null}, true);
+call('npm', ['install', '--no-progress'], {stdio: 'inherit'}, true);
 
 write('Done.');
 
