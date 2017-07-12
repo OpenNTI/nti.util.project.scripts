@@ -2,9 +2,10 @@
 const path = require('path');
 
 const babel = require('rollup-plugin-babel');
-const commonjs = require('rollup-plugin-commonjs');
+// const commonjs = require('rollup-plugin-commonjs');
 const json = require('rollup-plugin-json');
 const eslint = require('rollup-plugin-eslint');
+const resolve = require('rollup-plugin-node-resolve');
 const string = require('rollup-plugin-string');
 const image = require('rollup-plugin-img');
 
@@ -72,15 +73,17 @@ module.exports = {
 		exports: 'named',
 		external: isExternal,
 		plugins: [
+			resolve({
+				extensions: [ '.js', '.jsx' ],
+				modulesOnly: true,
+			}),
 			eslint({
 				baseConfig: false,
 				configFile: lintConfig,
 				throwOnError: true
 			}),
 			babel({ exclude: 'node_modules/**' }),
-			commonjs({
-				ignoreGlobal: true
-			}),
+			// commonjs({ ignoreGlobal: true }),
 			json(),
 			string({
 				include: '**/*.svg',
