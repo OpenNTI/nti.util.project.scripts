@@ -46,6 +46,7 @@ const NODE_BUILTINS = [
 
 const pkg = require(paths.packageJson);
 const externals = [
+	'babel-runtime',
 	NODE_BUILTINS,
 	Object.keys(pkg.dependencies || {}),
 	Object.keys(pkg.devDependencies || {}),
@@ -78,17 +79,27 @@ module.exports = {
 				modulesOnly: true,
 			}),
 			eslint({
+				exclude: 'node_modules/**',
+				include: [
+					'**/*.js',
+					'**/*.jsx'
+				],
 				baseConfig: false,
 				configFile: lintConfig,
 				throwOnError: true
 			}),
-			babel({ exclude: 'node_modules/**' }),
+			babel({
+				runtimeHelpers: true,
+				exclude: 'node_modules/**'
+			}),
 			// commonjs({ ignoreGlobal: true }),
 			json(),
 			string({
 				include: '**/*.svg',
 			}),
-			image()
+			image({
+				extensions: /\.(png|jpg|jpeg|gif)$/,
+			})
 		]
 	}
 };
