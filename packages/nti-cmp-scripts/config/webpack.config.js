@@ -3,6 +3,7 @@
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
+const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
@@ -173,6 +174,7 @@ exports = module.exports = {
 	},
 
 	plugins: [
+		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
 		new ExtractTextPlugin({
 			filename: 'index.css',
 			allChunks: true,
