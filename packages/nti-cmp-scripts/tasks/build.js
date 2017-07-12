@@ -42,6 +42,7 @@ Promise.resolve(callHook())
 	// Run webpack... (produces commonjs & style output)
 	.then(() => buildWebpackBundle(wpConfig))
 	// Run Rollup... (produces treeshake-able es module)
+	.then(() => console.log(chalk.green('\nBuilding ES Module...')))
 	.then(() => buildRollupBundle({ignoreExisting: true}))
 	// Announce complete...
 	.then(() => console.log(chalk.green('\nDone.\n\n')));
