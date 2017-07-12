@@ -2,7 +2,7 @@
 
 module.exports = {
 	extends: [
-		'nti-codestyle-js'
+		require.resolve('eslint-config-nti-codestyle-js')
 	],
 
 	env: {

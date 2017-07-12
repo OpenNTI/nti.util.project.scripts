@@ -3,7 +3,7 @@
 
 module.exports = {
 	'extends': [
-		'nti-codestyle-jsx'
+		require.resolve('eslint-config-nti-codestyle-jsx')
 	],
 
 	'settings': {
