@@ -8,6 +8,7 @@ const paths = require('../config/paths');
 
 const createJestConfig = require('./utils/create-jest-config');
 
+process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
 process.env.PUBLIC_URL = '';
 process.env.JEST_JUNIT_OUTPUT = 'reports/test-results/index.xml';
