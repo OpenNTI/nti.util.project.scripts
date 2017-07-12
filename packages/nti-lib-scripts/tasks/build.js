@@ -23,7 +23,7 @@ process.on('unhandledRejection', err => {
 
 
 call('node', [require.resolve('./check')]);
-call('node', [require.resolve('./test')]);
+call('node', [require.resolve('./test'), '--no-cache']);
 
 //Blank out lib
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));

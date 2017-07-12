@@ -24,7 +24,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 }
 
 call('node', [require.resolve('./check')]);
-call('node', [require.resolve('./test')]);
+call('node', [require.resolve('./test'), '--no-cache']);
 
 //clean dist & ensure client/server directories
 fs.emptyDirSync(path.resolve(paths.path, 'dist'));
