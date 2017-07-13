@@ -3,7 +3,7 @@ const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 // const AppCachePlugin = require('appcache-webpack-plugin');
-const StatsPlugin = require('stats-webpack-plugin');
+const {StatsWriterPlugin} = require('webpack-stats-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const gitRevision = JSON.stringify(require('nti-util-git-rev'));
@@ -191,7 +191,10 @@ exports = module.exports = {
 			NODE_ENV: PROD ? 'production' : 'development'
 		}),
 
-		PROD && new StatsPlugin('../compile-data.json'),
+		PROD && new StatsWriterPlugin({
+			filename: '../compile-data.json',
+			transform: ({assetsByChunkName}) => JSON.stringify({assetsByChunkName})
+		}),
 
 		// new AppCachePlugin({
 		// 	cache: [

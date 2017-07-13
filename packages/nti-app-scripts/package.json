@@ -51,11 +51,11 @@
     "resolve-url-loader": "^2.0.0",
     "sass-loader": "^6.0.0",
     "source-map-loader": "0.x.x",
-    "stats-webpack-plugin": "0.x.x",
     "style-loader": "0.x.x",
     "tmp": "0.x.x",
     "url-loader": "0.x.x",
     "webpack": "^3.2.0",
-    "webpack-dev-server": "^2.5.1"
+    "webpack-dev-server": "^2.5.1",
+    "webpack-stats-plugin": "0.x.x"
   }
 }
