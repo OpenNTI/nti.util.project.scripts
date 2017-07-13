@@ -31,12 +31,17 @@ module.exports = function recordVersions () {
 
 	const {status: lsErr, stdout: ntiListBuffer} = call('npm', 'list');
 	if (!lsErr && ntiListBuffer) {
-		list = ntiListBuffer
+		const [title, ...deps] = ntiListBuffer
 			.toString('utf8')
 			.split('\n')
-			.filter(x => /nti-/.test(x))
-			.map(x => x.replace(/^[│└├─┬\s]{1,}/, '- ').trim())
-			.join('\n');
-		fs.writeFileSync(ntiVersions, list);
+			.filter(x => /nti-/.test(x) && !/deduped$/.test(x))
+			.map(x => x.replace(/^[│└├─┬\s]{1,}/, '- ').trim());
+
+		list = [
+			title,
+			...deps.sort()
+		];
+
+		fs.writeFileSync(ntiVersions, list.join('\n'));
 	}
 };
