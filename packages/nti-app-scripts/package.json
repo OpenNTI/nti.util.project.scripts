@@ -1,6 +1,6 @@
 {
   "name": "nti-app-scripts",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "nti-app-scripts": "./bin/cli.js"
