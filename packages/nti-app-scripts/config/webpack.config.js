@@ -40,7 +40,7 @@ exports = module.exports = {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[chunkhash:8].js',
 		chunkFilename: 'js/[name].chunk.[chunkhash:8].js',
-		publicPath: '/',
+		publicPath: paths.servedPath || '/',
 		// Point sourcemap entries to original disk location
 		devtoolModuleFilenameTemplate: info => path.relative(paths.src, info.absoluteResourcePath),
 	},
