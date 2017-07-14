@@ -4,7 +4,8 @@
   "description": "Common tasks and project management",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release": "lerna publish --npm-tag=alpha"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
-    "eslint-config-nti-codestyle-js": "^1.1.0"
+    "eslint-config-nti-codestyle-js": "^1.1.0",
+    "lerna": "^2.0.0"
   }
 }
