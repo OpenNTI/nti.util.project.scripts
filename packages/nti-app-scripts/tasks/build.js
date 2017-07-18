@@ -1,6 +1,7 @@
 'use strict';
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+const DEBUG = process.argv.includes('--debug');
+process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
+process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => { throw err; });
 

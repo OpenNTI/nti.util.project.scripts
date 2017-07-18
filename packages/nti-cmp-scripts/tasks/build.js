@@ -1,5 +1,7 @@
 /*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
+const DEBUG = process.argv.includes('--debug');
+
 const path = require('path');
 
 const chalk = require('chalk');
@@ -13,8 +15,8 @@ const buildRollupBundle = require('nti-lib-scripts/tasks/utils/build-with-rollup
 const paths = require('../config/paths');
 const wpConfig = require('../config/webpack.config');
 
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
+process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {

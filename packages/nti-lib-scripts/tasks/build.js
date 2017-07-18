@@ -1,4 +1,5 @@
 'use strict';
+const DEBUG = process.argv.includes('--debug');
 const path = require('path');
 
 const chalk = require('chalk');
@@ -8,8 +9,8 @@ const call = require('./utils/call-cmd');
 const buildBundle = require('./utils/build-with-rollup');
 const paths = require('../config/paths');
 
-process.env.BABEL_ENV = 'production';
-process.env.NODE_ENV = 'production';
+process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
+process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {
