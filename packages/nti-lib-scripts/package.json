@@ -3,7 +3,8 @@
   "version": "1.0.22",
   "description": "library scripts & dependencies",
   "bin": {
-    "nti-lib-scripts": "./bin/cli.js"
+    "nti-lib-scripts": "./bin/cli.js",
+    "nti-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"

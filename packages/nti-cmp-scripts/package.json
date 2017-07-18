@@ -3,7 +3,8 @@
   "version": "1.0.4",
   "description": "component-specific scripts & dependencies",
   "bin": {
-    "nti-cmp-scripts": "./bin/cli.js"
+    "nti-cmp-scripts": "./bin/cli.js",
+    "nti-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"

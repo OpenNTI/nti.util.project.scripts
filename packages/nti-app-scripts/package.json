@@ -3,7 +3,8 @@
   "version": "1.0.24",
   "description": "app-specific scripts & dependencies",
   "bin": {
-    "nti-app-scripts": "./bin/cli.js"
+    "nti-app-scripts": "./bin/cli.js",
+    "nti-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"
