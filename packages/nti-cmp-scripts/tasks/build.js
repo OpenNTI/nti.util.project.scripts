@@ -1,6 +1,7 @@
 /*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
 const DEBUG = process.argv.includes('--debug');
+const CLEAN = !process.argv.includes('--no-clean');
 
 const path = require('path');
 
@@ -37,7 +38,9 @@ call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
 
 //clean dist
-fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+if (CLEAN) {
+	fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+}
 
 //call build hook
 Promise.resolve(callHook())
