@@ -18,7 +18,7 @@ process.env.JEST_JUNIT_OUTPUT = 'reports/test-results/index.xml';
 // terminate the Node.js process with a non-zero exit code.
 process.on('unhandledRejection', err => { throw err; });
 
-const isTestTask = process.argv[1] === module.filename;
+const isTestTask = path.basename(process.argv[1]) === path.basename(module.filename);
 
 const argv = isTestTask ? process.argv.slice(2) : [];
 

@@ -1,8 +1,11 @@
 'use strict';
 const fs = require('fs');
+const path = require('path');
 
-const paths = require('../../config/paths');
-const testEnvironment = require(paths.packageJson)['testEnvironment'];
+//get the 'active' paths
+const paths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
+const {testEnvironment} = require(paths.packageJson);
+
 module.exports = (resolve, rootDir) => {
 
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
@@ -17,6 +20,10 @@ module.exports = (resolve, rootDir) => {
 			'lcov',
 			'cobertura'
 		],
+		'moduleDirectories': [
+			paths.appModules && paths.appModules.replace(paths.path, '<rootDir>'),
+			'node_modules'
+		].filter(Boolean),
 		roots: [
 			'<rootDir>/src/'
 		],
