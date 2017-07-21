@@ -1,9 +1,14 @@
 'use strict';
 const chalk = require('chalk');
+const path = require('path');
 const gitState = require('git-state');
 const semver = require('semver');
 const paths = require('../config/paths');
+const readPackageJson = require('./utils/read-package-json');
 const call = require('./utils/call-cmd');
+
+const currentScriptsPaths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
+const {json: {name: command}} = readPackageJson(currentScriptsPaths.ownPackageJson);
 
 const tasks = ['check', 'test'];
 const DATE = new Date().toString();
@@ -45,7 +50,7 @@ write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 for (let task of tasks) {
 	write(chalk.cyan('\nRunning: Task: ' + chalk.underline.magenta(task)));
-	call('node', [require.resolve('./' + task)]);
+	call(command, [task]);
 }
 
 const version = semver.inc(pkg.version, inc);
