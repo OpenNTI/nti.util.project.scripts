@@ -33,8 +33,8 @@ module.exports = function recordVersions () {
 	if (!lsErr && ntiListBuffer) {
 		const [title, ...deps] = ntiListBuffer
 			.toString('utf8')
-			.split('\n')
-			.filter(x => /nti-/.test(x) && !/deduped$/.test(x))
+			.split(/[\r\n]+/)
+			.filter(x => /nti-/.test(x) && !/deduped\s*$/.test(x))
 			.map(x => x.replace(/^[│└├─┬\s]{1,}/, '- ').trim());
 
 		list = [
