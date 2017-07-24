@@ -13,11 +13,25 @@ const gitRevision = JSON.stringify(require('nti-util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
 const paths = require('./paths');
-
+// const pkg = require(paths.packageJson);
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
 const modules = paths.nodeModules;
+
+// const prefetch = [];
+//
+// for (let dep of new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.devDependencies || {})])) {
+// 	if (/^nti-/.test(dep)) {
+// 		try {
+// 			const i = require.resolve(path.join(paths.nodeModules, dep));
+// 			prefetch.push(new webpack.PrefetchPlugin(paths.path, path.relative(paths.path, i)));
+// 		} catch (e) {
+// 			//
+// 		}
+// 	}
+// }
+
 
 //fake out the plugin (it does an instanceof test)
 const NTI_PACKAGES = Object.assign(new RegExp(''), {
@@ -196,6 +210,9 @@ exports = module.exports = {
 			NODE_ENV: PROD ? 'production' : 'development'
 		}),
 
+		new webpack.AutomaticPrefetchPlugin(),
+
+		// ...prefetch,
 
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
