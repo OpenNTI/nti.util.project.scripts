@@ -62,7 +62,6 @@ exports = module.exports = {
 		devtoolModuleFilenameTemplate: info => path.relative(paths.src, info.absoluteResourcePath),
 	},
 
-	cache: !PROD,
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
 	target: 'web',

@@ -25,7 +25,6 @@ exports = module.exports = {
 		libraryTarget: 'commonjs-module'
 	},
 
-	cache: !PROD,
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
 	node: {
