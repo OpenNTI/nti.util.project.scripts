@@ -37,7 +37,9 @@ call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
 
 //clean dist
-fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+if (process.env.NODE_ENV === 'production') {
+	fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+}
 
 //call build hook
 Promise.resolve(callHook())
