@@ -1,5 +1,5 @@
 'use strict';
-const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');;
+const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
