@@ -25,7 +25,9 @@ module.exports = (resolve, rootDir) => {
 			'node_modules'
 		].filter(Boolean),
 		roots: [
-			'<rootDir>/src/'
+			paths.appModules
+				? paths.appModules.replace(paths.path, '<rootDir>')
+				: '<rootDir>/src/'
 		],
 		setupFiles: [
 			'babel-polyfill',
