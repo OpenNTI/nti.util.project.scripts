@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.1.0",
     "baggage-loader": "^1.0.1-nti.0",
     "chalk": "^2.0.1",
+    "circular-dependency-plugin": "^3.0.0",
     "compression-webpack-plugin": "^1.0.0",
     "cross-spawn": "*",
     "css-loader": "0.x.x",

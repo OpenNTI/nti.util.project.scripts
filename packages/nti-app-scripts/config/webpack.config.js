@@ -1,8 +1,11 @@
 'use strict';
+const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');;
+
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 // const AppCachePlugin = require('appcache-webpack-plugin');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const {StatsWriterPlugin} = require('webpack-stats-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -191,6 +194,14 @@ exports = module.exports = {
 	plugins: [
 		new webpack.EnvironmentPlugin({
 			NODE_ENV: PROD ? 'production' : 'development'
+		}),
+
+
+		DEBUG && new CircularDependencyPlugin({
+			// exclude detection of files based on a RegExp
+			exclude: /node_modules/,
+			// add errors to webpack instead of warnings
+			// failOnError: true
 		}),
 
 		PROD && new StatsWriterPlugin({
