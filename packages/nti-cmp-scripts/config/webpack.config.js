@@ -1,9 +1,11 @@
 /*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
+const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const CircularDependencyPlugin = require('circular-dependency-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
@@ -173,7 +175,17 @@ exports = module.exports = {
 	},
 
 	plugins: [
+		new webpack.AutomaticPrefetchPlugin(),
+
+		DEBUG && new CircularDependencyPlugin({
+			// exclude detection of files based on a RegExp
+			exclude: /node_modules/,
+			// add errors to webpack instead of warnings
+			// failOnError: true
+		}),
+
 		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
+
 		new ExtractTextPlugin({
 			filename: 'index.css',
 			allChunks: true,
