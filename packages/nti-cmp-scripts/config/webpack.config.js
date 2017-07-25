@@ -112,7 +112,10 @@ exports = module.exports = {
 			{
 				test: /\.jsx?$/,
 				enforce: 'pre',
-				loader: require.resolve('source-map-loader')
+				loader: require.resolve('source-map-loader'),
+				include: [
+					paths.nodeModules
+				]
 			},
 
 			{
@@ -122,7 +125,10 @@ exports = module.exports = {
 					//this just allows this loader to run on this path, it does not force the contents into the bundle.
 					paths.testApp
 				],
-				loader: require.resolve('babel-loader')
+				loader: require.resolve('babel-loader'),
+				options: {
+					cacheDirectory: true,
+				}
 			},
 
 			{

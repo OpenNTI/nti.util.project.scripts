@@ -140,7 +140,10 @@ exports = module.exports = {
 			{
 				test: /\.jsx?$/,
 				enforce: 'pre',
-				loader: require.resolve('source-map-loader')
+				loader: require.resolve('source-map-loader'),
+				include: [
+					paths.nodeModules
+				]
 			},
 			{
 				test: /\.async\.jsx?$/,
@@ -149,7 +152,10 @@ exports = module.exports = {
 			{
 				test: /\.jsx?$/,
 				include: [paths.src],
-				loader: require.resolve('babel-loader')
+				loader: require.resolve('babel-loader'),
+				options: {
+					cacheDirectory: true,
+				}
 			},
 			{
 				test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
