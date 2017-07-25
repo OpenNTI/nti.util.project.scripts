@@ -3,6 +3,8 @@ const chalk = require('chalk');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const webpack = require('webpack');
 const {ProgressPlugin} = webpack;
+const paths = require('../../config/paths');
+const pkg = require(paths.packageJson);
 
 module.exports = function build (config = require('../../config/webpack.config')) {
 	console.log('Creating a production build...');
@@ -25,7 +27,7 @@ module.exports = function build (config = require('../../config/webpack.config')
 				return reject(new Error(messages.errors.join('\n\n')));
 			}
 
-			if (process.env.CI && messages.warnings.length) {
+			if (process.env.CI && messages.warnings.length && !(pkg.build || {}).ignoreWarnings) {
 				console.log(
 					chalk.yellow(
 						'\nTreating warnings as errors because process.env.CI = true.\n' +
