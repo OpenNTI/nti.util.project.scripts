@@ -11,6 +11,8 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const gitRevision = JSON.stringify(require('nti-util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const paths = require('./paths');
 // const pkg = require(paths.packageJson);
@@ -209,6 +211,8 @@ exports = module.exports = {
 			NODE_ENV: PROD ? 'production' : 'development'
 		}),
 
+		// Add module names to factory functions so they appear in browser profiler.
+		new webpack.NamedModulesPlugin(),
 
 		// ...prefetch,
 
@@ -244,6 +248,7 @@ exports = module.exports = {
 		// }),
 
 		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
+
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
 			// names: ['vendor', 'manifest'],
@@ -264,6 +269,17 @@ exports = module.exports = {
 		new webpack.DefinePlugin({
 			'BUILD_SOURCE': gitRevision
 		}),
+
+		// Watcher doesn't work well if you mistype casing in a path so we use
+		// a plugin that prints an error when you attempt to do this.
+		// See https://github.com/facebookincubator/create-react-app/issues/240
+		new CaseSensitivePathsPlugin(),
+
+		// If you require a missing module and then `npm install` it, you still have
+		// to restart the development server for Webpack to discover it. This plugin
+		// makes the discovery automatic so you don't have to restart.
+		// See https://github.com/facebookincubator/create-react-app/issues/186
+		new WatchMissingNodeModulesPlugin(paths.appNodeModules),
 
 		PROD && new webpack.optimize.UglifyJsPlugin({
 			compress: { warnings: false },

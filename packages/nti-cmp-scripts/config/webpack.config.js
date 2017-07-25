@@ -5,9 +5,11 @@ const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profi
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
+const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
@@ -183,6 +185,8 @@ exports = module.exports = {
 	},
 
 	plugins: [
+		// Add module names to factory functions so they appear in browser profiler.
+		new webpack.NamedModulesPlugin(),
 
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
@@ -192,6 +196,17 @@ exports = module.exports = {
 		}),
 
 		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
+
+		// Watcher doesn't work well if you mistype casing in a path so we use
+		// a plugin that prints an error when you attempt to do this.
+		// See https://github.com/facebookincubator/create-react-app/issues/240
+		new CaseSensitivePathsPlugin(),
+
+		// If you require a missing module and then `npm install` it, you still have
+		// to restart the development server for Webpack to discover it. This plugin
+		// makes the discovery automatic so you don't have to restart.
+		// See https://github.com/facebookincubator/create-react-app/issues/186
+		new WatchMissingNodeModulesPlugin(paths.appNodeModules),
 
 		new ExtractTextPlugin({
 			filename: 'index.css',
