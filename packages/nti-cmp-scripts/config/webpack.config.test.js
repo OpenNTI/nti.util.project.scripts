@@ -2,7 +2,12 @@
 const paths = require('./paths');
 
 exports = module.exports = Object.assign(require('./webpack.config'), {
-	entry: paths.resolveApp('./test/app/index.js'),
+	entry: {
+		index: [
+			require.resolve('babel-polyfill'),
+			paths.resolveApp('./test/app/index.js')
+		]
+	},
 	externals: [],
 	output: {
 		path: '/',

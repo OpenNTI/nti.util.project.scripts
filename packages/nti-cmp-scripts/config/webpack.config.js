@@ -100,7 +100,11 @@ exports = module.exports = {
 						loader: require.resolve('eslint-loader'),
 					},
 				],
-				include: paths.src,
+				include: [
+					paths.src,
+					//this just allows this loader to run on this path, it does not force the contents into the bundle.
+					paths.testApp
+				],
 			},
 
 			{
@@ -111,7 +115,11 @@ exports = module.exports = {
 
 			{
 				test: /\.jsx?$/,
-				include: [paths.src],
+				include: [
+					paths.src,
+					//this just allows this loader to run on this path, it does not force the contents into the bundle.
+					paths.testApp
+				],
 				loader: require.resolve('babel-loader')
 			},
 

@@ -11,6 +11,7 @@ function resolveOwn (relativePath) {
 
 module.exports = Object.assign({}, paths, {
 	appModules: null,
+	testApp: paths.resolveApp('test'),
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
 	webpackDevConfig: resolveOwn('./config/webpack.config.test.js'),
