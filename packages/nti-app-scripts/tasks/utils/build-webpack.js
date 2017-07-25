@@ -9,7 +9,9 @@ module.exports = function build (config = require('../../config/webpack.config')
 
 	const compiler = webpack(config);
 
-	compiler.apply(new ProgressPlugin({profile: false}));
+	if (!process.env.CI) {
+		compiler.apply(new ProgressPlugin({profile: false}));
+	}
 
 	return new Promise((resolve, reject) => {
 		compiler.run((err, stats) => {
