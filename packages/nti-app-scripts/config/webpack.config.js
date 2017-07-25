@@ -209,7 +209,6 @@ exports = module.exports = {
 			NODE_ENV: PROD ? 'production' : 'development'
 		}),
 
-		new webpack.AutomaticPrefetchPlugin(),
 
 		// ...prefetch,
 

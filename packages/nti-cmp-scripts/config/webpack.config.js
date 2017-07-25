@@ -183,7 +183,6 @@ exports = module.exports = {
 	},
 
 	plugins: [
-		new webpack.AutomaticPrefetchPlugin(),
 
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
