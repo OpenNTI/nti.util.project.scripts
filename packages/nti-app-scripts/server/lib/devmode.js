@@ -28,9 +28,14 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 			'*': '//localhost:' + port
 		},
 
-		noInfo: false,
-		quiet: false,
+		clientLogLevel: 'none',
+
+		overlay: true,
+
+		noInfo: true,
+		quiet: true,
 		lazy: false,
+
 		watchOptions: {
 			aggregateTimeout: 5000
 		},

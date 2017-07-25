@@ -15,8 +15,6 @@ const port = 8000;
 //	--watch
 //	--progress
 //	--inline
-//	--info false
-//	--content-base ./test/app/
 
 call('webpack-dev-server', [
 	'-d',
@@ -25,8 +23,6 @@ call('webpack-dev-server', [
 	'--port', port,
 	'--quiet',
 	'--watch',
-	'--progress',
-	'--inline',
-	'--info', 'false',
-	'--content-base', paths.resolveApp('test/app/')
+	// '--progress',
+	'--inline'
 ]);

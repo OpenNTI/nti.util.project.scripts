@@ -13,10 +13,26 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		path: '/',
 		filename: 'index.js'
 		// publicPath: '/'
+	},
+	node: {
+		dgram: 'empty',
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+	},
+	performance: {
+		hints: false,
+	},
+	devServer: {
+		allowedHosts: ['.dev'],
+		clientLogLevel: 'none',
+		contentBase: paths.resolveApp('test/app/'),
+		watchContentBase: true,
+		overlay: true,
+		noInfo: true
 	}
 });
 
-delete exports.node;
 
 exports.module.rules.push({
 	test: /\.(eot|ttf|woff)$/,
