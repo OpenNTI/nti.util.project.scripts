@@ -10,10 +10,10 @@ const {
 
 const IGNORED_FILES = [
 	/\.DS_Store/,
-	/js$/, //JS files & the js directory
-	/fonts$/, // fonts directory
-	/mocks$/, // mocks directory
-	/scss$/,  // scss directory
+	/\/js$/, //JS files & the js directory
+	/\/fonts$/, // fonts directory
+	/\/mocks$/, // mocks directory
+	/\/scss$/,  // scss directory
 ];
 
 module.exports = function copyStaticAssets () {
