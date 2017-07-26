@@ -32,8 +32,8 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 
 		overlay: true,
 
-		noInfo: true,
-		quiet: true,
+		noInfo: false,
+		quiet: false,
 		lazy: false,
 
 		watchOptions: {
