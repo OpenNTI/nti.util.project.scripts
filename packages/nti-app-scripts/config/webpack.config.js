@@ -19,7 +19,6 @@ const paths = require('./paths');
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
-const modules = paths.nodeModules;
 
 // const prefetch = [];
 //
@@ -37,7 +36,7 @@ const modules = paths.nodeModules;
 
 //fake out the plugin (it does an instanceof test)
 const NTI_PACKAGES = Object.assign(new RegExp(''), {
-	prefix: `${modules}/nti-`,
+	prefix: `${paths.nodeModules}/nti-`,
 	decendent: /node_modules/,
 
 	test (x) {
@@ -142,7 +141,7 @@ exports = module.exports = {
 				enforce: 'pre',
 				loader: require.resolve('source-map-loader'),
 				include: [
-					paths.nodeModules
+					NTI_PACKAGES
 				]
 			},
 			{
