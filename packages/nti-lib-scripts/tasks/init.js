@@ -71,7 +71,7 @@ pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PR
 pkg.scripts['clean'] = global.NTI_INIT_SCRIPT_CLEAN || `${scriptPackageName} clean`;
 pkg.scripts['check'] = global.NTI_INIT_SCRIPT_CHECK || `${scriptPackageName} check`;
 pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
-pkg.scripts['install-shapshots'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} install-shapshots`;
+pkg.scripts['install-snapshots'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} install-snapshots`;
 
 if (global.NTI_INIT_PACKAGE_HOOK) {
 	global.NTI_INIT_PACKAGE_HOOK(pkg);
