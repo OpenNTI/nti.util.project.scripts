@@ -26,7 +26,12 @@ exports = module.exports = {
 		path: path.join(paths.path, path.dirname(pkg.main)),
 		filename: path.basename(pkg.main),
 		library: pkg.name,
-		libraryTarget: 'commonjs-module'
+		libraryTarget: 'commonjs-module',
+		pathinfo: !PROD,
+		devtoolModuleFilenameTemplate: info =>
+			path.resolve(info.absoluteResourcePath)
+				.replace(path.resolve(paths.path), `/${path.basename(paths.path)}`)
+				.replace(/\\/g, '/')
 	},
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
