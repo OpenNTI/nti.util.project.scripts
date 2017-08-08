@@ -38,19 +38,16 @@ for (let dep of new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(
 }
 
 
-//fake out the plugin (it does an instanceof test)
-const NTI_PACKAGES = Object.assign(new RegExp(''), {
-	prefix: `${paths.nodeModules}/nti-`,
-	decendent: /node_modules/,
+function isNTIPackage (x) {
+	const prefix = `${paths.nodeModules}/nti-`;
+	const decendent = /node_modules/;
 
-	test (x) {
-		let str = x ? x.toString() : '';
-		if(str.startsWith(this.prefix)) {
-			str = str.substr(this.prefix.length);
-			return !this.decendent.test(str);
-		}
+	let str = x ? x.toString() : '';
+	if(str.startsWith(prefix)) {
+		str = str.substr(prefix.length);
+		return !decendent.test(str);
 	}
-});
+}
 
 
 exports = module.exports = {
@@ -268,7 +265,7 @@ exports = module.exports = {
 			minChunks: (module) => (
 				module.context
 				&& /node_modules/.test(module.context)
-				&& !NTI_PACKAGES.test(module.context)
+				&& !isNTIPackage(module.context)
 			)
 		}),
 
