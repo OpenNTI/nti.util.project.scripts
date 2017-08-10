@@ -2,7 +2,7 @@
 const chalk = require('chalk');
 
 global.NTI_INIT_TO_COPY = [
-	'.stylelintrc'
+	'stylelintrc.dotfile'
 ];
 global.NTI_INIT_TO_REMOVE = [
 	'webpack.config.js'

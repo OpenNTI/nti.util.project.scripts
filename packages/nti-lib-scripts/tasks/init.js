@@ -24,6 +24,13 @@ const dropDeps = [
 	...Object.keys(combindedDeps)
 ];
 
+const DOTFILE = '.dotfile';
+const getFinalFilename = (file) =>
+	(file.endsWith(DOTFILE))
+		? `.${file.substr(0, -DOTFILE.length)}`
+		: file;
+
+
 
 const write = x => console.log(chalk.cyan('\n' + x));
 
@@ -81,23 +88,28 @@ if (global.NTI_INIT_PACKAGE_HOOK) {
 // save:
 writePackageJson(pkg, {spaces: indent});
 
+
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const ToCopy = [
-	'.babelrc',
-	'.editorconfig',
-	'.eslintignore',
-	'.eslintrc',
-	'.npmignore',
+	'babelrc.dotfile',
+	'editorconfig.dotfile',
+	'eslintignore.dotfile',
+	'eslintrc.dotfile',
+	'gitignore.dotfile',
+	'npmignore.dotfile',
 	...(global.NTI_INIT_TO_COPY || [])
 ];
-write(`Updating/Adding: ${chalk.magenta(ToCopy.join(', '))}`);
+write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
 for (let file of ToCopy) {
 	const lib = path.resolve(paths.ownPath, 'config', 'init-files', file);
 	const cur = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files', file);
 
+	//to make dotfiles easier to bundle and not auto-ignored, lets call them '.dotfile's...and rename them on copy.
+	const outFile = getFinalFilename(file);
+
 	fs.copySync(
 		fs.existsSync(cur) ? cur : lib,
-		path.resolve(paths.path, file)
+		path.resolve(paths.path, outFile)
 	);
 }
 
