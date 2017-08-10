@@ -127,11 +127,13 @@ const ToRemove = [
 	'snapshot.sh',
 	'pre-commit.sample',
 	...AdditionalToRemove
-].filter(x => !NotToRemove.includes(x));
+].filter(x => fs.existsSync(x) && !NotToRemove.includes(x));
 
-write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
-for (let file of ToRemove) {
-	fs.removeSync(path.resolve(paths.path, file));
+if (ToRemove.length > 0) {
+	write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
+	for (let file of ToRemove) {
+		fs.removeSync(path.resolve(paths.path, file));
+	}
 }
 
 if (!SKIP_REGEN) {
