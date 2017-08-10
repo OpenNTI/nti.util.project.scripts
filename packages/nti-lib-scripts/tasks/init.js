@@ -27,7 +27,7 @@ const dropDeps = [
 const DOTFILE = '.dotfile';
 const getFinalFilename = (file) =>
 	(file.endsWith(DOTFILE))
-		? `.${file.substr(0, -DOTFILE.length)}`
+		? `.${file.slice(0, -DOTFILE.length)}`
 		: file;
 
 
