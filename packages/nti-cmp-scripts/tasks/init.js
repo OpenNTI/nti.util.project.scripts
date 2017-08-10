@@ -1,6 +1,6 @@
 'use strict';
 global.NTI_INIT_TO_COPY = [
-	'.stylelintrc'
+	'stylelintrc.dotfile'
 ];
 global.NTI_INIT_TO_REMOVE = [
 	'-test', //leave the test folder alone
