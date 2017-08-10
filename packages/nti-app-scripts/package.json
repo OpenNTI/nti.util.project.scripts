@@ -1,6 +1,6 @@
 {
   "name": "nti-app-scripts",
-  "version": "1.0.46",
+  "version": "1.0.47",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "nti-app-scripts": "./bin/cli.js"
@@ -44,7 +44,7 @@
     "json-colorz": "0.x.x",
     "node-sass": "^4.0.0",
     "normalize.css": "^7.0.0",
-    "nti-lib-scripts": "^1.0.33",
+    "nti-lib-scripts": "^1.0.34",
     "nti-util-git-rev": "^1.0.0",
     "nti-web-service": "^1.5.0",
     "null-loader": "0.x.x",
