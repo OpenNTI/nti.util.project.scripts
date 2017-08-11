@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "lerna publish --npm-tag=alpha"
+    "release": "lerna publish --npm-tag=alpha",
+    "postinstall": "lerna bootstrap --hoist"
   },
   "repository": {
     "type": "git",
