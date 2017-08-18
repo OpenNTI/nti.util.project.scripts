@@ -33,7 +33,11 @@ EOF
 
 	#replace the package.json with the temp...
 	mv .package-alpha.json package.json
-	npm publish --tag alpha
+	PACKAGE=`node -e "console.log((o => o.name+'@'+o.version)(require('./package.json')))"`
+	EXISTS=`npm view $PACKAGE`
+	if [ ${#EXISTS} == 0 ] ; then
+		npm publish --tag alpha
+	fi
 
 	git checkout package.json
 	)
