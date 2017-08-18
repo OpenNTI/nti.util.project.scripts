@@ -1,6 +1,40 @@
 #!/usr/bin/env bash
-lerna publish --yes --npm-tag alpha
+lerna publish --yes
 
-npm dist-tag rm nti-app-scripts latest
-npm dist-tag rm nti-cmp-scripts latest
-npm dist-tag rm nti-lib-scripts latest
+DIRS=packages/*
+
+for f in $DIRS;
+do
+	if [ ! -d $f ] ; then
+		continue
+	fi
+
+	(
+	cd $f;
+
+	# point all "nti-" dependencies to the snapshot tag.
+	node <<EOF > .package-alpha.json
+		process.stdout.write(
+			JSON.stringify(
+				(json => ([
+						json.dependencies,
+						json.devDependencies
+					].forEach(deps =>
+						deps && Object.keys(deps)
+							.filter(x => x.startsWith('nti-'))
+							.forEach(x => (o => o[x] = 'alpha')(deps))
+					),
+					json.version = json.version + '-alpha',
+					json
+				))(require('./package.json')), void 0, 2
+			)
+		)
+EOF
+
+	#replace the package.json with the temp...
+	mv .package-alpha.json package.json
+	npm publish --tag alpha
+
+	git checkout package.json
+	)
+done
