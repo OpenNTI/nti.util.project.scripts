@@ -32,20 +32,16 @@ fs.emptyDirSync(path.resolve(paths.path, 'dist'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
+Promise.resolve()
 //Copy server code...
-copyServerCode();
-
+	.then(() => copyServerCode())
 //call build hook
-callHook();
-
+	.then(() => callHook())
 //Copy Static assets...
-copyStaticAssets();
-
+	.then(() => copyStaticAssets())
 //Update React library references...
-updateLibraryReferences();
-
+	.then(() => updateLibraryReferences())
 // Run webpack...
-buildBundle();
-
+	.then(() => buildBundle())
 //record versions
-recordVersions();
+	.then(() => recordVersions());
