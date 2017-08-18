@@ -1,16 +1,16 @@
 'use strict';
 const chalk = require('chalk');
-const path = require('path');
 const fs = require('fs-extra');
 
 const {resolveApp} = require('../config/paths');
 
 const outputs = [
-	resolveApp('dist')
+	resolveApp('dist'),
+	resolveApp('reports')
 ];
 
 const write = x => console.log(chalk.cyan('\n' + x));
-const dirs = outputs.map(x => path.dirname(x.dest))
+const dirs = outputs
 	.reduce((a, x) => a.includes(x) ? a : [...a, x], [])
 	.filter(fs.existsSync);
 
