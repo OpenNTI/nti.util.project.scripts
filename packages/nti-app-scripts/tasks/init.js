@@ -11,8 +11,7 @@ global.NTI_INIT_SCRIPT_START = 'nti-app-scripts start';
 
 global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
 	Object.assign(pkg, {
-		homepage: 'proxy://localhost:8083/app/',
-		testEnvironment: 'jsdom'
+		homepage: 'proxy://localhost:8083/app/'
 	});
 };
 
