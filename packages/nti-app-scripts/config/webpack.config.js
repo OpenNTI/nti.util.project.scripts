@@ -26,14 +26,15 @@ const sourceMapExclude = [
 ];
 
 for (let dep of new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.devDependencies || {})])) {
-	if (/^nti-/.test(dep)) {
-		try {
+	try {
+		if (/^nti-/.test(dep)) {
 			const i = require.resolve(dep);
 			sourceMapInclude.push(i);
+			sourceMapExclude.push(path.join(i, 'node_modules'));
 			// prefetch.push(new webpack.PrefetchPlugin(paths.path, path.relative(paths.path, i)));
-		} catch (e) {
-			//meh
 		}
+	} catch (e) {
+		//meh
 	}
 }
 
@@ -155,10 +156,7 @@ exports = module.exports = {
 			{
 				test: /\.jsx?$/,
 				include: [paths.src],
-				loader: require.resolve('babel-loader'),
-				options: {
-					cacheDirectory: true,
-				}
+				loader: require.resolve('babel-loader')
 			},
 			{
 				test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
@@ -260,8 +258,6 @@ exports = module.exports = {
 
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
-			// names: ['vendor', 'manifest'],
-			// children: true,
 			minChunks: (module) => (
 				module.context
 				&& /node_modules/.test(module.context)

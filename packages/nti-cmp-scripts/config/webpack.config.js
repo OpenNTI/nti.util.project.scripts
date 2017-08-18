@@ -130,10 +130,7 @@ exports = module.exports = {
 					//this just allows this loader to run on this path, it does not force the contents into the bundle.
 					paths.testApp
 				],
-				loader: require.resolve('babel-loader'),
-				options: {
-					cacheDirectory: true,
-				}
+				loader: require.resolve('babel-loader')
 			},
 
 			{
