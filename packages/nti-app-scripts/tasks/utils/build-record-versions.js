@@ -23,14 +23,14 @@ module.exports = function recordVersions () {
 
 	let list;
 
-	const {status: laErr, stdout: listBuffer} = call('npm', 'list', '--long');
-	if (!laErr && listBuffer) {
+	const {stdout: listBuffer} = call('npm', 'list', '--long');
+	if (listBuffer) {
 		list = listBuffer.toString('utf8');
 		fs.writeFileSync(versions, list);
 	}
 
-	const {status: lsErr, stdout: ntiListBuffer} = call('npm', 'list');
-	if (!lsErr && ntiListBuffer) {
+	const {stdout: ntiListBuffer} = call('npm', 'list');
+	if (ntiListBuffer) {
 		const [title, ...deps] = ntiListBuffer
 			.toString('utf8')
 			.split(/[\r\n]+/)
