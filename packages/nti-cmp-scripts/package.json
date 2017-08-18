@@ -1,6 +1,6 @@
 {
   "name": "nti-cmp-scripts",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "component-specific scripts & dependencies",
   "bin": {
     "nti-cmp-scripts": "./bin/cli.js"
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
-    "nti-app-scripts": "^1.0.49",
+    "nti-app-scripts": "^1.0.50",
     "nti-lib-scripts": "^1.0.36"
   }
 }
