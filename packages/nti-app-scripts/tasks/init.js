@@ -10,7 +10,10 @@ global.NTI_INIT_TO_REMOVE = [
 global.NTI_INIT_SCRIPT_START = 'nti-app-scripts start';
 
 global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
-	pkg.homepage = 'proxy://localhost:8083/app/';
+	Object.assign(pkg, {
+		homepage: 'proxy://localhost:8083/app/',
+		testEnvironment: 'jsdom'
+	});
 };
 
 require('nti-lib-scripts/tasks/init');
