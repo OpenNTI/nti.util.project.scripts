@@ -10,11 +10,11 @@ module.exports = function buildBundle ({ignoreExisting = false} = {}) {
 		.then(bundle =>
 			Promise.all(
 				outputs.map(o =>
-					fs.existsSync(o.dest)
-						? (ignoreExisting || console.warn('%s exists, skipping.', o.dest))
+					fs.existsSync(o.file)
+						? (ignoreExisting || console.warn('%s exists, skipping.', o.file))
 						: bundle.write({
 							format: o.format,
-							file: o.dest,
+							file: o.file,
 							sourcemap: true,
 							exports: 'named'
 						})
