@@ -16,7 +16,7 @@ module.exports = (resolve, rootDir) => {
 		collectCoverageFrom: ['src/**/*.{js,jsx}','!**/*.spec.js'],
 		coverageDirectory: 'reports/coverage',
 		coverageReporters: [
-			'text',
+			'text-summary',
 			'lcov',
 			'cobertura'
 		],
