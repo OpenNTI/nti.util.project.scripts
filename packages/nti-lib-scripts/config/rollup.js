@@ -54,8 +54,8 @@ const externals = [
 ].reduce((a, d) => [...a, ...d], []);
 
 const outputs = [
-	{format: 'cjs', dest: path.resolve(paths.path, pkg.main)},
-	pkg.module && {format: 'es', dest: path.resolve(paths.path, pkg.module)}
+	{format: 'cjs', file: path.resolve(paths.path, pkg.main)},
+	pkg.module && {format: 'es', file: path.resolve(paths.path, pkg.module)}
 ].filter(Boolean);
 
 
@@ -67,10 +67,9 @@ function isExternal (id) {
 module.exports = {
 	outputs,
 	config: {
-		entry: path.resolve(paths.src, 'index.js'),
-		format: outputs[0].format,
-		dest: outputs[0].dest,
-		sourceMap: true,
+		input: path.resolve(paths.src, 'index.js'),
+		output: outputs,
+		sourcemap: true,
 		exports: 'named',
 		external: isExternal,
 		plugins: [

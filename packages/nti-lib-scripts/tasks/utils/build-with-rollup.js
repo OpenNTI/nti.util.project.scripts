@@ -14,8 +14,8 @@ module.exports = function buildBundle ({ignoreExisting = false} = {}) {
 						? (ignoreExisting || console.warn('%s exists, skipping.', o.dest))
 						: bundle.write({
 							format: o.format,
-							dest: o.dest,
-							sourceMap: true,
+							file: o.dest,
+							sourcemap: true,
 							exports: 'named'
 						})
 				)
