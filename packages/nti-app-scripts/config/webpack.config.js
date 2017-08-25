@@ -254,7 +254,7 @@ exports = module.exports = {
 		// 	output: 'manifest.appcache'
 		// }),
 
-		webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
+		PROD && webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
 
 		new webpack.optimize.CommonsChunkPlugin({
 			name: 'vendor',
