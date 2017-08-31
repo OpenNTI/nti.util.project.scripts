@@ -5,7 +5,7 @@ const fs = require('fs-extra');
 const {outputs} = require('../config/rollup');
 
 const write = x => console.log(chalk.cyan('\n' + x));
-const dirs = outputs.map(x => path.dirname(x.dest))
+const dirs = outputs.map(x => path.dirname(x.file))
 	.reduce((a, x) => a.includes(x) ? a : [...a, x], [])
 	.filter(fs.existsSync);
 
