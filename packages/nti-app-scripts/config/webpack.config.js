@@ -272,7 +272,9 @@ exports = module.exports = {
 		}),
 
 		new webpack.DefinePlugin({
-			'BUILD_SOURCE': gitRevision
+			'BUILD_SOURCE': gitRevision,
+			'BUILD_PACKAGE_NAME': JSON.stringify(pkg.name),
+			'BUILD_PACKAGE_VERSION': JSON.stringify(pkg.version)
 		}),
 
 		// Watcher doesn't work well if you mistype casing in a path so we use
