@@ -35,7 +35,7 @@ module.exports = function recordVersions () {
 			.toString('utf8')
 			.split(/[\r\n]+/)
 			.filter(x => /nti-/.test(x) && !/deduped\s*$/.test(x))
-			.map(x => x.replace(/^[│└├─┬\s]{1,}/, '- ').trim());
+			.map(x => x.replace(/^[-+|│├─┬└\s]+/, '- ').trim());
 
 		list = [
 			title,
