@@ -73,8 +73,8 @@ exports = module.exports = {
 
 	resolve: {
 		modules: [
-			'node_modules',
-			// paths.nodeModules,
+			// 'node_modules',
+			paths.nodeModules,
 			paths.appModules,
 			paths.resolveApp('src/main/resources/scss'),
 		],
