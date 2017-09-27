@@ -24,7 +24,7 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		hints: false,
 	},
 	devServer: {
-		allowedHosts: ['.dev'],
+		allowedHosts: ['.dev', '.local'],
 		clientLogLevel: 'none',
 		contentBase: paths.resolveApp('test/app/'),
 		watchContentBase: true,
