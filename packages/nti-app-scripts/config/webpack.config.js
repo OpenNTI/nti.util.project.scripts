@@ -25,13 +25,12 @@ const sourceMapExclude = [
 	paths.nodeModules
 ];
 
-for (let dep of new Set([...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.devDependencies || {})])) {
+for (let dep of Object.keys(Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {}))) {
 	try {
 		if (/^nti-/.test(dep)) {
 			const i = require.resolve(dep);
 			sourceMapInclude.push(i);
 			sourceMapExclude.push(path.join(i, 'node_modules'));
-			// prefetch.push(new webpack.PrefetchPlugin(paths.path, path.relative(paths.path, i)));
 		}
 	} catch (e) {
 		//meh
