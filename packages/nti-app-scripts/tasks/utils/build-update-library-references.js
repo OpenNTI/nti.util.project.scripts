@@ -20,8 +20,8 @@ Object.keys(EXTERNAL_LIBS).forEach(x =>
 module.exports = function updateReferences () {
 	const pageSrc = fs.readFileSync(PAGE, {encoding: 'UTF-8'})
 		.replace(
-			/(react\/)(.+)\/(.+)\.js/gm,
-			(_, p, v, script) => (p + v + '/' + script + '.min.js')
+			/(react(?:-dom)?\/)(.+)\/(.+)\.js/gm,
+			(_, p, v, script) => (p + v + '/' + script.replace('development', 'production') + '.min.js')
 		);
 
 	return fs.writeFileSync(PAGE, pageSrc);
