@@ -303,11 +303,6 @@ exports = module.exports = {
 			test: /\.js(x?)($|\?)/i,
 		}),
 
-		// Moment.js is an extremely popular library that bundles large locale files
-		// by default due to how Webpack interprets its code. This is a practical
-		// solution that requires the user to opt into importing specific locales.
-		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
 		PROD && new CompressionPlugin(),
 	].filter(x => x)
