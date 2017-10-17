@@ -2,6 +2,7 @@
   "name": "nti-lib-scripts",
   "version": "1.0.43",
   "description": "library scripts & dependencies",
+  "main": "./bin/cli.js",
   "bin": {
     "nti-lib-scripts": "./bin/cli.js"
   },
@@ -37,8 +38,9 @@
     "detect-indent": "^5.0.0",
     "eslint-config-nti-codestyle-js": "^1.1.0",
     "fs-extra": "^4.0.0",
-    "git-state": "^4.0.0",
+    "git-state": "github:jsg2021/git-state",
     "in-publish": "^2.0.0",
+    "inquirer": "^3.3.0",
     "install-nti-snapshots": "^1.0.0",
     "jest": "^21.0.0",
     "jest-junit": "^3.0.0",
