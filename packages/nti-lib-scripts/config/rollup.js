@@ -97,7 +97,7 @@ module.exports = {
 				include: '**/*.template.svg',
 			}),
 			image({
-				extensions: /\.(png|jpg|jpeg|gif)$/,
+				extensions: /\.(png|jpg|jpeg|gif|svg)$/,
 				exclude: ['**/*.template.svg'],
 			})
 		]
