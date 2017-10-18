@@ -89,15 +89,16 @@ module.exports = {
 			}),
 			babel({
 				runtimeHelpers: true,
-				exclude: 'node_modules/**'
+				exclude: ['node_modules/**', '**/*.template.svg']
 			}),
 			// commonjs({ ignoreGlobal: true }),
 			json(),
 			string({
-				include: '**/*.svg',
+				include: '**/*.template.svg',
 			}),
 			image({
 				extensions: /\.(png|jpg|jpeg|gif)$/,
+				exclude: ['**/*.template.svg'],
 			})
 		]
 	}
