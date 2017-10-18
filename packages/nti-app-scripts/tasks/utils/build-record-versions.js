@@ -4,11 +4,11 @@
 */
 const path = require('path');
 const fs = require('fs-extra');
-const spawn = require('cross-spawn');
+const {spawnSync} = require('child_process');
 const paths = require('../../config/paths');
 
 
-const call = (cmd, ...args) => spawn.sync(cmd, args, {
+const call = (cmd, ...args) => spawnSync(cmd, args, {
 	//npm doesn't output anything when NODE_ENV = 'production'
 	env: Object.assign({}, process.env, { NODE_ENV: null }),
 	stdio: [null, 'pipe', null],

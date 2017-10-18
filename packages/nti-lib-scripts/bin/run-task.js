@@ -1,16 +1,17 @@
 'use strict';
 
-const spawn = require('cross-spawn');
+const {spawnSync} = require('child_process');
 
-// const inspect = process.argv.slice(3).includes('--inspect');// --inspect-brk
+const inspect = process.argv.slice(3).some(x => x.startsWith('--inspect'));// --inspect-brk
 
 module.exports = function run (scriptFile, args) {
 
-	const result = spawn.sync('node',
+	const result = spawnSync('node',
 		[
+			inspect && '--inspect-brk',
 			'--max-old-space-size=8192',
 			scriptFile
-		].concat(args),
+		].filter(Boolean).concat(args),
 		{ stdio: 'inherit' });
 
 	if (result.signal) {
