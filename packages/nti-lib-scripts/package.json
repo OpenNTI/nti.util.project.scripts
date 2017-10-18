@@ -38,7 +38,7 @@
     "detect-indent": "^5.0.0",
     "eslint-config-nti-codestyle-js": "^1.1.0",
     "fs-extra": "^4.0.0",
-    "git-state": "github:jsg2021/git-state#037ea91ffc1bbdb845e945b6709b2846d6ce97a8",
+    "git-state": "github:jsg2021/git-state#01b8d8fa",
     "in-publish": "^2.0.0",
     "inquirer": "^3.3.0",
     "install-nti-snapshots": "^1.0.0",
