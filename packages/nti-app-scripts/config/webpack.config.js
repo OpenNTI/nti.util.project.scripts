@@ -63,8 +63,10 @@ exports = module.exports = {
 		publicPath: paths.servedPath || '/',
 		devtoolModuleFilenameTemplate: info =>
 			path.resolve(info.absoluteResourcePath)
-				.replace(path.resolve(paths.path), `/${path.basename(paths.path)}`)
+				.replace(path.resolve(paths.path), paths.servedPath)
+				.replace('src/main', '')
 				.replace(/\\/g, '/')
+				.replace(/\/\//g, '/')
 	},
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
