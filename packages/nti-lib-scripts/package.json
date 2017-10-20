@@ -1,6 +1,6 @@
 {
   "name": "nti-lib-scripts",
-  "version": "1.0.46",
+  "version": "1.0.47",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -47,7 +47,7 @@
     "git-state": "github:jsg2021/git-state#01b8d8fa",
     "in-publish": "^2.0.0",
     "inquirer": "^3.3.0",
-    "install-nti-snapshots": "^1.0.0",
+    "install-nti-snapshots": "^1.0.1",
     "jest": "^21.0.0",
     "jest-junit": "^3.0.0",
     "rollup": "0.x.x",
