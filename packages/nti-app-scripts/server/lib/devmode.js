@@ -4,21 +4,29 @@ const {worker} = require('cluster');
 
 const first = x => Array.isArray(x) ? x[0] : x;
 
-exports.setupDeveloperMode = function setupDeveloperMode (config) {
+exports.setupDeveloperMode = /*async*/ function setupDeveloperMode (config) {
 	const webpack = require('webpack');
-	// const paths = require('../../config/paths');
+	const paths = require('../../config/paths');
 	const webpackConfigFile = require('../../config/webpack.config');
+	// const getPort = require('get-port');
 
 	const WebpackServer = require('webpack-dev-server');
 
 	const {debug = false, port} = config;
-	const devPort = config['webpack-dev-server'] || 0;
+	const devPort = config['webpack-dev-server'] || 0; //await getPort();
 
 	const webpackConfig = Object.assign({}, first(webpackConfigFile));
 
 	webpackConfig.output.path = '/';
 	webpackConfig.output.publicPath = config.basepath;
 	webpackConfig.output.filename = 'js/[name].js';
+
+	if (devPort !== 0) {
+		for (let entry of Object.keys(webpackConfig.entry)) {
+			const e = webpackConfig.entry[entry];
+			e.unshift(`webpack-dev-server/client?http://localhost:${devPort}`);
+		}
+	}
 
 	const compiler = webpack(webpackConfig);
 
@@ -28,16 +36,11 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 			'*': '//localhost:' + port
 		},
 
-		clientLogLevel: 'none',
-
-		overlay: true,
-
-		noInfo: false,
-		quiet: false,
-		lazy: false,
-
-		watchOptions: {
-			aggregateTimeout: 5000
+		https: true,
+		contentBase: paths.assetsRoot,
+		overlay: {
+			errors: true,
+			warnings: true,
 		},
 
 		stats: {
@@ -53,11 +56,6 @@ exports.setupDeveloperMode = function setupDeveloperMode (config) {
 
 			modules: false,
 			children: false,
-
-			// cached: false,
-			// cachedAssets: false,
-			// showChildren: false,
-			// source: false,
 
 			colors: true,
 			reasons: true,
