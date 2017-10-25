@@ -97,6 +97,7 @@ module.exports = {
 				include: '**/*.template.svg',
 			}),
 			image({
+				output: path.resolve(path.resolve(paths.path, pkg.main), '../images'),
 				extensions: /\.(png|jpg|jpeg|gif|svg)$/,
 				exclude: ['**/*.template.svg'],
 			})
