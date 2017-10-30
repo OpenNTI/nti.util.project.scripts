@@ -4,16 +4,16 @@ const {worker} = require('cluster');
 
 const first = x => Array.isArray(x) ? x[0] : x;
 
-exports.setupDeveloperMode = /*async*/ function setupDeveloperMode (config) {
+exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	const webpack = require('webpack');
 	const paths = require('../../config/paths');
 	const webpackConfigFile = require('../../config/webpack.config');
-	// const getPort = require('get-port');
+	const getPort = require('get-port');
 
 	const WebpackServer = require('webpack-dev-server');
 
 	const {debug = false, port} = config;
-	const devPort = config['webpack-dev-server'] || 0; //await getPort();
+	const devPort = config['webpack-dev-server'] || await getPort();
 
 	const webpackConfig = Object.assign({}, first(webpackConfigFile));
 
