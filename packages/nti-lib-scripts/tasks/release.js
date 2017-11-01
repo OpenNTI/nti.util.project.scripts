@@ -58,7 +58,7 @@ const questions = [
 		prefix: '',
 		suffix: '',
 		message: '\n\n' + chalk.red(chalk.underline(paths.path)) + ' has upstream changes...',
-		defualt: 'exit',
+		default: 'exit',
 		when: hasRemote && behind > 0,
 		choices: [
 			{

@@ -50,7 +50,7 @@ const questions = [
 		prefix: '',
 		suffix: '',
 		message: '\n\nWhat do you want to fix?',
-		defualt: 'exit',
+		default: list[0],
 		when: list.length > 1,
 		choices: list.slice(0, 10).map(x => (
 			{
