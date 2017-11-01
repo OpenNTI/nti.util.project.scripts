@@ -6,6 +6,7 @@
   "bin": {
     "build": "./bin/run.js",
     "check": "./bin/run.js",
+    "fix": "./bin/run.js",
     "clean": "./bin/run.js",
     "install-snapshots": "./bin/run.js",
     "nti-lib-scripts": "./bin/cli.js",
