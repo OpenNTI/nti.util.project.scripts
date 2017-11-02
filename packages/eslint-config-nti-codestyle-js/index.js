@@ -1,3 +1,4 @@
+'use strict';
 const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 
 // The ESLint browser environment defines all browser globals as valid,
@@ -5,7 +6,7 @@ const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 // This is dangerous as it hides accidentally undefined variables.
 // We blacklist the globals that we deem potentially confusing.
 // To use them, explicitly reference them, e.g. `window.name` or `window.status`.
-var restrictedGlobals = [
+const restrictedGlobals = [
 	'addEventListener',
 	'blur',
 	'close',
@@ -64,7 +65,7 @@ var restrictedGlobals = [
 	'stop',
 	'toolbar',
 	'top',
-	
+
 	//block deprecated jasmine globals
 	'it',
 	'xit',
@@ -103,7 +104,7 @@ module.exports = {
 		node: true,
 		browser: true
 	},
-	
+
 	plugins: [
 		'import'
 	],
@@ -122,7 +123,7 @@ module.exports = {
 		'no-restricted-globals': ['error'].concat(restrictedGlobals),
 		'no-shadow': ['warn', {'builtinGlobals': false, 'hoist': 'never', 'allow': ['done']}],
 		'no-throw-literal': 'error',
-		'no-unused-vars': [DEV ? 'warn' : 'error', {"args": "none"}],
+		'no-unused-vars': [DEV ? 'warn' : 'error', {'args': 'none'}],
 		'no-use-before-define': ['error', 'nofunc'],
 		'no-var': 'error',
 		'quotes': ['warn', 'single'],
@@ -135,7 +136,7 @@ module.exports = {
 		'strict': ['error', 'never'],
 		'valid-jsdoc': 'warn',
 		'wrap-iife': ['error', 'any'],
-		
+
 		'import/no-duplicates': 'warn',
 		'import/no-extraneous-dependencies': ['error', {'devDependencies': ['**/test/*.js', '**/*.spec.js']}],
 		'import/no-unresolved': ['error', {'commonjs': true}],
