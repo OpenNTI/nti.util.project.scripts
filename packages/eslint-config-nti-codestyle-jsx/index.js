@@ -5,10 +5,10 @@ module.exports = {
 	],
 
 	settings: {
-		'import/extensions': ['.js', '.jsx'],
+		'import/extensions': ['.js', '.mjs', '.jsx'],
 		'import/resolver': {
 			'node': {
-				'extensions': ['.js', '.jsx'],
+				'extensions': ['.js', '.mjs', '.jsx'],
 				'moduleDirectory': [
 					'node_modules',
 					'src/main/js'

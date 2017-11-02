@@ -74,14 +74,15 @@ module.exports = {
 		external: isExternal,
 		plugins: [
 			resolve({
-				extensions: [ '.js', '.jsx' ],
+				extensions: [ '.js', '.jsx', '.mjs' ],
 				modulesOnly: true,
 			}),
 			eslint({
 				exclude: 'node_modules/**',
 				include: [
 					'**/*.js',
-					'**/*.jsx'
+					'**/*.jsx',
+					'**/*.mjs'
 				],
 				baseConfig: false,
 				configFile: lintConfig,

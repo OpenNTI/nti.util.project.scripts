@@ -1,4 +1,3 @@
-
 const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 
 // The ESLint browser environment defines all browser globals as valid,
@@ -84,6 +83,18 @@ module.exports = {
 			experimentalObjectRestSpread: true,
 			impliedStrict: true,
 			globalReturn: false
+		}
+	},
+
+	settings: {
+		'import/extensions': ['.js', '.mjs'],
+		'import/resolver': {
+			'node': {
+				'extensions': ['.js', '.mjs'],
+				'moduleDirectory': [
+					'node_modules'
+				]
+			}
 		}
 	},
 
