@@ -15,7 +15,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
 
-	const {debug = false, port} = config;
+	const {debug = false/*, port*/} = config;
 	const devPort = config['webpack-dev-server'] || await getPort();
 
 	const webpackConfig = Object.assign({}, first(webpackConfigFile));
