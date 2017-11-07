@@ -37,9 +37,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		allowedHosts: ['.dev', '.local'],
 		// disableHostCheck: true,
 		// hot: true,
-		proxy: {
-			'*': '//localhost:' + port
-		},
+		// proxy: {
+		// 	'*': '//localhost:' + port
+		// },
 
 		https: true,
 		contentBase: paths.assetsRoot,
