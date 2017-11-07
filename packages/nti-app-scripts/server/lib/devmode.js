@@ -1,6 +1,7 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
 const {worker} = require('cluster');
+const url = require('url');
 
 const first = x => Array.isArray(x) ? x[0] : x;
 
@@ -11,6 +12,8 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	const getPort = require('get-port');
 
 	const WebpackServer = require('webpack-dev-server');
+
+	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
 
 	const {debug = false, port} = config;
 	const devPort = config['webpack-dev-server'] || await getPort();
@@ -24,14 +27,16 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	if (devPort !== 0) {
 		for (let entry of Object.keys(webpackConfig.entry)) {
 			const e = webpackConfig.entry[entry];
-			e.unshift(`webpack-dev-server/client?http://localhost:${devPort}`);
+			e.unshift(`webpack-dev-server/client?http://${domain}:${devPort}`);
 		}
 	}
 
 	const compiler = webpack(webpackConfig);
 
 	const webpackServer = new WebpackServer(compiler, {
-		//hot: true,
+		allowedHosts: ['.dev', '.local'],
+		// disableHostCheck: true,
+		// hot: true,
 		proxy: {
 			'*': '//localhost:' + port
 		},
