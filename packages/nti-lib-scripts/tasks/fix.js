@@ -121,10 +121,10 @@ function handleResponse ({fix = list[0]}) {
 
 		if (!remoteBranch) {
 			write(chalk.cyan('No remote branch detected, pushing new branch to remote...'));
-			call('git', 'push', '-u', 'origin');
+			call('git', 'push', '-u', 'origin', maint);
 		} else {
 			write(chalk.cyan('Exiting remote branch detected, pulling from remote...'));
-			call('git', 'branch', maint, '--set-upstream-to', remoteBranch);
+			call('git', 'branch', '--set-upstream-to=origin/' + maint, maint);
 			call('git', 'pull', '-r');
 		}
 	}
