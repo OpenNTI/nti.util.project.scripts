@@ -13,6 +13,9 @@ module.exports = (resolve, rootDir) => {
 		: undefined;
 
 	const config = {
+		clearMocks: true,
+		resetMocks: true,
+		resetModules: true,
 		collectCoverageFrom: ['src/**/*.{js,jsx}','!**/*.spec.js'],
 		coverageDirectory: 'reports/coverage',
 		coverageReporters: [
