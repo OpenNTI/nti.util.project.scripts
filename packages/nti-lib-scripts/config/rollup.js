@@ -56,7 +56,12 @@ const externals = [
 const outputs = [
 	{format: 'cjs', file: path.resolve(paths.path, pkg.main)},
 	pkg.module && {format: 'es', file: path.resolve(paths.path, pkg.module)}
-].filter(Boolean);
+]
+	.filter(Boolean)
+	.map(x => Object.assign(x, {
+		sourcemap: true,
+		exports: 'named'
+	}));
 
 
 function isExternal (id) {
@@ -69,8 +74,6 @@ module.exports = {
 	config: {
 		input: path.resolve(paths.src, 'index.js'),
 		output: outputs,
-		sourcemap: true,
-		exports: 'named',
 		external: isExternal,
 		plugins: [
 			resolve({
