@@ -48,8 +48,8 @@ exports = module.exports = {
 
 	resolve: {
 		modules: [
-			// 'node_modules',
 			paths.nodeModules,
+			'node_modules',//needed for conflicted versions of modules that get nested, but attempt last.
 		],
 		extensions: ['.jsx', '.js', '.mjs'],
 		alias: {
@@ -114,15 +114,6 @@ exports = module.exports = {
 					//this just allows this loader to run on this path, it does not force the contents into the bundle.
 					paths.testApp
 				],
-			},
-
-			{
-				test: /\.jsx?$/,
-				enforce: 'pre',
-				loader: require.resolve('source-map-loader'),
-				include: [
-					paths.nodeModules
-				]
 			},
 
 			{
