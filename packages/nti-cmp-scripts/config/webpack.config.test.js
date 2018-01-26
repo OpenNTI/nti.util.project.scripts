@@ -44,7 +44,7 @@ rules.push({
 	}
 });
 
-const i = exports.module.rules.findIndex(r => r.enforce == null && ['.js', '.jsx'].every(x => r.test.test(x));
+const i = exports.module.rules.findIndex(r => r.enforce == null && ['.js', '.jsx'].every(x => r.test.test(x)));
 
 rules.splice(i, 0, {
 	test: /\.(css|jsx?)$/,
