@@ -20,6 +20,7 @@
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
   },
+  "releaseMode": "interactive",
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
     "eslint-config-nti-codestyle-js": "^1.1.0",
