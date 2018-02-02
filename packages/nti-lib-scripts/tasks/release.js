@@ -34,6 +34,12 @@ const hasRemote = Boolean(remoteBranch);
 
 const inc = branch === 'master' ? (major ? 'major' : 'minor') : 'patch';
 
+if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
+	write('\n\n'
+		+ chalk.red('You cannot release a version while on feature branch: ' + chalk.underline(branch)
+		+ '.\nYou must be on ' + chalk.underline('master')) + ' or ' + chalk.underline('maint-n.m') + '\n\n');
+}
+
 if (major && branch !== 'master') {
 	write('\n\n'
 		+ chalk.red('You cannot release a major version increment while on branch: ' + chalk.underline(branch)
@@ -50,6 +56,12 @@ if (branch === 'master' && !/-alpha$/.test(pkg.version)) {
 	write('\n\n' + chalk.red(chalk.underline(pkg.name + '@' + pkg.version) + ' should end in -alpha.') + '\n\n');
 	process.exit(1);
 }
+
+if (branch !== 'master' && /-alpha$/.test(pkg.version)) {
+	write('\n\n' + chalk.red('The branch and version are missmatched. Alpha tags should not be on maint branches.') + '\n\n');
+	process.exit(1);
+}
+
 
 const questions = [
 	{
