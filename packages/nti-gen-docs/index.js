@@ -36,8 +36,10 @@ if (version.prerelease.length > 1) {
 }
 
 
-spawnSync(bin,
+spawnSync('node',
 	[
+		'--max-old-space-size=8192',
+		bin,
 		// '--debug',
 		// '--verbose',
 		'--configure', config,
