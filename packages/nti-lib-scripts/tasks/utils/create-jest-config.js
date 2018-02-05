@@ -9,7 +9,7 @@ const {testEnvironment} = require(paths.packageJson);
 module.exports = (resolve, rootDir) => {
 
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
-		? '<rootDir>/src/__test__/setup.js'
+		? paths.testsSetup
 		: undefined;
 
 	const config = {

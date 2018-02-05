@@ -48,6 +48,7 @@ module.exports = Object.assign({}, paths, {
 	appHtml: resolveApp('src/main/page.html'),
 	appIndexJs: resolveApp('src/main/js/index.js'),
 	appBuildHook: exists(resolveApp('config/build-hook.js')),
+	testsSetup: resolveApp('src/main/js/__test__/setup.js'),
 
 	publicUrl: getPublicUrl(resolveApp('package.json')),
 	servedPath: getServedPath(resolveApp('package.json')),
