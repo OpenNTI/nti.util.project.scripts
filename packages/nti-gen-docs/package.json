@@ -1,0 +1,24 @@
+{
+  "name": "nti-gen-docs",
+  "version": "1.0.0",
+  "description": "Generate API documentation",
+  "main": "index.js",
+  "bin": {
+    "nti-gen-docs": "index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "docs"
+  ],
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "dependencies": {
+    "fs-extra": "^4.0.0",
+    "jsdoc": "^3.5.5",
+    "minami": "^1.2.3",
+    "semver": "^5.5.0",
+    "tmp": "0.x.x"
+  }
+}

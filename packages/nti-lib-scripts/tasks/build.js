@@ -25,6 +25,7 @@ process.on('unhandledRejection', err => {
 
 call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
+call('npx', ['nti-gen-docs']);
 
 //Blank out lib
 if (process.env.NODE_ENV === 'production') {
