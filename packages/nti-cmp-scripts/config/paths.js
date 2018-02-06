@@ -15,4 +15,5 @@ module.exports = Object.assign({}, paths, {
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
 	webpackDevConfig: resolveOwn('./config/webpack.config.test.js'),
+	testsSetup: paths.resolveApp('src/__test__/setup.js')
 });
