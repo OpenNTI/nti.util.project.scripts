@@ -8,6 +8,9 @@ const {spawnSync} = require('child_process');
 const paths = require('../../config/paths');
 
 
+const removePaths = (line) => (~line.indexOf(paths.path)) ? null : line;
+
+
 const call = (cmd, ...args) => spawnSync(cmd, args, {
 	//npm doesn't output anything when NODE_ENV = 'production'
 	env: Object.assign({}, process.env, { NODE_ENV: null }),
@@ -21,24 +24,35 @@ module.exports = function recordVersions () {
 	const versions = path.resolve(paths.DIST_CLIENT, 'js/versions.txt');
 	const ntiVersions = path.resolve(paths.DIST_CLIENT, 'js/nti-versions.txt');
 
+	const {version} = fs.readJsonSync(paths.packageJson);
+
 	let list;
 
 	const {stdout: listBuffer} = call('npm', 'list', '--long');
 	if (listBuffer) {
-		list = listBuffer.toString('utf8');
-		fs.writeFileSync(versions, list);
-	}
-
-	const {stdout: ntiListBuffer} = call('npm', 'list');
-	if (ntiListBuffer) {
-		const [title, ...deps] = ntiListBuffer
+		list = listBuffer
 			.toString('utf8')
 			.split(/[\r\n]+/)
-			.filter(x => /nti-/.test(x) && !/deduped\s*$/.test(x))
-			.map(x => x.replace(/^[-+|│├─┬└\s]+/, '- ').trim());
+			.map(removePaths)
+			.filter(Boolean);
+		fs.writeFileSync(versions, list.join());
+	}
+
+	const {stdout: ntiListBuffer} = call('npm', 'list', '--parseable', '--long');
+	if (ntiListBuffer) {
+		const deps = ntiListBuffer
+			.toString('utf8')
+			.split(/[\r\n]+/)
+			.filter(x => /\/nti-/.test(x)
+				// Web service bundles its dependencies so, it will polute our list...
+				// ...so omit its dependencies.
+				&& !/\/nti-web-service\//.test(x)
+			)
+			.map(x => '- ' + x.split(':')[1]);
+
 
 		list = [
-			title,
+			version,
 			...deps.sort()
 		];
 
