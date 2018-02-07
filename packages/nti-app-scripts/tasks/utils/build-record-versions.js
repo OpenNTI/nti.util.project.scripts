@@ -21,10 +21,13 @@ const call = (cmd, ...args) => spawnSync(cmd, args, {
 
 module.exports = function recordVersions () {
 	fs.ensureDirSync(path.resolve(paths.DIST_CLIENT, 'js'));
+	const versionFile = path.resolve(paths.DIST_CLIENT, 'js/version');
 	const versions = path.resolve(paths.DIST_CLIENT, 'js/versions.txt');
 	const ntiVersions = path.resolve(paths.DIST_CLIENT, 'js/nti-versions.txt');
 
 	const {version} = fs.readJsonSync(paths.packageJson);
+
+	fs.writeFileSync(versionFile, version);
 
 	let list;
 
