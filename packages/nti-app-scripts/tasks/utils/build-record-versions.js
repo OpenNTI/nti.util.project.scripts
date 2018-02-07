@@ -38,7 +38,7 @@ module.exports = function recordVersions () {
 			.split(/[\r\n]+/)
 			.map(removePaths)
 			.filter(Boolean);
-		fs.writeFileSync(versions, list.join());
+		fs.writeFileSync(versions, list.join('\n'));
 	}
 
 	const {stdout: ntiListBuffer} = call('npm', 'list', '--parseable', '--long');
@@ -46,7 +46,7 @@ module.exports = function recordVersions () {
 		const deps = ntiListBuffer
 			.toString('utf8')
 			.split(/[\r\n]+/)
-			.filter(x => /\/nti-/.test(x)
+			.filter(x => /:nti-/.test(x)
 				// Web service bundles its dependencies so, it will polute our list...
 				// ...so omit its dependencies.
 				&& !/\/nti-web-service\//.test(x)
