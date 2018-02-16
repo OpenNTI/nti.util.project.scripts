@@ -33,5 +33,7 @@ call('webpack-dev-server', [
 	'--watch',
 	// '--progress',
 	'--inline',
+	'--hot',
+	'--hot-only',
 	...SSL
 ]);
