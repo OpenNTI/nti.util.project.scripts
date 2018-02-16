@@ -1,10 +1,18 @@
 'use strict';
+const path = require('path');
 const call = require('nti-lib-scripts/tasks/utils/call-cmd');
 
 const paths = require('../config/paths');
 
 const host = '0.0.0.0';
 const port = 8000;
+const {NTI_BUILDOUT_PATH = false} = process.env;
+
+const SSL = !NTI_BUILDOUT_PATH ? [] : [
+	'--https',
+	'--key', path.join(NTI_BUILDOUT_PATH, 'etc/pki/localhost.key'),
+	'--cert', path.join(NTI_BUILDOUT_PATH, 'etc/pki/localhost.crt')
+];
 
 //webpack-dev-server
 //	-d
@@ -24,5 +32,6 @@ call('webpack-dev-server', [
 	'--quiet',
 	'--watch',
 	// '--progress',
-	'--inline'
+	'--inline',
+	...SSL
 ]);
