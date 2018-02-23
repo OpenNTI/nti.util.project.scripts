@@ -17,9 +17,13 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	const WebpackServer = require('webpack-dev-server');
 
-	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
+	const {debug = false, server} = config;
 
-	const {debug = false/*, port*/} = config;
+	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
+	const api = url.parse(server);
+	const apiHost = api.hostname || 'localhost';
+	const apiPort = api.port;
+
 	const devPort = config['webpack-dev-server'] || await getPort();
 
 	const webpackConfig = Object.assign({}, first(webpackConfigFile));
@@ -42,9 +46,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		disableHostCheck: true,
 		hot: true,
 		hotOnly: true,
-		// proxy: {
-		// 	'*': '//localhost:' + port
-		// },
+		proxy: {
+			'*': `http://${apiHost}:${apiPort}/`
+		},
 
 		https: NTI_BUILDOUT_PATH && {
 			cert: fs.readFileSync(path.join(NTI_BUILDOUT_PATH, 'etc/pki/localhost.crt')),
