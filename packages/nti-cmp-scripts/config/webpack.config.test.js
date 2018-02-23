@@ -25,12 +25,16 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		hints: false,
 	},
 	devServer: {
+		disableHostCheck: true,
 		allowedHosts: ['.dev', '.local'],
 		clientLogLevel: 'none',
 		contentBase: paths.resolveApp('test/app/'),
 		watchContentBase: true,
 		overlay: true,
-		noInfo: true
+		noInfo: true,
+		proxy: {
+			'*': 'http://localhost:8082/'
+		}
 	}
 });
 
