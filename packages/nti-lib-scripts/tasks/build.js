@@ -25,12 +25,15 @@ process.on('unhandledRejection', err => {
 
 call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
-call('npx', ['nti-gen-docs']);
 
 //Blank out lib
-if (process.env.NODE_ENV === 'production') {
-	fs.emptyDirSync(path.resolve(paths.path, 'lib'));
-}
+fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-buildBundle()
-	.then(() => console.log(chalk.green('\nDone.\n\n')));
+call('npx', ['nti-gen-docs']);
+
+(async function () {
+
+	await buildBundle();
+	console.log(chalk.green('\nDone.\n\n'));
+
+}());

@@ -35,19 +35,23 @@ process.on('unhandledRejection', err => {
 
 call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
-call('npx', ['nti-gen-docs']);
 
 //clean dist
-if (process.env.NODE_ENV === 'production') {
-	fs.emptyDirSync(path.resolve(paths.path, 'lib'));
-}
+fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-//call build hook
-Promise.resolve(callHook())
+call('npx', ['nti-gen-docs']);
+
+(async function build () {
+	//call build hook
+	await callHook();
+
 	// Run webpack... (produces commonjs & style output)
-	.then(() => buildWebpackBundle(wpConfig))
+	await buildWebpackBundle(wpConfig);
+
 	// Run Rollup... (produces treeshake-able es module)
-	.then(() => console.log(chalk.green('\nBuilding ES Module...')))
-	.then(() => buildRollupBundle({ignoreExisting: true}))
+	console.log(chalk.green('\nBuilding ES Module...'));
+
+	await buildRollupBundle({ignoreExisting: true});
 	// Announce complete...
-	.then(() => console.log(chalk.green('\nDone.\n\n')));
+	console.log(chalk.green('\nDone.\n\n'));
+}());

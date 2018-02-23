@@ -26,23 +26,30 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 
 call('node', [require.resolve('./check')]);
 call('node', [require.resolve('./test'), '--no-cache']);
-call('npx', ['nti-gen-docs']);
 
 //clean dist & ensure client/server directories
 fs.emptyDirSync(path.resolve(paths.path, 'dist'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
-Promise.resolve()
-//Copy server code...
-	.then(() => copyServerCode())
-//call build hook
-	.then(() => callHook())
-//Copy Static assets...
-	.then(() => copyStaticAssets())
-//Update React library references...
-	.then(() => updateLibraryReferences())
-// Run webpack...
-	.then(() => buildBundle())
-//record versions
-	.then(() => recordVersions());
+call('npx', ['nti-gen-docs']);
+
+(async function () {
+	//Copy server code...
+	await copyServerCode();
+
+	//call build hook
+	await callHook();
+
+	//Copy Static assets...
+	await copyStaticAssets();
+
+	//Update React library references...
+	await updateLibraryReferences();
+
+	// Run webpack...
+	await buildBundle();
+
+	//record versions
+	await recordVersions();
+}());
