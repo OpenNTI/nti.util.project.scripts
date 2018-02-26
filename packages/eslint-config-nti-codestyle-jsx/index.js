@@ -1,4 +1,13 @@
 'use strict';
+
+function getReactVersion () {
+	try {
+		return require('react/package.json').version;
+	} catch (e) {
+		return '16.2.0';
+	}
+}
+
 module.exports = {
 	extends: [
 		'eslint-config-nti-codestyle-js',
@@ -18,7 +27,7 @@ module.exports = {
 		},
 		'react': {
 			pragma: 'React',
-			version: require('react/package.json').version
+			version: getReactVersion()
 		}
 	},
 
