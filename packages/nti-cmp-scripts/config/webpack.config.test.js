@@ -32,9 +32,10 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		watchContentBase: true,
 		overlay: true,
 		noInfo: true,
-		proxy: {
-			'*': 'http://localhost:8082/'
-		}
+		proxy: [{
+			context: ['/content', '/dataserver2'],
+			target: 'http://localhost:8082',
+		}]
 	}
 });
 
