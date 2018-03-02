@@ -1,6 +1,6 @@
 {
   "name": "nti-gen-docs",
-  "version": "1.11.2",
+  "version": "1.13.2",
   "description": "Generate API documentation",
   "main": "index.js",
   "bin": {
