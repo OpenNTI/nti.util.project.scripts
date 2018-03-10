@@ -17,6 +17,10 @@ const pkg = require(paths.packageJson);
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
+const getWorkspace = require('nti-lib-scripts/config/workspace');
+const workspaceLinks = (!PROD && paths.workspace)
+	? getWorkspace(paths.workspace, paths.packageJson)
+	: {};
 
 exports = module.exports = {
 	entry: {
@@ -53,6 +57,7 @@ exports = module.exports = {
 		],
 		extensions: ['.jsx', '.js', '.mjs'],
 		alias: {
+			...workspaceLinks,
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,

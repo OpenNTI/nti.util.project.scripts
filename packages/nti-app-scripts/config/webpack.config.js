@@ -19,6 +19,11 @@ const pkg = require(paths.packageJson);
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
+const getWorkspace = require('nti-lib-scripts/config/workspace');
+const workspaceLinks = (!PROD && paths.workspace)
+	? getWorkspace(paths.workspace, paths.packageJson)
+	: {}
+
 // const prefetch = [];
 const sourceMapInclude = [];
 const sourceMapExclude = [
@@ -75,13 +80,14 @@ exports = module.exports = {
 
 	resolve: {
 		modules: [
-			// 'node_modules',
 			paths.nodeModules,
 			paths.appModules,
 			paths.resolveApp('src/main/resources/scss'),
+			'node_modules',
 		],
 		extensions: ['.jsx', '.async.jsx', '.js', '.mjs'],
 		alias: {
+			...workspaceLinks,
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,
