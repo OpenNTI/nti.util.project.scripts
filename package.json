@@ -2,7 +2,6 @@
   "name": "nti-project-scripts",
   "version": "1.0.0",
   "description": "Common tasks and project management",
-  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "release": "./release",
