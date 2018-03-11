@@ -104,90 +104,110 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
-			{
+			// Disable require.ensure as it's not a standard language feature.
+			// { parser: { requireEnsure: false } },
+
+			// First, run the linter.
+			// It's important to do this before Babel processes the JS.
+			!PROD && {
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
-				use : [
+				use: [{
+					loader: require.resolve('eslint-loader'),
+					options: {
+						formatter: eslintFormatter,
+						ignore: false,
+						failOnError: true,
+						failOnWarning: false,
+						emitWarning: false,
+						// useEslintrc: false,
+						// eslintPath: require.resolve('eslint'),
+						// baseConfig: {
+						// 	extends: [require.resolve('eslint-config-nti-codestyle-jsx')],
+						// },
+					},
+
+				}],
+				include: [
+					paths.appModules,
+					// ...(Object.values(workspaceLinks))
+				],
+				exclude: [/[/\\\\]node_modules[/\\\\]/],
+			},
+
+			{
+				oneOf: [
 					{
-						loader: require.resolve('baggage-loader'),
+						test: /\.m?jsx?$/,
+						include: [paths.src],
+						use: [
+							{loader: require.resolve('babel-loader')},
+							{
+								loader: require.resolve('baggage-loader'),
+								options: {
+									'[file].scss':{},
+									'[file].css':{}
+								}
+							}
+						]
+					},
+
+					{
+						test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
+						loader: require.resolve('url-loader'),
 						options: {
-							'[file].scss':{}
+							limit: 50,
+							name: 'resources/images/[hash].[ext]',
+							mimeType: 'image/[ext]'
 						}
 					},
-					// First, run the linter. (loaders are run "bottom up")
-					// It's important to do this before Babel processes the JS.
-					!PROD && {
+
+					{
+						test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
+						loader: require.resolve('file-loader'),
 						options: {
-							formatter: eslintFormatter,
-							ignore: false,
-							failOnError: true,
-							failOnWarning: false,
-							emitWarning: false
-						},
-						loader: require.resolve('eslint-loader'),
-					},
-				].filter(Boolean),
-				include: paths.appModules,
-			},
-
-			{
-				test: /\.jsx?$/,
-				include: [paths.src],
-				loader: require.resolve('babel-loader')
-			},
-			{
-				test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
-				loader: require.resolve('url-loader'),
-				options: {
-					limit: 50,
-					name: 'resources/images/[hash].[ext]',
-					mimeType: 'image/[ext]'
-				}
-			},
-			{
-				test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
-				loader: require.resolve('file-loader'),
-				options: {
-					name: 'resources/fonts/[hash].[ext]'
-				}
-			},
-
-			{
-				test: /\.(s?)css$/,
-				use: ExtractTextPlugin.extract({
-					fallback: require.resolve('style-loader'),
-					use: [
-						{
-							loader: require.resolve('css-loader'),
-							options: {
-								sourceMap: true
-							}
-						},
-						{
-							loader: require.resolve('postcss-loader'),
-							options: {
-								sourceMap: true,
-								plugins: () => [
-									autoprefixer({ browsers: ['> 1% in US', 'last 2 versions', 'iOS > 8'] })
-								]
-							}
-						},
-						{
-							loader: require.resolve('resolve-url-loader')
-						},
-						{
-							loader: require.resolve('sass-loader'),
-							options: {
-								sourceMap: true,
-								includePaths: [
-									paths.resolveApp('src/main/resources/scss')
-								]
-							}
+							name: 'resources/fonts/[hash].[ext]'
 						}
-					]
-				})
+					},
+
+					{
+						test: /\.(s?)css$/,
+						use: ExtractTextPlugin.extract({
+							fallback: require.resolve('style-loader'),
+							use: [
+								{
+									loader: require.resolve('css-loader'),
+									options: {
+										sourceMap: true
+									}
+								},
+								{
+									loader: require.resolve('postcss-loader'),
+									options: {
+										sourceMap: true,
+										plugins: () => [
+											autoprefixer({ browsers: ['> 1% in US', 'last 2 versions', 'iOS > 8'] })
+										]
+									}
+								},
+								{
+									loader: require.resolve('resolve-url-loader')
+								},
+								{
+									loader: require.resolve('sass-loader'),
+									options: {
+										sourceMap: true,
+										includePaths: [
+											paths.resolveApp('src/main/resources/scss')
+										]
+									}
+								}
+							]
+						})
+					}
+				].filter(Boolean)
 			}
-		].filter(Boolean)
+		]
 	},
 
 	plugins: [
