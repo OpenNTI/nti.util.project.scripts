@@ -131,10 +131,6 @@ exports = module.exports = {
 			},
 
 			{
-				test: /\.async\.jsx?$/,
-				loader: require.resolve('react-proxy-loader')
-			},
-			{
 				test: /\.jsx?$/,
 				include: [paths.src],
 				loader: require.resolve('babel-loader')
