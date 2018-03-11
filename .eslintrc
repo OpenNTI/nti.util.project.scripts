@@ -3,7 +3,7 @@
 		"nti-codestyle-js"
 	],
 
-	"parser": "esprima",
+	"parser": "babel-eslint",
 
 	"parserOptions": {
 		"ecmaVersion": "ES2017",

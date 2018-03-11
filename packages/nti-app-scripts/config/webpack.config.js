@@ -22,7 +22,7 @@ const PROD = ENV === 'production';
 const getWorkspace = require('nti-lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
-	: {}
+	: {};
 
 
 function isNTIPackage (x) {
