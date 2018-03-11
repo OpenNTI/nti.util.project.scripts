@@ -35,9 +35,10 @@ module.exports = function getWorkspace (workspace, entryPackage) {
 
 			if (has) {
 				const entry = path.join(dir, pkg.module || pkg.main);
-				if (!fs.existsSync(entry)) {
+				const installed = fs.existsSync(path.join(dir, 'node_modules'));
+				if (!fs.existsSync(entry) || !installed) {
 					if (DEBUG) {
-						console.warn('[workspace] Ignoring "%s" because it does not exist.', entry);
+						console.warn('[workspace] Ignoring "%s" because it does not exist or is not installed.', entry);
 					}
 				} else {
 					aliases[pkg.name] = dir;
