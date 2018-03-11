@@ -24,24 +24,6 @@ const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
 	: {}
 
-// const prefetch = [];
-const sourceMapInclude = [];
-const sourceMapExclude = [
-	paths.nodeModules
-];
-
-for (let dep of Object.keys(Object.assign({}, pkg.dependencies || {}, pkg.devDependencies || {}))) {
-	try {
-		if (/^nti-/.test(dep)) {
-			const i = require.resolve(dep);
-			sourceMapInclude.push(i);
-			sourceMapExclude.push(path.join(i, 'node_modules'));
-		}
-	} catch (e) {
-		//meh
-	}
-}
-
 
 function isNTIPackage (x) {
 	const prefix = `${paths.nodeModules}/nti-`;
@@ -146,14 +128,6 @@ exports = module.exports = {
 					},
 				].filter(Boolean),
 				include: paths.appModules,
-			},
-
-			{
-				test: /\.jsx?$/,
-				enforce: 'pre',
-				loader: require.resolve('source-map-loader'),
-				include: sourceMapInclude,
-				exclude: sourceMapExclude
 			},
 
 			{

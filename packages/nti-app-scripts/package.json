@@ -54,7 +54,6 @@
     "react-proxy-loader": "github:jsg2021/react-proxy-loader#react-15.5",
     "resolve-url-loader": "^2.0.0",
     "sass-loader": "^6.0.0",
-    "source-map-loader": "0.x.x",
     "style-loader": "0.x.x",
     "tmp": "0.x.x",
     "url-loader": "0.x.x",
