@@ -269,6 +269,12 @@ exports = module.exports = {
 			)
 		}),
 
+		new webpack.optimize.CommonsChunkPlugin({
+			name: 'common',
+			async: true,
+			minChunks: 2
+		}),
+
 		new ExtractTextPlugin({
 			filename: 'resources/styles.css',
 			allChunks: true,
