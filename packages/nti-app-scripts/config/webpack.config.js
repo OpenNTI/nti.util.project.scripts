@@ -207,7 +207,7 @@ exports = module.exports = {
 					}
 				].filter(Boolean)
 			}
-		]
+		].filter(Boolean)
 	},
 
 	plugins: [
