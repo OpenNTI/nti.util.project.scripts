@@ -48,6 +48,7 @@ function exists (testPath, fallback) {
 module.exports = {
 	exists,
 	resolveApp,
+	resolveOwn,
 
 	path: resolveApp('.'),
 	packageJson: resolveApp('package.json'),

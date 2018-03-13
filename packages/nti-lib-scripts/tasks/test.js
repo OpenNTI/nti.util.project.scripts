@@ -1,12 +1,17 @@
 'use strict';
 //Inspired by "react-scripts"
 const path = require('path');
-
+const fs = require('fs-extra');
 const jest = require('jest');
-
 const paths = require('../config/paths');
 
-const createJestConfig = require('./utils/create-jest-config');
+const config = paths.resolveApp('jest.config.js');
+if (!fs.existsSync(config)) {
+	fs.copySync(
+		paths.resolveOwn('config/init-files/jest.config.js'),
+		config
+	);
+}
 
 process.env.BABEL_ENV = 'test';
 process.env.NODE_ENV = 'test';
@@ -26,17 +31,5 @@ const argv = isTestTask ? process.argv.slice(2) : [];
 if (process.env.CI && !argv.includes('--coverage')) {
 	argv.push('--coverage');
 }
-
-
-argv.push(
-	'--config',
-	JSON.stringify(
-		createJestConfig(
-			relativePath => path.resolve(__dirname, '..', relativePath),
-			path.resolve(paths.src, '..'),
-			false
-		)
-	)
-);
 
 jest.run(argv);

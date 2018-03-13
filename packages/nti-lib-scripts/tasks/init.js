@@ -98,6 +98,7 @@ const ToCopy = [
 	'eslintrc.dotfile',
 	'gitignore.dotfile',
 	'npmignore.dotfile',
+	'jest.config.js',
 	...(global.NTI_INIT_TO_COPY || [])
 ];
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
