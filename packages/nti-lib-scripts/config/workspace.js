@@ -16,7 +16,7 @@ function include (file, whitelist, blacklist) {
 	return true;
 }
 
-module.exports = function getWorkspace (workspace, entryPackage) {
+module.exports = function getWorkspace (workspace, entryPackage, {regexp = false} = {}) {
 	const {whitelist = false, blacklist = false/*, ...options*/} = fs.readJsonSync(workspace, { throws: false }) || {};
 	const workspaceDir = path.dirname(workspace);
 	const packages = {};
@@ -41,7 +41,12 @@ module.exports = function getWorkspace (workspace, entryPackage) {
 						console.warn('[workspace] Ignoring "%s" because it does not exist or is not installed.', entry);
 					}
 				} else {
-					aliases[pkg.name] = dir;
+					if (regexp) {
+						aliases['^' + pkg.name.replace(/([.-/])/g, '\\$1')] = dir;
+					} else {
+						aliases[pkg.name] = dir;
+					}
+
 					packages[pkg.name] = pkg;
 				}
 			}
@@ -50,7 +55,7 @@ module.exports = function getWorkspace (workspace, entryPackage) {
 		});
 
 	for (let key of Object.keys(aliases)) {
-		console.log('[workspace] Mapping %s => %s', key, aliases[key]);
+		console.log('[workspace] Mapping %s => %s', key.replace(/[\^\\]/g, ''), aliases[key]);
 	}
 	return aliases;
 };

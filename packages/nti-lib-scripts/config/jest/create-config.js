@@ -4,7 +4,15 @@ const path = require('path');
 
 //get the 'active' paths
 const paths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
+const getWorkspace = require('../workspace');
 const {testEnvironment} = require(paths.packageJson);
+
+
+const DEV = !process.env.CI;
+
+const workspaceLinks = (DEV && paths.workspace)
+	? getWorkspace(paths.workspace, paths.packageJson, {regexp: true})
+	: {};
 
 module.exports = (resolve, rootDir) => {
 
@@ -45,12 +53,14 @@ module.exports = (resolve, rootDir) => {
 		testResultsProcessor: process.env.CI ? './node_modules/jest-junit' : void 0,
 		testURL: 'http://localhost',
 		transform: {
-			'^.+\\.(js|jsx)$': resolve('config/jest/babelTransform.js'),
+			'^.+\\.(js|jsx|mjs)$': resolve('config/jest/babelTransform.js'),
 			'^.+\\.css$': resolve('config/jest/cssTransform.js'),
 			'^(?!.*\\.(js|jsx|css|json)$)': resolve('config/jest/fileTransform.js'),
 		},
 		transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
-		moduleNameMapper: {},
+		moduleNameMapper: {
+			...workspaceLinks,
+		},
 	};
 
 	if (rootDir) {
