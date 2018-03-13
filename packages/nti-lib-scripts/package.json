@@ -50,6 +50,7 @@
     "install-nti-snapshots": "^1.13.2",
     "jest": "^21.0.0",
     "jest-junit": "^3.0.0",
+    "raf": "^3.4.0",
     "rollup": ">=0.51.3",
     "rollup-plugin-babel": "^3.0.3-nti.0",
     "rollup-plugin-commonjs": "^8.0.0",

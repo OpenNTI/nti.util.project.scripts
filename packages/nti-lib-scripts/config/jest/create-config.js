@@ -34,6 +34,7 @@ module.exports = (resolve, rootDir) => {
 		],
 		setupFiles: [
 			'babel-polyfill',
+			'raf/polyfill',
 			resolve('config/polyfills.js')
 		],
 		setupTestFrameworkScriptFile: setupTestsFile,
