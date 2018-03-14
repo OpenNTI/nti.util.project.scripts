@@ -1,5 +1,4 @@
 'use strict';
-const path = require('path');
 const paths = require('./paths');
 
 exports = module.exports = Object.assign(require('./webpack.config'), {
@@ -47,18 +46,4 @@ rules.push({
 	query: {
 		name: 'assets/fonts/[name]-[hash].[ext]'
 	}
-});
-
-const i = exports.module.rules.findIndex(r => r.enforce == null && ['.js', '.jsx'].every(x => r.test.test(x)));
-
-rules.splice(i, 0, {
-	test: /\.(css|jsx?)$/,
-	enforce: 'pre',
-	loader: require.resolve('source-map-loader'),
-	include: [
-		path.join(paths.nodeModules, 'nti-')
-	],
-	exclude: [
-		paths.nodeModules
-	]
 });
