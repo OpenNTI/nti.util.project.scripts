@@ -1,6 +1,6 @@
 {
   "name": "nti-lib-scripts",
-  "version": "1.14.5",
+  "version": "1.14.6",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -43,7 +43,7 @@
     "babel-preset-stage-1": "^6.16.0",
     "chalk": "^2.0.1",
     "detect-indent": "^5.0.0",
-    "eslint-config-nti-codestyle-js": "^1.14.5",
+    "eslint-config-nti-codestyle-js": "^1.14.6",
     "fs-extra": "^4.0.0",
     "git-state": "github:jsg2021/git-state#01b8d8fa",
     "inquirer": "^3.3.0",
