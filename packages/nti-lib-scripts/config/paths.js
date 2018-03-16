@@ -56,7 +56,13 @@ module.exports = {
 	nodeModules: resolveApp('node_modules'),
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),
-	workspace: exists(resolveApp('../.workspace.json')),
+	workspace: exists(
+		resolveApp('.workspace.json'),
+		exists(
+			resolveApp('../.workspace.json'),
+			null
+		)
+	),
 
 	nodePaths: nodePaths,
 
