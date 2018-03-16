@@ -3,6 +3,7 @@ const path = require('path');
 const fs = require('fs-extra');
 
 const DEBUG = process.argv.includes('--debug');
+const ENV_KEY = '__NTI_WORKSPACE';
 
 function include (file, whitelist, blacklist) {
 	if (Array.isArray(blacklist) && blacklist.find(x => ~file.indexOf(x))) {
@@ -17,6 +18,10 @@ function include (file, whitelist, blacklist) {
 }
 
 module.exports = function getWorkspace (workspace, entryPackage, {regexp = false} = {}) {
+	if (process.env[ENV_KEY]) {
+		return JSON.parse(process.env[ENV_KEY]);
+	}
+
 	const {whitelist = false, blacklist = false/*, ...options*/} = fs.readJsonSync(workspace, { throws: false }) || {};
 	const workspaceDir = path.dirname(workspace);
 	const packages = {};
@@ -57,5 +62,7 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 	for (let key of Object.keys(aliases)) {
 		console.log('[workspace] Mapping %s => %s', key.replace(/[\^\\]/g, ''), aliases[key]);
 	}
+
+	process.env[ENV_KEY] = JSON.stringify(aliases);
 	return aliases;
 };
