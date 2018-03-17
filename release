@@ -25,6 +25,10 @@ do
 		continue
 	fi
 
+	if [[ -f "${f}/.skip-alpha" ]] ; then
+		continue
+	fi
+
 	(
 	cd $f;
 
