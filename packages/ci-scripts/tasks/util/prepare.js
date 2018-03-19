@@ -48,8 +48,10 @@ function printHeader (...args) {
 
 	const [fmt, ...values] = args;
 	console.log(` ${fmt}`, ...values);
-
 	console.log('%s\n\n', line);
+
+	call('npm config list');
+	console.log('\n\n%s\n\n', line);
 }
 
 
