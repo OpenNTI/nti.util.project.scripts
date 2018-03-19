@@ -29,7 +29,7 @@ call('node', [require.resolve('./test'), '--no-cache']);
 //Blank out lib
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-call('npx', ['nti-gen-docs']);
+call('npx', ['@nti/gen-docs']);
 
 (async function () {
 

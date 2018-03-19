@@ -2,6 +2,6 @@
 module.exports = {
 	'parser': 'babel-eslint',
 	'extends': [
-		require.resolve('eslint-config-nti-codestyle-jsx')
+		require.resolve('@nti/codestyle-jsx')
 	]
 };

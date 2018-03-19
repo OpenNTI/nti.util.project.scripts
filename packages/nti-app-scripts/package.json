@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
+    "@nti/codestyle-jsx": "^1.14.7",
     "autoprefixer": "^8.1.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-react-jsx-self": "^6.22.0",
@@ -35,7 +36,6 @@
     "circular-dependency-plugin": "^4.0.0",
     "compression-webpack-plugin": "^1.0.0",
     "css-loader": "0.x.x",
-    "eslint-config-nti-codestyle-jsx": "^1.14.7",
     "eslint-loader": "^2.0.0",
     "extract-text-webpack-plugin": "^3.0.0",
     "file-loader": "^1.1.9",

@@ -32,7 +32,7 @@ fs.emptyDirSync(path.resolve(paths.path, 'dist'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
-call('npx', ['nti-gen-docs']);
+call('npx', ['@nti/gen-docs']);
 
 (async function () {
 	//Copy server code...

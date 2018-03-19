@@ -1,2 +1,2 @@
 'use strict';
-require('install-nti-snapshots');
+require('@nti/install-snapshots');

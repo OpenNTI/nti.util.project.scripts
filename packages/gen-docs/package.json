@@ -1,10 +1,10 @@
 {
-  "name": "nti-gen-docs",
+  "name": "@nti/gen-docs",
   "version": "1.13.2",
   "description": "Generate API documentation",
   "main": "index.js",
   "bin": {
-    "nti-gen-docs": "index.js"
+    "gen-docs": "index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

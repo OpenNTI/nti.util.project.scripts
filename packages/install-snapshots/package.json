@@ -1,10 +1,10 @@
 {
-  "name": "install-nti-snapshots",
+  "name": "@nti/install-snapshots",
   "version": "1.13.2",
   "description": "library scripts & dependencies",
   "main": "./bin.js",
   "bin": {
-    "install-nti-snapshots": "./bin.js"
+    "install-snapshots": "./bin.js"
   },
   "scripts": {},
   "repository": {

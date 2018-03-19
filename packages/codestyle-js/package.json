@@ -1,5 +1,5 @@
 {
-  "name": "eslint-config-nti-codestyle-js",
+  "name": "@nti/codestyle-js",
   "version": "1.14.7",
   "description": "NextThought code style standard",
   "main": "index.js",
