@@ -15,6 +15,9 @@
   "author": "nextthought",
   "license": "UNLICENCED",
   "dependencies": {
+    "esdoc": "^1.0.4",
+    "esdoc-ecmascript-proposal-plugin": "^1.0.0",
+    "esdoc-standard-plugin": "^1.0.0",
     "fs-extra": "^4.0.0",
     "jsdoc": "^3.5.5",
     "minami": "^1.2.3",
