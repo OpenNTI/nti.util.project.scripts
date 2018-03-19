@@ -10,7 +10,7 @@ function getReactVersion () {
 
 module.exports = {
 	extends: [
-		'eslint-config-nti-codestyle-js',
+		require.resolve('@nti/codestyle-js'),
 		'plugin:react/recommended'
 	],
 
