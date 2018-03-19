@@ -1,6 +1,6 @@
 {
   "name": "nti-app-scripts",
-  "version": "1.15.0",
+  "version": "1.15.1",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "nti-app-scripts": "./bin/cli.js"
@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
-    "@nti/codestyle-jsx": "^1.15.0",
+    "@nti/codestyle-jsx": "^1.15.1",
     "autoprefixer": "^8.1.0",
     "babel-loader": "^7.0.0",
     "babel-plugin-transform-react-jsx-self": "^6.22.0",
