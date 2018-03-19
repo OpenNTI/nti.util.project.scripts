@@ -2,8 +2,7 @@
 'use strict';
 const {prepare, call, nofail} = require('./util/prepare');
 
-
-const {version, stamp} = prepare();
+const {version, stamp} = prepare('snapshot');
 
 // Update the package(-lock).json to a snapshot version
 call(`npm --no-git-tag-version version ${version}.${stamp}`);

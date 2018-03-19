@@ -3,13 +3,13 @@ const fs = require('fs-extra');
 const path = require('path');
 const {spawnSync} = require('child_process');
 
-const call = (x, {fd = 'inherit', forgive = false}) => {
+const call = (x, {fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
 
 	const {status} = spawnSync(cmd, args, {
 		stdio: typeof fd === 'string'
 			? fd
-			: [process.stdin, fd, process.stderr]
+			: ['ignore', fd, fd]
 	});
 
 	if (typeof fd !== 'string') {
@@ -27,10 +27,11 @@ const call = (x, {fd = 'inherit', forgive = false}) => {
 const cwd = process.cwd();
 const packageFile = path.join(cwd, 'package.json');
 const lockfile = path.join(cwd, 'package-lock.json');
-const skipFile = path.join(cwd, '.snapshot-skip-npm');
 const modulesDir = path.join(cwd, 'node_modules');
 
 Object.assign(exports,{
+	printHeader,
+	getPackageNameAndVersion,
 	prepare,
 	call,
 	nofail: {fd: 'ignore', forgive: true},
@@ -40,9 +41,29 @@ Object.assign(exports,{
 	packageFile,
 });
 
-function prepare () {
+
+function printHeader (...args) {
+	const line = new Array(80).join('–');
+	console.log('\n\n%s', line);
+
+	const [fmt, ...values] = args;
+	console.log(` ${fmt}`, ...values);
+
+	console.log('%s\n\n', line);
+}
+
+
+function getPackageNameAndVersion () {
 	const pkg = fs.readJsonSync(packageFile);
 	const {name, version} = pkg;
+	return {
+		name, version, pkg
+	};
+}
+
+
+function prepare (type) {
+	const {name, version, pkg} = getPackageNameAndVersion();
 	const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
 
 	if (!/-alpha$/.test(version)) {
@@ -51,33 +72,34 @@ function prepare () {
 	}
 
 	//DATE=`date +%Y%m%d%H%M`
-	console.log('Preparing build %s@%s.%s', name, version, stamp);
+	printHeader('Preparing %s build %s@%s.%s', type, name, version, stamp);
 
-	if (!fs.existsSync(skipFile) || !fs.existsSync(modulesDir)) {
-		// download latest deps (and alphas)
-		fs.writeJsonSync(
-			packageFile,
-			(json => (
-				[json.dependencies, json.devDependencies].forEach(deps =>
-					deps && Object.keys(deps)
-						.filter(x => x.startsWith('nti-'))
-						.forEach(x => (o => o[x] = 'alpha')(deps))),
-				json
-			))(pkg),
-			{spaces: 2}
-		);
+	fs.remove(lockfile);
+	fs.remove(modulesDir);
 
-		fs.remove(lockfile);
-		fs.remove(modulesDir);
+	// download latest deps (and alphas)
+	fs.writeJsonSync(
+		packageFile,
+		(json => (
+			[json.dependencies, json.devDependencies].forEach(deps =>
+				deps && Object.keys(deps)
+					.filter(x => x.startsWith('nti-'))
+					.forEach(x => (o => o[x] = 'alpha')(deps))),
+			json
+		))(pkg),
+		{spaces: 2}
+	);
 
-		const log = fs.openSync(path.join(cwd, '.node_modules.log'), 'w+');
-		call('npm install --parseable', {fd:log});
-	}
+	const nodeEnv = process.env.NODE_ENV;
+	process.env.NODE_ENV = ''; //NPM will not install devDependencies if NODE_ENV is set to production.
 
-	if (fs.existsSync(modulesDir)) {
-		fs.utimesSync(modulesDir, new Date(), new Date());
-	}
+	const log = fs.openSync(path.join(cwd, '.node_modules.log'), 'w+');
 
+	console.log('Installing dependencies...');
+	call('npm install --parseable --no-progress', {fd:log});
+	console.log('Dependencies installed.');
+
+	process.env.NODE_ENV = nodeEnv;
 	return {
 		name, version, stamp
 	};

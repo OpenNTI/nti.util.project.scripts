@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const {prepare, call} = require('./util/prepare');
 
-prepare();
+prepare('smoketest');
 
 call('npm pack');
 

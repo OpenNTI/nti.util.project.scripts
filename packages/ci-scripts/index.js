@@ -6,6 +6,9 @@ const run = require('./run');
 const [script] = (process.argv[2] || '').split('/');
 const args = process.argv.slice(3);
 
+process.env.CI = true;
+process.env.NODE_ENV = 'production';
+
 let scriptFile;
 try {
 	scriptFile = require.resolve('./tasks/' + script);

@@ -1,6 +1,4 @@
 'use strict';
-const fs = require('fs-extra');
-const path = require('path');
 const {spawnSync} = require('child_process');
 
 const call = x => (x = x.split(' '), spawnSync(x[0], x.slice(1), {stdio: 'ignore'}));
@@ -28,14 +26,9 @@ module.exports = function run (scriptFile, args) {
 	);
 
 
-	const lockfile = path.join(process.cwd(), 'package-lock.json');
-	// Restore the package.json & lock file to original (the version & publish process saves the version to the lockfile)
-	call('git checkout package.json');
-	if (fs.existsSync(lockfile)) {
-		if (call('git checkout package-lock.json').status !== 0) {
-			fs.remove(lockfile);
-		}
-	}
+	// Restore the package.json & lock file to original
+	// the version & publish process saves the version to the lockfile
+	call('git checkout package*');
 
 
 	if (result.signal) {
