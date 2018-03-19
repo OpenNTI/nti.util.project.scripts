@@ -1,10 +1,8 @@
 // release
 'use strict';
 const fs = require('fs-extra');
-const { call, nofail, lockfile, modulesDir } = require('./util/prepare');
+const { call, nofail, lockfile } = require('./util/prepare');
 
-
-fs.remove(modulesDir);
 
 if (fs.existsSync(lockfile)) {
 	if (call('git checkout package-lock.json', nofail) !== 0) {
@@ -13,5 +11,5 @@ if (fs.existsSync(lockfile)) {
 }
 
 
-call('npm install');
+call('npm ci');
 call('npm publish');
