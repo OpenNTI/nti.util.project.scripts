@@ -7,7 +7,7 @@ process.on('unhandledRejection', err => { throw err; });
 
 const args = process.argv.slice(2);
 
-process.env.BABEL_ENV =
-process.env.NODE_ENV = 'production';
+process.env.NODE_ENV = process.env.NODE_ENV || 'production';
+process.env.BABEL_ENV = process.env.BABEL_ENV || process.env.NODE_ENV;
 
 call('eslint', ['--ext', '.js,.jsx', paths.src, ...args]);
