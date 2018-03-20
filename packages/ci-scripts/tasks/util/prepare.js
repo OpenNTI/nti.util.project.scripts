@@ -97,7 +97,7 @@ function prepare (type) {
 	);
 
 	const nodeEnv = process.env.NODE_ENV;
-	process.env.NODE_ENV = ''; //NPM will not install devDependencies if NODE_ENV is set to production.
+	process.env.NODE_ENV = 'development'; //NPM will not install devDependencies if NODE_ENV is set to production.
 
 	const log = fs.openSync(path.join(cwd, '.node_modules.log'), 'w+');
 
