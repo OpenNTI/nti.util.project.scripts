@@ -79,7 +79,7 @@ function prepare (type) {
 	}
 
 	//DATE=`date +%Y%m%d%H%M`
-	printHeader('Preparing %s build %s@%s.%s', type, name, version, stamp);
+	printHeader('Preparing %s build:\n  %s@%s.%s', type, name, version, stamp);
 
 	fs.remove(lockfile);
 	fs.remove(modulesDir);

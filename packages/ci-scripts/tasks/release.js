@@ -10,7 +10,7 @@ if (/-alpha$/.test(version)) {
 	return process.exit(1);
 }
 
-printHeader('Preparing release build %s@%s', name, version);
+printHeader('Preparing release build:\n  %s@%s', name, version);
 
 if (fs.existsSync(lockfile)) {
 	if (call('git checkout package-lock.json', nofail) !== 0) {
