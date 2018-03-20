@@ -6,7 +6,7 @@ const {spawnSync} = require('child_process');
 const call = (x, {fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
 
-	const {status} = spawnSync(cmd, args, {
+	const {signal, status} = spawnSync(cmd, args, {
 		stdio: typeof fd === 'string'
 			? fd
 			: ['ignore', fd, fd]
@@ -14,6 +14,10 @@ const call = (x, {fd = 'inherit', forgive = false} = {}) => {
 
 	if (typeof fd !== 'string') {
 		fs.closeSync(fd);
+	}
+
+	if (signal) {
+		process.kill(process.pid, signal);
 	}
 
 	if (status !== 0 && !forgive) {
@@ -99,7 +103,7 @@ function prepare (type) {
 
 	console.log('Installing dependencies...');
 	call('npm install --parseable --no-progress', {fd:log});
-	console.log('Dependencies installed.');
+	console.log('Dependencies installed.\n');
 
 	process.env.NODE_ENV = nodeEnv;
 	return {

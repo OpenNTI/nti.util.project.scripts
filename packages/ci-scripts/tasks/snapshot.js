@@ -5,7 +5,7 @@ const {prepare, call, nofail} = require('./util/prepare');
 const {version, stamp} = prepare('snapshot');
 
 // Update the package(-lock).json to a snapshot version
-call(`npm --no-git-tag-version version ${version}.${stamp}`);
+call(`npm --no-git-tag-version version ${version}.${stamp}`, {fd: 'ignore'});
 //publish the snapshot (will build)
 call('npm publish --tag alpha');
 
