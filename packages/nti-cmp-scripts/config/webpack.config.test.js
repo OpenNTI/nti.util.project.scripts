@@ -29,7 +29,10 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		clientLogLevel: 'none',
 		contentBase: paths.resolveApp('test/app/'),
 		watchContentBase: true,
-		overlay: true,
+		overlay: {
+			warnings: false,
+			errors: true
+		},
 		noInfo: true,
 		proxy: [{
 			context: ['/content', '/dataserver2'],

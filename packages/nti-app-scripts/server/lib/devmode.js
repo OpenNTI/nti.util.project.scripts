@@ -57,7 +57,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		contentBase: paths.assetsRoot,
 		overlay: NTI_BUILDOUT_PATH && {
 			errors: true,
-			warnings: true,
+			warnings: false,
 		},
 
 		stats: {
