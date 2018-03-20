@@ -103,7 +103,7 @@ function prepare (type) {
 	const log = fs.openSync(path.join(cwd, '.node_modules.log'), 'w+');
 
 	console.log('Installing dependencies...');
-	call('npm install --parseable --no-progress', {fd:log});
+	call('npm install --parseable', {fd:log});
 	console.log('Dependencies installed.\n');
 
 	process.env.NODE_ENV = nodeEnv;
