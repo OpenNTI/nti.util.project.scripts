@@ -18,10 +18,11 @@ const call = (x, {fd = 'inherit', forgive = false} = {}) => {
 	}
 
 	if (signal) {
+		console.log('Command killed: ', x);
 		process.kill(process.pid, signal);
+		process.exit(status);
 	}
-
-	if (status !== 0 && !forgive) {
+	else if (status !== 0 && !forgive) {
 		console.log('Command failed: ', x);
 		process.exit(status);
 	}
