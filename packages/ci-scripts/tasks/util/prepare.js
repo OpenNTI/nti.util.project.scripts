@@ -7,6 +7,7 @@ const call = (x, {fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
 
 	const {signal, status} = spawnSync(cmd, args, {
+		env: process.env,
 		stdio: typeof fd === 'string'
 			? fd
 			: ['ignore', fd, fd]
