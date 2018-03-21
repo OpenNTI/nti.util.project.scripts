@@ -18,11 +18,13 @@ if (fs.existsSync(lockfile)) {
 	}
 }
 
-// NPM will not install devDependencies if NODE_ENV is set to production.
-// We use devDependencies to declare our build tool chain. We require devDependencies to build.
-const nodeEnv = process.env.NODE_ENV;
-process.env.NODE_ENV = 'development';
-call('npm ci');
-process.env.NODE_ENV = nodeEnv;
+call('npm ci', {
+	env: {
+		// NPM will not install devDependencies if NODE_ENV is set to production.
+		// We use devDependencies to declare our build tool chain. We require devDependencies to build.
+		// So override the env here.
+		NODE_ENV: 'development'
+	}
+});
 
 call('npm publish');

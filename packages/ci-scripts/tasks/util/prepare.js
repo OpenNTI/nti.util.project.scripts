@@ -3,11 +3,11 @@ const fs = require('fs-extra');
 const path = require('path');
 const {spawnSync} = require('child_process');
 
-const call = (x, {fd = 'inherit', forgive = false} = {}) => {
+const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
 
 	const {signal, status} = spawnSync(cmd, args, {
-		env: process.env,
+		env: {...process.env, ...env},
 		stdio: typeof fd === 'string'
 			? fd
 			: ['ignore', fd, fd]
@@ -98,16 +98,18 @@ function prepare (type) {
 		{spaces: 2}
 	);
 
-	const nodeEnv = process.env.NODE_ENV;
-	process.env.NODE_ENV = 'development'; //NPM will not install devDependencies if NODE_ENV is set to production.
-
-	const log = fs.openSync(path.join(cwd, '.node_modules.log'), 'w+');
-
 	console.log('Installing dependencies...');
-	call('npm install --parseable', {fd:log});
+	call('npm install --parseable', {
+		fd: fs.openSync(path.join(cwd, '.node_modules.log'), 'w+'),
+		env: {
+			// NPM will not install devDependencies if NODE_ENV is set to production.
+			// We use devDependencies to declare our build tool chain. We require devDependencies to build.
+			// So override the env here.
+			NODE_ENV: 'development'
+		}
+	});
 	console.log('Dependencies installed.\n');
 
-	process.env.NODE_ENV = nodeEnv;
 	return {
 		name, version, stamp
 	};
