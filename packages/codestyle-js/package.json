@@ -1,6 +1,6 @@
 {
   "name": "@nti/codestyle-js",
-  "version": "1.15.0",
+  "version": "1.15.14",
   "description": "NextThought code style standard",
   "main": "index.js",
   "repository": {
