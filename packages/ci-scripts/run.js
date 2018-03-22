@@ -1,7 +1,7 @@
 'use strict';
 const {spawnSync} = require('child_process');
 
-const call = x => (x = x.split(' '), spawnSync(x[0], x.slice(1), {stdio: 'ignore'}));
+const call = x => (x = x.split(' '), spawnSync(x[0], x.slice(1), {env: process.env, stdio: 'ignore'}));
 const inspect = process.argv.slice(3).some(x => x.startsWith('--inspect'));// --inspect-brk
 
 process.on('SIGINT', ()=> console.log('Interrupted.'));
@@ -23,7 +23,7 @@ module.exports = function run (scriptFile, args) {
 			'--max-old-space-size=8192',
 			scriptFile
 		].filter(Boolean).concat(args),
-		{ stdio: 'inherit' }
+		{ env: process.env, stdio: 'inherit' }
 	);
 
 
