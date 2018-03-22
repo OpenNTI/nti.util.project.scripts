@@ -1,8 +1,5 @@
 {
-	"extends": [
-		"nti-codestyle-js"
-	],
-
+	"extends": "./packages/codestyle-js/index.js",
 	"parser": "babel-eslint",
 
 	"parserOptions": {

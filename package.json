@@ -22,7 +22,6 @@
   "releaseMode": "interactive",
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
-    "eslint-config-nti-codestyle-js": "^1.1.0",
     "lerna": "^2.0.0"
   }
 }
