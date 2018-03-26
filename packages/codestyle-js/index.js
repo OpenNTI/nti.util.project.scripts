@@ -117,7 +117,7 @@ module.exports = {
 		'indent': ['error', 'tab'],
 		'no-caller': 'error',
 		'no-console': DEV ? 'warn' : 'error',
-		'no-debugger': DEV ? 'off' : 'error',
+		'no-debugger': DEV ? 'warn' : 'error',
 		'no-multiple-empty-lines': ['warn', {'max': 3, 'maxBOF': 3, 'maxEOF': 1}],
 		'no-new': 'error',
 		'no-restricted-globals': ['error'].concat(restrictedGlobals),
