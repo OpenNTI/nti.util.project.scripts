@@ -3,6 +3,7 @@
 const path = require('path');
 const fs = require('fs-extra');
 const jest = require('jest');
+const {isCI} = require('ci-info');
 const paths = require('../config/paths');
 
 const config = paths.resolveApp('jest.config.js');
@@ -28,7 +29,7 @@ const isTestTask = path.basename(process.argv[1]) === path.basename(module.filen
 const argv = isTestTask ? process.argv.slice(2) : [];
 
 //CI needs coverage
-if (process.env.CI && !argv.includes('--coverage')) {
+if (isCI && !argv.includes('--coverage')) {
 	argv.push('--coverage');
 }
 

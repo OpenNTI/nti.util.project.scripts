@@ -2,12 +2,13 @@
 'use strict';
 const engine = 'jsdoc';
 const fs = require('fs-extra');
+const {isCI} = require('ci-info');
 const run = require(`./engines/${engine}`);
 
 const output = run();
 
 
-if (process.env.CI) {
+if (isCI) {
 	//transfer docs
 
 

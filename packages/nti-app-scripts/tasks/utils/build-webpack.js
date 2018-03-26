@@ -1,5 +1,6 @@
 'use strict';
 const chalk = require('chalk');
+const {isCI} = require('ci-info');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const webpack = require('webpack');
 const {ProgressPlugin} = webpack;
@@ -11,7 +12,7 @@ module.exports = function build (config = require('../../config/webpack.config')
 
 	const compiler = webpack(config);
 
-	if (!process.env.CI) {
+	if (!isCI) {
 		compiler.apply(new ProgressPlugin({profile: false}));
 	}
 
@@ -27,10 +28,10 @@ module.exports = function build (config = require('../../config/webpack.config')
 				return reject(new Error(messages.errors.join('\n\n')));
 			}
 
-			if (process.env.CI && messages.warnings.length && !(pkg.build || {}).ignoreWarnings) {
+			if (isCI && messages.warnings.length && !(pkg.build || {}).ignoreWarnings) {
 				console.log(
 					chalk.yellow(
-						'\nTreating warnings as errors because process.env.CI = true.\n' +
+						'\nTreating warnings as errors because isCI = true.\n' +
 						'Most CI servers set it automatically.\n'
 					)
 				);
