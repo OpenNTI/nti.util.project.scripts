@@ -1,5 +1,6 @@
 /*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
+const SKIP = process.argv.includes('--skip-checks');
 const DEBUG = process.argv.includes('--debug');
 
 const path = require('path');
@@ -33,13 +34,17 @@ process.on('unhandledRejection', err => {
 // 	process.exit(1);
 // }
 
-call('node', [require.resolve('./check')]);
-call('node', [require.resolve('./test'), '--no-cache']);
+if (!SKIP) {
+	call('node', [require.resolve('./check')]);
+	call('node', [require.resolve('./test'), '--no-cache']);
+}
 
 //clean dist
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-call('npx', ['@nti/gen-docs']);
+if (!SKIP) {
+	call('npx', ['@nti/gen-docs']);
+}
 
 (async function build () {
 	//call build hook

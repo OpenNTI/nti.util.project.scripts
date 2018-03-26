@@ -1,4 +1,5 @@
 'use strict';
+const SKIP = process.argv.includes('--skip-checks');
 const DEBUG = process.argv.includes('--debug');
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
 process.env.NODE_ENV = DEBUG ? 'development' : 'production';
@@ -24,15 +25,20 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 	process.exit(1);
 }
 
-call('node', [require.resolve('./check')]);
-call('node', [require.resolve('./test'), '--no-cache']);
+
+if (!SKIP) {
+	call('node', [require.resolve('./check')]);
+	call('node', [require.resolve('./test'), '--no-cache']);
+}
 
 //clean dist & ensure client/server directories
 fs.emptyDirSync(path.resolve(paths.path, 'dist'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
-call('npx', ['@nti/gen-docs']);
+if (!SKIP) {
+	call('npx', ['@nti/gen-docs']);
+}
 
 (async function () {
 	//Copy server code...
