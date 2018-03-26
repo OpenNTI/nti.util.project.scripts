@@ -1,6 +1,6 @@
 {
   "name": "@nti/gen-docs",
-  "version": "1.15.2",
+  "version": "1.15.17",
   "description": "Generate API documentation",
   "main": "index.js",
   "bin": {
