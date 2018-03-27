@@ -13,7 +13,7 @@ const removePaths = (line) => (~line.indexOf(paths.path)) ? null : line;
 
 const call = (cmd, ...args) => spawnSync(cmd, args, {
 	//npm doesn't output anything when NODE_ENV = 'production'
-	env: Object.assign({}, process.env, { NODE_ENV: null }),
+	env: Object.assign({}, process.env, { NODE_ENV: 'development' }),
 	stdio: [null, 'pipe', null],
 	maxBuffer: 1024 * 1024 //1MB max
 });
