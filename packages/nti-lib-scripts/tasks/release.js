@@ -1,4 +1,6 @@
 'use strict';
+process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
+
 const chalk = require('chalk');
 const path = require('path');
 const gitState = require('git-state');
