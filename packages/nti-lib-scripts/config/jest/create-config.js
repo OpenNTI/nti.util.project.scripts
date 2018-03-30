@@ -4,7 +4,9 @@ const path = require('path');
 const {isCI} = require('ci-info');
 
 //get the 'active' paths
-const paths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
+const setupEnv = require('./setup-env');
+const {config: configDir} = setupEnv();
+const paths = require(path.resolve(configDir, './paths'));
 const getWorkspace = require('../workspace');
 const {testEnvironment} = require(paths.packageJson);
 
