@@ -4,7 +4,7 @@ const path = require('path');
 module.exports = function setupEnv () {
 	const file = process.argv[1];
 	if (/tasks\/test\.js/.test(file)) {
-		return path.resolve(path.dirname(process.argv[1]), '../config/');
+		return {config: path.resolve(path.dirname(process.argv[1]), '../config/')};
 	}
 
 	try {
