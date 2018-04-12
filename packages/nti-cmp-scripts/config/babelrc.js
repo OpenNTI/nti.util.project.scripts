@@ -1,3 +1,3 @@
 'use strict';
 
-module.exports = require('nti-app-scripts/config/babelrc.js');
+module.exports = require('@nti/app-scripts/config/babelrc.js');

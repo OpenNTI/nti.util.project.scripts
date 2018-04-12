@@ -3,7 +3,7 @@
 const path = require('path');
 // const url = require('url');
 
-const paths = require('nti-app-scripts/config/paths');
+const paths = require('@nti/app-scripts/config/paths');
 
 function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);

@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const call = require('nti-lib-scripts/tasks/utils/call-cmd');
+const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 
 const paths = require('../config/paths');
 

@@ -8,7 +8,7 @@ const colorz = require('json-colorz');
 const path = require('path');
 const url = require('url');
 const tmp = require('tmp');
-const call = require('nti-lib-scripts/tasks/utils/call-cmd');
+const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 
 const paths = require('../config/paths');
 const merge = require('./utils/merge-config');

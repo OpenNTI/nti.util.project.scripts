@@ -1,5 +1,5 @@
 {
-  "name": "nti-lib-scripts",
+  "name": "@nti/lib-scripts",
   "version": "1.15.24",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
@@ -9,7 +9,7 @@
     "fix": "./bin/run.js",
     "clean": "./bin/run.js",
     "install-snapshots": "./bin/run.js",
-    "nti-lib-scripts": "./bin/cli.js",
+    "lib-scripts": "./bin/cli.js",
     "release": "./bin/run.js",
     "start": "./bin/run.js",
     "test": "./bin/run.js"

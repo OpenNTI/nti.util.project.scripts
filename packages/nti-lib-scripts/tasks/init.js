@@ -14,6 +14,7 @@ const {json: pkg, indent} = readPackageJson();
 const {json: libPkg} = readPackageJson(paths.ownPackageJson);
 const {json: ownPkg} = readPackageJson(currentScriptsPaths.ownPackageJson);
 const scriptPackageName = ownPkg.name;
+const scriptBinName = scriptPackageName.replace(/^@nti\//, '');
 const combindedDeps = Object.assign({}, libPkg.dependencies, ownPkg.dependencies, global.NTI_INIT_DROP_DEPENDENCIES || {});
 const dropDeps = [
 	'babel-register',
@@ -69,18 +70,18 @@ delete pkg.scripts['version'];
 delete pkg.scripts['preversion'];
 delete pkg.scripts['postversion'];
 delete pkg.scripts['prepublish'];
-// 	b) set "test": "${scriptPackageName} test"
-pkg.scripts['test'] = global.NTI_INIT_SCRIPT_TEST || `${scriptPackageName} test`;
-// 	c) set "start": "${scriptPackageName} test --watch"
-pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptPackageName} test --watch`;
-// 	d) set "prepublish": "${scriptPackageName} build"
-pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
-pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptPackageName} build`;
-pkg.scripts['clean'] = global.NTI_INIT_SCRIPT_CLEAN || `${scriptPackageName} clean`;
-pkg.scripts['check'] = global.NTI_INIT_SCRIPT_CHECK || `${scriptPackageName} check`;
-pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptPackageName} release`;
-pkg.scripts['install-snapshots'] = global.NTI_INIT_SCRIPT_SNAPSHOT || `${scriptPackageName} install-snapshots`;
-pkg.scripts['fix'] = global.NTI_INIT_SCRIPT_FIX || `${scriptPackageName} fix`;
+// 	b) set "test": "${scriptBinName} test"
+pkg.scripts['test'] = global.NTI_INIT_SCRIPT_TEST || `${scriptBinName} test`;
+// 	c) set "start": "${scriptBinName} test --watch"
+pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptBinName} test --watch`;
+// 	d) set "prepublish": "${scriptBinName} build"
+pkg.scripts['prepack'] = global.NTI_INIT_SCRIPT_PREPACK || `${scriptBinName} build`;
+pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptBinName} build`;
+pkg.scripts['clean'] = global.NTI_INIT_SCRIPT_CLEAN || `${scriptBinName} clean`;
+pkg.scripts['check'] = global.NTI_INIT_SCRIPT_CHECK || `${scriptBinName} check`;
+pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptBinName} release`;
+pkg.scripts['install-snapshots'] = global.NTI_INIT_SCRIPT_SNAPSHOT || `${scriptBinName} install-snapshots`;
+pkg.scripts['fix'] = global.NTI_INIT_SCRIPT_FIX || `${scriptBinName} fix`;
 
 if (global.NTI_INIT_PACKAGE_HOOK) {
 	global.NTI_INIT_PACKAGE_HOOK(pkg);

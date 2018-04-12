@@ -9,7 +9,7 @@ process.on('unhandledRejection', err => { throw err; });
 const path = require('path');
 // const chalk = require('chalk');
 const fs = require('fs-extra');
-const call = require('nti-lib-scripts/tasks/utils/call-cmd');
+const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const paths = require('../config/paths');
 

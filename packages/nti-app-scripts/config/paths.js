@@ -3,7 +3,7 @@
 const path = require('path');
 const url = require('url');
 
-const paths = require('nti-lib-scripts/config/paths');
+const paths = require('@nti/lib-scripts/config/paths');
 
 // const ownPackageJson = require('../package.json');
 // const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);

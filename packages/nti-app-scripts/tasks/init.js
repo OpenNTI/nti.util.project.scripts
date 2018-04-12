@@ -7,7 +7,7 @@ global.NTI_INIT_TO_COPY = [
 global.NTI_INIT_TO_REMOVE = [
 	'webpack.config.js'
 ];
-global.NTI_INIT_SCRIPT_START = 'nti-app-scripts start';
+global.NTI_INIT_SCRIPT_START = 'app-scripts start';
 
 global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
 	Object.assign(pkg, {
@@ -15,7 +15,7 @@ global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
 	});
 };
 
-require('nti-lib-scripts/tasks/init');
+require('@nti/lib-scripts/tasks/init');
 
 console.log(`
 

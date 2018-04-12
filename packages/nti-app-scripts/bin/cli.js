@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-require('nti-lib-scripts/bin/validate-env');
+require('@nti/lib-scripts/bin/validate-env');
 
-const run = require('nti-lib-scripts/bin/run-task');
+const run = require('@nti/lib-scripts/bin/run-task');
 const script = process.argv[2];
 const args = process.argv.slice(3);
 

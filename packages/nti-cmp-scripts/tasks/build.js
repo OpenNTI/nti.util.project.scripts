@@ -7,11 +7,11 @@ const path = require('path');
 
 const chalk = require('chalk');
 const fs = require('fs-extra');
-const call = require('nti-lib-scripts/tasks/utils/call-cmd');
+const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const callHook = require('nti-app-scripts/tasks/utils/build-call-hook');
-const buildWebpackBundle = require('nti-app-scripts/tasks/utils/build-webpack');
-const buildRollupBundle = require('nti-lib-scripts/tasks/utils/build-with-rollup');
+const callHook = require('@nti/app-scripts/tasks/utils/build-call-hook');
+const buildWebpackBundle = require('@nti/app-scripts/tasks/utils/build-webpack');
+const buildRollupBundle = require('@nti/lib-scripts/tasks/utils/build-with-rollup');
 
 const paths = require('../config/paths');
 const wpConfig = require('../config/webpack.config');
