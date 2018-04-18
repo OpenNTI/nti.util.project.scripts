@@ -26,7 +26,7 @@ if (paths.appBuildHook) {
 
 const {hostname = 'localhost', protocol, port} = url.parse(paths.publicUrl || 'proxy://localhost:8083/');
 
-const service = require.resolve('nti-web-service/src/index.js');
+const service = require.resolve('@nti/web-service/src/index.js');
 const servicePath = path.dirname(service);
 
 const tempConfig = tmp.fileSync();

@@ -49,7 +49,7 @@ module.exports = function recordVersions () {
 			.filter(x => /:nti-/.test(x)
 				// Web service bundles its dependencies so, it will polute our list...
 				// ...so omit its dependencies.
-				&& !/\/nti-web-service\//.test(x)
+				&& !/\/(nti-|@nti\/)web-service\//.test(x)
 			)
 			.map(x => '- ' + x.split(':')[1]);
 
