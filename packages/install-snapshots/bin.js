@@ -16,7 +16,7 @@ const pkg = readPackageJson();
 for (let deps of [pkg.dependencies, pkg.devDependencies]) {
 	if (deps) {
 		Object.keys(deps)
-			.filter(x => x.startsWith('nti-'))
+			.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
 			.forEach(x => (o => o[x] = 'alpha')(deps));
 	}
 }
