@@ -1,6 +1,6 @@
 {
   "name": "nti-lib-scripts",
-  "version": "1.15.23",
+  "version": "1.15.24",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -32,7 +32,7 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
     "@nti/codestyle-js": "^1.15.17",
-    "@nti/install-snapshots": "^1.15.0",
+    "@nti/install-snapshots": "^1.15.24",
     "babel-cli": "^6.1.0",
     "babel-core": "^6.1.0",
     "babel-eslint": "^8.2.2",
