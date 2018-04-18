@@ -91,7 +91,7 @@ function prepare (type) {
 		(json => (
 			[json.dependencies, json.devDependencies].forEach(deps =>
 				deps && Object.keys(deps)
-					.filter(x => x.startsWith('nti-'))
+					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
 					.forEach(x => (o => o[x] = 'alpha')(deps))),
 			json
 		))(pkg),
