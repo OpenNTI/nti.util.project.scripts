@@ -1,6 +1,6 @@
 {
   "name": "nti-app-scripts",
-  "version": "1.15.24",
+  "version": "1.15.25",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "nti-app-scripts": "./bin/cli.js"
@@ -23,7 +23,6 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
     "@nti/codestyle-jsx": "^1.15.17",
-    "nti-lib-scripts": "^1.15.24",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "autoprefixer": "^8.1.0",
@@ -48,6 +47,7 @@
     "json-colorz": "0.x.x",
     "node-sass": "^4.0.0",
     "normalize.css": "^8.0.0",
+    "nti-lib-scripts": "^1.15.24",
     "null-loader": "0.x.x",
     "postcss-loader": "^2.0.3",
     "raw-loader": "0.x.x",
