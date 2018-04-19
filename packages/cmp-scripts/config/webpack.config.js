@@ -97,7 +97,7 @@ exports = module.exports = {
 				enforce: 'pre',
 				use : [
 					{
-						loader: require.resolve('baggage-loader'),
+						loader: require.resolve('@nti/baggage-loader'),
 						options: {
 							'[file].scss':{}
 						}

@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
+    "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.15.17",
     "@nti/lib-scripts": "^1.15.24",
     "@nti/util-git-rev": "^1.0.0",
@@ -33,7 +34,6 @@
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-polyfill": "^6.1.0",
     "babel-preset-react": "^6.1.0",
-    "baggage-loader": "^1.0.1-nti.4",
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.0.1",
     "ci-info": "^1.1.3",

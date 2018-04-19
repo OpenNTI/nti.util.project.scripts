@@ -144,7 +144,7 @@ exports = module.exports = {
 						use: [
 							{loader: require.resolve('babel-loader')},
 							{
-								loader: require.resolve('baggage-loader'),
+								loader: require.resolve('@nti/baggage-loader'),
 								options: {
 									'[file].scss':{},
 									'[file].css':{}
