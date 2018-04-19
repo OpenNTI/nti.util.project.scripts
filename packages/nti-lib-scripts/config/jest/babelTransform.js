@@ -1,8 +1,9 @@
 'use strict';
-
+const path = require('path');
 const babelJest = require('babel-jest');
+const resolveScriptDir = require('./resolve-script-dir');
 
 module.exports = babelJest.createTransformer({
-	// presets: [require.resolve('babel-preset-react-app')],
-	// babelrc: false,
+	presets: [path.join(resolveScriptDir(), 'config', 'babelrc.js')],
+	babelrc: false,
 });

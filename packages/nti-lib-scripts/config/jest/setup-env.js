@@ -1,5 +1,6 @@
 'use strict';
 const path = require('path');
+const resolveScriptDir = require('./resolve-script-dir');
 
 module.exports = function setupEnv () {
 	try {
@@ -11,11 +12,7 @@ module.exports = function setupEnv () {
 			config = path.resolve(path.dirname(file), '../config/');
 		}
 		else {
-			const cwd = process.cwd();
-			const {scripts} = require(path.resolve(cwd, 'package.json'));
-			const [script] = scripts.test.split(' ');
-
-			config = path.join(cwd, 'node_modules', script, 'config');
+			config = path.join(resolveScriptDir(), 'config');
 		}
 
 		try {

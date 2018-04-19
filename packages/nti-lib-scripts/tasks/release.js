@@ -2,15 +2,14 @@
 process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
 
 const chalk = require('chalk');
-const path = require('path');
 const gitState = require('git-state');
 const semver = require('semver');
 const inquirer = require('inquirer');
 const paths = require('../config/paths');
+const currentScriptsPaths = require('./utils/current-script-paths');
 const readPackageJson = require('./utils/read-package-json');
 const call = require('./utils/call-cmd');
 
-const currentScriptsPaths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
 const {json: {name: command}} = readPackageJson(currentScriptsPaths.ownPackageJson);
 
 const tasks = ['check', 'test'];

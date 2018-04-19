@@ -4,11 +4,11 @@ const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs-extra');
 const paths = require('../config/paths');
+const currentScriptsPaths = require('./utils/current-script-paths');
 const call = require('./utils/call-cmd');
 const readPackageJson = require('./utils/read-package-json');
 const writePackageJson = require('./utils/write-package-json');
 
-const currentScriptsPaths = require(path.resolve(path.dirname(process.argv[1]), '../config/paths'));
 
 const {json: pkg, indent} = readPackageJson();
 const {json: libPkg} = readPackageJson(paths.ownPackageJson);
