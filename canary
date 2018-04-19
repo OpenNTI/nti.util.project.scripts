@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+if [ $# -eq 0 ]; then
+	SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+	lerna exec "exec $SCRIPTPATH/${0##*/} \$LERNA_PACKAGE_NAME" --bail --loglevel error
+	if [ "$?" -eq 0 ]; then
+		lerna publish --skip-git --npm-tag=next --canary --exact --yes
+	fi
+	exit $?;
+fi
+
+LERNA_PACKAGE_NAME=$1;
+
+VERSION=`npm view $LERNA_PACKAGE_NAME .dist-tags.next`
+
+if [ ${#VERSION} != 0 ] ; then
+	# echo $LERNA_PACKAGE_NAME@$VERSION
+	npm unpublish $LERNA_PACKAGE_NAME@$VERSION
+fi
