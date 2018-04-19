@@ -1,22 +1,22 @@
 'use strict';
+const fs = require('fs');
 const path = require('path');
 const resolveScriptDir = require('./resolve-script-dir');
 
 module.exports = function setupEnv () {
 	try {
-		let config;
-
 		const [,file] = process.argv;
 
-		if (/tasks\/test\.js/.test(file)) {
-			config = path.resolve(path.dirname(file), '../config/');
-		}
-		else {
-			config = path.join(resolveScriptDir(), 'config');
-		}
+		const config =
+			(/tasks\/test\.js/.test(file))
+				? path.resolve(path.dirname(file), '../config/')
+				: path.join(resolveScriptDir(), 'config');
 
 		try {
-			require(path.join(config, 'jest'));
+			const init = path.join(config, 'jest.js');
+			if (fs.existsSync(init)) {
+				require(init);
+			}
 		}
 		catch (e) {
 			console.error(e.stack);
