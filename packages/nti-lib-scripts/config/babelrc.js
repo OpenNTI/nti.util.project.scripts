@@ -1,4 +1,5 @@
 'use strict';
+const browsers = require('./browserlist');
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
@@ -28,7 +29,7 @@ else {
 				'useBuiltIns': true,
 				'modules': false,
 				'targets': {
-					'browsers': ['> 1% in US', 'last 2 versions', 'safari >= 6']
+					browsers
 				},
 			}],
 			'stage-1'

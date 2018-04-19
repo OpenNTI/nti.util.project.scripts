@@ -17,6 +17,7 @@ const pkg = require(paths.packageJson);
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
+const browsers = require('nti-lib-scripts/config/browserlist');
 const getWorkspace = require('nti-lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
@@ -171,7 +172,7 @@ exports = module.exports = {
 							options: {
 								sourceMap: true,
 								plugins: () => [
-									autoprefixer({ browsers: ['> 1% in US', 'last 2 versions', 'iOS > 8'] })
+									autoprefixer({ browsers })
 								]
 							}
 						},
