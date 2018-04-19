@@ -27,7 +27,7 @@ const workspaceLinks = (!PROD && paths.workspace)
 
 
 function isNTIPackage (x) {
-	const prefix = `${paths.nodeModules}/nti-`;
+	const prefix = `${paths.nodeModules}/@nti/`;
 	const decendent = /node_modules/;
 
 	let str = x ? x.toString() : '';
