@@ -1,17 +1,19 @@
 'use strict';
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 const paths = require('./paths');
+const pkg = require(paths.packageJson);
 
 exports = module.exports = Object.assign(require('./webpack.config'), {
 	entry: {
 		index: [
-			require.resolve('babel-polyfill'),
+			require.resolve('./polyfills'),
 			paths.resolveApp('./test/app/index.js')
 		]
 	},
 	externals: [],
 	output: {
 		path: '/',
-		filename: 'index.js'
+		filename: '[name].js'
 		// publicPath: '/'
 	},
 	node: {
@@ -41,12 +43,7 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 	}
 });
 
-const {module: {rules}} = exports;
-
-rules.push({
-	test: /\.(eot|ttf|woff)$/,
-	loader: require.resolve('file-loader'),
-	query: {
-		name: 'assets/fonts/[name]-[hash].[ext]'
-	}
-});
+exports.plugins.push(new HtmlWebpackPlugin({
+	title: pkg.name + ': Test Harness',
+	template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
+}));

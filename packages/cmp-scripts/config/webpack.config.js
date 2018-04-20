@@ -1,15 +1,13 @@
-/*eslint import/no-extraneous-dependencies: 0*/
 'use strict';
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
-const webpack = require('webpack');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+//
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
@@ -24,6 +22,8 @@ const workspaceLinks = (!PROD && paths.workspace)
 	: {};
 
 exports = module.exports = {
+	mode: ENV,
+	bail: PROD,
 	entry: {
 		index: path.resolve(paths.src, 'index.js')
 	},
@@ -56,7 +56,7 @@ exports = module.exports = {
 			paths.nodeModules,
 			'node_modules',//needed for conflicted versions of modules that get nested, but attempt last.
 		],
-		extensions: ['.jsx', '.js', '.mjs'],
+		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
 			...workspaceLinks,
 			// Resolve Babel runtime relative to app-scripts.
@@ -92,133 +92,171 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
-			{
+			// Disable require.ensure as it's not a standard language feature.
+			// { parser: { requireEnsure: false } },
+
+			// First, run the linter.
+			// It's important to do this before Babel processes the JS.
+			!PROD && {
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
-				use : [
-					{
-						loader: require.resolve('@nti/baggage-loader'),
-						options: {
-							'[file].scss':{}
-						}
-					},
-					// First, run the linter. (loaders are run "bottom up")
-					// It's important to do this before Babel processes the JS.
-					{
-						options: {
-							formatter: eslintFormatter,
-							ignore: false,
-							failOnError: true,
-							failOnWarning: false,
-							emitWarning: false
+				use: [{
+					loader: require.resolve('eslint-loader'),
+					options: {
+						formatter: eslintFormatter,
+						ignore: false,
+						failOnError: true,
+						failOnWarning: false,
+						emitWarning: false,
+						useEslintrc: false,
+						eslintPath: require.resolve('eslint'),
+						baseConfig: {
+							extends: [require.resolve('./eslintrc')]
 						},
-						loader: require.resolve('eslint-loader'),
 					},
-				],
+
+				}],
 				include: [
 					paths.src,
-					//this just allows this loader to run on this path, it does not force the contents into the bundle.
-					paths.testApp
+					//Only lint source files in workspaceLinks
+					// ...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
 				],
+				exclude: [/[/\\\\]node_modules[/\\\\]/],
 			},
 
 			{
-				test: /\.jsx?$/,
-				include: [
-					paths.src,
-					//this just allows this loader to run on this path, it does not force the contents into the bundle.
-					paths.testApp
-				],
-				loader: require.resolve('babel-loader')
-			},
+				oneOf: [
+					{
+						test: /\.m?jsx?$/,
+						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
+						include: [
+							paths.src,
+							paths.testApp
+						],
+						use: [
+							{
+								//TODO: Limit this loader to nextthought code...
+								loader: require.resolve('@nti/baggage-loader'),
+								options: {
+									'[file].scss':{},
+									'[file].css':{}
+								}
+							},
+							{
+								loader: require.resolve('babel-loader'),
+								options: {
+									babelrc: false,
+									cacheDirectory: !PROD,
+									presets: [require.resolve('./babelrc')]
+								}
 
-			{
-				test: /-avatar.png$/,
-				loader: require.resolve('url-loader'),
-				options: {
-					mimeType: 'image/[ext]'
-				}
-			},
+							},
+						]
+					},
 
-			{
-				test: /\.template\.svg$/,
-				loader: require.resolve('raw-loader')
-			},
-
-			{
-				test: /\.(ico|gif|png|jpg|svg)$/,
-				exclude: [/-avatar.png$/, /\.template\.svg$/],
-				loader: require.resolve('url-loader'),
-				options: {
-					limit: 500,
-					name: 'assets/[name]-[hash].[ext]',
-					mimeType: 'image/[ext]'
-				}
-			},
-
-			{
-				test: /\.(s?)css$/,
-				use: ExtractTextPlugin.extract({
-					fallback: require.resolve('style-loader'),
-					use: [
-						{
-							loader: require.resolve('css-loader'),
-							options: {
-								sourceMap: true
-							}
-						},
-						{
-							loader: require.resolve('postcss-loader'),
-							options: {
-								sourceMap: true,
-								plugins: () => [
-									autoprefixer({ browsers })
-								]
-							}
-						},
-						{
-							loader: require.resolve('resolve-url-loader')
-						},
-						{
-							loader: require.resolve('sass-loader'),
-							options: {
-								sourceMap: true
-							}
+					{
+						test: /-avatar.png$/,
+						loader: require.resolve('url-loader'),
+						options: {
+							mimeType: 'image/[ext]'
 						}
-					]
-				})
+					},
+
+					{
+						test: /\.template\.svg$/,
+						loader: require.resolve('raw-loader')
+					},
+
+					{
+						test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
+						exclude: [/-avatar.png$/, /\.template\.svg$/],
+						loader: require.resolve('url-loader'),
+						options: {
+							limit: 50,
+							name: 'assets/[name]-[hash].[ext]',
+							mimeType: 'image/[ext]'
+						}
+					},
+
+					{
+						test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
+						loader: require.resolve('file-loader'),
+						options: {
+							name: 'assets/fonts/[hash].[ext]'
+						}
+					},
+
+					{
+						test: /\.(eot|ttf|woff)$/,
+						loader: require.resolve('file-loader'),
+						query: {
+							name: 'assets/fonts/[name]-[hash].[ext]'
+						}
+					},
+
+					{
+						test: /\.(s?)css$/,
+						use: [
+							MiniCssExtractPlugin.loader,
+							{
+								loader: require.resolve('css-loader'),
+								options: {
+									sourceMap: true
+								}
+							},
+							{
+								loader: require.resolve('postcss-loader'),
+								options: {
+									sourceMap: true,
+									plugins: () => [
+										autoprefixer({ browsers })
+									]
+								}
+							},
+							{
+								loader: require.resolve('resolve-url-loader')
+							},
+							{
+								loader: require.resolve('sass-loader'),
+								options: {
+									sourceMap: true
+								}
+							}
+						]
+					}
+				].filter(Boolean)
 			}
-		]
+		].filter(Boolean)
+	},
+
+	performance: {
+		hints: false,
+		// maxEntrypointSize: 250000, //bytes
+		// maxAssetSize: 250000, //bytes
 	},
 
 	plugins: [
-		// Add module names to factory functions so they appear in browser profiler.
-		new webpack.NamedModulesPlugin(),
-
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
 			exclude: /node_modules/,
+
 			// add errors to webpack instead of warnings
-			// failOnError: true
+			// failOnError: true,
+
+			onDetected ({ /*module,*/ paths: cycle, compilation }) {
+				// `paths` will be an Array of the relative module paths that make up the cycle
+				// `module` will be the module record generated by webpack that caused the cycle
+				compilation.warnings.push(new Error(cycle.join('\n\t-> ')));
+			}
 		}),
 
-		PROD && webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
-
+		new MiniCssExtractPlugin({
+			filename: '[name].css',
+			chunkFilename: '[id].css'
+		}),
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
-
-		// If you require a missing module and then `npm install` it, you still have
-		// to restart the development server for Webpack to discover it. This plugin
-		// makes the discovery automatic so you don't have to restart.
-		// See https://github.com/facebookincubator/create-react-app/issues/186
-		!PROD && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-
-		new ExtractTextPlugin({
-			filename: 'index.css',
-			allChunks: true,
-			disable: false
-		}),
 	].filter(x => x)
 };

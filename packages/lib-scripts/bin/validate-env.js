@@ -6,7 +6,7 @@ const getVersion = require('./get-version');
 
 const minVersions = {
 	npm: '5.5.1',
-	node: '8.9.0',
+	node: '8.9.4',
 };
 
 for (let cmd of Object.keys(minVersions)) {

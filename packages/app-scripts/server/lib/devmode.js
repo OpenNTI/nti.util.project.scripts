@@ -30,7 +30,6 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	webpackConfig.output.path = '/';
 	webpackConfig.output.publicPath = config.basepath;
-	webpackConfig.output.filename = 'js/[name].js';
 
 	if (devPort !== 0 && NTI_BUILDOUT_PATH) {
 		for (let entry of Object.keys(webpackConfig.entry)) {
@@ -80,10 +79,12 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		}
 	});
 
+	const template = webpackConfig.plugins.find(x => x.constructor.name === 'HtmlWebpackPlugin');
 
 	return {
 		middleware: webpackServer.middleware,
 		entry: webpackConfig.output.filename,
+		template: template.options.filename,
 		start: () => {
 			webpackServer.listen(devPort, 'localhost', err => {
 				if (err) {

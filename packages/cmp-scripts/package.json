@@ -26,6 +26,7 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
     "@nti/app-scripts": "^1.16.1",
-    "@nti/lib-scripts": "^1.16.1"
+    "@nti/lib-scripts": "^1.16.1",
+    "core-js": "^2.5.4"
   }
 }

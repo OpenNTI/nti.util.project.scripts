@@ -24,7 +24,7 @@ const SSL = !NTI_BUILDOUT_PATH ? [] : [
 //	--progress
 //	--inline
 
-call('webpack-dev-server', [
+call(require.resolve('webpack-dev-server/bin/webpack-dev-server.js'), [
 	'-d',
 	'--config', paths.webpackDevConfig,
 	'--host', host,
@@ -33,7 +33,5 @@ call('webpack-dev-server', [
 	'--watch',
 	// '--progress',
 	'--inline',
-	'--hot',
-	'--hot-only',
 	...SSL
 ]);

@@ -4,18 +4,22 @@ const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profi
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
-// const AppCachePlugin = require('appcache-webpack-plugin');
+const tmp = require('tmp');
+//Webpack plugins:
+const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const {StatsWriterPlugin} = require('webpack-stats-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const PreloadWebpackPlugin = require('preload-webpack-plugin');
+//
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
+
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
@@ -39,6 +43,7 @@ function isNTIPackage (x) {
 
 
 exports = module.exports = {
+	mode: ENV,
 	bail: PROD,
 	entry: {
 		index: [require.resolve('./polyfills'), paths.appIndexJs]
@@ -59,6 +64,12 @@ exports = module.exports = {
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
+	node: {
+		crypto: 'empty',
+		global: false,
+	},
+
+
 	target: 'web',
 
 	resolve: {
@@ -66,7 +77,7 @@ exports = module.exports = {
 			paths.nodeModules,
 			paths.appModules,
 			paths.resolveApp('src/main/resources/scss'),
-			'node_modules',
+			'node_modules',//needed for conflicted versions of modules that get nested, but attempt last.
 		],
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
@@ -89,16 +100,12 @@ exports = module.exports = {
 		},
 	},
 
-	node: {
-		crypto: 'empty'
-	},
 
 	externals: [
 		{
 			'extjs': 'Ext',
 			'react' : 'React',
-			'react-dom': 'ReactDOM',
-			'react/lib/ReactCSSTransitionGroup': 'React.addons.CSSTransitionGroup'
+			'react-dom': 'ReactDOM'
 		}
 	],
 
@@ -121,17 +128,18 @@ exports = module.exports = {
 						failOnError: true,
 						failOnWarning: false,
 						emitWarning: false,
-						// useEslintrc: false,
-						// eslintPath: require.resolve('eslint'),
-						// baseConfig: {
-						// 	extends: [require.resolve('eslint-config-nti-codestyle-jsx')],
-						// },
+						useEslintrc: false,
+						eslintPath: require.resolve('eslint'),
+						baseConfig: {
+							extends: [require.resolve('./eslintrc')]
+						},
 					},
 
 				}],
 				include: [
-					paths.appModules,
-					// ...(Object.values(workspaceLinks))
+					paths.src,
+					//Only lint source files in workspaceLinks
+					// ...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
 				],
 				exclude: [/[/\\\\]node_modules[/\\\\]/],
 			},
@@ -140,16 +148,28 @@ exports = module.exports = {
 				oneOf: [
 					{
 						test: /\.m?jsx?$/,
-						include: [paths.src],
+						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
+						include: [
+							paths.src,
+						],
 						use: [
-							{loader: require.resolve('babel-loader')},
 							{
+								//TODO: Limit this loader to nextthought code...
 								loader: require.resolve('@nti/baggage-loader'),
 								options: {
 									'[file].scss':{},
 									'[file].css':{}
 								}
-							}
+							},
+							{
+								loader: require.resolve('babel-loader'),
+								options: {
+									babelrc: false,
+									cacheDirectory: !PROD,
+									presets: [require.resolve('./babelrc')]
+								}
+
+							},
 						]
 					},
 
@@ -173,54 +193,72 @@ exports = module.exports = {
 
 					{
 						test: /\.(s?)css$/,
-						use: ExtractTextPlugin.extract({
-							fallback: require.resolve('style-loader'),
-							use: [
-								{
-									loader: require.resolve('css-loader'),
-									options: {
-										sourceMap: true
-									}
-								},
-								{
-									loader: require.resolve('postcss-loader'),
-									options: {
-										sourceMap: true,
-										plugins: () => [
-											autoprefixer({ browsers })
-										]
-									}
-								},
-								{
-									loader: require.resolve('resolve-url-loader')
-								},
-								{
-									loader: require.resolve('sass-loader'),
-									options: {
-										sourceMap: true,
-										includePaths: [
-											paths.resolveApp('src/main/resources/scss')
-										]
-									}
+						use: [
+							MiniCssExtractPlugin.loader,
+							{
+								loader: require.resolve('css-loader'),
+								options: {
+									sourceMap: true
 								}
-							]
-						})
+							},
+							{
+								loader: require.resolve('postcss-loader'),
+								options: {
+									sourceMap: true,
+									plugins: () => [
+										autoprefixer({ browsers })
+									]
+								}
+							},
+							{
+								loader: require.resolve('resolve-url-loader')
+							},
+							{
+								loader: require.resolve('sass-loader'),
+								options: {
+									sourceMap: true,
+									includePaths: [
+										paths.resolveApp('src/main/resources/scss')
+									]
+								}
+							}
+						]
 					}
 				].filter(Boolean)
 			}
 		].filter(Boolean)
 	},
 
+	optimization: {
+		occurrenceOrder: true,
+		splitChunks: {
+			cacheGroups: {
+				commons: {
+					chunks: 'initial',
+					minChunks: 2
+				},
+				vendor: {
+					test: (module) => (
+						module.context
+						&& /node_modules/.test(module.context)
+						&& !isNTIPackage(module.context)
+					),
+					chunks: 'initial',
+					name: 'vendor',
+					priority: 10,
+					enforce: true
+				}
+			}
+		}
+	},
+
+	performance: {
+		hints: false,
+		// maxEntrypointSize: 250000, //bytes
+		// maxAssetSize: 250000, //bytes
+	},
+
 	plugins: [
-		new webpack.EnvironmentPlugin({
-			NODE_ENV: PROD ? 'production' : 'development'
-		}),
-
-		// Add module names to factory functions so they appear in browser profiler.
-		new webpack.NamedModulesPlugin(),
-
-		// ...prefetch,
-
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
 			exclude: /node_modules/,
@@ -235,51 +273,17 @@ exports = module.exports = {
 			}
 		}),
 
-		PROD && new StatsWriterPlugin({
-			filename: '../compile-data.json',
-			transform: ({assetsByChunkName}) => JSON.stringify({assetsByChunkName})
+		new HtmlWebpackPlugin({
+			alwaysWriteToDisk: true,
+			filename: PROD ? 'page.html' : tmp.fileSync().name,
+			template: paths.appHtml
 		}),
+		new HtmlWebpackHarddiskPlugin(),
+		new PreloadWebpackPlugin(),
 
-		// new AppCachePlugin({
-		// 	cache: [
-		// 		'page.html',
-		// 		'offline.json',
-		// 		'resources/images/favicon.ico',
-		// 		'resources/images/app-icon.png',
-		// 		'resources/images/app-splash.png'
-		// 	],
-		// 	network: [
-		// 		'/dataserver2/',
-		// 		'/content/',
-		// 		'*'
-		// 	],
-		// 	fallback: ['/dataserver2/ offline.json', '/ page.html'],
-		// 	settings: ['prefer-online'],
-		// 	exclude: [],
-		// 	output: 'manifest.appcache'
-		// }),
-
-		PROD && webpack.optimize.ModuleConcatenationPlugin && new webpack.optimize.ModuleConcatenationPlugin(),
-
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'vendor',
-			minChunks: (module) => (
-				module.context
-				&& /node_modules/.test(module.context)
-				&& !isNTIPackage(module.context)
-			)
-		}),
-
-		new webpack.optimize.CommonsChunkPlugin({
-			name: 'common',
-			async: true,
-			minChunks: 2
-		}),
-
-		new ExtractTextPlugin({
-			filename: 'resources/styles.css',
-			allChunks: true,
-			disable: false
+		new MiniCssExtractPlugin({
+			filename: 'resources/[name].css',
+			chunkFilename: 'resources/[id].css'
 		}),
 
 		new webpack.DefinePlugin({
@@ -292,22 +296,6 @@ exports = module.exports = {
 		// a plugin that prints an error when you attempt to do this.
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
-
-		// If you require a missing module and then `npm install` it, you still have
-		// to restart the development server for Webpack to discover it. This plugin
-		// makes the discovery automatic so you don't have to restart.
-		// See https://github.com/facebookincubator/create-react-app/issues/186
-		!PROD && new WatchMissingNodeModulesPlugin(paths.appNodeModules),
-
-		PROD && new webpack.optimize.UglifyJsPlugin({
-			compress: { warnings: false },
-			output: {
-				comments: false,
-			},
-			sourceMap: true,
-			test: /\.js(x?)($|\?)/i,
-		}),
-
 
 		PROD && new CompressionPlugin(),
 
