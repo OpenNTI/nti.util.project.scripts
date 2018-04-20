@@ -14,6 +14,9 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
+  "publishConfig":{
+    "registry":"https://npm.nextthought.com"
+  },
   "dependencies": {
     "ci-info": "^1.1.3",
     "esdoc": "^1.0.4",

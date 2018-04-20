@@ -17,6 +17,9 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
+  "publishConfig":{
+    "registry":"https://npm.nextthought.com"
+  },
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
   },

@@ -11,6 +11,9 @@
   },
   "author": "nextthought",
   "license": "UNLICENCED",
+  "publishConfig":{
+    "registry":"https://npm.nextthought.com"
+  },
   "dependencies": {
     "fs-extra": "^5.0.0"
   }
