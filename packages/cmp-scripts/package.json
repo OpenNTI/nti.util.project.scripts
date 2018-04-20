@@ -1,6 +1,6 @@
 {
   "name": "@nti/cmp-scripts",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "description": "component-specific scripts & dependencies",
   "bin": {
     "cmp-scripts": "./bin/cli.js"
@@ -17,16 +17,16 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
-    "@nti/app-scripts": "^1.16.1",
-    "@nti/lib-scripts": "^1.16.1",
+    "@nti/app-scripts": "^1.17.0",
+    "@nti/lib-scripts": "^1.17.0",
     "core-js": "^2.5.4"
   }
 }

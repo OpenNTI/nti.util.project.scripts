@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -17,8 +17,8 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
@@ -27,7 +27,7 @@
   "dependencies": {
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.15.17",
-    "@nti/lib-scripts": "^1.16.1",
+    "@nti/lib-scripts": "^1.17.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "autoprefixer": "^8.1.0",

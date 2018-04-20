@@ -1,6 +1,6 @@
 {
   "name": "@nti/gen-docs",
-  "version": "1.15.17",
+  "version": "1.17.0",
   "description": "Generate API documentation",
   "main": "index.js",
   "bin": {
@@ -14,8 +14,8 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "dependencies": {
     "ci-info": "^1.1.3",

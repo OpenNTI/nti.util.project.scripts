@@ -1,6 +1,6 @@
 {
   "name": "@nti/install-snapshots",
-  "version": "1.15.24",
+  "version": "1.17.0",
   "description": "library scripts & dependencies",
   "main": "./bin.js",
   "bin": {
@@ -16,8 +16,8 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"

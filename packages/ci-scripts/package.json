@@ -1,6 +1,6 @@
 {
   "name": "@nti/ci-scripts",
-  "version": "1.15.24",
+  "version": "1.17.0",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -11,8 +11,8 @@
   },
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "dependencies": {
     "fs-extra": "^5.0.0"

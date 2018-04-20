@@ -1,6 +1,6 @@
 {
   "name": "@nti/lib-scripts",
-  "version": "1.16.1",
+  "version": "1.17.0",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -26,8 +26,8 @@
   ],
   "author": "nextthought",
   "license": "UNLICENCED",
-  "publishConfig":{
-    "registry":"https://npm.nextthought.com"
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
   },
   "bugs": {
     "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
@@ -35,7 +35,7 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
     "@nti/codestyle-js": "^1.15.17",
-    "@nti/install-snapshots": "^1.15.24",
+    "@nti/install-snapshots": "^1.17.0",
     "babel-cli": "^6.1.0",
     "babel-core": "^6.1.0",
     "babel-eslint": "^8.2.2",
