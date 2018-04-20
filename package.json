@@ -1,5 +1,6 @@
 {
-  "name": "nti-project-scripts",
+  "name": "@nti/project-scripts",
+  "private": true,
   "version": "1.0.0",
   "description": "Common tasks and project management",
   "scripts": {
