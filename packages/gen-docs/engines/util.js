@@ -4,6 +4,17 @@ const fs = require('fs-extra');
 const semver = require('semver');
 const tmp = require('tmp');
 
+exports.getReadMe = () => {
+	const dir = process.cwd();
+	const readme = /^readme\.*$/i;
+	const looksLikeAReadMe = x => readme.test(x);
+	const [filename] = fs.readdirSync(dir)
+		.map(x => (looksLikeAReadMe(x) && fs.statSync(path.join(dir, x)).isFile()) ? x : null)
+		.filter(Boolean);
+
+	return filename || null;
+};
+
 exports.getPackageJson = () => {
 
 	const source = process.cwd();

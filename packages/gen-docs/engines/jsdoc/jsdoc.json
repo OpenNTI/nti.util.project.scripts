@@ -7,8 +7,7 @@
 		"encoding": "utf8",
 		"recurse": true,
 		"private": true,
-		"package": "package.json",
-		"readme": "README.md"
+		"package": "package.json"
 	},
 	"recurseDepth": 10,
 	"source": {

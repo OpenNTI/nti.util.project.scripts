@@ -3,7 +3,7 @@
 const {spawnSync} = require('child_process');
 const path = require('path');
 const fs = require('fs-extra');
-const {getPackageJson} = require('../util');
+const {getPackageJson, getReadMe} = require('../util');
 
 module.exports = function run () {
 
@@ -29,6 +29,12 @@ module.exports = function run () {
 		packageLocationOverride.push('--package', packageJson);
 	}
 
+	const readMeLocation = [];
+	const readme = getReadMe();
+	if (readme) {
+		readMeLocation.push('--readme', readme);
+	}
+
 
 	spawnSync('node',
 		[
@@ -36,6 +42,7 @@ module.exports = function run () {
 			bin,
 			// '--debug',
 			// '--verbose',
+			...readMeLocation,
 			'--configure', config,
 			'--template', template,
 			...packageLocationOverride,
