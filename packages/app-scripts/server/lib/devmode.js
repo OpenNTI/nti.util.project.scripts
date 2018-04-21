@@ -79,12 +79,10 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		}
 	});
 
-	const template = webpackConfig.plugins.find(x => x.constructor.name === 'HtmlWebpackPlugin');
-
 	return {
 		middleware: webpackServer.middleware,
 		entry: webpackConfig.output.filename,
-		template: template.options.filename,
+		template: webpackConfig[Symbol.for('template temp file')],
 		start: () => {
 			webpackServer.listen(devPort, 'localhost', err => {
 				if (err) {

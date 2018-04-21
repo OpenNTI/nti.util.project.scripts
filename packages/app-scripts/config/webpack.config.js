@@ -42,12 +42,19 @@ function isNTIPackage (x) {
 }
 
 
+function tempPage () {
+	return tempPage.file || (tempPage.file = tmp.fileSync().name);
+}
+
+
 exports = module.exports = {
 	mode: ENV,
 	bail: PROD,
 	entry: {
 		index: [require.resolve('./polyfills'), paths.appIndexJs]
 	},
+	//Hide this key from webpack, but allow our devmode module to access this value...
+	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
 	output: {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[chunkhash:8].js',
@@ -103,7 +110,7 @@ exports = module.exports = {
 
 	externals: [
 		{
-			'extjs': 'Ext',
+			'@nti/extjs': 'Ext',
 			'react' : 'React',
 			'react-dom': 'ReactDOM'
 		}
@@ -128,7 +135,7 @@ exports = module.exports = {
 						failOnError: true,
 						failOnWarning: false,
 						emitWarning: false,
-						useEslintrc: false,
+						useEslintrc: true, //we can't disable this until we can delete the web-app's lecgacy directory
 						eslintPath: require.resolve('eslint'),
 						baseConfig: {
 							extends: [require.resolve('./eslintrc')]
@@ -275,7 +282,7 @@ exports = module.exports = {
 
 		new HtmlWebpackPlugin({
 			alwaysWriteToDisk: true,
-			filename: PROD ? 'page.html' : tmp.fileSync().name,
+			filename: PROD ? 'page.html' : tempPage(),
 			template: paths.appHtml
 		}),
 		new HtmlWebpackHarddiskPlugin(),
