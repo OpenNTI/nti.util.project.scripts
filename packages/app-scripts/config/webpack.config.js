@@ -13,6 +13,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
+const ClosureCompilerPlugin = require('webpack-closure-compiler');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -237,6 +238,11 @@ exports = module.exports = {
 	},
 
 	optimization: {
+		minimizer: [
+			new ClosureCompilerPlugin({
+				concurrency: 4
+			}),
+		],
 		occurrenceOrder: true,
 		splitChunks: {
 			cacheGroups: {
@@ -289,8 +295,8 @@ exports = module.exports = {
 		new PreloadWebpackPlugin(),
 
 		new MiniCssExtractPlugin({
-			filename: 'resources/[name].css',
-			chunkFilename: 'resources/[id].css'
+			filename: 'resources/[name]-[hash].css',
+			chunkFilename: 'resources/[id]-[hash].css'
 		}),
 
 		new webpack.DefinePlugin({

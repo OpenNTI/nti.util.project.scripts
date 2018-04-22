@@ -229,6 +229,10 @@ exports = module.exports = {
 		].filter(Boolean)
 	},
 
+	optimization: {
+		minimize: false
+	},
+
 	performance: {
 		hints: false,
 		// maxEntrypointSize: 250000, //bytes
