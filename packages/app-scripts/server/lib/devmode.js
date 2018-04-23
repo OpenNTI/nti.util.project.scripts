@@ -1,6 +1,7 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
 const {worker} = require('cluster');
+const readline = require('readline');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
@@ -89,7 +90,8 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 					console.error(err);
 				}
 
-				console.info('WebPack Dev Server Started');
+				readline.clearLine(process.stdout,0);
+				console.info('\rWebPack Dev Server Started');
 			});
 
 			worker.on('disconnect', () => {

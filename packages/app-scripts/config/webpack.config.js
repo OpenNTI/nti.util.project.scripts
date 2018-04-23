@@ -77,7 +77,6 @@ exports = module.exports = {
 		global: false,
 	},
 
-
 	target: 'web',
 
 	resolve: {
@@ -106,7 +105,6 @@ exports = module.exports = {
 			'react-native': 'react-native-web',
 		},
 	},
-
 
 	externals: [
 		{
@@ -296,6 +294,8 @@ exports = module.exports = {
 				compilation.warnings.push(new Error(cycle.join('\n\t-> ')));
 			}
 		}),
+
+		!PROD && new webpack.ProgressPlugin(),
 
 		new HtmlWebpackPlugin({
 			alwaysWriteToDisk: true,
