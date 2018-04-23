@@ -306,7 +306,7 @@ exports = module.exports = {
 		new PreloadWebpackPlugin(),
 
 		new MiniCssExtractPlugin({
-			filename: 'resources/[name]-[id]-[chunkhash].css'
+			filename: 'resources/[name]-[chunkhash:8].css'
 		}),
 
 		new webpack.DefinePlugin({

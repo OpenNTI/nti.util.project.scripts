@@ -255,7 +255,7 @@ exports = module.exports = {
 		}),
 
 		new MiniCssExtractPlugin({
-			filename: '[name]-[id]-[chunkhash].css'
+			filename: '[name]-[chunkhash:8].css'
 		}),
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.
