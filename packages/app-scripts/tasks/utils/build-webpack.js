@@ -3,7 +3,6 @@ const chalk = require('chalk');
 const {isCI} = require('ci-info');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const webpack = require('webpack');
-const {ProgressPlugin} = webpack;
 const paths = require('../../config/paths');
 const pkg = require(paths.packageJson);
 
@@ -11,10 +10,6 @@ module.exports = function build (config = require('../../config/webpack.config')
 	console.log('Creating a production build...');
 
 	const compiler = webpack(config);
-
-	if (!isCI) {
-		compiler.apply(new ProgressPlugin({profile: false}));
-	}
 
 	return new Promise((resolve, reject) => {
 		compiler.run((err, stats) => {

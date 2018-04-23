@@ -4,6 +4,7 @@ const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profi
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
+const {isCI} = require('ci-info');
 const tmp = require('tmp');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
@@ -295,7 +296,7 @@ exports = module.exports = {
 			}
 		}),
 
-		!PROD && new webpack.ProgressPlugin(),
+		!isCI && new webpack.ProgressPlugin({profile: false}),
 
 		new HtmlWebpackPlugin({
 			alwaysWriteToDisk: true,
