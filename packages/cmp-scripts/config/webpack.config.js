@@ -261,5 +261,5 @@ exports = module.exports = {
 		// a plugin that prints an error when you attempt to do this.
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
-	].filter(x => x)
+	].filter(Boolean)
 };

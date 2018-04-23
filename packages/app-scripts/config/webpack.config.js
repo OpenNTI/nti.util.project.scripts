@@ -324,5 +324,5 @@ exports = module.exports = {
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-	].filter(x => x)
+	].filter(Boolean)
 };
