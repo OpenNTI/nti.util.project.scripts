@@ -93,7 +93,7 @@ exports = module.exports = {
 		strictExportPresence: true,
 		rules: [
 			// Disable require.ensure as it's not a standard language feature.
-			// { parser: { requireEnsure: false } },
+			{ parser: { requireEnsure: false } },
 
 			// First, run the linter.
 			// It's important to do this before Babel processes the JS.
@@ -103,16 +103,16 @@ exports = module.exports = {
 				use: [{
 					loader: require.resolve('eslint-loader'),
 					options: {
-						formatter: eslintFormatter,
-						ignore: false,
-						failOnError: true,
-						failOnWarning: false,
-						emitWarning: false,
 						useEslintrc: false,
-						eslintPath: require.resolve('eslint'),
 						baseConfig: {
 							extends: [require.resolve('./eslintrc')]
 						},
+						emitWarning: false,
+						eslintPath: require.resolve('eslint'),
+						failOnError: true,
+						failOnWarning: false,
+						formatter: eslintFormatter,
+						ignore: false,
 					},
 
 				}],
@@ -255,8 +255,7 @@ exports = module.exports = {
 		}),
 
 		new MiniCssExtractPlugin({
-			filename: '[name].css',
-			chunkFilename: '[id].css'
+			filename: '[name]-[id]-[chunkhash].css'
 		}),
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.

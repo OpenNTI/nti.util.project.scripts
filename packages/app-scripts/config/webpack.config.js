@@ -82,9 +82,8 @@ exports = module.exports = {
 
 	resolve: {
 		modules: [
-			paths.nodeModules,
 			paths.appModules,
-			paths.resolveApp('src/main/resources/scss'),
+			paths.nodeModules,
 			'node_modules',//needed for conflicted versions of modules that get nested, but attempt last.
 		],
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
@@ -131,16 +130,18 @@ exports = module.exports = {
 				use: [{
 					loader: require.resolve('eslint-loader'),
 					options: {
-						formatter: eslintFormatter,
-						ignore: false,
+						// We can't lock the config until we can delete the web-app's lecgacy directory
+						//
+						// useEslintrc: false,
+						// baseConfig: {
+						// 	extends: [require.resolve('./eslintrc')]
+						// },
+						emitWarning: false,
+						eslintPath: require.resolve('eslint'),
 						failOnError: true,
 						failOnWarning: false,
-						emitWarning: false,
-						useEslintrc: true, //we can't disable this until we can delete the web-app's lecgacy directory
-						eslintPath: require.resolve('eslint'),
-						baseConfig: {
-							extends: [require.resolve('./eslintrc')]
-						},
+						formatter: eslintFormatter,
+						ignore: false,
 					},
 
 				}],
@@ -238,6 +239,7 @@ exports = module.exports = {
 	},
 
 	optimization: {
+		minimize: PROD,
 		minimizer: [
 			new ClosureCompilerPlugin({
 				concurrency: 4
@@ -250,6 +252,16 @@ exports = module.exports = {
 					chunks: 'initial',
 					minChunks: 2
 				},
+				shared: {
+					test: (module) => (
+						module.context
+						&& /node_modules/.test(module.context)
+						&& isNTIPackage(module.context)
+					),
+					chunks: 'initial',
+					name: 'shared',
+					enforce: true
+				},
 				vendor: {
 					test: (module) => (
 						module.context
@@ -258,7 +270,6 @@ exports = module.exports = {
 					),
 					chunks: 'initial',
 					name: 'vendor',
-					priority: 10,
 					enforce: true
 				}
 			}
@@ -295,8 +306,7 @@ exports = module.exports = {
 		new PreloadWebpackPlugin(),
 
 		new MiniCssExtractPlugin({
-			filename: 'resources/[name]-[hash].css',
-			chunkFilename: 'resources/[id]-[hash].css'
+			filename: 'resources/[name]-[id]-[chunkhash].css'
 		}),
 
 		new webpack.DefinePlugin({
