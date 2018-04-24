@@ -55,7 +55,7 @@ exports.plugins.push(
 	new HtmlWebpackIncludeAssetsPlugin({
 		append: false,
 		assets: [
-			{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'script' },
+			{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 		]
 	}),
 );

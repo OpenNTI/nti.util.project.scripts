@@ -312,9 +312,9 @@ exports = module.exports = {
 		new HtmlWebpackIncludeAssetsPlugin({
 			append: false,
 			assets: [
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react/${VERSIONS['react']}/umd/react.${REACT_MODE}.js`, type: 'script' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react-dom/${VERSIONS['react-dom']}/umd/react-dom.${REACT_MODE}.js`, type: 'script' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'script' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react/${VERSIONS['react']}/umd/react.${REACT_MODE}.js`, type: 'js' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react-dom/${VERSIONS['react-dom']}/umd/react-dom.${REACT_MODE}.js`, type: 'js' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 			]
 		}),
 		new PreloadWebpackPlugin(),
