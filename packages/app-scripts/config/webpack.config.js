@@ -28,7 +28,7 @@ const DEVENV = 'development';
 const ENV = process.env.NODE_ENV || DEVENV;
 const PROD = ENV === 'production';
 const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch']);
-const REACT_MODE = PROD ? ENV : DEVENV;
+const REACT_MODE = PROD ? `${ENV}.min` : DEVENV;
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
