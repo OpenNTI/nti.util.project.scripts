@@ -13,17 +13,22 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const ClosureCompilerPlugin = require('webpack-closure-compiler');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
+const getVersionsFor = require('./resolve-versions');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
 
-const ENV = process.env.NODE_ENV || 'development';
+const DEVENV = 'development';
+const ENV = process.env.NODE_ENV || DEVENV;
 const PROD = ENV === 'production';
+const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch']);
+const REACT_MODE = PROD ? ENV : DEVENV;
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
@@ -304,6 +309,14 @@ exports = module.exports = {
 			template: paths.appHtml
 		}),
 		new HtmlWebpackHarddiskPlugin(),
+		new HtmlWebpackIncludeAssetsPlugin({
+			append: false,
+			assets: [
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react/${VERSIONS['react']}/umd/react.${REACT_MODE}.js`, type: 'script' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react-dom/${VERSIONS['react-dom']}/umd/react-dom.${REACT_MODE}.js`, type: 'script' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'script' },
+			]
+		}),
 		new PreloadWebpackPlugin(),
 
 		new MiniCssExtractPlugin({

@@ -1,7 +1,11 @@
 'use strict';
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const getVersionsFor = require('@nti/app-scripts/config/resolve-versions');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
+
+const VERSIONS = getVersionsFor(['whatwg-fetch']);
 
 exports = module.exports = Object.assign(require('./webpack.config'), {
 	entry: {
@@ -43,7 +47,15 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 	}
 });
 
-exports.plugins.push(new HtmlWebpackPlugin({
-	title: pkg.name + ': Test Harness',
-	template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
-}));
+exports.plugins.push(
+	new HtmlWebpackPlugin({
+		title: pkg.name + ': Test Harness',
+		template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
+	}),
+	new HtmlWebpackIncludeAssetsPlugin({
+		append: false,
+		assets: [
+			{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'script' },
+		]
+	}),
+);

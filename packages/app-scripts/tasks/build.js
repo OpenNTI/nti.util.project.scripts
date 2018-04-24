@@ -16,7 +16,6 @@ const paths = require('../config/paths');
 const copyServerCode = require('./utils/build-copy-server-code');
 const callHook = require('./utils/build-call-hook');
 const copyStaticAssets = require('./utils/build-copy-static-assets');
-const updateLibraryReferences = require('./utils/build-update-library-references');
 const recordVersions = require('./utils/build-record-versions');
 const buildBundle = require('./utils/build-webpack');
 
@@ -49,9 +48,6 @@ if (!SKIP) {
 
 	//Copy Static assets...
 	await copyStaticAssets();
-
-	//Update React library references...
-	await updateLibraryReferences();
 
 	// Run webpack...
 	await buildBundle();
