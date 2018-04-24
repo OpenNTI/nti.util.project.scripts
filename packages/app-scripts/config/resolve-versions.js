@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs-extra');
 const path = require('path');
-const paths = require('.paths');
+const paths = require('./paths');
 
 module.exports = exports = function getVersionsFor (modules) {
 	if (!modules || !Array.isArray(modules) || modules.some(x => typeof x !== 'string')) {
