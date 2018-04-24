@@ -53,6 +53,7 @@ exports.plugins.push(
 		template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
 	}),
 	new HtmlWebpackIncludeAssetsPlugin({
+		publicPath: '',
 		append: false,
 		assets: [
 			{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },

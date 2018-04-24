@@ -310,6 +310,7 @@ exports = module.exports = {
 		}),
 		new HtmlWebpackHarddiskPlugin(),
 		new HtmlWebpackIncludeAssetsPlugin({
+			publicPath: '',
 			append: false,
 			assets: [
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react/${VERSIONS['react']}/umd/react.${REACT_MODE}.js`, type: 'js' },
