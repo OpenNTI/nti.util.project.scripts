@@ -64,8 +64,8 @@ exports = module.exports = {
 	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
 	output: {
 		path: paths.DIST_CLIENT,
-		filename: 'js/[id]-[chunkhash:8].js',
-		chunkFilename: 'js/[id]-[chunkhash:8].js',
+		filename: 'js/[name]-[chunkhash:8].js',
+		chunkFilename: 'js/[name]-[chunkhash:8].js',
 		pathinfo: !PROD,
 		publicPath: paths.servedPath || '/',
 		devtoolModuleFilenameTemplate: info =>
@@ -321,7 +321,7 @@ exports = module.exports = {
 		new PreloadWebpackPlugin(),
 
 		new MiniCssExtractPlugin({
-			filename: 'resources/[id]-[chunkhash:8].css'
+			filename: 'resources/[name]-[chunkhash:8].css'
 		}),
 
 		new webpack.DefinePlugin({
