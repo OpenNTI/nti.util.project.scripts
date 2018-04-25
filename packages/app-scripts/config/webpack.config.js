@@ -246,6 +246,9 @@ exports = module.exports = {
 		minimize: PROD,
 		minimizer: [
 			new ClosureCompilerPlugin({
+				compiler: {
+					'rewrite_polyfills': false
+				},
 				concurrency: 4
 			}),
 		],
