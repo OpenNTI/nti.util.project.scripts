@@ -1,7 +1,7 @@
 // release
 'use strict';
 const fs = require('fs-extra');
-const { call, nofail, lockfile, printHeader, getPackageNameAndVersion } = require('./util/prepare');
+const { call, nofail, lockfile, printHeader, getPackageNameAndVersion } = require('./util');
 
 const {name, version} = getPackageNameAndVersion();
 

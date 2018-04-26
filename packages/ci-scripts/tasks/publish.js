@@ -1,4 +1,4 @@
 'use strict';
 
-const { call } = require('./util/prepare');
+const { call } = require('./util');
 call('npm publish');

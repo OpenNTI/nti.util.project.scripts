@@ -1,7 +1,7 @@
 // smoketests
 'use strict';
 const fs = require('fs-extra');
-const {prepare, call} = require('./util/prepare');
+const {prepare, call} = require('./util');
 
 prepare('smoketest');
 
