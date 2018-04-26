@@ -1,8 +1,6 @@
 // smoketests
 'use strict';
 const {prepare, call, nofail} = require('./util/prepare');
-
-const {version, stamp} = prepare('snapshot');
 const silent = {fd:'ignore'};
 
 // Update the package(-lock).json to a snapshot version
