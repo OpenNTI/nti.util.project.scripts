@@ -27,7 +27,7 @@ module.exports = (resolve, rootDir) => {
 		// clearMocks: true,
 		// resetMocks: true,
 		// resetModules: true, //Can't enable this, ExtJS code breaks
-		collectCoverageFrom: ['src/**/*.{js,jsx}','!**/*.spec.js'],
+		collectCoverageFrom: ['src/**/*.{js,jsx,mjs}','!**/*.spec.js', '!**/__test__/**.js'],
 		coverageDirectory: 'reports/coverage',
 		coverageReporters: [
 			'text-summary',
