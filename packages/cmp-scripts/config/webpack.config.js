@@ -82,7 +82,7 @@ exports = module.exports = {
 		// Every non-relative module is external
 		// abc -> require("abc")
 		(context, request, callback) => {
-			if (/^[a-z\-0-9]+/i.test(request)) {
+			if (/^[@a-z\-0-9]+/i.test(request)) {
 				return callback(null, 'commonjs ' + request);
 			}
 			callback();
