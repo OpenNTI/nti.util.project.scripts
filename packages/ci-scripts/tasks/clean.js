@@ -2,10 +2,10 @@
 'use strict';
 const fs = require('fs-extra');
 const path = require('path');
-const { cwd } = require('./util');
 
+const cwd = process.cwd();
 const modulesDir = path.join(cwd, 'node_modules');
 const reportsDir = path.join(cwd, 'reports');
 
-fs.remove(modulesDir);
-fs.remove(reportsDir);
+fs.removeSync(modulesDir);
+fs.removeSync(reportsDir);

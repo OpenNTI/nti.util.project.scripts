@@ -1,15 +1,11 @@
 // smoketests
 'use strict';
-const fs = require('fs-extra');
-const {prepare, call} = require('./util');
+const {call} = require('./util');
 
-prepare('smoketest');
+call('npx @nti/ci-scripts@micro clean');
 
-call('npm pack');
+call('npx @nti/ci-scripts@micro prepare');
 
-for( let f of fs.readdirSync(process.cwd())) {
-	if (/\.tgz$/.test(f)) {
-		// rm *.tgz #cleanup the tarball artifact
-		fs.remove(f);
-	}
-}
+call('npx @nti/ci-scripts@micro install');
+
+call('npx @nti/ci-scripts@micro pack');

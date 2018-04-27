@@ -1,12 +1,11 @@
-// smoketests
+// snapshot
 'use strict';
-const {prepare, call, nofail} = require('./util');
-const silent = {fd:'ignore'};
+const {call} = require('./util');
 
-// Update the package(-lock).json to a snapshot version
-call(`npm --no-git-tag-version version ${version}.${stamp}`, silent);
-//publish the snapshot (will build)
-call('npm publish --tag alpha');
+call('npx @nti/ci-scripts@micro clean');
 
-call('git tag snapshot -f', nofail);
-call('git push origin tag snapshot -f', silent);
+call('npx @nti/ci-scripts@micro prepare');
+
+call('npx @nti/ci-scripts@micro install');
+
+call('npx @nti/ci-scripts@micro publish');
