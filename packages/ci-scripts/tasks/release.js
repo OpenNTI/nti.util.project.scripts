@@ -1,8 +1,12 @@
 // release
 'use strict';
 
-require('clean');
+const { printHeader, getPackageNameAndVersion } = require('./util');
+const { name, version } = getPackageNameAndVersion();
+printHeader('Preparing release build:\n  %s@%s', name, version);
 
-require('ci');
+require('./clean');
 
-require('publish');
+require('./install-strict');
+
+require('./publish');

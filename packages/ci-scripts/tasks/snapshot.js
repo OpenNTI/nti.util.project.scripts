@@ -1,10 +1,14 @@
 // snapshot
 'use strict';
 
-require('clean');
+const { printHeader, getPackageNameAndVersion } = require('./util');
+const { name, version } = getPackageNameAndVersion();
+printHeader('Preparing snapshot build:\n  %s@%s', name, version);
 
-require('prepare');
+require('./clean');
 
-require('install');
+require('./prepare');
 
-require('publish');
+require('./install');
+
+require('./publish');

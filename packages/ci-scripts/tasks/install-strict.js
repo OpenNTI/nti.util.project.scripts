@@ -1,8 +1,7 @@
 'use strict';
-const { call, printHeader, getPackageNameAndVersion } = require('./util');
+const { call, print, reprint } = require('./util');
 
-const { name, version } = getPackageNameAndVersion();
-printHeader('Installing package: \n %s@s', name, version);
+print('Installing dependencies ... ');
 
 call('npm ci', {
 	env: {
@@ -12,4 +11,5 @@ call('npm ci', {
 		NODE_ENV: 'development'
 	}
 });
-console.log('npm ci completed.\n');
+
+reprint('Installing dependencies ... done.');

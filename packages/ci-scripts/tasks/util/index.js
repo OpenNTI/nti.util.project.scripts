@@ -1,13 +1,12 @@
 'use strict';
 const fs = require('fs-extra');
 const path = require('path');
+const util = require('util');
+const readline = require('readline');
 const {spawnSync} = require('child_process');
 
 const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
-	console.log(cmd, args);
-	return 0;
-	/*
 	const {signal, status} = spawnSync(cmd, args, {
 		env: {...process.env, ...env},
 		stdio: typeof fd === 'string'
@@ -20,17 +19,16 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	}
 
 	if (signal) {
-		console.log('Command killed: ', x);
+		print('Command killed: ', x);
 		process.kill(process.pid, signal);
 		process.exit(status);
 	}
 	else if (status !== 0 && !forgive) {
-		console.log('Command failed: ', x);
+		print('Command failed: ', x);
 		process.exit(status);
 	}
 
 	return status;
-	*/
 };
 
 const cwd = process.cwd();
@@ -39,9 +37,10 @@ const lockfile = path.join(cwd, 'package-lock.json');
 const modulesDir = path.join(cwd, 'node_modules');
 
 Object.assign(exports,{
+	print,
+	reprint,
 	printHeader,
 	getPackageNameAndVersion,
-	prepare,
 	call,
 	nofail: {fd: 'ignore', forgive: true},
 
@@ -51,16 +50,29 @@ Object.assign(exports,{
 });
 
 
+function print (...args) {
+	console.log(
+		util.formatWithOptions({ colors: true }, ...args)
+	);
+}
+
+
+function reprint (...args) {
+	readline.moveCursor(process.stdout, 0, -1);
+	print(...args);
+}
+
+
 function printHeader (...args) {
 	const line = new Array(80).join('–');
-	console.log('\n\n%s', line);
+	print('\n\n%s', line);
 
 	const [fmt, ...values] = args;
-	console.log(` ${fmt}`, ...values);
-	console.log('%s\n\n', line);
+	print(` ${fmt}`, ...values);
+	print('%s\n\n', line);
 
 	call('npm config list');
-	console.log('\n\n%s\n\n', line);
+	print('\n\n%s\n\n', line);
 }
 
 
@@ -68,52 +80,9 @@ function getPackageNameAndVersion () {
 	const pkg = fs.readJsonSync(packageFile);
 	const {name, version} = pkg;
 	return {
+		// semver: MAJOR.MINOR.PATCH-PRERELEASETAG.PRERELEASEITERATION
+		// If the version has a hyphen, then its a snapshot.
+		isSnapshot: /-/.test(version),
 		name, version, pkg
-	};
-}
-
-
-function prepare (type) {
-	const {name, version, pkg} = getPackageNameAndVersion();
-	const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
-
-	if (!/-alpha$/.test(version)) {
-		console.log('Version %s, does not have an alpha tag. Aborting.', version);
-		return process.exit(1);
-	}
-
-	//DATE=`date +%Y%m%d%H%M`
-	printHeader('Preparing %s build:\n  %s@%s.%s', type, name, version, stamp);
-
-	fs.remove(lockfile);
-	fs.remove(modulesDir);
-
-	// download latest deps (and alphas)
-	fs.writeJsonSync(
-		packageFile,
-		(json => (
-			[json.dependencies, json.devDependencies].forEach(deps =>
-				deps && Object.keys(deps)
-					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-					.forEach(x => (o => o[x] = 'alpha')(deps))),
-			json
-		))(pkg),
-		{spaces: 2}
-	);
-
-	console.log('Installing dependencies...');
-	call('npm install --parseable', {
-		fd: fs.openSync(path.join(cwd, '.node_modules.log'), 'w+'),
-		env: {
-			// NPM will not install devDependencies if NODE_ENV is set to production.
-			// We use devDependencies to declare our build tool chain. We require devDependencies to build.
-			// So override the env here.
-			NODE_ENV: 'development'
-		}
-	});
-	console.log('Dependencies installed.\n');
-
-	return {
-		name, version, stamp
 	};
 }

@@ -1,13 +1,11 @@
 'use strict';
 const fs = require('fs-extra');
 const path = require('path');
-const { call } = require('./util');
-const { printHeader, getPackageNameAndVersion } = require('./util');
-
-const { name, version } = getPackageNameAndVersion();
-printHeader('Installing package: \n %s@s', name, version);
+const { call, print, reprint } = require('./util');
 
 const cwd = process.cwd();
+
+print('Installing dependencies ... ');
 call('npm install --parseable', {
 	fd: fs.openSync(path.join(cwd, '.node_modules.log'), 'w+'),
 	env: {
@@ -17,4 +15,4 @@ call('npm install --parseable', {
 		NODE_ENV: 'development'
 	}
 });
-console.log('Dependencies installed.\n');
+reprint('Installing dependencies ... done.');

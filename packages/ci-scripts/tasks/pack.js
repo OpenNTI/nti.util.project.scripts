@@ -1,9 +1,6 @@
 'use strict';
 const fs = require('fs-extra');
-const { call, printHeader, getPackageNameAndVersion } = require('./util');
-
-const { name, version } = getPackageNameAndVersion();
-printHeader('Packing package: \n %s@s', name, version);
+const { call } = require('./util');
 
 call('npm pack');
 
@@ -13,4 +10,3 @@ for( let f of fs.readdirSync(process.cwd())) {
 		fs.removeSync(f);
 	}
 }
-console.log('npm pack completed');
