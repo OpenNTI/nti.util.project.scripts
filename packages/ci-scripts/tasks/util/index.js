@@ -5,7 +5,9 @@ const {spawnSync} = require('child_process');
 
 const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
-
+	console.log(cmd, args);
+	return 0;
+	/*
 	const {signal, status} = spawnSync(cmd, args, {
 		env: {...process.env, ...env},
 		stdio: typeof fd === 'string'
@@ -28,6 +30,7 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	}
 
 	return status;
+	*/
 };
 
 const cwd = process.cwd();
