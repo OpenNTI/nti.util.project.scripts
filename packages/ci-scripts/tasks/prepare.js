@@ -35,4 +35,4 @@ fs.writeJsonSync(
 	{spaces: 2}
 );
 
-process.exit();
+console.log('Build prepared');

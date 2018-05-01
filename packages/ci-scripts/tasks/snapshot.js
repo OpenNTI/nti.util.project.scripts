@@ -1,11 +1,10 @@
 // snapshot
 'use strict';
-const {call} = require('./util');
 
-call('npx @nti/ci-scripts@micro clean');
+require('clean');
 
-call('npx @nti/ci-scripts@micro prepare');
+require('prepare');
 
-call('npx @nti/ci-scripts@micro install');
+require('install');
 
-call('npx @nti/ci-scripts@micro publish');
+require('publish');

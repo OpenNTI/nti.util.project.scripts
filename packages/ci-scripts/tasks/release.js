@@ -1,9 +1,8 @@
 // release
 'use strict';
-const {call} = require('./util');
 
-call('npx @nti/ci-scripts@micro clean');
+require('clean');
 
-call('npx @nti/ci-scripts@micro ci');
+require('ci');
 
-call('npx @nti/ci-scripts@micro publish');
+require('publish');

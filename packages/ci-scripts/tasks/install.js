@@ -2,9 +2,12 @@
 const fs = require('fs-extra');
 const path = require('path');
 const { call } = require('./util');
+const { printHeader, getPackageNameAndVersion } = require('./util');
+
+const { name, version } = getPackageNameAndVersion();
+printHeader('Installing package: \n %s@s', name, version);
 
 const cwd = process.cwd();
-console.log('Installing dependencies...');
 call('npm install --parseable', {
 	fd: fs.openSync(path.join(cwd, '.node_modules.log'), 'w+'),
 	env: {
