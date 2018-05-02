@@ -1,11 +1,9 @@
 'use strict';
 
-const { call, printHeader, getPackageNameAndVersion, nofail } = require('./util');
+const { call, getPackageNameAndVersion, nofail } = require('./util');
 
-const { name, version, isSnapshot } = getPackageNameAndVersion();
+const { isSnapshot } = getPackageNameAndVersion();
 const silent = {fd:'ignore'};
-
-printHeader('Publishing package: \n %s@s', name, version);
 
 if (isSnapshot) {
 	//publish the snapshot (will build)

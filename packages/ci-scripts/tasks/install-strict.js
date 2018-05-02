@@ -1,5 +1,5 @@
 'use strict';
-const { call, print, reprint } = require('./util');
+const { call, printLine, print } = require('./util');
 
 print('Installing dependencies ... ');
 
@@ -12,4 +12,4 @@ call('npm ci', {
 	}
 });
 
-reprint('Installing dependencies ... done.');
+printLine('done.');

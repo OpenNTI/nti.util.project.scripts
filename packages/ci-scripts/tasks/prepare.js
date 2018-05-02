@@ -5,7 +5,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const {print, reprint, getPackageNameAndVersion} = require('./util');
+const {printLine, print, getPackageNameAndVersion} = require('./util');
 
 const {name, version, pkg} = getPackageNameAndVersion();
 const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
@@ -16,7 +16,7 @@ const lockfile = path.join(cwd, 'package-lock.json');
 
 
 if (!/-alpha$/.test(version)) {
-	print('Version %s, does not have an alpha tag. Aborting.', version);
+	printLine('Version %s, does not have an alpha tag. Aborting.', version);
 	return process.exit(1);
 }
 
@@ -38,4 +38,4 @@ fs.writeJsonSync(
 	{spaces: 2}
 );
 
-reprint('Preparing: %s@%s ... done.', name, pkg.version);
+printLine('done.');

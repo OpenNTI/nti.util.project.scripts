@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const { print, reprint } = require('./util');
+const { printLine, print } = require('./util');
 
 const cwd = process.cwd();
 
@@ -14,5 +14,5 @@ const cwd = process.cwd();
 	dir = path.join(cwd, dir);
 	print('Deleting: %s ... ', dir);
 	fs.removeSync(dir);
-	reprint('Deleting: %s ... done.', dir);
+	printLine('done.');
 });

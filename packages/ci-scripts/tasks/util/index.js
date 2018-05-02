@@ -2,7 +2,6 @@
 const fs = require('fs-extra');
 const path = require('path');
 const util = require('util');
-const readline = require('readline');
 const {spawnSync} = require('child_process');
 
 const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
@@ -19,12 +18,12 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	}
 
 	if (signal) {
-		print('Command killed: ', x);
+		printLine('Command killed: ', x);
 		process.kill(process.pid, signal);
 		process.exit(status);
 	}
 	else if (status !== 0 && !forgive) {
-		print('Command failed: ', x);
+		printLine('Command failed: ', x);
 		process.exit(status);
 	}
 
@@ -38,7 +37,7 @@ const modulesDir = path.join(cwd, 'node_modules');
 
 Object.assign(exports,{
 	print,
-	reprint,
+	printLine,
 	printHeader,
 	getPackageNameAndVersion,
 	call,
@@ -50,9 +49,14 @@ Object.assign(exports,{
 });
 
 
-function print (...args) {
+function printLine (...args) {
+	print(...args);
+	print('\n');
+}
 
-	console.log(
+function print (...args) {
+	const {stdout} = process;
+	stdout.write(
 		util.formatWithOptions
 			? util.formatWithOptions({ colors: true }, ...args)
 			: util.format(...args)
@@ -60,22 +64,16 @@ function print (...args) {
 }
 
 
-function reprint (...args) {
-	readline.moveCursor(process.stdout, 0, -1);
-	print(...args);
-}
-
-
 function printHeader (...args) {
 	const line = new Array(80).join('–');
-	print('\n\n%s', line);
+	printLine('\n\n%s', line);
 
 	const [fmt, ...values] = args;
-	print(` ${fmt}`, ...values);
-	print('%s\n\n', line);
+	printLine(` ${fmt}`, ...values);
+	printLine('%s\n\n', line);
 
 	call('npm config list');
-	print('\n\n%s\n\n', line);
+	printLine('\n\n%s\n\n', line);
 }
 
 

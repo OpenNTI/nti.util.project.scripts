@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs-extra');
 const path = require('path');
-const { call, print, reprint } = require('./util');
+const { call, printLine, print } = require('./util');
 
 const cwd = process.cwd();
 
@@ -15,4 +15,4 @@ call('npm install --parseable', {
 		NODE_ENV: 'development'
 	}
 });
-reprint('Installing dependencies ... done.');
+printLine('done.');
