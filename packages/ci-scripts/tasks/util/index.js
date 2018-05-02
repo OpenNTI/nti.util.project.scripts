@@ -51,8 +51,11 @@ Object.assign(exports,{
 
 
 function print (...args) {
+
 	console.log(
-		util.formatWithOptions({ colors: true }, ...args)
+		util.formatWithOptions
+			? util.formatWithOptions({ colors: true }, ...args)
+			: util.format(...args)
 	);
 }
 
