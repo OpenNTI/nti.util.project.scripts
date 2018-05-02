@@ -1,15 +1,14 @@
 // smoketests
 'use strict';
-const fs = require('fs-extra');
-const {prepare, call} = require('./util/prepare');
 
-prepare('smoketest');
+const { printHeader, getPackageNameAndVersion } = require('./util');
+const { name, version } = getPackageNameAndVersion();
+printHeader('Preparing smoketest build:\n  %s@%s', name, version);
 
-call('npm pack');
+require('./clean');
 
-for( let f of fs.readdirSync(process.cwd())) {
-	if (/\.tgz$/.test(f)) {
-		// rm *.tgz #cleanup the tarball artifact
-		fs.remove(f);
-	}
-}
+require('./prepare');
+
+require('./install');
+
+require('./pack');

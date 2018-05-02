@@ -1,14 +1,14 @@
-// smoketests
+// snapshot
 'use strict';
-const {prepare, call, nofail} = require('./util/prepare');
 
-const {version, stamp} = prepare('snapshot');
-const silent = {fd:'ignore'};
+const { printHeader, getPackageNameAndVersion } = require('./util');
+const { name, version } = getPackageNameAndVersion();
+printHeader('Preparing snapshot build:\n  %s@%s', name, version);
 
-// Update the package(-lock).json to a snapshot version
-call(`npm --no-git-tag-version version ${version}.${stamp}`, silent);
-//publish the snapshot (will build)
-call('npm publish --tag alpha');
+require('./clean');
 
-call('git tag snapshot -f', nofail);
-call('git push origin tag snapshot -f', silent);
+require('./prepare');
+
+require('./install');
+
+require('./publish');
