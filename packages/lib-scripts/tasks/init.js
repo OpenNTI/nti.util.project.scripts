@@ -100,6 +100,7 @@ const ToCopy = [
 	'gitignore.dotfile',
 	'npmignore.dotfile',
 	'jest.config.js',
+	'Jenkinsfile',
 	...(global.NTI_INIT_TO_COPY || [])
 ];
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
