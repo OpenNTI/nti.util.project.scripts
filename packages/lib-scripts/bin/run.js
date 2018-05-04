@@ -23,6 +23,7 @@ if (!scripts[script]) {
 	write(chalk.red(`\n\nThis project (${chalk.underline(chalk.bold(name))}) does not define the "${chalk.underline(chalk.bold(script))}" script.`));
 	if (!pkg.scripts || !scripts.test || !scriptExists(script)) {
 		write('\n\n');
+		write(chalk.red('❌  Could not guess command.'));
 		process.exit(1);
 	}
 
@@ -43,7 +44,7 @@ spawn('npm', ['run', script, ...args], { env: process.env, stdio: 'inherit' });
 
 function scriptExists (s) {
 	try {
-		if (!require.resolve(scripts.test.split(/\s+/)[0] + '/tasks/' + s)) {
+		if (!require.resolve('@nti/' + scripts.test.split(/\s+/)[0] + '/tasks/' + s)) {
 			throw new Error('nope');
 		}
 	} catch (e) {
