@@ -1,10 +1,8 @@
 #!/usr/bin/env node
 'use strict';
-
 require('./validate-env');
 
 const run = require('./run-task');
-
 const script = process.argv[2];
 const args = process.argv.slice(3);
 
@@ -18,6 +16,5 @@ try {
 	console.log('Unknown task "' + script + '".');
 	process.exit(1);
 }
-
 
 run(scriptFile, args);
