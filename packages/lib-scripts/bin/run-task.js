@@ -1,6 +1,6 @@
 'use strict';
-
 const {spawnSync} = require('child_process');
+const {resolveAppDir} = require('./resolve-app-dir');
 
 const inspect = process.argv.slice(3).some(x => x.startsWith('--inspect'));// --inspect-brk
 
@@ -12,7 +12,10 @@ module.exports = function run (scriptFile, name, args) {
 			'--max-old-space-size=8192',
 			scriptFile
 		].filter(Boolean).concat(args),
-		{ stdio: 'inherit' });
+		{
+			cwd: resolveAppDir(process.cwd(), name),
+			stdio: 'inherit'
+		});
 
 	if (result.signal) {
 		if (result.signal === 'SIGKILL') {
