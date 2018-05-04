@@ -4,7 +4,7 @@ const {spawnSync} = require('child_process');
 
 const inspect = process.argv.slice(3).some(x => x.startsWith('--inspect'));// --inspect-brk
 
-module.exports = function run (scriptFile, args) {
+module.exports = function run (scriptFile, name, args) {
 
 	const result = spawnSync('node',
 		[
