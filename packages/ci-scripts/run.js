@@ -35,7 +35,6 @@ module.exports = function run (scriptFile, args) {
 	// Restore the package.json & lock file to original
 	// the version & publish process saves the version to the lockfile
 	if (!isCI) {
-		printLine('Running git commands');
 		call('git checkout package*');
 	}
 
