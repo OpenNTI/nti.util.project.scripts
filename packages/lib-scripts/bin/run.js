@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 'use strict';
+require('./set-app-dir');
+
 const { spawn } = require('child_process');
 const path = require('path');
 
