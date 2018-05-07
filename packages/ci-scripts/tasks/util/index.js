@@ -6,10 +6,11 @@ const {spawnSync} = require('child_process');
 
 const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	const [cmd, ...args] = x.split(' ');
-	const {signal, status} = spawnSync(cmd, args, {
+	const {signal, status, stdout, stderr} = spawnSync(cmd, args, {
 		env: {...process.env, ...env},
+		maxBuffer: 2 * 1024 * 1024,
 		stdio: typeof fd === 'string'
-			? fd
+			? (fd === 'ignore' ? 'pipe' : fd)
 			: ['ignore', fd, fd]
 	});
 
@@ -24,6 +25,7 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 	}
 	else if (status !== 0 && !forgive) {
 		printLine('Command failed: ', x);
+		printLine(`${stderr}\n${stdout}`);
 		process.exit(status);
 	}
 
