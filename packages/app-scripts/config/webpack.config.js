@@ -33,8 +33,8 @@ const getReactPath = (lib) => {
 	const major = parseInt(VERSIONS[lib], 10);
 	if (major < 16) {
 		// https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js
-		// https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js
-		return `react/${VERSIONS[lib]}/${lib}${PROD ? '.min' : ''}.js`;
+		// https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.5.4/react-dom.min.js
+		return `${lib}/${VERSIONS[lib]}/${lib}${PROD ? '.min' : ''}.js`;
 	}
 
 	return `${lib}/${VERSIONS[lib]}/umd/${lib}.${PROD ? `${ENV}.min` : DEVENV}.js`;
