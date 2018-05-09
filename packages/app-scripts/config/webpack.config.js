@@ -37,7 +37,7 @@ const getReactPath = (lib) => {
 		return `react/${VERSIONS[lib]}/${lib}${PROD ? '.min' : ''}.js`;
 	}
 
-	return `${lib}/${VERSIONS[lib]}/umd/react.${PROD ? `${ENV}.min` : DEVENV}.js`;
+	return `${lib}/${VERSIONS[lib]}/umd/${lib}.${PROD ? `${ENV}.min` : DEVENV}.js`;
 };
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
