@@ -28,7 +28,17 @@ const DEVENV = 'development';
 const ENV = process.env.NODE_ENV || DEVENV;
 const PROD = ENV === 'production';
 const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch']);
-const REACT_MODE = PROD ? `${ENV}.min` : DEVENV;
+
+const getReactPath = (lib) => {
+	const major = parseInt(VERSIONS[lib], 10);
+	if (major < 16) {
+		// https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js
+		// https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react-dom.min.js
+		return `react/${VERSIONS[lib]}/${lib}${PROD ? '.min' : ''}.js`;
+	}
+
+	return `${lib}/${VERSIONS[lib]}/umd/react.${PROD ? `${ENV}.min` : DEVENV}.js`;
+};
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
@@ -316,8 +326,8 @@ exports = module.exports = {
 			publicPath: '',
 			append: false,
 			assets: [
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react/${VERSIONS['react']}/umd/react.${REACT_MODE}.js`, type: 'js' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/react-dom/${VERSIONS['react-dom']}/umd/react-dom.${REACT_MODE}.js`, type: 'js' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react')}`, type: 'js' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react-dom')}`, type: 'js' },
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 			]
 		}),
