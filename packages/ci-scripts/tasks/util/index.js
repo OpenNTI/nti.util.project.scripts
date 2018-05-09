@@ -52,13 +52,12 @@ Object.assign(exports,{
 
 
 function printLine (...args) {
-	print(...args);
-	print('\n');
+	return print(...args, '\n');
 }
 
 function print (...args) {
 	const {stdout} = process;
-	stdout.write(
+	return stdout.write(
 		util.formatWithOptions
 			? util.formatWithOptions({ colors: true }, ...args)
 			: util.format(...args)

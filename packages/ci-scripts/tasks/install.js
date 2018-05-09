@@ -23,6 +23,6 @@ if (result === SUCCESS) {
 	printLine('done.');
 } else {
 	printLine('failed!');
-	printLine(fs.readFileSync(log));
+	printLine(fs.readFileSync(log, {encoding: 'UTF-8', flag: 'r'}));
 	process.exit(result);
 }
