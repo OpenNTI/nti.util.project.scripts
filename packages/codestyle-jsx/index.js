@@ -39,9 +39,10 @@ module.exports = {
 		'jsx-quotes': ['warn', 'prefer-double'],
 
 
+		'react/no-typos': ['error'],
+
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
 		'react/jsx-pascal-case': ['warn', { 'allowAllCaps': true }],
-
 
 		//JSX should always be wrapped in parentheses... especically when multiline.
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md
