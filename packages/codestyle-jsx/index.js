@@ -40,6 +40,7 @@ module.exports = {
 
 		'react/no-deprecated': ['warn'],
 		'react/no-typos': ['error'],
+		'react/destructuring-assignment': ['warn', 'always'],
 
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
 		'react/jsx-pascal-case': ['warn', { 'allowAllCaps': true }],
