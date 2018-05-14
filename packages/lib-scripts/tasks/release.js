@@ -2,7 +2,7 @@
 process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
 
 const chalk = require('chalk');
-const gitState = require('git-state');
+const gitState = require('@nti/git-state');
 const semver = require('semver');
 const inquirer = require('inquirer');
 const paths = require('../config/paths');

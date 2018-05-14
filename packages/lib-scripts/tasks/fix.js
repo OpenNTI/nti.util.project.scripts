@@ -3,7 +3,7 @@ const chalk = require('chalk');
 const inquirer = require('inquirer');
 const {spawnSync} = require('child_process');
 const semver = require('semver');
-const gitState = require('git-state');
+const gitState = require('@nti/git-state');
 
 const cwd = process.cwd();
 

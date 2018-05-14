@@ -23,6 +23,6 @@
   "releaseMode": "interactive",
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
-    "lerna": "^2.0.0"
+    "lerna": "^2.11.0"
   }
 }
