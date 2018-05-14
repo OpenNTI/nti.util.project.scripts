@@ -38,7 +38,7 @@ module.exports = {
 		//See: http://eslint.org/docs/rules/jsx-quotes
 		'jsx-quotes': ['warn', 'prefer-double'],
 
-
+		'react/no-deprecated': ['warn'],
 		'react/no-typos': ['error'],
 
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
