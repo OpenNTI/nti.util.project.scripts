@@ -63,7 +63,7 @@
     "raw-loader": "0.x.x",
     "react-dev-utils": "^5.0.0",
     "resolve-url-loader": "^2.3.0",
-    "sass-loader": "^7.0.0",
+    "sass-loader": "^6.0.0",
     "style-loader": "0.x.x",
     "tmp": "0.x.x",
     "url-loader": "^1.0.0",
