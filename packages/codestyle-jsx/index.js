@@ -1,5 +1,5 @@
 'use strict';
-const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
+// const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 
 function getReactVersion () {
 	try {
@@ -41,7 +41,7 @@ module.exports = {
 
 		'react/no-deprecated': ['warn'],
 		'react/no-typos': ['error'],
-		'react/destructuring-assignment': [DEV ? 'warn' : 'off', 'always'],
+		'react/destructuring-assignment': ['off'],
 
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
 		'react/jsx-pascal-case': ['warn', { 'allowAllCaps': true }],
