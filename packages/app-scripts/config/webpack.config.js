@@ -15,7 +15,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const ClosureCompilerPlugin = require('webpack-closure-compiler');
+const ClosureCompilerPlugin = require('closure-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -255,11 +255,16 @@ exports = module.exports = {
 	optimization: {
 		minimize: PROD,
 		minimizer: [
-			new ClosureCompilerPlugin({
-				compiler: {
-					'rewrite_polyfills': false
-				},
-				concurrency: 4
+			new ClosureCompilerPlugin({mode: 'STANDARD'}, {
+				'compilation_level': 'SIMPLE',
+				// 'language_in': 'ECMASCRIPT5_STRICT',
+				'language_out': 'ECMASCRIPT5_STRICT',
+				'warning_level': 'QUIET',
+				// 'assume_function_wrapper': false,
+				'apply_input_source_maps': false,
+				'use_types_for_optimization': false,
+				'process_common_js_modules': false,
+				'rewrite_polyfills': false
 			}),
 		],
 		occurrenceOrder: true,
