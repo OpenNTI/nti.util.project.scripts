@@ -259,7 +259,8 @@ exports = module.exports = {
 				compiler: {
 					'compilation_level': 'SIMPLE',
 					// 'language_in': 'ECMASCRIPT5_STRICT',
-					'language_out': 'ECMASCRIPT5_STRICT',
+					// 'language_out': 'ECMASCRIPT5_STRICT',
+					'language_out': 'ECMASCRIPT5',
 					'warning_level': 'QUIET',
 					// 'assume_function_wrapper': false,
 					'apply_input_source_maps': false,
