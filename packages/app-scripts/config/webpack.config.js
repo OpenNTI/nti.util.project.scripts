@@ -340,7 +340,13 @@ exports = module.exports = {
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 			]
 		}),
-		new PreloadWebpackPlugin(),
+		new PreloadWebpackPlugin({
+			fileBlacklist: [
+				/admin/,
+				/\.map/,
+				/\/no-preload\//
+			]
+		}),
 
 		new MiniCssExtractPlugin({
 			filename: 'resources/[name]-[chunkhash:8].css'
