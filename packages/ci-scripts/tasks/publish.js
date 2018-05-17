@@ -1,8 +1,8 @@
 'use strict';
 
-const { call, getPackageNameAndVersion, nofail } = require('./util');
+const { call, getPackageNameAndVersion, nofail, printLine } = require('./util');
 
-const { isSnapshot, version, printLine } = getPackageNameAndVersion();
+const { isSnapshot, version } = getPackageNameAndVersion();
 const silent = {fd:'ignore'};
 
 if (isSnapshot) {
