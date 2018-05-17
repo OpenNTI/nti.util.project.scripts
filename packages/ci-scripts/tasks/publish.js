@@ -6,7 +6,7 @@ const { isSnapshot, version } = getPackageNameAndVersion();
 const silent = {fd:'ignore'};
 
 if (isSnapshot) {
-	if (!/-alpha$/.test(version)) {
+	if (!/-alpha/.test(version)) {
 		printLine('Version %s, does not have an alpha tag. Aborting.', version);
 		return process.exit(1);
 	}
