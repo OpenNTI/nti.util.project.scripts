@@ -2,10 +2,15 @@
 
 const { call, getPackageNameAndVersion, nofail } = require('./util');
 
-const { isSnapshot } = getPackageNameAndVersion();
+const { isSnapshot, version, printLine } = getPackageNameAndVersion();
 const silent = {fd:'ignore'};
 
 if (isSnapshot) {
+	if (!/-alpha$/.test(version)) {
+		printLine('Version %s, does not have an alpha tag. Aborting.', version);
+		return process.exit(1);
+	}
+
 	//publish the snapshot (will build)
 	call('npm publish --tag alpha');
 

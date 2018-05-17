@@ -4,6 +4,7 @@
  */
 const fs = require('fs-extra');
 const path = require('path');
+const semver = require('semver');
 
 const {printLine, print, getPackageNameAndVersion} = require('./util');
 
@@ -14,13 +15,11 @@ const cwd = process.cwd();
 const packageFile = path.join(cwd, 'package.json');
 const lockfile = path.join(cwd, 'package-lock.json');
 
+const v = semver.parse(version);
 
-if (!/-alpha$/.test(version)) {
-	printLine('Version %s, does not have an alpha tag. Aborting.', version);
-	return process.exit(1);
-}
+v.prerelease.push(stamp);
 
-pkg.version = `${version}.${stamp}`;
+pkg.version = v.format();
 
 print('Preparing: %s@%s ... ', name, pkg.version);
 
