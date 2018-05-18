@@ -43,7 +43,7 @@ if (!SKIP) {
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
 if (!SKIP) {
-	call('npx', ['@nti/gen-docs']);
+	call('npx', ['--quiet', '@nti/gen-docs']);
 }
 
 (async function build () {

@@ -36,7 +36,7 @@ fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
 if (!SKIP) {
-	call('npx', ['@nti/gen-docs']);
+	call('npx', ['--quiet', '@nti/gen-docs']);
 }
 
 (async function () {
