@@ -80,11 +80,12 @@ function printHeader (...args) {
 
 function getPackageNameAndVersion () {
 	const pkg = fs.readJsonSync(packageFile);
-	const {name, version} = pkg;
+	const {name, version, publishConfig} = pkg;
 	return {
 		// semver: MAJOR.MINOR.PATCH-PRERELEASETAG.PRERELEASEITERATION
 		// If the version has a hyphen, then its a snapshot.
 		isSnapshot: /-/.test(version),
-		name, version, pkg
+		name, version, pkg,
+		publishConfig
 	};
 }

@@ -2,8 +2,13 @@
 
 const { call, getPackageNameAndVersion, nofail, printLine } = require('./util');
 
-const { isSnapshot, version } = getPackageNameAndVersion();
+const { isSnapshot, version, publishConfig } = getPackageNameAndVersion();
 const silent = {fd:'ignore'};
+
+if (!publishConfig || !publishConfig.registry) {
+	printLine('Refusing to publish without a publishConfig.registry set');
+	return process.exit(1);
+}
 
 if (isSnapshot) {
 	if (!/-alpha/.test(version)) {
