@@ -14,6 +14,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 //
@@ -292,6 +293,7 @@ exports = module.exports = {
 				cache: true,
 				sourceMap: true,
 			}),
+			new OptimizeCSSAssetsPlugin(),
 		],
 		occurrenceOrder: true,
 		splitChunks: {
