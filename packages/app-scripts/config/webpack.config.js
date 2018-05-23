@@ -15,7 +15,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const ClosureCompilerPlugin = require('webpack-closure-compiler');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -255,20 +255,42 @@ exports = module.exports = {
 	optimization: {
 		minimize: PROD,
 		minimizer: [
-			new ClosureCompilerPlugin({
-				compiler: {
-					'compilation_level': 'SIMPLE',
-					// 'language_in': 'ECMASCRIPT5_STRICT',
-					// 'language_out': 'ECMASCRIPT5_STRICT',
-					'language_out': 'ECMASCRIPT5',
-					'warning_level': 'QUIET',
-					// 'assume_function_wrapper': false,
-					'apply_input_source_maps': false,
-					'use_types_for_optimization': false,
-					'process_common_js_modules': false,
-					'rewrite_polyfills': false
+			new UglifyJsPlugin({
+				uglifyOptions: {
+					parse: {
+						// we want uglify-js to parse ecma 8 code. However, we don't want it
+						// to apply any minfication steps that turns valid ecma 5 code
+						// into invalid ecma 5 code. This is why the 'compress' and 'output'
+						// sections only apply transformations that are ecma 5 safe
+						// https://github.com/facebook/create-react-app/pull/4234
+						ecma: 8,
+					},
+					compress: {
+						ecma: 5,
+						warnings: false,
+						// Disabled because of an issue with Uglify breaking seemingly valid code:
+						// https://github.com/facebook/create-react-app/issues/2376
+						// Pending further investigation:
+						// https://github.com/mishoo/UglifyJS2/issues/2011
+						comparisons: false,
+					},
+					mangle: {
+						safari10: true,
+					},
+					output: {
+						ecma: 5,
+						comments: false,
+						// Turned on because emoji and regex is not minified properly using default
+						// https://github.com/facebook/create-react-app/issues/2488
+						'ascii_only': true,
+					},
 				},
-				concurrency: 4
+				// Use multi-process parallel running to improve the build speed
+				// Default number of concurrent runs: os.cpus().length - 1
+				parallel: true,
+				// Enable file caching
+				cache: true,
+				sourceMap: true,
 			}),
 		],
 		occurrenceOrder: true,
@@ -299,7 +321,10 @@ exports = module.exports = {
 					enforce: true
 				}
 			}
-		}
+		},
+		// Keep the runtime chunk seperated to enable long term caching
+		// https://twitter.com/wSokra/status/969679223278505985
+		runtimeChunk: true,
 	},
 
 	performance: {
