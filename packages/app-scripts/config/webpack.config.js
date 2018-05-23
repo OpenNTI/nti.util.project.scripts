@@ -16,7 +16,8 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -87,7 +88,7 @@ exports = module.exports = {
 				.replace(/\/\//g, '/')
 	},
 
-	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
+	devtool: PROD ? false : 'cheap-module-source-map',
 
 	node: {
 		crypto: 'empty',
@@ -256,6 +257,8 @@ exports = module.exports = {
 	optimization: {
 		minimize: PROD,
 		minimizer: [
+			new BabelMinifyPlugin(),
+			/*
 			new UglifyJsPlugin({
 				uglifyOptions: {
 					parse: {
@@ -338,6 +341,7 @@ exports = module.exports = {
 				cache: false,
 				sourceMap: true,
 			}),
+			*/
 			new OptimizeCSSAssetsPlugin(),
 		],
 		occurrenceOrder: true,
