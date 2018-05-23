@@ -266,16 +266,60 @@ exports = module.exports = {
 						// https://github.com/facebook/create-react-app/pull/4234
 						ecma: 8,
 					},
-					compress: false,
-					// compress: {
-					// 	ecma: 5,
-					// 	warnings: false,
-					// 	// Disabled because of an issue with Uglify breaking seemingly valid code:
-					// 	// https://github.com/facebook/create-react-app/issues/2376
-					// 	// Pending further investigation:
-					// 	// https://github.com/mishoo/UglifyJS2/issues/2011
-					// 	comparisons: false,
-					// },
+					// compress: false,
+					compress: {
+						ecma: 5,
+
+						// arguments     : false,
+						booleans      : true,
+						collapse_vars : false,
+						// warnings: false,
+						// Disabled because of an issue with Uglify breaking seemingly valid code:
+						// https://github.com/facebook/create-react-app/issues/2376
+						// Pending further investigation:
+						// https://github.com/mishoo/UglifyJS2/issues/2011
+						comparisons   : false,
+						conditionals  : true,
+						dead_code     : true,
+						// drop_console  : false,
+						// drop_debugger : true,
+						evaluate      : true,
+						// expression    : false,
+						// global_defs   : {},
+						// hoist_funs    : false,
+						hoist_props   : false,
+						// hoist_vars    : false,
+						// ie8           : false,
+						if_return     : true,
+						inline        : true,
+						join_vars     : true,
+						keep_fargs    : true,
+						// keep_fnames   : false,
+						// keep_infinity : false,
+						loops         : true,
+						negate_iife   : true,
+						passes        : 1,
+						properties    : true,
+						pure_getters  : true && "strict",
+						// pure_funcs    : null,
+						reduce_funcs  : true,
+						reduce_vars   : true,
+						sequences     : true,
+						side_effects  : true,
+						switches      : true,
+						// top_retain    : null,
+						// toplevel      : !!(options && options["top_retain"]),
+						typeofs       : false,
+						// unsafe        : false,
+						// unsafe_comps  : false,
+						// unsafe_Function: false,
+						// unsafe_math   : false,
+						// unsafe_proto  : false,
+						// unsafe_regexp : false,
+						// unsafe_undefined: false,
+						unused        : true,
+						warnings      : false,
+					},
 					mangle: {
 						safari10: true,
 					},
@@ -289,9 +333,9 @@ exports = module.exports = {
 				},
 				// Use multi-process parallel running to improve the build speed
 				// Default number of concurrent runs: os.cpus().length - 1
-				parallel: true,
+				parallel: false,
 				// Enable file caching
-				cache: true,
+				cache: false,
 				sourceMap: true,
 			}),
 			new OptimizeCSSAssetsPlugin(),
