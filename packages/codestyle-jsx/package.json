@@ -1,6 +1,6 @@
 {
   "name": "@nti/codestyle-jsx",
-  "version": "1.18.28",
+  "version": "1.18.29",
   "description": "NextThought code style standard",
   "main": "index.js",
   "repository": {
