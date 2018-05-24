@@ -1,7 +1,7 @@
 /*eslint-disable curly*/
 'use strict';
 const DEBUG = process.argv.includes('--debug');
-
+const os = require('os');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const colorz = require('json-colorz');
@@ -76,6 +76,7 @@ const args = [
 if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
 
 call(process.argv[0], [
+	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 	service,
 	...args
 ], {
