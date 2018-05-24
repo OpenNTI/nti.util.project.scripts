@@ -17,8 +17,8 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 	externals: [],
 	output: {
 		path: '/',
-		filename: '[name].js'
-		// publicPath: '/'
+		filename: '[name].js',
+		publicPath: '/'
 	},
 	node: {
 		dgram: 'empty',

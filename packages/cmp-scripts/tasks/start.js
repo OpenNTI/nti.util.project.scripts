@@ -26,6 +26,7 @@ const SSL = !NTI_BUILDOUT_PATH ? [] : [
 
 call(require.resolve('webpack-dev-server/bin/webpack-dev-server.js'), [
 	'-d',
+	'--history-api-fallback',
 	'--config', paths.webpackDevConfig,
 	'--host', host,
 	'--port', port,
