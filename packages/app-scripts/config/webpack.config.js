@@ -1,3 +1,4 @@
+/*eslint camelcase:0*/
 'use strict';
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
@@ -16,8 +17,8 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const PreloadWebpackPlugin = require('preload-webpack-plugin');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -257,10 +258,10 @@ exports = module.exports = {
 	optimization: {
 		minimize: PROD,
 		minimizer: [
-			new BabelMinifyPlugin({}, {
-				exclude: /runtime[^/]*\.js($|\?)/i,
-			}),
-			/*
+			// new BabelMinifyPlugin({}, {
+			// 	exclude: /runtime[^/]*\.js($|\?)/i,
+			// }),
+
 			new UglifyJsPlugin({
 				uglifyOptions: {
 					parse: {
@@ -274,47 +275,45 @@ exports = module.exports = {
 					// compress: false,
 					compress: {
 						ecma: 5,
-
-						// arguments     : false,
-						booleans      : true,
+						// arguments     : true,
+						// booleans      : true,
 						collapse_vars : false,
-						// warnings: false,
 						// Disabled because of an issue with Uglify breaking seemingly valid code:
 						// https://github.com/facebook/create-react-app/issues/2376
 						// Pending further investigation:
 						// https://github.com/mishoo/UglifyJS2/issues/2011
 						comparisons   : false,
-						conditionals  : true,
-						dead_code     : true,
+						// conditionals  : true,
+						// dead_code     : true,
 						// drop_console  : false,
 						// drop_debugger : true,
-						evaluate      : true,
+						// evaluate      : true,
 						// expression    : false,
 						// global_defs   : {},
 						// hoist_funs    : false,
 						hoist_props   : false,
 						// hoist_vars    : false,
 						// ie8           : false,
-						if_return     : true,
-						inline        : true,
-						join_vars     : true,
-						keep_fargs    : true,
+						// if_return     : true,
+						// inline        : true,
+						// join_vars     : true,
+						// keep_fargs    : true,
 						// keep_fnames   : false,
 						// keep_infinity : false,
-						loops         : true,
-						negate_iife   : true,
-						passes        : 1,
-						properties    : true,
-						pure_getters  : true && "strict",
+						// loops         : true,
+						// negate_iife   : true,
+						// passes        : 1,
+						// properties    : true,
+						// pure_getters  : true && "strict",
 						// pure_funcs    : null,
-						reduce_funcs  : true,
-						reduce_vars   : true,
-						sequences     : true,
-						side_effects  : true,
-						switches      : true,
+						// reduce_funcs  : true,
+						// reduce_vars   : true,
+						// sequences     : true,
+						// side_effects  : true,
+						// switches      : true,
 						// top_retain    : null,
 						// toplevel      : !!(options && options["top_retain"]),
-						typeofs       : false,
+						// typeofs       : true,
 						// unsafe        : false,
 						// unsafe_comps  : false,
 						// unsafe_Function: false,
@@ -322,8 +321,8 @@ exports = module.exports = {
 						// unsafe_proto  : false,
 						// unsafe_regexp : false,
 						// unsafe_undefined: false,
-						unused        : true,
-						warnings      : false,
+						// unused        : true,
+						// warnings      : false,
 					},
 					mangle: {
 						safari10: true,
@@ -343,7 +342,7 @@ exports = module.exports = {
 				cache: false,
 				sourceMap: true,
 			}),
-			*/
+
 			new OptimizeCSSAssetsPlugin(),
 		],
 		occurrenceOrder: true,
