@@ -257,7 +257,9 @@ exports = module.exports = {
 	optimization: {
 		minimize: PROD,
 		minimizer: [
-			new BabelMinifyPlugin(),
+			new BabelMinifyPlugin({}, {
+				exclude: /runtime[^/]*\.js($|\?)/i,
+			}),
 			/*
 			new UglifyJsPlugin({
 				uglifyOptions: {
