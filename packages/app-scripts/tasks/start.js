@@ -81,7 +81,7 @@ call(process.argv[0], [
 	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 	service,
 	...args
-], {
+].filter(Boolean), {
 	env: Object.assign({}, process.env, DEBUG ? {} : {
 		DEBUG: '-NodeService:*'
 	}),
