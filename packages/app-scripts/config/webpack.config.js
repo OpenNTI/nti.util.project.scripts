@@ -343,7 +343,11 @@ exports = module.exports = {
 				sourceMap: true,
 			}),
 
-			new OptimizeCSSAssetsPlugin(),
+			new OptimizeCSSAssetsPlugin({
+				cssProcessorOptions: {
+					reduceIdents: false
+				}
+			}),
 		],
 		occurrenceOrder: true,
 		splitChunks: {
