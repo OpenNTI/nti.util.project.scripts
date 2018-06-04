@@ -16,7 +16,8 @@ if (isSnapshot) {
 		return process.exit(1);
 	}
 
-	const {status, stdout: prevVersion} = call(`npm view ${name} .dist-tags.alpha`, {...silent, fd: 'pipe'});
+	const {status, stdout} = call(`npm view ${name} .dist-tags.alpha`, {...silent, fd: 'pipe'});
+	const prevVersion = stdout && stdout.toString().trim();
 
 	//publish the snapshot (will build)
 	call('npm publish --tag alpha');
@@ -27,7 +28,7 @@ if (isSnapshot) {
 
 	if (status === 0 && prevVersion) {
 		printLine('Removing previous snapshot: %s@%s', name, prevVersion);
-		call(`npm unpublish ${name}@${prevVersion.toString().trim()} --loglevel silly`, {forgive: true});
+		call(`npm unpublish ${name}@${prevVersion} --loglevel silly`, {forgive: true});
 	}
 }
 else {
