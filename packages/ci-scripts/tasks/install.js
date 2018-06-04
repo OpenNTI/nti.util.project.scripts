@@ -14,7 +14,7 @@ const options = {
 };
 
 printLine('Installing dependencies ... ');
-const result = call('npm install --no-progress --loglevel info', options);
+const {status:result} = call('npm install --no-progress --loglevel info', options);
 if (result === SUCCESS) {
 	printLine('done.');
 } else {

@@ -29,7 +29,7 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 		process.exit(status);
 	}
 
-	return status;
+	return {status, stdout, stderr};
 };
 
 const cwd = process.cwd();
