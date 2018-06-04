@@ -38,6 +38,12 @@ module.exports = (resolve, rootDir) => {
 			paths.appModules && paths.appModules.replace(paths.path, '<rootDir>'),
 			'node_modules'
 		].filter(Boolean),
+		reporters: !isCI ? void 0 : [
+			'default',
+			['jest-junit', {
+				output: 'reports/test-results/index.xml'
+			}]
+		],
 		roots: [
 			paths.appModules
 				? paths.appModules.replace(paths.path, '<rootDir>')
@@ -53,7 +59,6 @@ module.exports = (resolve, rootDir) => {
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
 		],
 		testEnvironment: testEnvironment || process.env.JEST_ENV || 'node',
-		testResultsProcessor: isCI ? './node_modules/jest-junit' : void 0,
 		testURL: 'http://localhost',
 		transform: {
 			'^.+\\.(js|jsx|mjs)$': resolve('config/jest/babelTransform.js'),
