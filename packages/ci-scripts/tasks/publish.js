@@ -27,7 +27,7 @@ if (isSnapshot) {
 
 	if (status === 0 && prevVersion) {
 		printLine('Removing previous snapshot: %s@%s', name, prevVersion);
-		call(`npm unpublish ${name}@${prevVersion}`, silent);
+		call(`npm unpublish ${name}@${prevVersion}`, {forgive: true});
 	}
 }
 else {
