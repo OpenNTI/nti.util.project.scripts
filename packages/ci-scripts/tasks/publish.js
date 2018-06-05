@@ -26,9 +26,8 @@ if (isSnapshot) {
 	call('git tag snapshot -f', nofail);
 	call('git push origin tag snapshot -f', silent);
 
-
+	printLine('Removing previous snapshots:');
 	for (let prevVersion of prevVersions) {
-		printLine('Removing previous snapshot: %s@%s', name, prevVersion);
 		call(`npm unpublish ${name}@${prevVersion}`, {forgive: true});
 	}
 }
