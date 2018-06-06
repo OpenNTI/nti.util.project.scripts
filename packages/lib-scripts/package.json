@@ -53,7 +53,7 @@
     "jest": "^23.0.0",
     "jest-junit": "^5.0.0",
     "raf": "^3.4.0",
-    "rollup": ">=0.56.3",
+    "rollup": "0.59.4",
     "rollup-plugin-babel": "^3.0.4",
     "rollup-plugin-commonjs": "^9.0.0",
     "rollup-plugin-eslint": "^4.0.0",
