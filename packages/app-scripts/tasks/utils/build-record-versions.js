@@ -13,8 +13,8 @@ const removePaths = (line) => (~line.indexOf(paths.path)) ? null : line;
 //TODO: rewrite this into an async function
 const call = (cmd, ...args) => spawnSync(cmd, args, {
 	//npm doesn't output anything when NODE_ENV = 'production'
-	env: Object.assign({}, process.env, { NODE_ENV: 'development' }),
-	stdio: [null, 'pipe', null],
+	env: { ...process.env, NODE_ENV: 'development' },
+	stdio: ['ignore', 'pipe', 'pipe'],
 	maxBuffer: 1024 * 1024 //1MB max
 });
 
@@ -51,6 +51,7 @@ module.exports = async function recordVersions () {
 			const deps = ntiListBuffer
 				.toString('utf8')
 				.split(/[\r\n]+/)
+				.slice(1)//remove the entry line
 				.filter(x => /:@?nti([-/])/.test(x)
 				// Web service bundles its dependencies so, it will polute our list...
 				// ...so omit its dependencies.
