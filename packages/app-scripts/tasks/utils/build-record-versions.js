@@ -34,7 +34,7 @@ module.exports = async function recordVersions () {
 	]);
 
 	async function long () {
-		const {stdout: listBuffer} = call('npm', 'list', '--long');
+		const {stdout: listBuffer} = call('npm', 'list', '--dev', '--prod', '--long');
 		if (listBuffer) {
 			const list = listBuffer
 				.toString('utf8')
@@ -46,7 +46,7 @@ module.exports = async function recordVersions () {
 	}
 
 	async function short () {
-		const {stdout: ntiListBuffer} = call('npm', 'list', '--parseable', '--long');
+		const {stdout: ntiListBuffer} = call('npm', 'list', '--dev', '--prod', '--parseable', '--long');
 		if (ntiListBuffer) {
 			const deps = ntiListBuffer
 				.toString('utf8')
