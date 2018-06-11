@@ -2,6 +2,7 @@
 'use strict';
 const {worker} = require('cluster');
 const readline = require('readline');
+const chalk = require('chalk');
 const fs = require('fs');
 const url = require('url');
 const path = require('path');
@@ -31,6 +32,22 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	webpackConfig.output.path = '/';
 	webpackConfig.output.publicPath = config.basepath;
+
+	if (!NTI_BUILDOUT_PATH) {
+		console.error(`
+
+
+		${chalk.bold(chalk.red('ERROR:'))} The environment variable ${chalk.bold('NTI_BUILDOUT_PATH')} is not defined!
+
+		SSL will not be available to webpack dev client until this is
+		defined and pointing to your buildout directory.
+
+		You should add this variable to your shell’s profile or in
+		your virtualenv workon hook.
+
+
+		`.replace(/^(\t)+/gm, '\t'));
+	}
 
 	if (devPort !== 0 && NTI_BUILDOUT_PATH) {
 		for (let entry of Object.keys(webpackConfig.entry)) {

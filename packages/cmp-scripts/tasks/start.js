@@ -1,7 +1,7 @@
 'use strict';
+const chalk = require('chalk');
 const path = require('path');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
-
 const paths = require('../config/paths');
 
 const host = '0.0.0.0';
@@ -14,15 +14,21 @@ const SSL = !NTI_BUILDOUT_PATH ? [] : [
 	'--cert', path.join(NTI_BUILDOUT_PATH, 'etc/pki/localhost.crt')
 ];
 
-//webpack-dev-server
-//	-d
-//	--config ./webpack.config.test.js
-//	--host 0.0.0.0
-//	--port 8000
-//	--quiet
-//	--watch
-//	--progress
-//	--inline
+if (!NTI_BUILDOUT_PATH) {
+	console.error(`
+
+
+	${chalk.bold(chalk.red('ERROR:'))} The environment variable ${chalk.bold('NTI_BUILDOUT_PATH')} is not defined!
+
+	SSL will not be available until this is defined and pointing to your
+	buildout directory.
+
+	You should add this variable to your shell’s profile or in
+	your virtualenv workon hook.
+
+
+	`);
+}
 
 call(require.resolve('webpack-dev-server/bin/webpack-dev-server.js'), [
 	'-d',
