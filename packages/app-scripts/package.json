@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "1.18.46",
+  "version": "1.18.47",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -26,8 +26,8 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
     "@nti/baggage-loader": "^1.0.0",
-    "@nti/codestyle-jsx": "^1.18.38",
-    "@nti/lib-scripts": "^1.18.43",
+    "@nti/codestyle-jsx": "^1.18.47",
+    "@nti/lib-scripts": "^1.18.47",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "autoprefixer": "^8.1.0",
