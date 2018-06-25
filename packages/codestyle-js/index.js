@@ -78,10 +78,9 @@ module.exports = {
 	extends: 'eslint:recommended',
 
 	parserOptions: {
-		ecmaVersion: 2017,
+		ecmaVersion: 2018,
 		sourceType: 'module',
 		ecmaFeatures: {
-			experimentalObjectRestSpread: true,
 			impliedStrict: true,
 			globalReturn: false
 		}
@@ -126,6 +125,7 @@ module.exports = {
 		'no-unused-vars': [DEV ? 'warn' : 'error', {'args': 'none'}],
 		'no-use-before-define': ['error', 'nofunc'],
 		'no-var': 'error',
+		'prefer-object-spread': 'warn',
 		'quotes': ['warn', 'single'],
 		'radix': 'error',
 		'semi': 'error',
