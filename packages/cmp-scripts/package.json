@@ -28,6 +28,6 @@
     "@nti/app-scripts": "^1.18.48",
     "@nti/lib-scripts": "^1.18.48",
     "core-js": "^2.5.4",
-    "webpack-cli": "^2.1.4"
+    "webpack-cli": "^3.0.8"
   }
 }
