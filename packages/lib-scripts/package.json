@@ -52,6 +52,7 @@
     "inquirer": "^6.0.0",
     "jest": "^23.0.0",
     "jest-junit": "^5.0.0",
+    "lock-verify": "^2.0.2",
     "raf": "^3.4.0",
     "rollup": ">=0.61.2",
     "rollup-plugin-babel": "^3.0.4",

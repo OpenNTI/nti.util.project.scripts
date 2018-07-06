@@ -4,6 +4,7 @@ process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
 const chalk = require('chalk');
 const gitState = require('@nti/git-state');
 const semver = require('semver');
+const lockVerify = require('lock-verify');
 const inquirer = require('inquirer');
 const paths = require('../config/paths');
 const currentScriptsPaths = require('./utils/current-script-paths');
@@ -88,7 +89,15 @@ const questions = [
 	},
 ];
 
-inquirer.prompt(questions)
+lockVerify(paths.path)
+	.then(result => {
+		(result.warnings || []).forEach(w => write('Warning: %o', w));
+		if (!result.status) {
+			(result.errors || []).forEach(e => write(chalk.red('Error: %o'), e));
+			process.exit(1);
+		}
+		return inquirer.prompt(questions);
+	})
 	.then(answers => (onBehind(answers.behind), answers))
 	.then(performRelease)
 	.catch(e => {
