@@ -20,7 +20,7 @@ const pkg = require(paths.packageJson);
 
 const major = process.argv.includes('--major');
 
-const write = (x) => console.log(x);
+const write = (...x) => console.log(...x);
 
 if (!gitState.isGitSync(paths.path)) {
 	write('\n\n' + chalk.red(chalk.underline(paths.path) + ' is not a git repository.') + '\n\n');
@@ -90,10 +90,17 @@ const questions = [
 ];
 
 lockVerify(paths.path)
-	.then(result => {
-		(result.warnings || []).forEach(w => write('Warning: %o', w));
-		if (!result.status) {
-			(result.errors || []).forEach(e => write(chalk.red('Error: %o'), e));
+	.then(({warnings = [], errors = [], status}) => {
+		warnings.forEach(e => write(chalk.yellow('%s %s'), chalk.underline('Warning:'), e));
+		if (warnings.length > 0) {
+			write('');
+		}
+
+		if (!status) {
+			errors.forEach(e => write(chalk.red('%s %s'), chalk.underline('Error:'), e));
+			write('');
+			write(chalk.red(chalk.bold('Check that package-lock.json is in sync with package.json')));
+			write('');
 			process.exit(1);
 		}
 		return inquirer.prompt(questions);
