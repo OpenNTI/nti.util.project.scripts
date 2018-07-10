@@ -6,6 +6,9 @@ const jest = require('jest');
 const {isCI} = require('ci-info');
 const paths = require('../config/paths');
 
+const isDebugFlag = RegExp.prototype.test.bind(/inspect/i);
+const isDebug = Boolean(process.argv.find(isDebugFlag));
+
 const config = paths.resolveApp('jest.config.js');
 if (!fs.existsSync(config)) {
 	fs.copySync(
@@ -32,4 +35,8 @@ if (isCI && !argv.includes('--coverage')) {
 	argv.push('--coverage');
 }
 
-jest.run(argv);
+if (isDebug) {
+	argv.push('--runInBand');
+}
+
+jest.run(argv.filter(x => !isDebugFlag(x)));
