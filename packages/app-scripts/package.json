@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "1.18.56",
+  "version": "1.18.57",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -27,7 +27,7 @@
   "dependencies": {
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.18.47",
-    "@nti/lib-scripts": "^1.18.56",
+    "@nti/lib-scripts": "^1.18.57",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "autoprefixer": "^8.1.0",
