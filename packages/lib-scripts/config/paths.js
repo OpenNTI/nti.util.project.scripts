@@ -34,6 +34,7 @@ const nodePaths = (process.env.NODE_PATH || '')
 	.filter(folder => !path.isAbsolute(folder))
 	.map(resolveApp);
 
+const packageJson = resolveApp('package.json');
 // const ownPackageJson = require('../package.json');
 // const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
 // const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
@@ -54,8 +55,9 @@ module.exports = {
 	resolveOwn,
 
 	path: resolveApp('.'),
-	packageJson: resolveApp('package.json'),
+	packageJson,
 	pacakgeLock: resolveApp('package-lock.json'),
+	packageMain: resolveApp(require(packageJson).main),
 	nodeModules: resolveApp('node_modules'),
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),

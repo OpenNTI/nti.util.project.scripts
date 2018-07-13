@@ -8,6 +8,7 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
+const sanityCheck = require('@nti/lib-scripts/tasks/utils/sanity-check');
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const callHook = require('@nti/app-scripts/tasks/utils/build-call-hook');
 const buildWebpackBundle = require('@nti/app-scripts/tasks/utils/build-webpack');
@@ -52,6 +53,8 @@ if (!SKIP) {
 
 	// Run webpack... (produces commonjs & style output)
 	await buildWebpackBundle(wpConfig);
+
+	await sanityCheck();
 
 	// Run Rollup... (produces treeshake-able es module)
 	console.log(chalk.green('\nBuilding ES Module...'));

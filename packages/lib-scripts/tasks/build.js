@@ -8,6 +8,7 @@ const fs = require('fs-extra');
 
 const call = require('./utils/call-cmd');
 const buildBundle = require('./utils/build-with-rollup');
+const sanityCheck = require('./utils/sanity-check');
 const paths = require('../config/paths');
 
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
@@ -38,6 +39,9 @@ if (!SKIP) {
 (async function () {
 
 	await buildBundle();
+
+	await sanityCheck();
+
 	console.log(chalk.green('\nDone.\n\n'));
 
 }());
