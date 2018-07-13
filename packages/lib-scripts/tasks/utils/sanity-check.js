@@ -1,5 +1,5 @@
 'use strict';
-require('regenerator-runtime');
+require('regenerator-runtime/runtime');
 const chalk = require('chalk');
 const paths = require('../../config/paths');
 
