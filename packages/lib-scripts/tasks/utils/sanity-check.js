@@ -1,4 +1,5 @@
 'use strict';
+require('generator-runtime');
 const chalk = require('chalk');
 const paths = require('../../config/paths');
 
