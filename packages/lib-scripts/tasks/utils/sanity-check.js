@@ -1,6 +1,6 @@
 'use strict';
 const chalk = require('chalk');
-const paths = require('../config/paths');
+const paths = require('../../config/paths');
 
 module.exports = function () {
 
