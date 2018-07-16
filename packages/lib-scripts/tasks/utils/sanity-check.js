@@ -6,7 +6,7 @@ const paths = require('../../config/paths');
 module.exports = function () {
 
 	try {
-		console.log(chalk.green('Sanity-Checking server-side require compatibility...'));
+		console.log(chalk.green('Sanity-Checking node require compatibility...'));
 
 		try {
 			//known bad modules
@@ -18,6 +18,7 @@ module.exports = function () {
 		console.log(chalk.green.bold('Passed.'));
 	} catch (e) {
 		console.log(chalk.red.bold('Failed.'));
+		console.log(chalk.red('This error was thrown when this module was require()`d under node:'));
 		console.log(e);
 		process.exit(1);
 	}
