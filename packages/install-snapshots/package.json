@@ -1,6 +1,6 @@
 {
   "name": "@nti/install-snapshots",
-  "version": "1.18.8",
+  "version": "1.18.60",
   "description": "library scripts & dependencies",
   "main": "./bin.js",
   "bin": {
