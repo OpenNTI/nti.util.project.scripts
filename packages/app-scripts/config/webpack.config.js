@@ -115,7 +115,7 @@ exports = module.exports = {
 				require.resolve('babel-runtime/package.json')
 			),
 
-			'core-js':path.dirname(
+			'core-js': path.dirname(
 				require.resolve('core-js/package.json')
 			),
 
