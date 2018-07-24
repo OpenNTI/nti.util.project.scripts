@@ -119,7 +119,7 @@ exports = module.exports = {
 				require.resolve('core-js/package.json')
 			),
 
-			'query-string': '@nti/query-string',
+			'query-string': '@jsg/query-string',
 
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/

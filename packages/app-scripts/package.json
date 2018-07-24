@@ -25,10 +25,10 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
+    "@jsg/query-string": "jsg2021/query-string",
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.18.60",
     "@nti/lib-scripts": "^1.18.60",
-    "@nti/query-string": "jsg2021/query-string",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "autoprefixer": "^9.0.0",
