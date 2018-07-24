@@ -30,6 +30,7 @@
     "@nti/lib-scripts": "^1.18.60",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
+    "@nti/query-string": "jsg2021/query-string",
     "autoprefixer": "^9.0.0",
     "babel-loader": "^7.0.0",
     "babel-minify-webpack-plugin": "0.x.x",
