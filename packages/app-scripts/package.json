@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
+    "@jsg/strict-uri-encode": "jsg2021/strict-uri-encode",
+    "@jsg/strip-ansi": "jsg2021/strip-ansi",
     "@jsg/query-string": "jsg2021/query-string",
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.18.60",

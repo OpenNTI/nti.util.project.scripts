@@ -119,6 +119,8 @@ exports = module.exports = {
 				require.resolve('core-js/package.json')
 			),
 
+			'strict-uri-encode': '@jsg/strict-uri-encode',
+			'strip-ansi': '@jsg/strip-ansi',
 			'query-string': '@jsg/query-string',
 
 			// Support React Native Web
