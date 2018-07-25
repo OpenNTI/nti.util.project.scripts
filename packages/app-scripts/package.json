@@ -25,6 +25,7 @@
   },
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "dependencies": {
+    "@jsg/ansi-regex": "jsg2021/ansi-regex",
     "@jsg/query-string": "jsg2021/query-string",
     "@jsg/strict-uri-encode": "jsg2021/strict-uri-encode",
     "@jsg/strip-ansi": "jsg2021/strip-ansi",
