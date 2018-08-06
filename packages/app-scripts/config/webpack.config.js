@@ -16,7 +16,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 // const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const PreloadWebpackPlugin = require('preload-webpack-plugin');
+// const PreloadWebpackPlugin = require('preload-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 // const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 //
@@ -52,12 +52,12 @@ const workspaceLinks = (!PROD && paths.workspace)
 
 function isNTIPackage (x) {
 	const prefix = `${paths.nodeModules}/@nti/`;
-	const decendent = /node_modules/;
+	const descendent = /node_modules/;
 
 	let str = x ? x.toString() : '';
 	if(str.startsWith(prefix)) {
 		str = str.substr(prefix.length);
-		return !decendent.test(str);
+		return !descendent.test(str);
 	}
 }
 
@@ -426,13 +426,13 @@ exports = module.exports = {
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 			]
 		}),
-		new PreloadWebpackPlugin({
-			fileBlacklist: [
-				/admin/,
-				/\.map/,
-				/\/no-preload\//
-			]
-		}),
+		// new PreloadWebpackPlugin({
+		// 	fileBlacklist: [
+		// 		/admin/,
+		// 		/\.map/,
+		// 		/\/no-preload\//
+		// 	]
+		// }),
 
 		new MiniCssExtractPlugin({
 			filename: 'resources/[name]-[chunkhash:8].css'
