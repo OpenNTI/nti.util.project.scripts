@@ -30,7 +30,7 @@ const pkg = require(paths.packageJson);
 const DEVENV = 'development';
 const ENV = process.env.NODE_ENV || DEVENV;
 const PROD = ENV === 'production';
-const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch']);
+const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch', 'airbrake-js']);
 
 const getReactPath = (lib) => {
 	const major = parseInt(VERSIONS[lib], 10);
@@ -71,7 +71,10 @@ exports = module.exports = {
 	mode: ENV,
 	bail: PROD,
 	entry: {
-		index: [require.resolve('./polyfills'), paths.appIndexJs]
+		index: [
+			require.resolve('./polyfills'),
+			paths.appIndexJs
+		]
 	},
 	//Hide this key from webpack, but allow our devmode module to access this value...
 	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
@@ -89,7 +92,7 @@ exports = module.exports = {
 				.replace(/\/\//g, '/')
 	},
 
-	devtool: PROD ? false : 'cheap-module-source-map',
+	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
 	node: {
 		crypto: 'empty',
@@ -421,9 +424,10 @@ exports = module.exports = {
 			publicPath: '',
 			append: false,
 			assets: [
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/airbrake-js/${VERSIONS['airbrake-js']}/client${PROD ? '.min' : ''}.js`, type: 'js' },
+				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react')}`, type: 'js' },
 				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react-dom')}`, type: 'js' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
 			]
 		}),
 		// new PreloadWebpackPlugin({
