@@ -357,11 +357,12 @@ exports = module.exports = {
 			// 	}
 			// }),
 		],
-		occurrenceOrder: true,
+		sideEffects: true,
 		splitChunks: {
+			chunks: 'all',
+			name: true,
 			cacheGroups: {
 				commons: {
-					chunks: 'initial',
 					minChunks: 2
 				},
 				shared: {
@@ -370,9 +371,6 @@ exports = module.exports = {
 						&& /node_modules/.test(module.context)
 						&& isNTIPackage(module.context)
 					),
-					chunks: 'initial',
-					name: 'shared',
-					enforce: true
 				},
 				vendor: {
 					test: (module) => (
@@ -380,10 +378,7 @@ exports = module.exports = {
 						&& /node_modules/.test(module.context)
 						&& !isNTIPackage(module.context)
 					),
-					chunks: 'initial',
-					name: 'vendor',
-					enforce: true
-				}
+				},
 			}
 		},
 		// Keep the runtime chunk seperated to enable long term caching
