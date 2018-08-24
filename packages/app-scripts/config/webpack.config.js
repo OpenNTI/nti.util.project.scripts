@@ -144,8 +144,12 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
-			// Disable require.ensure as it's not a standard language feature.
-			// { parser: { requireEnsure: false } },
+			{ parser: {
+				// Disable non-standard language features
+				requireInclude: false, // disable require.include
+				requireEnsure: false, // disable require.ensure
+				requireContext: false, // disable require.context
+			} },
 
 			// First, run the linter.
 			// It's important to do this before Babel processes the JS.
@@ -362,9 +366,9 @@ exports = module.exports = {
 			chunks: 'all',
 			name: true,
 			cacheGroups: {
-				commons: {
-					minChunks: 2
-				},
+				// commons: {
+				// 	minChunks: 2
+				// },
 				shared: {
 					test: (module) => (
 						module.context
