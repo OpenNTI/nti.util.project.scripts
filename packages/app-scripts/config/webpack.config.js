@@ -230,9 +230,9 @@ exports = module.exports = {
 					},
 
 					{
-						test: /\.(s?)css$/,
+						test: /\.(sa|sc|c)ss$/,
 						use: [
-							MiniCssExtractPlugin.loader,
+							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
 							{
 								loader: require.resolve('css-loader'),
 								options: {
@@ -438,7 +438,7 @@ exports = module.exports = {
 		// }),
 
 		new MiniCssExtractPlugin({
-			filename: 'resources/[name]-[chunkhash:8].css'
+			filename: 'resources/[name]-[contenthash].css'
 		}),
 
 		new webpack.DefinePlugin({
