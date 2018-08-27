@@ -7,6 +7,8 @@ const pkg = require(paths.packageJson);
 
 const VERSIONS = getVersionsFor(['whatwg-fetch']);
 
+process.env.NODE_ENV = 'development';
+
 exports = module.exports = Object.assign(require('./webpack.config'), {
 	entry: {
 		index: [

@@ -197,7 +197,7 @@ exports = module.exports = {
 					{
 						test: /\.(s?)css$/,
 						use: [
-							MiniCssExtractPlugin.loader,
+							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
 							{
 								loader: require.resolve('css-loader'),
 								options: {
@@ -254,9 +254,10 @@ exports = module.exports = {
 			}
 		}),
 
-		new MiniCssExtractPlugin({
+		PROD && new MiniCssExtractPlugin({
 			filename: '[name].css'
 		}),
+
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.
 		// See https://github.com/facebookincubator/create-react-app/issues/240
