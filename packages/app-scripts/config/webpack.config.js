@@ -146,9 +146,9 @@ exports = module.exports = {
 		rules: [
 			{ parser: {
 				// Disable non-standard language features
-				requireInclude: false, // disable require.include
-				requireEnsure: false, // disable require.ensure
-				requireContext: false, // disable require.context
+				requireInclude: !PROD, // disable require.include in production (the dev server uses this tho)
+				requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
+				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
 			} },
 
 			// First, run the linter.
