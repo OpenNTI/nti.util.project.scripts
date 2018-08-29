@@ -50,7 +50,7 @@ module.exports = (resolve, rootDir) => {
 				: '<rootDir>/src/'
 		],
 		setupFiles: [
-			'babel-polyfill',
+			'@babel/polyfill',
 			'raf/polyfill',
 			resolve('config/polyfills.js')
 		],

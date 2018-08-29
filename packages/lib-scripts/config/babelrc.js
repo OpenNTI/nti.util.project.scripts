@@ -1,42 +1,32 @@
 'use strict';
+
 const browsers = require('./browserlist');
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
-const base = {
-	'compact': false,
-	'sourceMaps': 'both',
-};
-
-if (env === 'test') {
-	module.exports = Object.assign(base, {
-		'plugins': ['transform-decorators-legacy'],
-		'presets': [
-			['env', {
-				'useBuiltIns': true,
-				'targets': {
-					'node': 'current'
-				}
-			}],
-			'stage-1'
-		]
-	});
-}
-else {
-	module.exports = Object.assign(base, {
-		'presets': [
-			['env', {
-				'useBuiltIns': true,
-				'modules': false,
-				'targets': {
+module.exports = function (api, opts) {
+	const isTest = (env === 'test');
+	return {
+		babelrc: false,
+		compact: false,
+		presets: [
+			['@babel/preset-env', {
+				...(opts['@babel/preset-env'] || {}),
+				shippedProposals: true,
+				targets: isTest ? {
+					node: 'current'
+				} : {
 					browsers
 				},
 			}],
-			'stage-1'
+			['@babel/preset-flow'],
 		],
-		'plugins': [
-			'transform-decorators-legacy',
-			'external-helpers'
-		]
-	});
-}
+		plugins: [
+			['@babel/plugin-proposal-decorators', { legacy: true }],
+			['@babel/plugin-proposal-class-properties', { loose: true }],
+			['@babel/plugin-proposal-export-default-from'],
+			['@babel/plugin-proposal-export-namespace-from'],
+			['@babel/plugin-syntax-dynamic-import'],
+		].filter(Boolean)
+	};
+};
