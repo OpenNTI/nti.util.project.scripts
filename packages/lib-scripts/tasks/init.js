@@ -93,7 +93,7 @@ writePackageJson(pkg, {spaces: indent});
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const ToCopy = [
-	'babelrc.dotfile',
+	'babel.config.js',
 	'editorconfig.dotfile',
 	'eslintignore.dotfile',
 	'eslintrc.dotfile',

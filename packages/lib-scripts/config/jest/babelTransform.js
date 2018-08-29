@@ -4,6 +4,6 @@ const babelJest = require('babel-jest');
 const resolveScriptDir = require('../resolve-script-dir');
 
 module.exports = babelJest.createTransformer({
-	presets: [path.join(resolveScriptDir(), 'config', 'babelrc.js')],
+	presets: [path.join(resolveScriptDir(), 'config', 'babel.config.js')],
 	babelrc: false,
 });
