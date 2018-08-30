@@ -93,7 +93,7 @@ module.exports = {
 			}),
 			babel({
 				runtimeHelpers: true,
-				exclude: ['node_modules/**', '**/*.template.svg']
+				exclude: ['node_modules/**', '**/*.template.svg', '**/*.json']
 			}),
 			// commonjs({ ignoreGlobal: true }),
 			json(),
