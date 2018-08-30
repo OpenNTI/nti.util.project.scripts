@@ -71,6 +71,11 @@ exports = module.exports = {
 				require.resolve('core-js/package.json')
 			),
 
+			'ansi-regex': '@jsg/ansi-regex',
+			'query-string': '@jsg/query-string',
+			'strict-uri-encode': '@jsg/strict-uri-encode',
+			'strip-ansi': '@jsg/strip-ansi',
+
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
