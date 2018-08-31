@@ -2,7 +2,7 @@
 const baseConfig = require('@nti/lib-scripts/config/babelrc');
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
-const dev = (env === 'development' || env === 'test');
+const dev = (!env || env === 'development' || env === 'test');
 
 module.exports = function (context, opts) {
 	const base = baseConfig(context, {
@@ -19,7 +19,7 @@ module.exports = function (context, opts) {
 			['@babel/preset-react', { development: dev }],
 		],
 		'plugins': [
-			!dev && '@babel/plugin-transform-runtime',
+			// !dev && '@babel/plugin-transform-runtime',
 			...base.plugins
 		].filter(Boolean)
 	};
