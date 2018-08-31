@@ -42,7 +42,8 @@ function resolveOwn (relativePath) {
 }
 
 
-module.exports = Object.assign({}, paths, {
+module.exports = {
+	...paths,
 	assetsRoot: resolveApp('src/main'),
 	appModules: resolveApp('src/main/js'),
 	appHtml: resolveApp('src/main/page.html'),
@@ -63,4 +64,4 @@ module.exports = Object.assign({}, paths, {
 
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
-});
+};

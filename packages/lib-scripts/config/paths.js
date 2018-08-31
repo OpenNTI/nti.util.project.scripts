@@ -54,6 +54,8 @@ module.exports = {
 	resolveApp,
 	resolveOwn,
 
+	userProfile: path.resolve(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']),
+
 	path: resolveApp('.'),
 	packageJson,
 	pacakgeLock: resolveApp('package-lock.json'),

@@ -9,7 +9,8 @@ function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
-module.exports = Object.assign({}, paths, {
+module.exports = {
+	...paths,
 	appModules: null,
 	testApp: paths.resolveApp('test'),
 	testAppHtml: paths.resolveApp('test/app/index.html'),
@@ -18,4 +19,4 @@ module.exports = Object.assign({}, paths, {
 	ownPackageJson: resolveOwn('package.json'),
 	webpackDevConfig: resolveOwn('./config/webpack.config.test.js'),
 	testsSetup: paths.resolveApp('src/__test__/setup.js')
-});
+};
