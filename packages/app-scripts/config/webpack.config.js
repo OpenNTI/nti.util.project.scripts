@@ -202,7 +202,7 @@ exports = module.exports = {
 								loader: require.resolve('babel-loader'),
 								options: {
 									babelrc: false,
-									cacheDirectory: path.resolve(paths.userProfile, '.babel-cache'),
+									cacheDirectory: !PROD && path.resolve(paths.userProfile, '.babel-cache'),
 									presets: [require.resolve('./babelrc')]
 								}
 							},
