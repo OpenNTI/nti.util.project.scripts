@@ -200,12 +200,11 @@ exports = module.exports = {
 							},
 							{
 								loader: require.resolve('babel-loader'),
-								// options: {
-								// 	babelrc: false,
-								// 	cacheDirectory: !PROD,
-								// 	presets: [require.resolve('./babelrc')]
-								// }
-
+								options: {
+									babelrc: false,
+									// cacheDirectory: !PROD,
+									presets: [require.resolve('./babelrc')]
+								}
 							},
 						]
 					},
