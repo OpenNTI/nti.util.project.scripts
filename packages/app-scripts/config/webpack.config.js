@@ -190,6 +190,12 @@ exports = module.exports = {
 							paths.src,
 						],
 						use: [
+							!PROD && {
+								loader: 'cache-loader',
+								options: {
+									cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
+								}
+							},
 							{
 								//TODO: Limit this loader to nextthought code...
 								loader: require.resolve('@nti/baggage-loader'),
@@ -202,11 +208,10 @@ exports = module.exports = {
 								loader: require.resolve('babel-loader'),
 								options: {
 									babelrc: false,
-									cacheDirectory: !PROD && path.resolve(paths.userProfile, '.babel-cache'),
 									presets: [require.resolve('./babelrc')]
 								}
 							},
-						]
+						].filter(Boolean)
 					},
 
 					{
