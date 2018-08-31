@@ -81,7 +81,7 @@ module.exports = {
 		ecmaVersion: 2018,
 		sourceType: 'module',
 		ecmaFeatures: {
-			legacyDecotators: true,
+			legacyDecorators: true,
 			impliedStrict: true,
 			globalReturn: false
 		}
