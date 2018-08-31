@@ -19,7 +19,7 @@ module.exports = function (context, opts) {
 			['@babel/preset-react', { development: dev }],
 		],
 		'plugins': [
-			// !dev && '@babel/plugin-transform-runtime',
+			!dev && '@babel/plugin-transform-runtime',
 			...base.plugins
 		].filter(Boolean)
 	};

@@ -7,6 +7,7 @@ const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 module.exports = function (api, opts) {
 	const isTest = (env === 'test');
 	return {
+		sourceType: 'unambiguous',
 		compact: false,
 		presets: [
 			['@babel/preset-env', {
