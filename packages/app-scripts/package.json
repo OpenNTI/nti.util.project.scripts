@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "1.19.11",
+  "version": "1.19.13",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -33,7 +33,7 @@
     "@jsg/strip-ansi": "jsg2021/strip-ansi",
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.19.6",
-    "@nti/lib-scripts": "^1.19.11",
+    "@nti/lib-scripts": "^1.19.13",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "airbrake-js": "^1.4.4",
