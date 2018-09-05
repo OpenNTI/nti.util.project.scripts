@@ -1,5 +1,5 @@
 'use strict';
-
+const semver = require('semver');
 const { call, getPackageNameAndVersion, nofail, printLine } = require('./util');
 
 const { isSnapshot, name, version, publishConfig } = getPackageNameAndVersion();
@@ -39,7 +39,10 @@ else {
 
 function parsePrevVersions (buffer) {
 	try {
-		return JSON.parse(buffer.toString()).filter(x => x !== version && (/\d+\.\d+\.\d+-alpha/i).test(x));
+		return JSON.parse(buffer.toString())
+			.filter(x => x !== version && (/\d+\.\d+\.\d+-alpha/i).test(x))
+			.sort(semver.compare)
+			.slice(0, -1);
 	} catch (e) {
 		return [];
 	}
