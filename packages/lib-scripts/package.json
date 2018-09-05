@@ -1,6 +1,6 @@
 {
   "name": "@nti/lib-scripts",
-  "version": "1.19.13",
+  "version": "1.19.14",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
