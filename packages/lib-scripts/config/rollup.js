@@ -10,48 +10,13 @@ const string = require('rollup-plugin-string');
 const image = require('rollup-plugin-img');
 
 const paths = require('./paths');
+const resolveScriptDir = require('./resolve-script-dir');
 const lintConfig = paths.exists(
 	path.resolve(paths.path, '.eslintrc'),
 	path.resolve(paths.ownPath,'./config/eslintrc.js')
 );
 
-const NODE_BUILTINS = [
-	'child_process',
-	'cluster',
-	'crypto',
-	'dns',
-	'events',
-	'fs',
-	'http',
-	'https',
-	'inspector',
-	'net',
-	'os',
-	'path',
-	'querystring',
-	'readline',
-	'repl',
-	'stream',
-	'string_decoder',
-	'timers',
-	'tls',
-	'tty',
-	'dgram',
-	'url',
-	'util',
-	'v8',
-	'vm',
-	'zlib'
-];
-
 const pkg = require(paths.packageJson);
-const externals = [
-	'@babel/runtime',
-	NODE_BUILTINS,
-	Object.keys(pkg.dependencies || {}),
-	Object.keys(pkg.devDependencies || {}),
-	Object.keys(pkg.optionalDependencies || {})
-].reduce((a, d) => [...a, ...d], []);
 
 const outputs = [
 	{format: 'cjs', file: path.resolve(paths.path, pkg.main)},
@@ -65,7 +30,7 @@ const outputs = [
 
 
 function isExternal (id) {
-	return id[0] !== '.' && externals.some(x => id.startsWith(x));
+	return id[0] !== '.' && !id.startsWith(paths.src);
 }
 
 
@@ -92,8 +57,10 @@ module.exports = {
 				throwOnError: true
 			}),
 			babel({
+				configFile: path.join(resolveScriptDir(), 'config', 'babelrc.js'),
+				babelrc: false,
 				runtimeHelpers: true,
-				exclude: ['node_modules/**', '**/*.template.svg', '**/*.json']
+				exclude: 'node_modules/**'
 			}),
 			// commonjs({ ignoreGlobal: true }),
 			json(),

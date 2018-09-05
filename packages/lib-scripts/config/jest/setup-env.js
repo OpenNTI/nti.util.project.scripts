@@ -1,7 +1,7 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const resolveScriptDir = require('./resolve-script-dir');
+const resolveScriptDir = require('../resolve-script-dir');
 
 module.exports = function setupEnv () {
 	try {
