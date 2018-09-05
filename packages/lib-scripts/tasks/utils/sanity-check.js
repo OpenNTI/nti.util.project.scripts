@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const paths = require('../../config/paths');
 
 const Mock = () => new Proxy(
-	() => Mock(), //the Target (the thing we are proxying)... a callable function
+	function () {return Mock();}, //the Target (the thing we are proxying)... a callable/newable function
 	{
 		//the get() hook...
 		get: (_, p) =>
