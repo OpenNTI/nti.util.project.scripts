@@ -3,7 +3,18 @@ require('regenerator-runtime/runtime');
 const chalk = require('chalk');
 const paths = require('../../config/paths');
 
-const Mock = () => new Proxy(function () { return Mock(); }, { get: () => Mock() });
+const Mock = () => new Proxy(
+	() => Mock(), //the Target (the thing we are proxying)... a callable function
+	{
+		//the get() hook...
+		get: (_, p) =>
+			//If caller wants to unbox the primitive... return a function that generates a string
+			p === Symbol.toPrimitive
+				? () => String(Date.now())
+			// Otherwise return another Mock
+				: Mock()
+	}
+);
 
 module.exports = function () {
 
