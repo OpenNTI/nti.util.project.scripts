@@ -6,6 +6,11 @@ const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 
 module.exports = function (api, opts) {
 	const isTest = (env === 'test');
+
+	if (api && api.cache) {
+		api.cache(() => process.env.NODE_ENV);
+	}
+
 	return {
 		sourceType: 'unambiguous',
 		compact: false,
