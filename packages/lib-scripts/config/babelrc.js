@@ -11,7 +11,7 @@ module.exports = function (api, opts) {
 		compact: false,
 		presets: [
 			['@babel/preset-env', {
-				...(opts['@babel/preset-env'] || {}),
+				...((opts || {})['@babel/preset-env'] || {}),
 				shippedProposals: true,
 				targets: isTest ? {
 					node: 'current'
