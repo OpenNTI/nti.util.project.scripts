@@ -3,7 +3,7 @@ require('regenerator-runtime/runtime');
 const chalk = require('chalk');
 const paths = require('../../config/paths');
 
-const Mock = () => new Proxy(function () {}, { get: () => Mock() });
+const Mock = () => new Proxy(function () { return Mock(); }, { get: () => Mock() });
 
 module.exports = function () {
 
