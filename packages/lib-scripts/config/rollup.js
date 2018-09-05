@@ -46,7 +46,7 @@ const NODE_BUILTINS = [
 
 const pkg = require(paths.packageJson);
 const externals = [
-	'babel-runtime',
+	'@babel/runtime',
 	NODE_BUILTINS,
 	Object.keys(pkg.dependencies || {}),
 	Object.keys(pkg.devDependencies || {}),
