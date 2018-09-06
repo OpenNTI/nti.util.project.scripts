@@ -200,7 +200,15 @@ exports = module.exports = {
 								loader: require.resolve('babel-loader'),
 								options: {
 									babelrc: false,
-									presets: [require.resolve('./babel.config.js')]
+									sourceType: 'unambiguous',
+									compact: PROD,
+									presets: [
+										require.resolve('./babel.config.js'),
+										PROD && [require.resolve('babel-preset-minify'), {
+											mangle: false,
+											deadcode: false
+										}]
+									].filter(Boolean)
 								}
 							},
 						].filter(Boolean)

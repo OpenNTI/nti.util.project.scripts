@@ -35,6 +35,7 @@
     "airbrake-js": "^1.4.4",
     "autoprefixer": "^9.0.0",
     "babel-loader": "^8.0.0",
+    "babel-preset-minify": "0.x.x",
     "cache-loader": "^1.2.2",
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.0.1",
