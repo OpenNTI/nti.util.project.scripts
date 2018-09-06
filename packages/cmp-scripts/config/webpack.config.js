@@ -125,10 +125,11 @@ exports = module.exports = {
 				].filter(Boolean),
 				include: [
 					paths.src,
+					path.join(paths.nodeModules, '@nti'),
 					//Only lint|baggage source files in workspaceLinks
 					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
 				],
-				exclude: [/[/\\\\]node_modules[/\\\\]/],
+				// exclude: [/[/\\\\]node_modules[/\\\\]/],
 			},
 
 			{
