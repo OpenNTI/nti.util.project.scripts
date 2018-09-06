@@ -11,11 +11,9 @@ const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 const sanityCheck = require('@nti/lib-scripts/tasks/utils/sanity-check');
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const callHook = require('@nti/app-scripts/tasks/utils/build-call-hook');
-const buildWebpackBundle = require('@nti/app-scripts/tasks/utils/build-webpack');
 const buildRollupBundle = require('@nti/lib-scripts/tasks/utils/build-with-rollup');
 
 const paths = require('../config/paths');
-const wpConfig = require('../config/webpack.config');
 
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
 process.env.NODE_ENV = DEBUG ? 'development' : 'production';
@@ -43,23 +41,20 @@ if (!SKIP) {
 //clean dist
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-if (!SKIP) {
-	call('npx', ['--quiet', '@nti/gen-docs']);
-}
 
 (async function build () {
 	//call build hook
 	await callHook();
 
-	// Run webpack... (produces commonjs & style output)
-	await buildWebpackBundle(wpConfig);
+	await buildRollupBundle();
 
 	await sanityCheck();
 
-	// Run Rollup... (produces treeshake-able es module)
-	console.log(chalk.green('\nBuilding ES Module...'));
+	if (!SKIP) {
+		console.log('\nGenerating docs...\n');
+		call('npx', ['--quiet', '@nti/gen-docs']);
+	}
 
-	await buildRollupBundle({ignoreExisting: true});
 	// Announce complete...
 	console.log(chalk.green('\nDone.\n\n'));
 }());

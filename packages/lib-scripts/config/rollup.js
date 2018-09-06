@@ -13,14 +13,14 @@ const paths = require('./paths');
 const resolveScriptDir = require('./resolve-script-dir');
 const lintConfig = paths.exists(
 	path.resolve(paths.path, '.eslintrc'),
-	path.resolve(paths.ownPath,'./config/eslintrc.js')
+	path.join(resolveScriptDir(), 'config', './config/eslintrc.js')
 );
 
 const pkg = require(paths.packageJson);
 
 const outputs = [
 	{format: 'cjs', file: path.resolve(paths.path, pkg.main)},
-	pkg.module && {format: 'es', file: path.resolve(paths.path, pkg.module)}
+	// pkg.module && {format: 'es', file: path.resolve(paths.path, pkg.module)}
 ]
 	.filter(Boolean)
 	.map(x => Object.assign(x, {
@@ -57,7 +57,7 @@ module.exports = {
 				throwOnError: true
 			}),
 			babel({
-				configFile: path.join(resolveScriptDir(), 'config', 'babelrc.js'),
+				configFile: path.join(resolveScriptDir(), 'config', 'babel.config.js'),
 				babelrc: false,
 				runtimeHelpers: true,
 				exclude: 'node_modules/**'

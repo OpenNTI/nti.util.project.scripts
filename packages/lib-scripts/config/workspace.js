@@ -24,6 +24,7 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 
 	const {whitelist = false, blacklist = false, ...options} = fs.readJsonSync(workspace, { throws: false }) || {};
 	const workspaceDir = path.resolve(path.dirname(workspace), options.path || '.');
+	const assumeInstalled = options.ignoreInstallState;
 	const packages = {};
 	const aliases = {};
 	console.log('[workspace] Generating workspace bindings...');
@@ -40,7 +41,7 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 
 			if (has) {
 				const entry = path.join(dir, pkg.module || pkg.main);
-				const installed = fs.existsSync(path.join(dir, 'node_modules'));
+				const installed = assumeInstalled || fs.existsSync(path.join(dir, 'node_modules'));
 				if (!fs.existsSync(entry) || !installed) {
 					if (DEBUG) {
 						console.warn('[workspace] Ignoring "%s" because it does not exist or is not installed.', entry);

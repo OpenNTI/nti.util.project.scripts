@@ -32,15 +32,16 @@ if (!SKIP) {
 //Blank out lib
 fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 
-if (!SKIP) {
-	call('npx', ['--quiet', '@nti/gen-docs']);
-}
-
 (async function () {
 
 	await buildBundle();
 
 	await sanityCheck();
+
+	if (!SKIP) {
+		console.log('\nGenerating docs...\n');
+		call('npx', ['--quiet', '@nti/gen-docs']);
+	}
 
 	console.log(chalk.green('\nDone.\n\n'));
 

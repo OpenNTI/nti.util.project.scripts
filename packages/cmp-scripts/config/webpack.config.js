@@ -70,11 +70,6 @@ exports = module.exports = {
 				require.resolve('core-js/package.json')
 			),
 
-			'ansi-regex': '@jsg/ansi-regex',
-			'query-string': '@jsg/query-string',
-			'strict-uri-encode': '@jsg/strict-uri-encode',
-			'strip-ansi': '@jsg/strip-ansi',
-
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
@@ -99,31 +94,39 @@ exports = module.exports = {
 			// Disable require.ensure as it's not a standard language feature.
 			{ parser: { requireEnsure: false } },
 
-			// First, run the linter.
-			// It's important to do this before Babel processes the JS.
-			!PROD && {
+			{
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
-				use: [{
-					loader: require.resolve('eslint-loader'),
-					options: {
-						useEslintrc: false,
-						baseConfig: {
-							extends: [require.resolve('./eslintrc')]
+				use: [
+					// First, run the linter.
+					// It's important to do this before Babel processes the JS.
+					!PROD && {
+						loader: require.resolve('eslint-loader'),
+						options: {
+							useEslintrc: false,
+							baseConfig: {
+								extends: [require.resolve('./eslintrc')]
+							},
+							emitWarning: false,
+							eslintPath: require.resolve('eslint'),
+							failOnError: true,
+							failOnWarning: false,
+							formatter: eslintFormatter,
+							ignore: false,
 						},
-						emitWarning: false,
-						eslintPath: require.resolve('eslint'),
-						failOnError: true,
-						failOnWarning: false,
-						formatter: eslintFormatter,
-						ignore: false,
 					},
-
-				}],
+					{
+						loader: require.resolve('@nti/baggage-loader'),
+						options: {
+							'[file].scss':{},
+							'[file].css':{}
+						}
+					},
+				].filter(Boolean),
 				include: [
 					paths.src,
-					//Only lint source files in workspaceLinks
-					// ...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
+					//Only lint|baggage source files in workspaceLinks
+					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
 				],
 				exclude: [/[/\\\\]node_modules[/\\\\]/],
 			},
@@ -133,17 +136,11 @@ exports = module.exports = {
 					{
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
-						include: [
-							paths.src,
-							paths.testApp
-						],
 						use: [
-							{
-								//TODO: Limit this loader to nextthought code...
-								loader: require.resolve('@nti/baggage-loader'),
+							!PROD && {
+								loader: 'cache-loader',
 								options: {
-									'[file].scss':{},
-									'[file].css':{}
+									cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
 								}
 							},
 							{
@@ -151,9 +148,8 @@ exports = module.exports = {
 								options: {
 									babelrc: false,
 									cacheDirectory: !PROD,
-									presets: [require.resolve('./babelrc')]
+									presets: [require.resolve('./babel.config.js')]
 								}
-
 							},
 						]
 					},

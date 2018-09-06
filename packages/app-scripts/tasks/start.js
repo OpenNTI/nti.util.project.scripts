@@ -80,10 +80,14 @@ call(process.argv[0], [
 	INSPECT && '--inspect-brk',
 	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 	service,
+	DEBUG && '--debug',
 	...args
 ].filter(Boolean), {
-	env: Object.assign({}, process.env, DEBUG ? {} : {
-		DEBUG: '-NodeService:*'
-	}),
+	env: {
+		...process.env,
+		...(DEBUG ? {} : {
+			DEBUG: '-NodeService:*'
+		})
+	},
 	stdio: 'inherit'
 });

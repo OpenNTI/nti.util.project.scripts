@@ -121,11 +121,6 @@ exports = module.exports = {
 				require.resolve('core-js/package.json')
 			),
 
-			'ansi-regex': '@jsg/ansi-regex',
-			'query-string': '@jsg/query-string',
-			'strict-uri-encode': '@jsg/strict-uri-encode',
-			'strip-ansi': '@jsg/strip-ansi',
-
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
@@ -150,33 +145,41 @@ exports = module.exports = {
 				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
 			} },
 
-			// First, run the linter.
-			// It's important to do this before Babel processes the JS.
-			!PROD && {
+			{
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
-				use: [{
-					loader: require.resolve('eslint-loader'),
-					options: {
-						// We can't lock the config until we can delete the web-app's lecgacy directory
-						//
-						// useEslintrc: false,
-						// baseConfig: {
-						// 	extends: [require.resolve('./eslintrc')]
-						// },
-						emitWarning: false,
-						eslintPath: require.resolve('eslint'),
-						failOnError: true,
-						failOnWarning: false,
-						formatter: eslintFormatter,
-						ignore: false,
+				use: [
+					!PROD && {
+						// First, run the linter.
+						// It's important to do this before Babel processes the JS.
+						loader: require.resolve('eslint-loader'),
+						options: {
+							// We can't lock the config until we can delete the web-app's lecgacy directory
+							//
+							// useEslintrc: false,
+							// baseConfig: {
+							// 	extends: [require.resolve('./eslintrc')]
+							// },
+							emitWarning: false,
+							eslintPath: require.resolve('eslint'),
+							failOnError: true,
+							failOnWarning: false,
+							formatter: eslintFormatter,
+							ignore: false,
+						}
 					},
-
-				}],
+					{
+						loader: require.resolve('@nti/baggage-loader'),
+						options: {
+							'[file].scss':{},
+							'[file].css':{}
+						}
+					},
+				].filter(Boolean),
 				include: [
 					paths.src,
-					//Only lint source files in workspaceLinks
-					// ...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
+					//Only lint|baggage source files in workspaceLinks
+					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
 				],
 				exclude: [/[/\\\\]node_modules[/\\\\]/],
 			},
@@ -186,9 +189,6 @@ exports = module.exports = {
 					{
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
-						include: [
-							paths.src,
-						],
 						use: [
 							!PROD && {
 								loader: 'cache-loader',
@@ -197,18 +197,10 @@ exports = module.exports = {
 								}
 							},
 							{
-								//TODO: Limit this loader to nextthought code...
-								loader: require.resolve('@nti/baggage-loader'),
-								options: {
-									'[file].scss':{},
-									'[file].css':{}
-								}
-							},
-							{
 								loader: require.resolve('babel-loader'),
 								options: {
 									babelrc: false,
-									presets: [require.resolve('./babelrc')]
+									presets: [require.resolve('./babel.config.js')]
 								}
 							},
 						].filter(Boolean)

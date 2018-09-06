@@ -1,14 +1,14 @@
 'use strict';
-const baseConfig = require('@nti/lib-scripts/config/babelrc');
+const baseConfig = require('@nti/lib-scripts/config/babel.config');
 
 const env = process.env.BABEL_ENV || process.env.NODE_ENV;
 const dev = (!env || env === 'development' || env === 'test');
 
-module.exports = function (context, opts) {
-	const base = baseConfig(context, {
+module.exports = function (api, opts) {
+	const base = baseConfig(api, {
 		...opts,
 		'@babel/preset-env': {
-			useBuiltIns: 'entry',
+			// useBuiltIns: 'entry',
 		}
 	});
 

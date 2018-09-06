@@ -1,12 +1,7 @@
 'use strict';
-
-const browsers = require('./browserlist');
-
-const env = process.env.BABEL_ENV || process.env.NODE_ENV;
+const {isCI} = require('ci-info');
 
 module.exports = function (api, opts) {
-	const isTest = (env === 'test');
-
 	if (api && api.cache) {
 		api.cache(() => process.env.NODE_ENV);
 	}
@@ -18,10 +13,10 @@ module.exports = function (api, opts) {
 			['@babel/preset-env', {
 				...((opts || {})['@babel/preset-env'] || {}),
 				shippedProposals: true,
-				targets: isTest ? {
-					node: 'current'
-				} : {
-					browsers
+				targets: {
+					node: isCI
+						? '8.9.4' //just in case the build server's node is newer than PROD
+						: 'current'
 				},
 			}],
 			['@babel/preset-flow'],

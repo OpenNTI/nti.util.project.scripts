@@ -5,7 +5,7 @@ const semver = require('semver');
 const getVersion = require('./get-version');
 
 const minVersions = {
-	npm: '5.5.1',
+	npm: '5.6.0',
 	node: '8.9.4',
 };
 

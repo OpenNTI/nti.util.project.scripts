@@ -36,6 +36,7 @@ fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
 fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
 
 if (!SKIP) {
+	console.log('\nGenerating docs...\n');
 	call('npx', ['--quiet', '@nti/gen-docs']);
 }
 
