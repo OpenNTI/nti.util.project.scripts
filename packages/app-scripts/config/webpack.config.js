@@ -205,10 +205,10 @@ exports = module.exports = {
 									compact: PROD,
 									presets: [
 										require.resolve('./babel.config.js'),
-										// PROD && [require.resolve('babel-preset-minify'), {
-										// 	mangle: false,
-										// 	deadcode: false
-										// }]
+										PROD && [require.resolve('babel-preset-minify'), {
+											mangle: false,
+											deadcode: false
+										}]
 									].filter(Boolean)
 								}
 							},
