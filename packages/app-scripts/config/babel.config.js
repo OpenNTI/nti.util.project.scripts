@@ -10,11 +10,9 @@ module.exports = function (api, opts) {
 		...opts,
 		'@babel/preset-env': {
 			// useBuiltIns: 'entry',
-			...(env === 'test' ? {} : {
-				targets: {
-					browsers
-				}
-			})
+			targets: {
+				browsers
+			}
 		}
 	});
 
