@@ -39,7 +39,8 @@ module.exports = function () {
 		console.log(chalk.green.bold('Passed.'));
 	} catch (e) {
 		console.log(chalk.red.bold('Failed.'));
-		console.log(chalk.red('This error was thrown when this module was require()`d under node:'));
+		console.log(chalk.red('\nDid you delcare all your dependencies?\n'));
+		console.log(chalk.red('This error was thrown when this module was required under node:\n'));
 		console.log(e);
 		process.exit(1);
 	}
