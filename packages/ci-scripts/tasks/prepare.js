@@ -8,33 +8,35 @@ const semver = require('semver');
 
 const {printLine, print, getPackageNameAndVersion} = require('./util');
 
-const {name, version, pkg} = getPackageNameAndVersion();
+const {name, version, pkg, isSnapshot} = getPackageNameAndVersion();
 const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
 
 const cwd = process.cwd();
 const packageFile = path.join(cwd, 'package.json');
 const lockfile = path.join(cwd, 'package-lock.json');
 
-const v = semver.parse(version);
+if (isSnapshot) {
+	const v = semver.parse(version);
 
-v.prerelease.push(stamp);
+	v.prerelease.push(stamp);
 
-pkg.version = v.format();
+	pkg.version = v.format();
 
-print('Preparing: %s@%s ... ', name, pkg.version);
+	print('Preparing: %s@%s ... ', name, pkg.version);
 
-fs.removeSync(lockfile);
+	fs.removeSync(lockfile);
 
-fs.writeJsonSync(
-	packageFile,
-	(json => (
-		[json.dependencies, json.devDependencies].forEach(deps =>
-			deps && Object.keys(deps)
-				.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-				.forEach(x => (o => o[x] = 'alpha')(deps))),
-		json
-	))(pkg),
-	{spaces: 2}
-);
+	fs.writeJsonSync(
+		packageFile,
+		(json => (
+			[json.dependencies, json.devDependencies].forEach(deps =>
+				deps && Object.keys(deps)
+					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
+					.forEach(x => (o => o[x] = 'alpha')(deps))),
+			json
+		))(pkg),
+		{spaces: 2}
+	);
+}
 
 printLine('done.');
