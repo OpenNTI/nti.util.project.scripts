@@ -125,6 +125,7 @@ exports = module.exports = {
 				].filter(Boolean),
 				include: [
 					paths.src,
+					paths.testApp, //let baggage/lint run on test app files
 					path.join(paths.nodeModules, '@nti'),
 					//Only lint|baggage source files in workspaceLinks
 					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
