@@ -65,10 +65,10 @@ module.exports = (resolve, rootDir) => {
 			'^.+\\.css$': resolve('config/jest/cssTransform.js'),
 			'^(?!.*\\.(js|jsx|css|json)$)': resolve('config/jest/fileTransform.js'),
 		},
-		transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
 		moduleNameMapper: {
 			...workspaceLinks,
 		},
+		resolver: resolve('config/jest/resolver.js')
 	};
 
 	if (rootDir) {
