@@ -33,14 +33,13 @@ const PROD = ENV === 'production';
 const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch', 'airbrake-js']);
 
 const getReactPath = (lib) => {
-	const major = parseInt(VERSIONS[lib], 10);
-	if (major < 16) {
-		// https://cdnjs.cloudflare.com/ajax/libs/react/15.5.4/react.min.js
-		// https://cdnjs.cloudflare.com/ajax/libs/react-dom/15.5.4/react-dom.min.js
-		return `${lib}/${VERSIONS[lib]}/${lib}${PROD ? '.min' : ''}.js`;
-	}
+	const v = VERSIONS[lib];
+	const major = parseInt(v, 10);
+	const prefix = `${lib}@${v}/`;
 
-	return `${lib}/${VERSIONS[lib]}/umd/${lib}.${PROD ? `${ENV}.min` : DEVENV}.js`;
+	return (major < 16)
+		? `${prefix}dist/${lib}${PROD ? '.min' : ''}.js`
+		: `${prefix}umd/${lib}.${PROD ? 'production.min' : 'development'}.js`;
 };
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
@@ -429,10 +428,10 @@ exports = module.exports = {
 			publicPath: '',
 			append: false,
 			assets: [
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/airbrake-js/${VERSIONS['airbrake-js']}/client${PROD ? '.min' : ''}.js`, type: 'js' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/fetch/${VERSIONS['whatwg-fetch']}/fetch.min.js`, type: 'js' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react')}`, type: 'js' },
-				{ path: `https://cdnjs.cloudflare.com/ajax/libs/${getReactPath('react-dom')}`, type: 'js' },
+				{ path: `https://unpkg.com/airbrake-js@${VERSIONS['airbrake-js']}/dist/client${PROD ? '.min' : ''}.js`, type: 'js' },
+				{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}/fetch.js`, type: 'js' },
+				{ path: `https://unpkg.com/${getReactPath('react')}`, type: 'js' },
+				{ path: `https://unpkg.com/${getReactPath('react-dom')}`, type: 'js' },
 			]
 		}),
 		// new PreloadWebpackPlugin({
