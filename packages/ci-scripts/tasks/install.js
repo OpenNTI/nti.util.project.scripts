@@ -1,5 +1,7 @@
 'use strict';
-const { call, printLine } = require('./util');
+const { call, printLine, getPackageNameAndVersion} = require('./util');
+
+const { isSnapshot } = getPackageNameAndVersion();
 
 const SUCCESS = 0;
 
@@ -14,7 +16,7 @@ const options = {
 };
 
 printLine('Installing dependencies ... ');
-const {status:result} = call('npm install --no-progress --loglevel info', options);
+const {status:result} = call(`npm ${isSnapshot ? 'i' : 'ci'} --no-progress --loglevel info`, options);
 if (result === SUCCESS) {
 	printLine('done.');
 } else {
