@@ -7,14 +7,23 @@ const Mock = () => new Proxy(
 	function () {return Mock();}, //the Target (the thing we are proxying)... a callable/newable function
 	{
 		//the get() hook...
-		get: (_, p) =>
-			//If caller wants to unbox the primitive... return a function that generates a string
-			p === Symbol.toPrimitive
-				? () => String(Date.now())
-			// Otherwise return another Mock
-				: Mock()
+		get: (_, p) => {
+
+			const getters = {
+				[Symbol.iterator]: () => ({
+					next: () => ({done: true})
+				}),
+
+				//If caller wants to unbox the primitive... return a function that generates a string
+				[Symbol.toPrimitive]: () => String(Date.now())
+			};
+
+			return getters[p] || Mock();
+		}
 	}
 );
+
+//[Symbol.iterator]() { return { next() { return {done: true}}};}
 
 module.exports = function () {
 
