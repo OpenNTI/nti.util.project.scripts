@@ -428,8 +428,8 @@ exports = module.exports = {
 			publicPath: '',
 			append: false,
 			assets: [
-				{ path: `https://unpkg.com/airbrake-js@${VERSIONS['airbrake-js']}/dist/client${PROD ? '.min' : ''}.js`, type: 'js' },
-				{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}/fetch.js`, type: 'js' },
+				{ path: `https://unpkg.com/airbrake-js@${VERSIONS['airbrake-js']}`, type: 'js' },
+				{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}`, type: 'js' },
 				{ path: `https://unpkg.com/${getReactPath('react')}`, type: 'js' },
 				{ path: `https://unpkg.com/${getReactPath('react-dom')}`, type: 'js' },
 			]

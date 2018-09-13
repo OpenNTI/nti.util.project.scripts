@@ -58,7 +58,7 @@ exports.plugins.push(
 		publicPath: '',
 		append: false,
 		assets: [
-			{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}/fetch.js`, type: 'js' },
+			{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}`, type: 'js' },
 		]
 	}),
 );
