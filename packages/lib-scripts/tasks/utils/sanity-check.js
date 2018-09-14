@@ -6,6 +6,9 @@ const paths = require('../../config/paths');
 const Mock = () => new Proxy(
 	function () {return Mock();}, //the Target (the thing we are proxying)... a callable/newable function
 	{
+
+		has: (_, p) => typeof p !== 'symbol' || p === Symbol.iterator || p === Symbol.toPrimitive,
+
 		//the get() hook...
 		get: (_, p) => {
 
@@ -18,7 +21,7 @@ const Mock = () => new Proxy(
 				[Symbol.toPrimitive]: () => String(Date.now())
 			};
 
-			return getters[p] || Mock();
+			return getters[p] || (typeof p === 'symbol' ? void 0 : Mock());
 		}
 	}
 );
