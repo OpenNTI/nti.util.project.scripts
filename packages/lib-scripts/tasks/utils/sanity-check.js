@@ -6,6 +6,7 @@ const paths = require('../../config/paths');
 const Mock = () => new Proxy(
 	function () {return Mock();}, //the Target (the thing we are proxying)... a callable/newable function
 	{
+		getOwnPropertyDescriptor: () => ({ configurable: true, enumerable: true, value: Mock() }),
 
 		has: (_, p) => typeof p !== 'symbol' || p === Symbol.iterator || p === Symbol.toPrimitive,
 
