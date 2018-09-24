@@ -207,7 +207,7 @@ exports = module.exports = {
 										PROD && [require.resolve('babel-preset-minify'), {
 											mangle: false,
 											deadcode: false,
-											// simplify: false,
+											simplify: false,
 											evaluate: false,
 										}]
 									].filter(Boolean)
