@@ -28,9 +28,7 @@ exports = module.exports = Object.assign(require('./webpack.config'), {
 		net: 'empty',
 		tls: 'empty',
 	},
-	performance: {
-		hints: false,
-	},
+	performance: false,
 	devServer: {
 		disableHostCheck: true,
 		allowedHosts: ['.dev', '.local'],

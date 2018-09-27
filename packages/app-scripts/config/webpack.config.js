@@ -3,7 +3,6 @@
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 const webpack = require('webpack');
 const {isCI} = require('ci-info');
 const tmp = require('tmp');
@@ -93,7 +92,14 @@ exports = module.exports = {
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
+	// Some libraries import Node modules but don't use them in the browser.
+	// Tell Webpack to provide empty mocks for them so importing them works.
 	node: {
+		dgram: 'empty',
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+		child_process: 'empty',
 		crypto: 'empty',
 	},
 
@@ -190,6 +196,12 @@ exports = module.exports = {
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
 						use: [
+							{
+								loader: require.resolve('thread-loader'),
+								options: {
+									poolTimeout: Infinity, // keep workers alive for more effective watch mode
+								},
+							},
 							!PROD && {
 								loader: 'cache-loader',
 								options: {
@@ -200,8 +212,11 @@ exports = module.exports = {
 								loader: require.resolve('babel-loader'),
 								options: {
 									babelrc: false,
+									compact: false,
+									cacheDirectory: false,
+									cacheCompression: false,
+									highlightCode: true,
 									sourceType: 'unambiguous',
-									compact: PROD,
 									presets: [
 										require.resolve('./babel.config.js'),
 										PROD && [require.resolve('babel-preset-minify'), {
@@ -237,6 +252,12 @@ exports = module.exports = {
 					{
 						test: /\.(sa|sc|c)ss$/,
 						use: [
+							{
+								loader: require.resolve('thread-loader'),
+								options: {
+									poolTimeout: Infinity, // keep workers alive for more effective watch mode
+								},
+							},
 							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
 							{
 								loader: require.resolve('css-loader'),
@@ -249,7 +270,14 @@ exports = module.exports = {
 								options: {
 									sourceMap: true,
 									plugins: () => [
-										autoprefixer({ browsers })
+										require('postcss-flexbugs-fixes'),
+										require('postcss-preset-env')({
+											browsers,
+											autoprefixer: {
+												flexbox: 'no-2009',
+											},
+											stage: 3,
+										}),
 									]
 								}
 							},
