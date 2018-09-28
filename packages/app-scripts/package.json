@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.0.21",
+  "version": "2.1.0",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -29,7 +29,7 @@
     "@babel/preset-react": "^7.0.0",
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^1.19.6",
-    "@nti/lib-scripts": "^2.0.18",
+    "@nti/lib-scripts": "^2.1.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "airbrake-js": "^1.4.4",
@@ -65,13 +65,13 @@
     "resolve-url-loader": "^3.0.0",
     "sass-loader": "^7.1.0",
     "style-loader": "0.x.x",
-    "tmp": "0.x.x",
     "thread-loader": "^1.2.0",
-    "worker-loader": "^2.0.0",
+    "tmp": "0.x.x",
     "uglifyjs-webpack-plugin": "^2.0.1",
     "url-loader": "^1.0.0",
     "webpack": "^4.1.0",
     "webpack-dev-server": "^3.0.0",
-    "whatwg-fetch": "^3.0.0"
+    "whatwg-fetch": "^3.0.0",
+    "worker-loader": "^2.0.0"
   }
 }
