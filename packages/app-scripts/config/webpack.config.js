@@ -252,12 +252,6 @@ exports = module.exports = {
 					{
 						test: /\.(sa|sc|c)ss$/,
 						use: [
-							{
-								loader: require.resolve('thread-loader'),
-								options: {
-									poolTimeout: Infinity, // keep workers alive for more effective watch mode
-								},
-							},
 							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
 							{
 								loader: require.resolve('css-loader'),
@@ -308,83 +302,7 @@ exports = module.exports = {
 			// }),
 
 			new UglifyJsPlugin({
-				uglifyOptions: {
-					parse: {
-						// we want uglify-js to parse ecma 8 code. However, we don't want it
-						// to apply any minfication steps that turns valid ecma 5 code
-						// into invalid ecma 5 code. This is why the 'compress' and 'output'
-						// sections only apply transformations that are ecma 5 safe
-						// https://github.com/facebook/create-react-app/pull/4234
-						ecma: 8,
-					},
-					// compress: false,
-					compress: {
-						ecma: 5,
-						// arguments     : true,
-						// booleans      : true,
-						collapse_vars : false,
-						// Disabled because of an issue with Uglify breaking seemingly valid code:
-						// https://github.com/facebook/create-react-app/issues/2376
-						// Pending further investigation:
-						// https://github.com/mishoo/UglifyJS2/issues/2011
-						comparisons   : false,
-						// conditionals  : true,
-						// dead_code     : true,
-						// drop_console  : false,
-						// drop_debugger : true,
-						// evaluate      : true,
-						// expression    : false,
-						// global_defs   : {},
-						// hoist_funs    : false,
-						hoist_props   : false,
-						// hoist_vars    : false,
-						// ie8           : false,
-						// if_return     : true,
-						// inline        : true,
-						// join_vars     : true,
-						// keep_fargs    : true,
-						// keep_fnames   : false,
-						// keep_infinity : false,
-						// loops         : true,
-						// negate_iife   : true,
-						// passes        : 1,
-						// properties    : true,
-						// pure_getters  : true && "strict",
-						// pure_funcs    : null,
-						// reduce_funcs  : true,
-						// reduce_vars   : true,
-						// sequences     : true,
-						// side_effects  : true,
-						// switches      : true,
-						// top_retain    : null,
-						// toplevel      : !!(options && options["top_retain"]),
-						// typeofs       : true,
-						// unsafe        : false,
-						// unsafe_comps  : false,
-						// unsafe_Function: false,
-						// unsafe_math   : false,
-						// unsafe_proto  : false,
-						// unsafe_regexp : false,
-						// unsafe_undefined: false,
-						// unused        : true,
-						// warnings      : false,
-					},
-					mangle: {
-						safari10: true,
-					},
-					output: {
-						ecma: 5,
-						comments: false,
-						// Turned on because emoji and regex is not minified properly using default
-						// https://github.com/facebook/create-react-app/issues/2488
-						'ascii_only': true,
-					},
-				},
-				// Use multi-process parallel running to improve the build speed
-				// Default number of concurrent runs: os.cpus().length - 1
 				parallel: true,
-				// Enable file caching
-				cache: false,
 				sourceMap: true,
 			}),
 
