@@ -14,10 +14,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
-// const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-// const PreloadWebpackPlugin = require('preload-webpack-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
-// const BabelMinifyPlugin = require('babel-minify-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
@@ -63,6 +59,13 @@ function isNTIPackage (x) {
 function tempPage () {
 	return tempPage.file || (tempPage.file = tmp.fileSync().name);
 }
+
+const CACHE = {
+	loader: 'cache-loader',
+	options: {
+		cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
+	}
+};
 
 
 exports = module.exports = {
@@ -154,6 +157,7 @@ exports = module.exports = {
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
 				use: [
+					CACHE,
 					!PROD && {
 						// First, run the linter.
 						// It's important to do this before Babel processes the JS.
@@ -196,17 +200,12 @@ exports = module.exports = {
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
 						use: [
+							CACHE,
 							{
 								loader: require.resolve('thread-loader'),
 								options: {
 									poolTimeout: Infinity, // keep workers alive for more effective watch mode
 								},
-							},
-							!PROD && {
-								loader: 'cache-loader',
-								options: {
-									cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
-								}
 							},
 							{
 								loader: require.resolve('babel-loader'),
@@ -253,6 +252,7 @@ exports = module.exports = {
 						test: /\.(sa|sc|c)ss$/,
 						use: [
 							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
+							CACHE,
 							{
 								loader: require.resolve('css-loader'),
 								options: {
@@ -296,30 +296,13 @@ exports = module.exports = {
 
 	optimization: {
 		minimize: PROD,
-		minimizer: [
-			// new BabelMinifyPlugin({}, {
-			// 	exclude: /runtime[^/]*\.js($|\?)/i,
-			// }),
-
-			new UglifyJsPlugin({
-				parallel: true,
-				sourceMap: true,
-			}),
-
-			// new OptimizeCSSAssetsPlugin({
-			// 	cssProcessorOptions: {
-			// 		reduceIdents: false
-			// 	}
-			// }),
-		],
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
 			name: true,
+			minSize: 100000,
+			maxSize: 1000000,
 			cacheGroups: {
-				// commons: {
-				// 	minChunks: 2
-				// },
 				shared: {
 					test: (module) => (
 						module.context
@@ -341,11 +324,7 @@ exports = module.exports = {
 		runtimeChunk: true,
 	},
 
-	performance: {
-		hints: false,
-		// maxEntrypointSize: 250000, //bytes
-		// maxAssetSize: 250000, //bytes
-	},
+	performance: false,
 
 	plugins: [
 		DEBUG && new CircularDependencyPlugin({
