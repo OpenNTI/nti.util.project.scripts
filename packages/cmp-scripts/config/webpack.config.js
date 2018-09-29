@@ -22,6 +22,16 @@ const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
 	: {};
 
+const CACHE = {
+	loader: 'cache-loader',
+	options: {
+		cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
+	}
+};
+
+//TODO: Figure out how to inherit webpack config from app-scripts and mutate to target cmp-scripts needs so we
+//		can maintain one set of loader/workspace implementations.
+
 exports = module.exports = {
 	mode: ENV,
 	bail: PROD,
@@ -106,6 +116,7 @@ exports = module.exports = {
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
 				use: [
+					CACHE,
 					// First, run the linter.
 					// It's important to do this before Babel processes the JS.
 					!PROD && {
@@ -147,17 +158,12 @@ exports = module.exports = {
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
 						use: [
+							CACHE,
 							{
 								loader: require.resolve('thread-loader'),
-								options: {
+								options: PROD ? {} : {
 									poolTimeout: Infinity, // keep workers alive for more effective watch mode
 								},
-							},
-							!PROD && {
-								loader: 'cache-loader',
-								options: {
-									cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
-								}
 							},
 							{
 								loader: require.resolve('babel-loader'),
@@ -216,13 +222,8 @@ exports = module.exports = {
 					{
 						test: /\.(s?)css$/,
 						use: [
-							{
-								loader: require.resolve('thread-loader'),
-								options: {
-									poolTimeout: Infinity, // keep workers alive for more effective watch mode
-								},
-							},
 							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
+							CACHE,
 							{
 								loader: require.resolve('css-loader'),
 								options: {
@@ -265,11 +266,7 @@ exports = module.exports = {
 		minimize: false
 	},
 
-	performance: {
-		hints: false,
-		// maxEntrypointSize: 250000, //bytes
-		// maxAssetSize: 250000, //bytes
-	},
+	performance: false,
 
 	plugins: [
 		DEBUG && new CircularDependencyPlugin({

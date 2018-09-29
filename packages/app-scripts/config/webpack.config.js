@@ -203,7 +203,7 @@ exports = module.exports = {
 							CACHE,
 							{
 								loader: require.resolve('thread-loader'),
-								options: {
+								options: PROD ? {} : {
 									poolTimeout: Infinity, // keep workers alive for more effective watch mode
 								},
 							},
