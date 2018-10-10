@@ -239,7 +239,9 @@ exports = module.exports = {
 										require('postcss-preset-env')({
 											browsers,
 											autoprefixer: {
+												browsers,
 												flexbox: 'no-2009',
+												grid: true,
 											},
 											stage: 3,
 										}),
