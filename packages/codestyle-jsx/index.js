@@ -39,6 +39,7 @@ module.exports = {
 		//See: http://eslint.org/docs/rules/jsx-quotes
 		'jsx-quotes': ['warn', 'prefer-double'],
 
+		'react/no-children-prop': ['off'],
 		'react/no-deprecated': ['warn'],
 		'react/no-typos': ['error'],
 		'react/destructuring-assignment': ['off'],
