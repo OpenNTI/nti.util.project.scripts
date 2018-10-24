@@ -221,7 +221,7 @@ exports = module.exports = {
 										PROD && [require.resolve('babel-preset-minify'), {
 											mangle: false,
 											deadcode: false,
-											simplify: false,
+											// simplify: false,
 											evaluate: false,
 										}]
 									].filter(Boolean)
@@ -297,7 +297,7 @@ exports = module.exports = {
 	},
 
 	optimization: {
-		minimize: PROD,
+		minimize: false,
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
