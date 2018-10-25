@@ -68,6 +68,23 @@ const CACHE = {
 	}
 };
 
+class FilterPlugin {
+	constructor (options) {
+		Object.assign(this, options);
+	}
+
+	apply (compiler) {
+		compiler.hooks.afterEmit.tap(
+			'FilterPlugin',
+			c => {
+				c.warnings = c.warnings.filter(
+					({message}) => !this.filter.test(message)
+				);
+			}
+		);
+	}
+}
+
 
 exports = module.exports = {
 	mode: ENV,
@@ -429,5 +446,7 @@ exports = module.exports = {
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+		new FilterPlugin({ filter: /\[mini-css-extract-plugin]\nConflicting order between:/ }),
 	].filter(Boolean)
 };
