@@ -297,7 +297,7 @@ exports = module.exports = {
 	},
 
 	optimization: {
-		minimize: false,
+		minimize: PROD,
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
