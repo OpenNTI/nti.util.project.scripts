@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.2.2",
+  "version": "2.2.1",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -35,7 +35,7 @@
     "airbrake-js": "^1.4.4",
     "babel-loader": "^8.0.0",
     "babel-preset-minify": "0.x.x",
-    "cache-loader": "1.2.2",
+    "cache-loader": "^1.2.5",
     "case-sensitive-paths-webpack-plugin": "^2.1.1",
     "chalk": "^2.0.1",
     "ci-info": "^1.1.3",
