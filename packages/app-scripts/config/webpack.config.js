@@ -241,6 +241,7 @@ exports = module.exports = {
 											deadcode: false,
 											simplify: false,
 											evaluate: false,
+											consecutiveAdds: false
 										}]
 									].filter(Boolean)
 								}
