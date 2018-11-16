@@ -215,6 +215,15 @@ exports = module.exports = {
 			{
 				oneOf: [
 					{
+						test: /.*/,
+						resourceQuery: /for-download/,
+						loader: 'file-loader',
+						options: {
+							name: 'resources/files/[hash]/[name].[ext]'
+						}
+					},
+
+					{
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
 						use: [
@@ -267,13 +276,6 @@ exports = module.exports = {
 						}
 					},
 
-					{
-						test: /\.csv$/,
-						loader: require.resolve('file-loader'),
-						options: {
-							name: 'resources/assets/[hash].[ext]'
-						}
-					},
 
 					{
 						test: /\.(sa|sc|c)ss$/,
