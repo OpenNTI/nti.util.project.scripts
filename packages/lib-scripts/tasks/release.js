@@ -36,6 +36,10 @@ const hasRemote = Boolean(remoteBranch);
 
 const inc = branch === 'master' ? (major ? 'major' : 'minor') : 'patch';
 
+if (branch === 'master' && !process.argv.includes('--skip-lock-refresh')) {
+	tasks.unshift('update-locks');
+}
+
 if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
 	write('\n\n'
 		+ chalk.red('You cannot release a version while on feature branch: ' + chalk.underline(branch)
