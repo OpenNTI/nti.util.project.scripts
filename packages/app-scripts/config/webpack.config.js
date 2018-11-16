@@ -268,6 +268,14 @@ exports = module.exports = {
 					},
 
 					{
+						test: /\.csv$/,
+						loader: require.resolve('file-loader'),
+						options: {
+							name: 'resources/assets/[hash].[ext]'
+						}
+					},
+
+					{
 						test: /\.(sa|sc|c)ss$/,
 						use: [
 							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
