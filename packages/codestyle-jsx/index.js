@@ -18,7 +18,7 @@ module.exports = {
 	settings: {
 		'import/extensions': ['.js', '.mjs', '.jsx'],
 		'import/resolver': {
-			'node': {
+			[require.resolve('./node-query-resolver')]: {
 				'extensions': ['.js', '.mjs', '.jsx'],
 				'moduleDirectory': [
 					'node_modules',
