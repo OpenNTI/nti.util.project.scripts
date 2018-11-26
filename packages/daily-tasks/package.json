@@ -1,6 +1,6 @@
 {
   "name": "@nti/daily-tasks",
-  "version": "1.0.0",
+  "version": "2.3.0",
   "description": "A script to run daily in all NextThought projects",
   "main": "./bin.js",
   "bin": {
