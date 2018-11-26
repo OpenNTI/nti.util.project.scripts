@@ -1,0 +1,27 @@
+{
+  "name": "@nti/daily-tasks",
+  "version": "1.0.0",
+  "description": "A script to run daily in all NextThought projects",
+  "main": "./bin.js",
+  "bin": {
+    "daily-tasks": "./bin.js"
+  },
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+  },
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
+  },
+  "bugs": {
+    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+  },
+  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+  "dependencies": {
+    "chalk": "^2.0.1",
+    "fs-extra": "^7.0.0"
+  }
+}

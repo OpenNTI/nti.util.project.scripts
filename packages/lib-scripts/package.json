@@ -50,6 +50,7 @@
     "@nti/codestyle-js": "^1.19.6",
     "@nti/git-state": "^4.1.0",
     "@nti/install-snapshots": "^2.1.0",
+    "@nti/daily-tasks": "^1.0.0",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.0.0",
