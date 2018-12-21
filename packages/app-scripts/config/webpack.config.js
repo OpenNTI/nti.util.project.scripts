@@ -231,6 +231,7 @@ exports = module.exports = {
 									presets: [
 										require.resolve('./babel.config.js'),
 										PROD && [require.resolve('babel-preset-minify'), {
+											builtIns: false,
 											mangle: false,
 											deadcode: false,
 											simplify: false,
