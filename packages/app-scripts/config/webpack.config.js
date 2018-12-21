@@ -13,30 +13,17 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
-const getVersionsFor = require('./resolve-versions');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
 
 const DEVENV = 'development';
 const ENV = process.env.NODE_ENV || DEVENV;
 const PROD = ENV === 'production';
-const VERSIONS = getVersionsFor(['react', 'react-dom', 'whatwg-fetch', 'airbrake-js']);
-
-const getReactPath = (lib) => {
-	const v = VERSIONS[lib];
-	const major = parseInt(v, 10);
-	const prefix = `${lib}@${v}/`;
-
-	return (major < 16)
-		? `${prefix}dist/${lib}${PROD ? '.min' : ''}.js`
-		: `${prefix}umd/${lib}.${PROD ? 'production.min' : 'development'}.js`;
-};
 
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
@@ -156,8 +143,6 @@ exports = module.exports = {
 	externals: [
 		{
 			'@nti/extjs': 'Ext',
-			'react' : 'React',
-			'react-dom': 'ReactDOM'
 		}
 	],
 
@@ -420,16 +405,6 @@ exports = module.exports = {
 			template: paths.appHtml
 		}),
 		new HtmlWebpackHarddiskPlugin(),
-		new HtmlWebpackIncludeAssetsPlugin({
-			publicPath: '',
-			append: false,
-			assets: [
-				{ path: `https://unpkg.com/airbrake-js@${VERSIONS['airbrake-js']}`, type: 'js' },
-				{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}`, type: 'js' },
-				{ path: `https://unpkg.com/${getReactPath('react')}`, type: 'js' },
-				{ path: `https://unpkg.com/${getReactPath('react-dom')}`, type: 'js' },
-			]
-		}),
 		// new PreloadWebpackPlugin({
 		// 	fileBlacklist: [
 		// 		/admin/,

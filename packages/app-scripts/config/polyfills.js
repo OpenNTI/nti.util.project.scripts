@@ -1,6 +1,7 @@
 /*globals BUILD_SOURCE, BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION, Element, CharacterData, DocumentType*/
 'use strict';
 require('@babel/polyfill');
+require('whatwg-fetch');
 global.regeneratorRuntime = require('regenerator-runtime');
 global['revision'] = typeof BUILD_SOURCE !== 'undefined' && BUILD_SOURCE;
 global['BUILD_PACKAGE_NAME'] = typeof BUILD_PACKAGE_NAME !== 'undefined' && BUILD_PACKAGE_NAME;

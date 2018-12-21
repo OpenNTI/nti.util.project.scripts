@@ -1,11 +1,7 @@
 'use strict';
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const HtmlWebpackIncludeAssetsPlugin = require('html-webpack-include-assets-plugin');
-const getVersionsFor = require('@nti/app-scripts/config/resolve-versions');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
-
-const VERSIONS = getVersionsFor(['whatwg-fetch']);
 
 process.env.NODE_ENV = 'development';
 
@@ -51,12 +47,5 @@ exports.plugins.push(
 	new HtmlWebpackPlugin({
 		title: pkg.name + ': Test Harness',
 		template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
-	}),
-	new HtmlWebpackIncludeAssetsPlugin({
-		publicPath: '',
-		append: false,
-		assets: [
-			{ path: `https://unpkg.com/whatwg-fetch@${VERSIONS['whatwg-fetch']}`, type: 'js' },
-		]
 	}),
 );
