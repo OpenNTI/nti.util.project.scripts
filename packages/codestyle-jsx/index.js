@@ -47,6 +47,12 @@ module.exports = {
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/jsx-pascal-case.md
 		'react/jsx-pascal-case': ['warn', { 'allowAllCaps': true }],
 
+		// This is NOT an error.
+		'react/display-name': ['warn'],
+
+		// Do not require prop-type validaion for very common props provided by the system.
+		'react/prop-types': ['error', { ignore: ['children', 'className']}],
+
 		//JSX should always be wrapped in parentheses... especically when multiline.
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md
 		'react/jsx-wrap-multilines': ['warn', {
