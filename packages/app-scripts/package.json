@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -28,7 +28,7 @@
     "@babel/plugin-transform-runtime": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@nti/baggage-loader": "^1.0.0",
-    "@nti/codestyle-jsx": "^2.4.0",
+    "@nti/codestyle-jsx": "^2.4.2",
     "@nti/lib-scripts": "^2.4.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
