@@ -10,7 +10,6 @@ const tmp = require('tmp');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -18,14 +17,14 @@ const TerserPlugin = require('terser-webpack-plugin');
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
+const cache = require('./cache');
+const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
+const {PROD, ENV} = require('./env');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
 
-const DEVENV = 'development';
-const ENV = process.env.NODE_ENV || DEVENV;
-const PROD = ENV === 'production';
 
-const browsers = require('@nti/lib-scripts/config/browserlist');
+
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
@@ -48,12 +47,6 @@ function tempPage () {
 	return tempPage.file || (tempPage.file = tmp.fileSync().name);
 }
 
-const CACHE = {
-	loader: 'cache-loader',
-	options: {
-		cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
-	}
-};
 
 class FilterPlugin {
 	constructor (options) {
@@ -160,7 +153,7 @@ exports = module.exports = {
 				test: /\.m?jsx?$/,
 				enforce: 'pre',
 				use: [
-					CACHE,
+					cache(),
 					!PROD && {
 						// First, run the linter.
 						// It's important to do this before Babel processes the JS.
@@ -212,7 +205,7 @@ exports = module.exports = {
 						test: /\.m?jsx?$/,
 						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
 						use: [
-							CACHE,
+							cache(),
 							{
 								loader: require.resolve('thread-loader'),
 								options: PROD ? {} : {
@@ -262,50 +255,8 @@ exports = module.exports = {
 						}
 					},
 
+					...cssLoaders(),
 
-					{
-						test: /\.(sa|sc|c)ss$/,
-						use: [
-							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
-							CACHE,
-							{
-								loader: require.resolve('css-loader'),
-								options: {
-									sourceMap: true
-								}
-							},
-							{
-								loader: require.resolve('postcss-loader'),
-								options: {
-									sourceMap: true,
-									plugins: () => [
-										require('postcss-flexbugs-fixes'),
-										require('postcss-preset-env')({
-											browsers,
-											autoprefixer: {
-												browsers,
-												flexbox: 'no-2009',
-												grid: true,
-											},
-											stage: 3,
-										}),
-									]
-								}
-							},
-							{
-								loader: require.resolve('resolve-url-loader')
-							},
-							{
-								loader: require.resolve('sass-loader'),
-								options: {
-									sourceMap: true,
-									includePaths: [
-										paths.resolveApp('src/main/resources/scss')
-									]
-								}
-							}
-						]
-					}
 				].filter(Boolean)
 			}
 		].filter(Boolean)
@@ -414,9 +365,7 @@ exports = module.exports = {
 		// 	]
 		// }),
 
-		new MiniCssExtractPlugin({
-			filename: 'resources/[name]-[contenthash].css'
-		}),
+		...cssPlugins(),
 
 		new webpack.DefinePlugin({
 			'BUILD_SOURCE': gitRevision,
