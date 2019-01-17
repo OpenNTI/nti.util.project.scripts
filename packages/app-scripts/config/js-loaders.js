@@ -17,7 +17,7 @@ const standardPreloaderEntries = [
 		// It's important to do this before Babel processes the JS.
 		loader: require.resolve('eslint-loader'),
 		options: {
-			// We can't lock the config until we can delete the web-app's lecgacy directory
+			// We can't lock the config until we can delete the web-app's legacy directory
 			//
 			// useEslintrc: false,
 			// baseConfig: {
@@ -52,7 +52,7 @@ const preloaders = () => [
 		].filter(Boolean)
 	},
 	{
-		// legacy baggage-load; remove once we've weened ourselves off of sass
+		// legacy baggage-load; remove once we've weaned ourselves off of sass
 		test: jsTestExp,
 		enforce: 'pre',
 		include: [
