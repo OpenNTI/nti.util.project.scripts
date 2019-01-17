@@ -70,10 +70,27 @@ const loaders = () => [
 	
 	{
 		test: /\.css$/,
+		exclude: [
+			paths.nodeModules
+		],
 		use: [
 			style(),
 			cache(),
 			css({modules: true}),
+			postCss(),
+			resolveUrl()
+		]
+	},
+
+	{
+		test: /\.css$/,
+		include: [
+			paths.nodeModules
+		],
+		use: [
+			style(),
+			cache(),
+			css(),
 			postCss(),
 			resolveUrl()
 		]
