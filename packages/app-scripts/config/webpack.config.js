@@ -15,20 +15,13 @@ const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
-const cache = require('./cache');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
+const {loaders: jsLoaders, preloaders: jsPreloaders} = require('./js-loaders');
 const {PROD, ENV} = require('./env');
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
-
-
-
-const getWorkspace = require('@nti/lib-scripts/config/workspace');
-const workspaceLinks = (!PROD && paths.workspace)
-	? getWorkspace(paths.workspace, paths.packageJson)
-	: {};
+const workspaceLinks = require('./workspace-links');
 
 
 function isNTIPackage (x) {
@@ -114,7 +107,7 @@ exports = module.exports = {
 		],
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
-			...workspaceLinks,
+			...workspaceLinks(),
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,
@@ -149,46 +142,7 @@ exports = module.exports = {
 				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
 			} },
 
-			{
-				test: /\.m?jsx?$/,
-				enforce: 'pre',
-				use: [
-					cache(),
-					!PROD && {
-						// First, run the linter.
-						// It's important to do this before Babel processes the JS.
-						loader: require.resolve('eslint-loader'),
-						options: {
-							// We can't lock the config until we can delete the web-app's lecgacy directory
-							//
-							// useEslintrc: false,
-							// baseConfig: {
-							// 	extends: [require.resolve('./eslintrc')]
-							// },
-							emitWarning: false,
-							eslintPath: require.resolve('eslint'),
-							failOnError: true,
-							failOnWarning: false,
-							formatter: eslintFormatter,
-							ignore: false,
-						}
-					},
-					{
-						loader: require.resolve('@nti/baggage-loader'),
-						options: {
-							'[file].scss':{},
-							'[file].css':{}
-						}
-					},
-				].filter(Boolean),
-				include: [
-					paths.src,
-					path.join(paths.nodeModules, '@nti'),
-					//Only lint|baggage source files in workspaceLinks
-					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
-				],
-				// exclude: [/[/\\\\]node_modules[/\\\\]/],
-			},
+			...jsPreloaders(),
 
 			{
 				oneOf: [
@@ -201,41 +155,7 @@ exports = module.exports = {
 						}
 					},
 
-					{
-						test: /\.m?jsx?$/,
-						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
-						use: [
-							cache(),
-							{
-								loader: require.resolve('thread-loader'),
-								options: PROD ? {} : {
-									poolTimeout: Infinity, // keep workers alive for more effective watch mode
-								},
-							},
-							{
-								loader: require.resolve('babel-loader'),
-								options: {
-									babelrc: false,
-									compact: false,
-									cacheDirectory: false,
-									cacheCompression: false,
-									highlightCode: true,
-									sourceType: 'unambiguous',
-									presets: [
-										require.resolve('./babel.config.js'),
-										PROD && [require.resolve('babel-preset-minify'), {
-											builtIns: false,
-											mangle: false,
-											deadcode: false,
-											simplify: false,
-											evaluate: false,
-											consecutiveAdds: false
-										}]
-									].filter(Boolean)
-								}
-							},
-						].filter(Boolean)
-					},
+					...jsLoaders(),
 
 					{
 						test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
