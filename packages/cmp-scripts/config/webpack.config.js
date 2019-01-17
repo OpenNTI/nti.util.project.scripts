@@ -286,7 +286,7 @@ exports = module.exports = {
 		}),
 
 		PROD && new MiniCssExtractPlugin({
-			filename: '[name].css'
+			filename: 'index.generated.css'
 		}),
 
 		// Watcher doesn't work well if you mistype casing in a path so we use
