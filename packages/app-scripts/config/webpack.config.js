@@ -155,7 +155,22 @@ exports = module.exports = {
 						}
 					},
 
-					...jsLoaders(),
+					...jsLoaders({
+						babel: {
+							sourceType: 'unambiguous',
+							presets: [
+								require.resolve('./babel.config.js'),
+								PROD && [require.resolve('babel-preset-minify'), {
+									builtIns: false,
+									mangle: false,
+									deadcode: false,
+									simplify: false,
+									evaluate: false,
+									consecutiveAdds: false
+								}]
+							].filter(Boolean),
+						}
+					}),
 
 					{
 						test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
@@ -175,7 +190,13 @@ exports = module.exports = {
 						}
 					},
 
-					...cssLoaders(),
+					...cssLoaders({
+						sass: {
+							includePaths: [
+								paths.resolveApp('src/main/resources/scss')
+							]
+						}
+					}),
 
 				].filter(Boolean)
 			}

@@ -10,7 +10,8 @@ const workspaceLinks = require('./workspace-links');
 
 const jsTestExp = /\.m?jsx?$/;
 
-const standardPreloaderEntries = [
+// options is a mapping of loader => options for that loader, e.g. {eslint: {useEslintrc: false}}
+const standardPreloaderEntries = (options = {}) => [
 	cache(),
 	!PROD && {
 		// First, run the linter.
@@ -29,11 +30,12 @@ const standardPreloaderEntries = [
 			failOnWarning: false,
 			formatter: eslintFormatter,
 			ignore: false,
+			...(options.eslint || {})
 		}
 	}
 ];
 
-const preloaders = () => [
+const preloaders = (options) => [
 	{
 		test: jsTestExp,
 		enforce: 'pre',
@@ -41,7 +43,7 @@ const preloaders = () => [
 			path.join(paths.nodeModules, '@nti'),
 		],
 		use: [
-			...standardPreloaderEntries,
+			...standardPreloaderEntries(options),
 			{
 				loader: require.resolve('@nti/baggage-loader'),
 				options: {
@@ -61,7 +63,7 @@ const preloaders = () => [
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src')))
 		],
 		use: [
-			...standardPreloaderEntries,
+			...standardPreloaderEntries(options),
 			{
 				loader: require.resolve('@nti/baggage-loader'),
 				options: {
@@ -72,7 +74,7 @@ const preloaders = () => [
 	}
 ];
 
-const loaders = () => [
+const loaders = (options = {}) => [
 	{
 		test: jsTestExp,
 		exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
@@ -80,9 +82,10 @@ const loaders = () => [
 			cache(),
 			{
 				loader: require.resolve('thread-loader'),
-				options: PROD ? {} : {
-					poolTimeout: Infinity, // keep workers alive for more effective watch mode
-				},
+				options: {
+					...(PROD ? {} : {poolTimeout: Infinity}), // keep workers alive for more effective watch mode})
+					...(options.thread || {})
+				}
 			},
 			{
 				loader: require.resolve('babel-loader'),
@@ -92,18 +95,7 @@ const loaders = () => [
 					cacheDirectory: false,
 					cacheCompression: false,
 					highlightCode: true,
-					sourceType: 'unambiguous',
-					presets: [
-						require.resolve('./babel.config.js'),
-						PROD && [require.resolve('babel-preset-minify'), {
-							builtIns: false,
-							mangle: false,
-							deadcode: false,
-							simplify: false,
-							evaluate: false,
-							consecutiveAdds: false
-						}]
-					].filter(Boolean)
+					...(options.babel || {})
 				}
 			},
 		].filter(Boolean)
@@ -113,5 +105,6 @@ const loaders = () => [
 
 module.exports = {
 	loaders,
-	preloaders
+	preloaders,
+	pattern: jsTestExp
 };

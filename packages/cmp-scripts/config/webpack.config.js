@@ -6,9 +6,6 @@ const path = require('path');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-//
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
 const paths = require('./paths');
 const pkg = require(paths.packageJson);
@@ -16,18 +13,14 @@ const pkg = require(paths.packageJson);
 const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
-const browsers = require('@nti/lib-scripts/config/browserlist');
+const {loaders: jsLoaders, preloaders: jsPreloaders} = require('@nti/app-scripts/config/js-loaders');
+const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/js-loaders');
+
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
 	: {};
 
-const CACHE = {
-	loader: 'cache-loader',
-	options: {
-		cacheDirectory: path.resolve(paths.path, 'node_modules/.cache/nti-build')
-	}
-};
 
 //TODO: Figure out how to inherit webpack config from app-scripts and mutate to target cmp-scripts needs so we
 //		can maintain one set of loader/workspace implementations.
@@ -112,72 +105,22 @@ exports = module.exports = {
 			// Disable require.ensure as it's not a standard language feature.
 			{ parser: { requireEnsure: false } },
 
-			{
-				test: /\.m?jsx?$/,
-				enforce: 'pre',
-				use: [
-					CACHE,
-					// First, run the linter.
-					// It's important to do this before Babel processes the JS.
-					!PROD && {
-						loader: require.resolve('eslint-loader'),
-						options: {
-							useEslintrc: false,
-							baseConfig: {
-								extends: [require.resolve('./eslintrc')]
-							},
-							emitWarning: false,
-							eslintPath: require.resolve('eslint'),
-							failOnError: true,
-							failOnWarning: false,
-							formatter: eslintFormatter,
-							ignore: false,
-						},
-					},
-					{
-						loader: require.resolve('@nti/baggage-loader'),
-						options: {
-							'[file].scss':{},
-							'[file].css':{}
-						}
-					},
-				].filter(Boolean),
-				include: [
-					paths.src,
-					paths.testApp, //let baggage/lint run on test app files
-					path.join(paths.nodeModules, '@nti'),
-					//Only lint|baggage source files in workspaceLinks
-					...(Object.values(workspaceLinks).map(x => path.join(x, 'src')))
-				],
-				// exclude: [/[/\\\\]node_modules[/\\\\]/],
-			},
+			...jsPreloaders({
+				eslint: {
+					useEslintrc: false,
+					baseConfig: {
+						extends: [require.resolve('./eslintrc')]
+					}
+				}
+			}),
 
 			{
 				oneOf: [
-					{
-						test: /\.m?jsx?$/,
-						exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
-						use: [
-							CACHE,
-							{
-								loader: require.resolve('thread-loader'),
-								options: PROD ? {} : {
-									poolTimeout: Infinity, // keep workers alive for more effective watch mode
-								},
-							},
-							{
-								loader: require.resolve('babel-loader'),
-								options: {
-									babelrc: false,
-									compact: false,
-									cacheDirectory: false,
-									cacheCompression: false,
-									highlightCode: true,
-									presets: [require.resolve('./babel.config.js')]
-								}
-							},
-						]
-					},
+					...jsLoaders({
+						babel: {
+							presets: [require.resolve('./babel.config.js')]
+						}
+					}),
 
 					{
 						test: /-avatar.png$/,
@@ -219,46 +162,8 @@ exports = module.exports = {
 						}
 					},
 
-					{
-						test: /\.(s?)css$/,
-						use: [
-							!PROD ? 'style-loader' : MiniCssExtractPlugin.loader,
-							CACHE,
-							{
-								loader: require.resolve('css-loader'),
-								options: {
-									sourceMap: true
-								}
-							},
-							{
-								loader: require.resolve('postcss-loader'),
-								options: {
-									sourceMap: true,
-									plugins: () => [
-										require('postcss-flexbugs-fixes'),
-										require('postcss-preset-env')({
-											browsers,
-											autoprefixer: {
-												browsers,
-												flexbox: 'no-2009',
-												grid: true,
-											},
-											stage: 3,
-										}),
-									]
-								}
-							},
-							{
-								loader: require.resolve('resolve-url-loader')
-							},
-							{
-								loader: require.resolve('sass-loader'),
-								options: {
-									sourceMap: true
-								}
-							}
-						]
-					}
+					...cssLoaders()
+
 				].filter(Boolean)
 			}
 		].filter(Boolean)
@@ -285,8 +190,10 @@ exports = module.exports = {
 			}
 		}),
 
-		PROD && new MiniCssExtractPlugin({
-			filename: 'index.generated.css'
+		...cssPlugins({
+			miniCssExtract: {
+				filename: 'index.generated.css'
+			}
 		}),
 
 		// Watcher doesn't work well if you mistype casing in a path so we use
