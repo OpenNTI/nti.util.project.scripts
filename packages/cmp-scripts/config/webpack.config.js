@@ -14,7 +14,7 @@ const ENV = process.env.NODE_ENV || 'development';
 const PROD = ENV === 'production';
 
 const {loaders: jsLoaders, preloaders: jsPreloaders} = require('@nti/app-scripts/config/js-loaders');
-const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/js-loaders');
+const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
 
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
