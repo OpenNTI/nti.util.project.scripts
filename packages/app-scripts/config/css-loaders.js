@@ -48,14 +48,11 @@ const sass = (options = {}) => ({
 	loader: require.resolve('sass-loader'),
 	options: {
 		sourceMap: true,
-		includePaths: [
-			paths.resolveApp('src/main/resources/scss')
-		],
 		...options
 	}
 });
 
-const loaders = () => [
+const loaders = (options = {}) => [
 	{
 		test: /\.s(a|c)ss$/,
 		use: [
@@ -64,7 +61,7 @@ const loaders = () => [
 			css(),
 			postCss(),
 			resolveUrl(),
-			sass()
+			sass(options.sass)
 		]
 	},
 	
@@ -97,11 +94,12 @@ const loaders = () => [
 	}
 ];
 
-const plugins = () => [
-	new MiniCssExtractPlugin({
-		filename: 'resources/[name]-[contenthash].css'
+const plugins = (options = {}) => [
+	PROD && new MiniCssExtractPlugin({
+		filename: 'resources/[name]-[contenthash].css',
+		...(options.miniCssExtract || {})
 	})
-];
+].filter(Boolean);
 
 module.exports = {
 	loaders,
