@@ -49,3 +49,12 @@ exports.plugins.push(
 		template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
 	}),
 );
+
+const {pattern} = require('@nti/app-scripts/config/js-loaders');
+const jsPre = exports.module.rules.find(x => 
+	x.enforce === 'pre'
+	&& x.test === pattern
+	&& x.use.some(r => '[file].scss' in r.options)
+);
+
+jsPre.include.push(paths.testApp);
