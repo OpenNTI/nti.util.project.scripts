@@ -1,20 +1,24 @@
 /*eslint camelcase:0*/
 'use strict';
+process.env.NODE_ENV = 'development';
+
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 const path = require('path');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const paths = require('./paths');
-const pkg = require(paths.packageJson);
 
-const ENV = process.env.NODE_ENV || 'development';
-const PROD = ENV === 'production';
+const ENV = 'development';
+const PROD = false;
 
 const {loaders: jsLoaders, preloaders: jsPreloaders} = require('@nti/app-scripts/config/js-loaders');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
+
+const pkg = require(paths.packageJson);
 
 const getWorkspace = require('@nti/lib-scripts/config/workspace');
 const workspaceLinks = (!PROD && paths.workspace)
@@ -29,35 +33,25 @@ exports = module.exports = {
 	mode: ENV,
 	bail: PROD,
 	entry: {
-		index: path.resolve(paths.src, 'index.js')
+		index: [
+			require.resolve('./polyfills'),
+			paths.resolveApp('./test/app/index.js')
+		]
 	},
 	output: {
-		path: path.join(paths.path, path.dirname(pkg.main)),
-		filename: path.basename(pkg.main),
-		library: pkg.name,
-		libraryTarget: 'commonjs-module',
-		pathinfo: !PROD,
-		devtoolModuleFilenameTemplate: info =>
-			path.resolve(info.absoluteResourcePath)
-				.replace(path.resolve(paths.path), paths.servedPath)
-				.replace('src/main', '')
-				.replace(/\\/g, '/')
-				.replace(/\/\//g, '/')
+		path: '/',
+		filename: '[name].js',
+		publicPath: '/'
 	},
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
-	// Some libraries import Node modules but don't use them in the browser.
-	// Tell Webpack to provide empty mocks for them so importing them works.
 	node: {
 		dgram: 'empty',
 		fs: 'empty',
 		net: 'empty',
 		tls: 'empty',
-		child_process: 'empty',
-		crypto: 'empty',
 	},
-
 
 	target: 'web',
 
@@ -87,18 +81,6 @@ exports = module.exports = {
 		},
 	},
 
-
-	externals: [
-		// Every non-relative module is external
-		// abc -> require("abc")
-		(context, request, callback) => {
-			if (/^[@a-z\-0-9]+/i.test(request)) {
-				return callback(null, 'commonjs ' + request);
-			}
-			callback();
-		}
-	],
-
 	module: {
 		strictExportPresence: true,
 		rules: [
@@ -111,7 +93,10 @@ exports = module.exports = {
 					baseConfig: {
 						extends: [require.resolve('./eslintrc')]
 					}
-				}
+				},
+				includes: [
+					paths.testApp
+				]
 			}),
 
 			{
@@ -174,6 +159,22 @@ exports = module.exports = {
 	},
 
 	performance: false,
+	devServer: {
+		disableHostCheck: true,
+		allowedHosts: ['.dev', '.local'],
+		clientLogLevel: 'none',
+		contentBase: paths.resolveApp('test/app/'),
+		watchContentBase: true,
+		overlay: {
+			warnings: false,
+			errors: true
+		},
+		noInfo: true,
+		proxy: [{
+			context: ['/content', '/dataserver2'],
+			target: 'http://localhost:8082',
+		}]
+	},
 
 	plugins: [
 		DEBUG && new CircularDependencyPlugin({
@@ -194,6 +195,11 @@ exports = module.exports = {
 			miniCssExtract: {
 				filename: 'index.generated.css'
 			}
+		}),
+
+		new HtmlWebpackPlugin({
+			title: pkg.name + ': Test Harness',
+			template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
 		}),
 
 		// Watcher doesn't work well if you mistype casing in a path so we use

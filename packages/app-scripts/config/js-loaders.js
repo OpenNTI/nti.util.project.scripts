@@ -37,30 +37,15 @@ const standardPreloaderEntries = (options = {}) => [
 
 const preloaders = (options) => [
 	{
-		test: jsTestExp,
-		enforce: 'pre',
-		include: [
-			path.join(paths.nodeModules, '@nti'),
-		],
-		use: [
-			...standardPreloaderEntries(options),
-			{
-				loader: require.resolve('@nti/baggage-loader'),
-				options: {
-					'[file].css': {},
-					'index.generated.css': {}
-				}
-			},
-		].filter(Boolean)
-	},
-	{
 		// legacy baggage-load; remove once we've weaned ourselves off of sass
 		test: jsTestExp,
 		enforce: 'pre',
 		include: [
 			paths.src,
+			path.join(paths.nodeModules, '@nti'),
 			//Only lint|baggage source files in workspaceLinks
-			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src')))
+			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
+			...(options || {}).includes
 		],
 		use: [
 			...standardPreloaderEntries(options),
