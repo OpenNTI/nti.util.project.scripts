@@ -35,7 +35,7 @@ const standardPreloaderEntries = (options = {}) => [
 	}
 ];
 
-const preloaders = (options) => [
+const preloaders = (options = {}) => [
 	{
 		// legacy baggage-load; remove once we've weaned ourselves off of sass
 		test: jsTestExp,
@@ -45,7 +45,7 @@ const preloaders = (options) => [
 			path.join(paths.nodeModules, '@nti'),
 			//Only lint|baggage source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-			...(options || {}).includes
+			...(options.includes || [])
 		],
 		use: [
 			...standardPreloaderEntries(options),
