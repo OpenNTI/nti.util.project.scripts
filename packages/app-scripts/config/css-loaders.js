@@ -75,7 +75,7 @@ const loaders = (options = {}) => [
 			cache(),
 			css({
 				modules: true,
-				localIdentName: '[folder]-[name]__[local]--[hash:base64:5]'
+				localIdentName: '[local]--[hash:base64:8]'
 			}),
 			postCss(),
 			resolveUrl()
