@@ -8,10 +8,11 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs-extra');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
-const sanityCheck = require('@nti/lib-scripts/tasks/utils/sanity-check');
+// const sanityCheck = require('@nti/lib-scripts/tasks/utils/sanity-check');
 // const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
 const callHook = require('@nti/app-scripts/tasks/utils/build-call-hook');
-const buildRollupBundle = require('@nti/lib-scripts/tasks/utils/build-with-rollup');
+// const buildRollupBundle = require('@nti/lib-scripts/tasks/utils/build-with-rollup');
+const noCjs = require('../templates/no-cjs');
 
 const paths = require('../config/paths');
 
@@ -46,9 +47,10 @@ fs.emptyDirSync(path.resolve(paths.path, 'lib'));
 	//call build hook
 	await callHook();
 
-	await buildRollupBundle();
+	// await buildRollupBundle();
+	// await sanityCheck();
+	noCjs();
 
-	await sanityCheck();
 
 	if (!SKIP) {
 		console.log('\nGenerating docs...\n');
