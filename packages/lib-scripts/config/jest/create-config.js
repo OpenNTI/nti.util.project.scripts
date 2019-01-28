@@ -68,6 +68,7 @@ module.exports = (resolve, rootDir) => {
 		transformIgnorePatterns: [],
 		moduleNameMapper: {
 			...workspaceLinks,
+			'(^@nti\\/extjs)': '$1', // exclude @nti/extjs from the src dir mapping that follows
 			'^@nti\\/([^\\/]+)': '@nti/$1/src',
 		},
 		resolver: resolve('config/jest/resolver.js')
