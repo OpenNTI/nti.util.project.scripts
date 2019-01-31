@@ -61,6 +61,7 @@ module.exports = {
 	pacakgeLock: resolveApp('package-lock.json'),
 	packageMain: resolveApp(require(packageJson).main),
 	nodeModules: resolveApp('node_modules'),
+	ntiModules: resolveApp('node_modules/@nti'),
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),
 	workspace: isDevBlocked ? null : exists(
