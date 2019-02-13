@@ -2,9 +2,7 @@
 const {isCI} = require('ci-info');
 
 module.exports = function (api, opts) {
-	if (api && api.cache) {
-		api.cache(() => process.env.NODE_ENV);
-	}
+	api.cache.using(() => process.env.NODE_ENV);
 
 	return {
 		sourceType: 'unambiguous',
