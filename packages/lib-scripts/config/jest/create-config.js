@@ -54,7 +54,7 @@ module.exports = (resolve, rootDir) => {
 			'raf/polyfill',
 			resolve('config/polyfills.js')
 		],
-		setupTestFrameworkScriptFile: setupTestsFile,
+		setupFilesAfterEnv: [setupTestsFile],
 		testPathIgnorePatterns: [
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
 		],
