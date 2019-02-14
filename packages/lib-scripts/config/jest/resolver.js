@@ -25,10 +25,15 @@ module.exports = function (request, context) {
 			}
 		}
 
+		const key = request + '|' + JSON.stringify(context);
 		try {
-			return resolve.sync(request, context);
+			if (CACHE[key]) {
+				return CACHE[key];
+			}
+
+			return CACHE[key] = resolve.sync(request, context);
 		} catch (e) {
-			return resolve.sync(request, {
+			return CACHE[key] = resolve.sync(request, {
 				...context,
 				basedir: rootDir || basedir
 			});
