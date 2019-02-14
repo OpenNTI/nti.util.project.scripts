@@ -27,7 +27,7 @@ if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 
 if (!SKIP) {
 	call('node', [require.resolve('./check')]);
-	call('node', [require.resolve('./test'), '--no-cache']);
+	call('node', [require.resolve('./test')]);
 }
 
 //clean dist & ensure client/server directories

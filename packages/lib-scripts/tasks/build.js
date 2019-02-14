@@ -26,7 +26,7 @@ process.on('unhandledRejection', err => {
 
 if (!SKIP) {
 	call('node', [require.resolve('./check')]);
-	call('node', [require.resolve('./test'), '--no-cache']);
+	call('node', [require.resolve('./test')]);
 }
 
 //Blank out lib
