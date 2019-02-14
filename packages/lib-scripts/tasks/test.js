@@ -35,7 +35,11 @@ if (isCI && !argv.includes('--coverage')) {
 	argv.push('--coverage');
 }
 
-if (isDebug) {
+// if (isCI) {
+// 	argv.push('--maxWorkers=4');
+// }
+
+if (isDebug || isCI) {
 	argv.push('--runInBand');
 }
 
