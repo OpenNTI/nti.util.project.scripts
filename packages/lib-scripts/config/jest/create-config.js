@@ -67,7 +67,7 @@ module.exports = (resolve, rootDir) => {
 		},
 		transformIgnorePatterns: [],
 		moduleNameMapper: {
-			...workspaceLinks,
+			...(isCI ? null : workspaceLinks),
 			'(^@nti\\/extjs)': '$1', // exclude @nti/extjs from the src dir mapping that follows
 			'^@nti\\/([^\\/]+)': '@nti/$1/src',
 		},
