@@ -33,6 +33,7 @@ const postCss = (options = {}) => ({
 					flexbox: 'no-2009',
 					grid: true,
 				},
+				importFrom: paths.cssCustomProperties,
 				stage: 3,
 			}),
 		],

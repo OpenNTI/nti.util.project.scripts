@@ -64,6 +64,21 @@ module.exports = {
 	ntiModules: resolveApp('node_modules/@nti'),
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),
+
+	/**
+	*	Import custom properties from @nti/style-common when present.
+	*	This allows postcss to fill in fallback rules for custom properties:
+	*	Assuming --mycolor: red,
+	*	
+	*		[input]
+	*		color: var(--mycolor);
+	*
+	*		[output]
+	*		color: red;
+	*		color: var(--mycolor);
+	*/
+	cssCustomProperties: exists(resolveApp('node_modules/@nti/style-common/variables.css'), null),
+
 	workspace: isDevBlocked ? null : exists(
 		resolveApp('.workspace.json'),
 		exists(
