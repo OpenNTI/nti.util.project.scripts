@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.6.9",
+  "version": "2.6.10",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -29,7 +29,7 @@
     "@babel/preset-react": "^7.0.0",
     "@nti/baggage-loader": "^1.0.0",
     "@nti/codestyle-jsx": "^2.6.3",
-    "@nti/lib-scripts": "^2.6.9",
+    "@nti/lib-scripts": "^2.6.10",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
     "babel-loader": "^8.0.0",
