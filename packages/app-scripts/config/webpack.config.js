@@ -72,8 +72,8 @@ exports = module.exports = {
 	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
 	output: {
 		path: paths.DIST_CLIENT,
-		filename: 'js/[name]-[chunkhash:8].js',
-		chunkFilename: 'js/[name]-[chunkhash:8].js',
+		filename: 'js/[name]-[hash:8].js',
+		chunkFilename: 'js/[name]-[hash:8].js',
 		pathinfo: !PROD,
 		publicPath: paths.servedPath || '/',
 		devtoolModuleFilenameTemplate: info =>
