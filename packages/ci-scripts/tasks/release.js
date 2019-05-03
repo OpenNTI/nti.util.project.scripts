@@ -7,6 +7,6 @@ printHeader('Preparing release build:\n  %s@%s', name, version);
 
 require('./clean');
 
-require('./install-strict');
+require('./install');
 
 require('./publish');

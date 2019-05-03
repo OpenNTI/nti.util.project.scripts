@@ -46,6 +46,7 @@ Object.assign(exports,{
 	nofail: {fd: 'ignore', forgive: true},
 
 	lockfile,
+	lockfileExists: () => fs.existsSync(lockfile),
 	modulesDir,
 	packageFile,
 });
