@@ -3,17 +3,13 @@
  * Prepares a package to be a snapshot or smoketest.
  */
 const fs = require('fs-extra');
-const path = require('path');
 const semver = require('semver');
 
-const {printLine, print, getPackageNameAndVersion} = require('./util');
+const {lockfile, packageFile, printLine, print, getPackageNameAndVersion} = require('./util');
 
 const {name, version, pkg, isSnapshot} = getPackageNameAndVersion();
 const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
 
-const cwd = process.cwd();
-const packageFile = path.join(cwd, 'package.json');
-const lockfile = path.join(cwd, 'package-lock.json');
 
 if (isSnapshot) {
 	const v = semver.parse(version);
