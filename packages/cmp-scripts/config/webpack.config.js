@@ -169,11 +169,11 @@ exports = module.exports = {
 			warnings: false,
 			errors: true
 		},
-		noInfo: true,
 		proxy: [{
 			context: ['/content', '/dataserver2'],
 			target: 'http://localhost:8082',
-		}]
+		}],
+		stats: 'errors-only',
 	},
 
 	plugins: [

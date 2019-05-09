@@ -36,9 +36,7 @@ call(require.resolve('webpack-dev-server/bin/webpack-dev-server.js'), [
 	'--config', paths.webpackDevConfig,
 	'--host', host,
 	'--port', port,
-	'--quiet',
 	'--watch',
-	// '--progress',
 	'--inline',
 	...SSL
 ]);
