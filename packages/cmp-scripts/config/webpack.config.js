@@ -44,7 +44,7 @@ exports = module.exports = {
 		publicPath: '/'
 	},
 
-	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
+	devtool: 'cheap-module-source-map',
 
 	node: {
 		dgram: 'empty',
