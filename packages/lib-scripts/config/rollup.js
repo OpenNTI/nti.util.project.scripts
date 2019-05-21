@@ -6,7 +6,7 @@ const babel = require('rollup-plugin-babel');
 const json = require('rollup-plugin-json');
 const { eslint } = require('rollup-plugin-eslint');
 const resolve = require('rollup-plugin-node-resolve');
-const string = require('rollup-plugin-string');
+const { string } = require('rollup-plugin-string');
 const image = require('rollup-plugin-img');
 
 const paths = require('./paths');
