@@ -22,7 +22,7 @@ exports = module.exports = {
 		return resolveDev.then(devmode => {
 
 			if (devmode) {
-				expressApp.use(devmode.middleware); //serve in-memory compiled sources/assets
+				(expressApp.parent || expressApp).use(devmode.middleware); //serve in-memory compiled sources/assets
 			}
 
 			return {
