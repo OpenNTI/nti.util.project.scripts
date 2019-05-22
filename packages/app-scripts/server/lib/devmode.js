@@ -20,8 +20,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
 	const api = url.parse(server);
-	const apiHost = api.hostname || 'localhost';
-	const apiPort = api.port;
+
+	// eslint-disable-next-line no-unused-vars
+	const apiPort = api.port, apiHost = api.hostname || 'localhost';
 
 	const devPort = config['webpack-dev-server'] || await getPort();
 
@@ -44,9 +45,10 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		allowedHosts: ['.dev', '.local', '.localhost'],
 		hot: true,
 		hotOnly: true,
-		proxy: {
-			'*': `http://${apiHost}:${apiPort}/`
-		},
+		// This proxy will only work from the direct dev-server port. Only used for debugging.
+		// proxy: {
+		// 	'*': `http://${apiHost}:${apiPort}/`
+		// },
 
 		https: HTTPS && getHTTPS(),
 		contentBase: paths.assetsRoot,
