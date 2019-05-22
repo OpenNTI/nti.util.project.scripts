@@ -41,8 +41,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	const compiler = webpack(webpackConfig);
 
 	const webpackServer = new WebpackServer(compiler, {
-		allowedHosts: ['.dev', '.local'],
-		disableHostCheck: true,
+		allowedHosts: ['.dev', '.local', '.localhost'],
 		hot: true,
 		hotOnly: true,
 		proxy: {
