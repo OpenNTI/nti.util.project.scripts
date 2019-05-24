@@ -6,12 +6,14 @@ const path = require('path');
 const webpack = require('webpack');
 const {isCI} = require('ci-info');
 const tmp = require('tmp');
+const chalk = require('chalk');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
@@ -290,7 +292,9 @@ exports = module.exports = {
 			}
 		}),
 
-		!isCI && new webpack.ProgressPlugin({profile: false}),
+		!isCI && new ProgressBarPlugin({
+			format: '  build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)',
+		}),
 
 		new HtmlWebpackPlugin({
 			alwaysWriteToDisk: true,

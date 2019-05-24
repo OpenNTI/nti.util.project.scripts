@@ -56,6 +56,7 @@
     "null-loader": "^2.0.0",
     "optimize-css-assets-webpack-plugin": "^5.0.0",
     "postcss-flexbugs-fixes": "^4.1.0",
+    "progress-bar-webpack-plugin": "^1.12.1",
     "postcss-loader": "^3.0.0",
     "postcss-preset-env": "^6.0.7",
     "raw-loader": "2.0.0",

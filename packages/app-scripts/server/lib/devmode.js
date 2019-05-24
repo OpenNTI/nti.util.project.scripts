@@ -5,10 +5,22 @@ const readline = require('readline');
 const url = require('url');
 const { HTTPS, getHTTPS } = require('@nti/dev-ssl-config');
 
+function clearLine (n) {
+	const fn = console[n] || console.debug;
+	console[n] = (...args) => {
+		const [first] = args;
+		readline.clearLine(process.stderr, 0);
+		if (typeof first === 'string') {
+			args[0] = '\r' + first;
+		}
+		fn.call(console, ...args);
+	};
+}
 
 const first = x => Array.isArray(x) ? x[0] : x;
 
 exports.setupDeveloperMode = async function setupDeveloperMode (config) {
+	for(let n of ['info', 'log', 'debug']) { clearLine(n); }
 	const webpack = require('webpack');
 	const paths = require('../../config/paths');
 	const webpackConfigFile = require('../../config/webpack.config');
@@ -50,6 +62,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// 	'*': `http://${apiHost}:${apiPort}/`
 		// },
 
+		publicPath: config.basepath,
 		https: HTTPS && getHTTPS(),
 		contentBase: paths.assetsRoot,
 		overlay: {
@@ -64,7 +77,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 			assets: false,
 
-			chunks: debug,
+			chunks: false,
 			chunkModules: false,
 			chunkOrigins: false,
 
@@ -72,8 +85,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 			children: false,
 
 			colors: true,
-			reasons: true,
-			errorDetails: true
+			reasons: debug,
+			errorDetails: true,
+			entrypoints: false,
 		}
 	});
 
@@ -86,9 +100,6 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 				if (err) {
 					console.error(err);
 				}
-
-				readline.clearLine(process.stdout,0);
-				console.info('\rWebPack Dev Server Started');
 			});
 
 			worker.on('disconnect', () => {
