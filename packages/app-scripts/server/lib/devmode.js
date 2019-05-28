@@ -62,7 +62,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// 	'*': `http://${apiHost}:${apiPort}/`
 		// },
 
-		publicPath: config.basepath,
+		// Webpack Dev Server gets confused when setting this... content is served from memory.
+		// The output.publicPath covers us here.
+		// publicPath: config.basepath,
 		https: HTTPS && getHTTPS(),
 		contentBase: paths.assetsRoot,
 		overlay: {
