@@ -43,6 +43,7 @@ Object.assign(exports, {
 		'--cert', path.join(CA_ROOT, 'pki/localhost.crt')
 	],
 	getHTTPS: () => ({
+		ca: fs.readFileSync(path.join(CA_ROOT, 'cacert.pem')),
 		cert: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.crt')),
 		key: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.key'))
 	})

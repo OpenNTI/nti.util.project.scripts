@@ -66,7 +66,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// The output.publicPath covers us here.
 		// publicPath: config.basepath,
 		https: HTTPS && getHTTPS(),
+		compress: true,
 		contentBase: paths.assetsRoot,
+		public: `localhost:${devPort}`,
 		overlay: {
 			errors: true,
 			warnings: false,
