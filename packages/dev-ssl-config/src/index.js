@@ -14,6 +14,16 @@ if (!HAS_DEV_CERT && NTI_BUILDOUT_PATH && !fs.existsSync(NTI_BUILDOUT_PATH, 'etc
 	NTI_BUILDOUT_PATH = false;
 }
 
+const CA_ROOT = HAS_DEV_CERT
+	? DEV_CA
+	: NTI_BUILDOUT_PATH
+		? path.join(NTI_BUILDOUT_PATH, 'etc')
+		: false;
+
+const CA = path.join(DEV_CA, 'cacert.pem');
+const KEY = path.join(CA_ROOT, 'pki/localhost.key');
+const CERT = path.join(CA_ROOT, 'pki/localhost.crt');
+
 if (!HAS_DEV_CERT && !NTI_BUILDOUT_PATH) {
 	console.error(`
 
@@ -30,22 +40,16 @@ if (!HAS_DEV_CERT && !NTI_BUILDOUT_PATH) {
 	process.exit(1);
 }
 
-const CA_ROOT = HAS_DEV_CERT
-	? DEV_CA
-	: NTI_BUILDOUT_PATH
-		? path.join(NTI_BUILDOUT_PATH, 'etc')
-		: false;
-
 Object.assign(exports, {
 	HTTPS: Boolean(CA_ROOT),
 	SSL: !CA_ROOT ? [] : [
 		'--https',
-		'--key', path.join(CA_ROOT, 'pki/localhost.key'),
-		'--cert', path.join(CA_ROOT, 'pki/localhost.crt')
+		'--key', KEY,
+		'--cert', CERT
 	],
 	getHTTPS: () => ({
-		ca: HAS_DEV_CA ? fs.readFileSync(path.join(DEV_CA, 'cacert.pem')) : void 0,
-		cert: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.crt')),
-		key: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.key'))
+		ca: HAS_DEV_CA ? fs.readFileSync(CA) : void 0,
+		cert: fs.readFileSync(CERT),
+		key: fs.readFileSync(KEY)
 	})
 });
