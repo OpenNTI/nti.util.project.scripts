@@ -7,13 +7,14 @@ let {HOME, NTI_BUILDOUT_PATH = false} = process.env;
 
 const DEV_CA = path.join(HOME, 'DevCA');
 
-const HAS_DEV_CA = fs.existsSync(path.join(DEV_CA, 'pki'));
+const HAS_DEV_CA = fs.existsSync(DEV_CA);
+const HAS_DEV_CERT = fs.existsSync(path.join(DEV_CA, 'pki'));
 
-if (!HAS_DEV_CA && NTI_BUILDOUT_PATH && !fs.existsSync(NTI_BUILDOUT_PATH, 'etc/pki')) {
+if (!HAS_DEV_CERT && NTI_BUILDOUT_PATH && !fs.existsSync(NTI_BUILDOUT_PATH, 'etc/pki')) {
 	NTI_BUILDOUT_PATH = false;
 }
 
-if (!HAS_DEV_CA && !NTI_BUILDOUT_PATH) {
+if (!HAS_DEV_CERT && !NTI_BUILDOUT_PATH) {
 	console.error(`
 
 
@@ -29,7 +30,7 @@ if (!HAS_DEV_CA && !NTI_BUILDOUT_PATH) {
 	process.exit(1);
 }
 
-const CA_ROOT = HAS_DEV_CA
+const CA_ROOT = HAS_DEV_CERT
 	? DEV_CA
 	: NTI_BUILDOUT_PATH
 		? path.join(NTI_BUILDOUT_PATH, 'etc')
@@ -43,7 +44,7 @@ Object.assign(exports, {
 		'--cert', path.join(CA_ROOT, 'pki/localhost.crt')
 	],
 	getHTTPS: () => ({
-		ca: fs.readFileSync(path.join(CA_ROOT, 'cacert.pem')),
+		ca: HAS_DEV_CA ? fs.readFileSync(path.join(DEV_CA, 'cacert.pem')) : void 0,
 		cert: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.crt')),
 		key: fs.readFileSync(path.join(CA_ROOT, 'pki/localhost.key'))
 	})
