@@ -47,9 +47,9 @@ Object.assign(exports, {
 		'--key', KEY,
 		'--cert', CERT
 	],
-	getHTTPS: () => ({
+	getHTTPS: () => CA_ROOT && {
 		ca: HAS_DEV_CA ? fs.readFileSync(CA) : void 0,
 		cert: fs.readFileSync(CERT),
 		key: fs.readFileSync(KEY)
-	})
+	}
 });
