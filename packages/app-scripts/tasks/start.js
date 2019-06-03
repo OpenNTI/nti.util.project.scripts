@@ -86,7 +86,7 @@ call(process.argv[0], [
 	env: {
 		...process.env,
 		...(DEBUG ? {} : {
-			DEBUG: '-NodeService:*,*:error'
+			DEBUG: '*:error,-NodeService'
 		})
 	},
 	stdio: 'inherit'
