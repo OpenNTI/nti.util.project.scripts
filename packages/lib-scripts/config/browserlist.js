@@ -1,9 +1,44 @@
 'use strict';
+const {agents} = require('caniuse-lite/dist/unpacker/agents');
+const browserslist = require('browserslist');
+const chalk = require('chalk');
+const {isCI} = require('ci-info');
+
 // Test queries and coverage here: http://browserl.ist
 const { NTI_DEV_BROWSER } = process.env;
-module.exports = NTI_DEV_BROWSER ? NTI_DEV_BROWSER.split(',') : [
+const query = module.exports = NTI_DEV_BROWSER ? NTI_DEV_BROWSER.split(',') : [
 	'> 1% in US',
 	'last 2 versions',
 	'not dead',
 	'IE 11',
 ];
+
+if (process.stdout.isTTY || isCI) {
+	const byLocale = (a, b) => a.localeCompare(b);
+	const getName = n => (agents[n] || {}).browser || n;
+	const getVers = (o, n) => o[n] = (o[n] || []);
+	const dedupe = (o, line) => {
+		const [n, ver] = line.split(/\s+/);
+		getVers(o, getName(n)).push(ver);
+		return o;
+	};
+
+	const browsers = browserslist(query).reduce(dedupe, {});
+	const combine = (key) => [key, browsers[key].join(', ')].join(' ');
+
+	console.log(`
+Selected Browser targets:
+  ${chalk.bold.blue(
+		Object.keys(browsers).map(combine).sort(byLocale).join('\n  ')
+	)}
+
+Default targets are defined in ${chalk.grey('@nti/lib-scripts/config/browserlist')}.
+Developers may locally override this using the environment variable:
+
+  ${chalk.bold.blue('NTI_DEV_BROWSER')}="last 1 chrome version"
+
+Test queries and coverage here: ${chalk.bold.blue('http://browserl.ist')}
+
+`);
+
+}
