@@ -29,7 +29,7 @@ const postCss = (options = {}) => ({
 			require('postcss-preset-env')({
 				browsers,
 				autoprefixer: {
-					browsers,
+					overrideBrowserslist: browsers,
 					flexbox: 'no-2009',
 					grid: true,
 				},
