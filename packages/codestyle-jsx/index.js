@@ -51,7 +51,7 @@ module.exports = {
 		'react/display-name': ['warn'],
 
 		// Do not require prop-type validaion for very common props provided by the system.
-		'react/prop-types': ['error', { ignore: ['children', 'className']}],
+		'react/prop-types': ['warn', { ignore: ['children', 'className']}],
 
 		//JSX should always be wrapped in parentheses... especically when multiline.
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md
