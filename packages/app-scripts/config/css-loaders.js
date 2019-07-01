@@ -66,7 +66,7 @@ const loaders = (options = {}) => [
 			sass(options.sass)
 		]
 	},
-	
+
 	{
 		test: /\.css$/,
 		include: [
@@ -79,8 +79,9 @@ const loaders = (options = {}) => [
 			style(),
 			cache(),
 			css({
-				modules: true,
-				localIdentName: '[local]--[hash:base64:8]'
+				modules: {
+					localIdentName: '[local]--[hash:base64:8]'
+				}
 			}),
 			postCss(),
 			resolveUrl()

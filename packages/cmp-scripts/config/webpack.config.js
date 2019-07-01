@@ -4,7 +4,6 @@ process.env.NODE_ENV = 'development';
 
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
-const path = require('path');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
