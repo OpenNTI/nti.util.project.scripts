@@ -1,6 +1,6 @@
 {
   "name": "@nti/codestyle-jsx",
-  "version": "2.9.11",
+  "version": "2.10.0",
   "description": "NextThought code style standard",
   "main": "index.js",
   "repository": {
@@ -22,7 +22,7 @@
     "webpack": "*"
   },
   "dependencies": {
-    "@nti/codestyle-js": "^2.4.0",
+    "@nti/codestyle-js": "^2.10.0",
     "eslint-plugin-react": "^7.12.1",
     "stylelint": "^10.0.1",
     "stylelint-config-standard": "^18.0.0"
