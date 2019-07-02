@@ -120,6 +120,7 @@ module.exports = {
 		'no-debugger': DEV ? 'warn' : 'error',
 		'no-multiple-empty-lines': ['warn', {'max': 3, 'maxBOF': 3, 'maxEOF': 1}],
 		'no-new': 'error',
+		'no-prototype-builtins': 'warn',
 		'no-restricted-globals': ['error'].concat(restrictedGlobals),
 		'no-shadow': ['warn', {'builtinGlobals': false, 'hoist': 'never', 'allow': ['done']}],
 		'no-throw-literal': 'error',
