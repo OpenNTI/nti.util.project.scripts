@@ -130,6 +130,7 @@ module.exports = {
 		'prefer-object-spread': 'warn',
 		'quotes': ['warn', 'single'],
 		'radix': 'error',
+		'require-atomic-updates': 'warn',
 		'semi': 'error',
 		'space-before-blocks': ['warn', 'always'],
 		'space-before-function-paren': ['warn', {'anonymous': 'always', 'named': 'always'}],
