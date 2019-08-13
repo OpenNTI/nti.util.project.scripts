@@ -72,12 +72,13 @@ exports = module.exports = {
 			{ parser: { requireEnsure: false } },
 
 			...jsPreloaders({
-				eslint: {
-					useEslintrc: false,
-					baseConfig: {
-						extends: [require.resolve('./eslintrc')]
-					}
-				},
+				// We still need eslint to reconfigure for each workspace project
+				// eslint: {
+				// 	useEslintrc: false,
+				// 	baseConfig: {
+				// 		extends: [require.resolve('./eslintrc')]
+				// 	}
+				// },
 				includes: [
 					paths.testApp
 				]
