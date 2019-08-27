@@ -93,28 +93,36 @@ const questions = [
 	},
 ];
 
-lockVerify(paths.path)
-	.then(({warnings = [], errors = [], status}) => {
-		warnings.forEach(e => write(chalk.yellow('%s %s'), chalk.underline('Warning:'), e));
-		if (warnings.length > 0) {
-			write('');
-		}
-
-		if (!status) {
-			errors.forEach(e => write(chalk.red('%s %s'), chalk.underline('Error:'), e));
-			write('');
-			write(chalk.red(chalk.bold('Check that package-lock.json is in sync with package.json')));
-			write('');
-			process.exit(1);
-		}
-		return inquirer.prompt(questions);
-	})
+Promise.resolve()
+	.then(checkLockfile)
+	.then(() => inquirer.prompt(questions))
 	.then(answers => (onBehind(answers.behind), answers))
 	.then(performRelease)
 	.catch(e => {
 		write('\n\nOuch... \n',e.stack || e);
 	});
 
+
+const usesLock = async () => (await call.exec(paths.path, 'npm config get package-lock')).trim() === 'true';
+
+async function checkLockfile () {
+	if (!await usesLock()) {return;}
+
+	const {warnings = [], errors = [], status} = await lockVerify(paths.path);
+
+	warnings.forEach(e => write(chalk.yellow('%s %s'), chalk.underline('Warning:'), e));
+	if (warnings.length > 0) {
+		write('');
+	}
+
+	if (!status) {
+		errors.forEach(e => write(chalk.red('%s %s'), chalk.underline('Error:'), e));
+		write('');
+		write(chalk.red(chalk.bold('Check that package-lock.json is in sync with package.json')));
+		write('');
+		process.exit(1);
+	}
+}
 
 function onBehind (e) {
 	if (!e) {return;}
@@ -127,7 +135,7 @@ function onBehind (e) {
 }
 
 
-function performRelease () {
+async function performRelease () {
 	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 	for (let task of tasks) {
@@ -138,6 +146,11 @@ function performRelease () {
 	const version = semver.inc(pkg.version, inc);
 	const newTag = `v${version}`;
 	const nextVersion = semver.inc(version, 'minor') + '-alpha';
+	const lock = await usesLock();
+	const packageFiles = [
+		'package.json',
+		lock && 'package-lock.json'
+	].filter(Boolean);
 
 	// npm --no-git-tag-version version $VERSION > /dev/null
 	write(chalk.cyan(`\nSetting release version: ${chalk.underline.magenta(version)}...`));
@@ -145,7 +158,7 @@ function performRelease () {
 
 	write(chalk.cyan(`\nCommiting release version ${chalk.underline.magenta(version)}, tagging...`));
 	// git add package.json package-lock.json
-	call('git', ['add', 'package.json', 'package-lock.json']);
+	call('git', ['add', ...packageFiles]);
 	// git commit -m "$VERSION" > /dev/null
 	call('git', ['commit', '-m', version]);
 	// git tag "v$VERSION" -m "Cut on $DATE"
@@ -158,7 +171,7 @@ function performRelease () {
 		call('npm', ['--no-git-tag-version', 'version', nextVersion], {stdio: null});
 
 		// git add package.json package-lock.json
-		call('git', ['add', 'package.json', 'package-lock.json']);
+		call('git', ['add', ...packageFiles]);
 		// git commit -m "$VERSION" > /dev/null
 		call('git', ['commit', '-m', nextVersion]);
 	}
