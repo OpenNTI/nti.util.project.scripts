@@ -12,18 +12,16 @@ const jsTestExp = /\.m?jsx?$/;
 
 // options is a mapping of loader => options for that loader, e.g. {eslint: {useEslintrc: false}}
 const standardPreloaderEntries = (options = {}) => [
-	cache(),
 	!PROD && {
 		// First, run the linter.
 		// It's important to do this before Babel processes the JS.
 		loader: require.resolve('eslint-loader'),
 		options: {
-			// We can't lock the config until we can delete the web-app's legacy directory
-			//
-			// useEslintrc: false,
-			// baseConfig: {
-			// 	extends: [require.resolve('./eslintrc')]
-			// },
+			useEslintrc: false,
+			baseConfig: {
+				root: true,
+				extends: [require.resolve('./eslintrc')]
+			},
 			emitWarning: false,
 			eslintPath: require.resolve('eslint'),
 			failOnError: true,
@@ -32,12 +30,20 @@ const standardPreloaderEntries = (options = {}) => [
 			ignore: false,
 			...(options.eslint || {})
 		}
-	}
+	},
+
 ];
+
+// legacy baggage-load; remove once we've weaned ourselves off of sass
+const BAGGAGE_LOADER = {
+	loader: require.resolve('@nti/baggage-loader'),
+	options: {
+		'[file].scss': {}
+	}
+};
 
 const preloaders = (options = {}) => [
 	{
-		// legacy baggage-load; remove once we've weaned ourselves off of sass
 		test: jsTestExp,
 		enforce: 'pre',
 		include: [
@@ -45,16 +51,31 @@ const preloaders = (options = {}) => [
 			path.join(paths.nodeModules, '@nti'),
 			//Only lint|baggage source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-			...(options.includes || [])
+			...(options.include || options.includes || [])
+		],
+		exclude: [
+			path.join(paths.src, 'main/js/legacy'),
+			...(options.exclude || [])
 		],
 		use: [
 			...standardPreloaderEntries(options),
-			{
-				loader: require.resolve('@nti/baggage-loader'),
-				options: {
-					'[file].scss': {}
+			BAGGAGE_LOADER,
+		].filter(Boolean)
+	},
+	// legacy lint
+	{
+		test: jsTestExp,
+		enforce: 'pre',
+		include: path.join(paths.src, 'main/js/legacy'),
+		use: [
+			...standardPreloaderEntries({
+				...options,
+				eslint: {
+					...options.eslint,
+					useEslintrc: true
 				}
-			},
+			}),
+			BAGGAGE_LOADER,
 		].filter(Boolean)
 	}
 ];
