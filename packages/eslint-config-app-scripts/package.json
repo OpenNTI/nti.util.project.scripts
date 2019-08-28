@@ -1,0 +1,24 @@
+{
+  "name": "@nti/eslint-config-app-scripts",
+  "version": "1.0.0",
+  "description": "NextThought code style standard",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+  },
+  "keywords": [
+    "eslint",
+    "eslintconfig",
+    "codestyle"
+  ],
+  "author": "nextthought",
+  "license": "UNLICENCED",
+  "publishConfig": {
+    "registry": "https://npm.nextthought.com"
+  },
+  "dependencies": {
+    "@nti/codestyle-jsx": "^2.11.0",
+    "babel-eslint": "^10.0.3"
+  }
+}
