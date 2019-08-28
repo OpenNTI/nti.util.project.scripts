@@ -142,7 +142,7 @@ module.exports = {
 
 		'import/no-duplicates': 'warn',
 		'import/no-extraneous-dependencies': ['error', {'devDependencies': ['**/test/*.js', '**/*.spec.js']}],
-		'import/no-unresolved': ['error', {'commonjs': true}],
+		// 'import/no-unresolved': ['error', {'commonjs': true}],
 		'import/order': ['warn', {'newlines-between': 'always', 'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']}],
 		'import/no-amd': 'error',
 		'import/no-commonjs': 'error',
