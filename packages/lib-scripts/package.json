@@ -1,6 +1,6 @@
 {
   "name": "@nti/lib-scripts",
-  "version": "2.10.8",
+  "version": "2.11.0",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -47,7 +47,7 @@
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-flow": "^7.0.0",
     "@babel/runtime": "^7.0.0",
-    "@nti/codestyle-js": "^2.10.2",
+    "@nti/codestyle-js": "^2.11.0",
     "@nti/daily-tasks": "^2.10.0",
     "@nti/git-state": "^4.1.0",
     "@nti/install-snapshots": "^2.10.0",
