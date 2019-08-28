@@ -2,9 +2,8 @@
 // const paths = require('./paths');
 
 module.exports = {
-	'extends': [
+	parser: 'babel-eslint',
+	extends: [
 		require.resolve('@nti/codestyle-jsx')
-	],
-
-	'parser': 'babel-eslint'
+	]
 };

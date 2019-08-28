@@ -1,13 +1,8 @@
 'use strict';
 
 module.exports = {
+	parser: 'babel-eslint',
 	extends: [
 		require.resolve('@nti/codestyle-js')
-	],
-
-	env: {
-		browser: false
-	},
-
-	'parser': 'babel-eslint'
+	]
 };
