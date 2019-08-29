@@ -13,7 +13,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const ProgressBarPlugin = require('@nti/progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 //
 const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
