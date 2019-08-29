@@ -1,5 +1,8 @@
 'use strict';
-const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
+const IN_ATOM = 'ATOM_HOME' in process.env;
+const IN_VSCODE = 'VSCODE_PID' in process.env;
+const IN_IDE = IN_ATOM || IN_VSCODE;
+const DEV = process.env.NODE_ENV !== 'production' || IN_IDE;
 
 // The ESLint browser environment defines all browser globals as valid,
 // even though most people don't know some of them exist (e.g. `name` or `status`).
@@ -117,7 +120,7 @@ module.exports = {
 		'indent': ['error', 'tab'],
 		'no-caller': 'error',
 		'no-console': 'warn',
-		'no-debugger': DEV ? 'warn' : 'error',
+		'no-debugger': IN_IDE ? 'off' : DEV ? 'warn' : 'error',
 		'no-multiple-empty-lines': ['warn', {'max': 3, 'maxBOF': 3, 'maxEOF': 1}],
 		'no-new': 'error',
 		'no-prototype-builtins': 'warn',
@@ -130,7 +133,7 @@ module.exports = {
 		'prefer-object-spread': 'warn',
 		'quotes': ['warn', 'single'],
 		'radix': 'error',
-		'require-atomic-updates': 'warn',
+		'require-atomic-updates': IN_IDE ? 'warn' : 'off',
 		'semi': 'error',
 		'space-before-blocks': ['warn', 'always'],
 		'space-before-function-paren': ['warn', {'anonymous': 'always', 'named': 'always'}],
