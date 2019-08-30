@@ -10,7 +10,7 @@ const DEV_CA = path.join(HOME, 'DevCA');
 const HAS_DEV_CA = fs.existsSync(DEV_CA);
 const HAS_DEV_CERT = fs.existsSync(path.join(DEV_CA, 'pki'));
 
-if (!HAS_DEV_CERT && NTI_BUILDOUT_PATH && !fs.existsSync(NTI_BUILDOUT_PATH, 'etc/pki')) {
+if (!HAS_DEV_CERT && NTI_BUILDOUT_PATH && !fs.existsSync(path.join(NTI_BUILDOUT_PATH, 'etc/pki'))) {
 	NTI_BUILDOUT_PATH = false;
 }
 
@@ -21,8 +21,8 @@ const CA_ROOT = HAS_DEV_CERT
 		: false;
 
 const CA = path.join(DEV_CA, 'cacert.pem');
-const KEY = path.join(CA_ROOT, 'pki/localhost.key');
-const CERT = path.join(CA_ROOT, 'pki/localhost.crt');
+const KEY = CA_ROOT && path.join(CA_ROOT, 'pki/localhost.key');
+const CERT = CA_ROOT && path.join(CA_ROOT, 'pki/localhost.crt');
 
 if (!HAS_DEV_CERT && !NTI_BUILDOUT_PATH) {
 	console.error(`
