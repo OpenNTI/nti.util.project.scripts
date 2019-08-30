@@ -13,7 +13,9 @@ const call = require('./utils/call-cmd');
 
 const {json: {name: command}} = readPackageJson(currentScriptsPaths.ownPackageJson);
 
-const tasks = ['check', 'test'];
+const skipChecks = process.argv.includes('--skip-checks');
+
+const tasks = skipChecks ? [] : ['check', 'test'];
 const DATE = new Date().toString();
 
 const pkg = require(paths.packageJson);
