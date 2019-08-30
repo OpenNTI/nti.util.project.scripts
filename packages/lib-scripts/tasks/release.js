@@ -98,7 +98,12 @@ async function preflightChecks () {
 
 	if (dirty) {
 		write('\n\n' + chalk.red(chalk.underline(paths.path) + ' has uncommited changes.') + '\n\n');
-		process.exit(1);
+		if (!skipChecks) {
+			process.exit(1);
+		} else {
+			write('\n\n' + chalk.red('Waiting 5 seconds, ctrl+c now or forever hold your peace.'));
+			await new Promise(t => setTimeout(t, 5000));
+		}
 	}
 
 	if (branch === 'master' && !/-alpha$/.test(pkg.version)) {
