@@ -36,39 +36,6 @@ const hasRemote = Boolean(remoteBranch);
 
 const inc = branch === 'master' ? (major ? 'major' : 'minor') : 'patch';
 
-if (branch === 'master' && !process.argv.includes('--skip-lock-refresh')) {
-	tasks.unshift('update-locks');
-}
-
-if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
-	write('\n\n'
-		+ chalk.red('You cannot release a version while on feature branch: ' + chalk.underline(branch)
-		+ '.\nYou must be on ' + chalk.underline('master')) + ' or ' + chalk.underline('maint-n.m') + '\n\n');
-}
-
-if (major && branch !== 'master') {
-	write('\n\n'
-		+ chalk.red('You cannot release a major version increment while on branch: ' + chalk.underline(branch)
-		+ '.\nYou must be on ' + chalk.underline('master')) + '\n\n');
-	process.exit(1);
-}
-
-if (dirty) {
-	write('\n\n' + chalk.red(chalk.underline(paths.path) + ' has uncommited changes.') + '\n\n');
-	process.exit(1);
-}
-
-if (branch === 'master' && !/-alpha$/.test(pkg.version)) {
-	write('\n\n' + chalk.red(chalk.underline(pkg.name + '@' + pkg.version) + ' should end in -alpha.') + '\n\n');
-	process.exit(1);
-}
-
-if (branch !== 'master' && /-alpha$/.test(pkg.version)) {
-	write('\n\n' + chalk.red('The branch and version are missmatched. Alpha tags should not be on maint branches.') + '\n\n');
-	process.exit(1);
-}
-
-
 const questions = [
 	{
 		type: 'list',
@@ -95,6 +62,7 @@ const questions = [
 
 Promise.resolve()
 	.then(checkLockfile)
+	.then(preflightChecks)
 	.then(() => inquirer.prompt(questions))
 	.then(answers => (onBehind(answers.behind), answers))
 	.then(performRelease)
@@ -104,6 +72,43 @@ Promise.resolve()
 
 
 const usesLock = async () => (await call.exec(paths.path, 'npm config get package-lock')).trim() === 'true';
+
+async function preflightChecks () {
+	const locked = await usesLock();
+
+	if (branch === 'master' && locked && !process.argv.includes('--skip-lock-refresh')) {
+		tasks.unshift('update-locks');
+	}
+
+	if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
+		write('\n\n'
+			+ chalk.red('You cannot release a version while on feature branch: ' + chalk.underline(branch)
+			+ '.\nYou must be on ' + chalk.underline('master')) + ' or ' + chalk.underline('maint-n.m') + '\n\n');
+		process.exit(1);
+	}
+
+	if (major && branch !== 'master') {
+		write('\n\n'
+			+ chalk.red('You cannot release a major version increment while on branch: ' + chalk.underline(branch)
+			+ '.\nYou must be on ' + chalk.underline('master')) + '\n\n');
+		process.exit(1);
+	}
+
+	if (dirty) {
+		write('\n\n' + chalk.red(chalk.underline(paths.path) + ' has uncommited changes.') + '\n\n');
+		process.exit(1);
+	}
+
+	if (branch === 'master' && !/-alpha$/.test(pkg.version)) {
+		write('\n\n' + chalk.red(chalk.underline(pkg.name + '@' + pkg.version) + ' should end in -alpha.') + '\n\n');
+		process.exit(1);
+	}
+
+	if (branch !== 'master' && /-alpha$/.test(pkg.version)) {
+		write('\n\n' + chalk.red('The branch and version are missmatched. Alpha tags should not be on maint branches.') + '\n\n');
+		process.exit(1);
+	}
+}
 
 async function checkLockfile () {
 	if (!await usesLock()) {return;}
