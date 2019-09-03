@@ -102,6 +102,7 @@ const loaders = (options = {}) => [
 
 const plugins = (options = {}) => [
 	PROD && new MiniCssExtractPlugin({
+		ignoreOrder: true,
 		filename: 'resources/[name]-[contenthash].css',
 		...(options.miniCssExtract || {})
 	})
