@@ -1,3 +1,2 @@
 'use strict';
-require('@babel/polyfill');
-require('whatwg-fetch');
+require('@nti/app-scripts/config/polyfills');

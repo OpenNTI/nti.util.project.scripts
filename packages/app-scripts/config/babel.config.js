@@ -9,7 +9,7 @@ module.exports = function (api, opts) {
 	const base = baseConfig(api, {
 		...opts,
 		'@babel/preset-env': {
-			// useBuiltIns: 'entry',
+			useBuiltIns: 'entry',
 			targets: {
 				browsers
 			}

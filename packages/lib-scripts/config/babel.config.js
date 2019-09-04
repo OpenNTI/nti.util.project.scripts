@@ -10,6 +10,7 @@ module.exports = function (api, opts) {
 		presets: [
 			['@babel/preset-env', {
 				shippedProposals: true,
+				corejs: { version: 3, proposals: true },
 				targets: {
 					node: isCI
 						? '8.9.4' //just in case the build server's node is newer than PROD
@@ -25,6 +26,6 @@ module.exports = function (api, opts) {
 			['@babel/plugin-proposal-export-default-from'],
 			['@babel/plugin-proposal-export-namespace-from'],
 			['@babel/plugin-syntax-dynamic-import'],
-		].filter(Boolean)
+		]
 	};
 };
