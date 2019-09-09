@@ -4,16 +4,19 @@ const browserslist = require('browserslist');
 const chalk = require('chalk');
 const {isCI} = require('ci-info');
 
+const isWorker = process.argv.some(x => (/thread-loader.*worker/ig).test(x));
+
 // Test queries and coverage here: http://browserl.ist
 const { NTI_DEV_BROWSER } = process.env;
-const query = module.exports = NTI_DEV_BROWSER ? NTI_DEV_BROWSER.split(',') : [
+const query = module.exports = !isCI && NTI_DEV_BROWSER ? NTI_DEV_BROWSER.split(',') : [
 	'> 1% in US',
 	'last 2 versions',
 	'not dead',
 	'IE 11',
 ];
 
-if (process.stdout.isTTY || isCI) {
+
+if (!isWorker && (process.stdout.isTTY || isCI)) {
 	const byLocale = (a, b) => a.localeCompare(b);
 	const getName = n => (agents[n] || {}).browser || n;
 	const getVers = (o, n) => o[n] = (o[n] || []);
