@@ -83,7 +83,11 @@ const preloaders = (options = {}) => [
 const loaders = (options = {}) => [
 	{
 		test: jsTestExp,
-		exclude: [/[/\\\\]core-js[/\\\\]/, /[/\\\\]@babel[/\\\\]/],
+		exclude: [
+			/[/\\\\]core-js[/\\\\]/,
+			/[/\\\\]@babel[/\\\\]/,
+			/[/\\\\]react(-dom)?[/\\\\]/,
+		],
 		use: [
 			cache(),
 			{
