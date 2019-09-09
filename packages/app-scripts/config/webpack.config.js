@@ -194,9 +194,11 @@ exports = module.exports = {
 
 					...cssLoaders({
 						sass: {
-							includePaths: [
-								paths.resolveApp('src/main/resources/scss')
-							]
+							sassOptions: {
+								includePaths: [
+									paths.resolveApp('src/main/resources/scss')
+								]
+							}
 						}
 					}),
 
