@@ -12,6 +12,7 @@ const sanityCheck = require('./utils/sanity-check');
 const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
+const WORKER = process.env.__NTI_RELEASING || false;
 const DEBUG = process.argv.includes('--debug');
 
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
@@ -48,26 +49,27 @@ process.on('unhandledRejection', err => {
 	process.exit(1);
 });
 
-if (!SKIP) {
+if (WORKER) {
+	runBuild();
+}
+
+if (!WORKER && !SKIP) {
 	const activeScripts = path.dirname(process.argv[1]);
 	tasks.push(
 		call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
-		call('node ' + path.resolve(activeScripts, './test'), 'Tests...')
+		call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
+		call('npx --quiet @nti/gen-docs', 'Generating docs...')
 	);
 }
 
-const build = runBuild();
-ora.promise(build, 'Build...');
-tasks.push(build);
+if (!WORKER) {
+	tasks.push(call(process.argv.join(' '), 'Building...'));
 
-if (!SKIP) {
-	tasks.push(call('npx --quiet @nti/gen-docs', 'Generating docs...'));
+	Promise.all(tasks)
+		.then(() => spinner.succeed('Done.'))
+		.catch(er => {
+			spinner.fail('Failed');
+			console.log(er);
+			process.exit(1);
+		});
 }
-
-Promise.all(tasks)
-	.then(() => spinner.succeed('Done.'))
-	.catch(er => {
-		spinner.fail('Failed');
-		console.log(er);
-		process.exit(1);
-	});
