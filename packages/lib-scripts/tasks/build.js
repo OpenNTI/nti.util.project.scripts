@@ -24,7 +24,7 @@ const signal = new Cancelable();
 const call = (cmd, msg) => {
 	const t = exec(paths.path, cmd, signal)
 		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
-	spinner.promise(t, msg);
+	ora.promise(t, msg);
 	return t;
 };
 
@@ -51,12 +51,14 @@ process.on('unhandledRejection', err => {
 if (!SKIP) {
 	const activeScripts = path.dirname(process.argv[1]);
 	tasks.push(
-		call('node ' + path.resolve(activeScripts, './check'), 'Linting.'),
-		call('node ' + path.resolve(activeScripts, './test'), 'Tests.')
+		call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
+		call('node ' + path.resolve(activeScripts, './test'), 'Tests...')
 	);
 }
 
-tasks.push(runBuild());
+const build = runBuild();
+ora.promise(build, 'Build...');
+tasks.push(build);
 
 if (!SKIP) {
 	tasks.push(call('npx --quiet @nti/gen-docs', 'Generating docs...'));
