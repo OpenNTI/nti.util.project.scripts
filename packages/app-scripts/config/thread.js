@@ -12,7 +12,7 @@ module.exports = function thread (options = {}) {
 	]);
 
 	return {
-		loader: threadLoader,
+		loader: require.resolve('thread-loader'),
 		options
 	};
 };
