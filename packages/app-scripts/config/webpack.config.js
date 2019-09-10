@@ -253,10 +253,9 @@ exports = module.exports = {
 		splitChunks: {
 			chunks: 'all',
 			name: true,
-			minSize: 100000,
-			maxSize: 1000000,
 			cacheGroups: {
 				shared: {
+					reuseExistingChunk: true,
 					test: (module) => (
 						module.context
 						&& /node_modules/.test(module.context)
@@ -264,6 +263,7 @@ exports = module.exports = {
 					),
 				},
 				vendor: {
+					reuseExistingChunk: true,
 					test: (module) => (
 						module.context
 						&& /node_modules/.test(module.context)
