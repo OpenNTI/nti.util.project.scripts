@@ -32,7 +32,12 @@ call.exec = (cwd, cmd, cancelable) => new Promise((finish, fail) => {
 		unsub && unsub();
 		if (!cancelable || !cancelable.canceled) {
 			let out = `${stderr}\n${stdout}`;
-			if (er) {fail(`${er.stack || er.message || er}\n${out}`);}
+			if (er) {
+				fail(
+					(/Command failed/i.test(er.message))
+						? out
+						: `${er.stack || er.message || er}\n${out}`);
+			}
 			else {finish(out);}
 		}
 	});
