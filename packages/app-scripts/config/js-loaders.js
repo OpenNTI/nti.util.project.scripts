@@ -1,9 +1,9 @@
 'use strict';
 const path = require('path');
-
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
 const cache = require('./cache');
+const thread = require('./thread');
 const {PROD} = require('./env');
 const paths = require('./paths');
 const workspaceLinks = require('./workspace-links');
@@ -80,38 +80,38 @@ const preloaders = (options = {}) => [
 	}
 ];
 
-const loaders = (options = {}) => [
-	{
-		test: jsTestExp,
-		exclude: [
-			/[/\\\\]core-js[/\\\\]/,
-			/[/\\\\]@babel[/\\\\]/,
-			/[/\\\\]react(-dom)?[/\\\\]/,
-		],
-		use: [
-			cache(),
-			{
-				loader: require.resolve('thread-loader'),
-				options: {
-					...(PROD ? {} : {poolTimeout: Infinity}), // keep workers alive for more effective watch mode})
-					...(options.thread || {})
-				}
-			},
-			{
-				loader: require.resolve('babel-loader'),
-				options: {
-					babelrc: false,
-					compact: false,
-					cacheDirectory: false,
-					cacheCompression: false,
-					highlightCode: true,
-					...(options.babel || {})
-				}
-			},
-		].filter(Boolean)
-	},
 
-];
+const loaders = (options = {}) => {
+
+	return [
+		{
+			test: jsTestExp,
+			exclude: [
+				/[/\\\\]core-js[/\\\\]/,
+				/[/\\\\]@babel[/\\\\]/,
+				/[/\\\\]react(-dom)?[/\\\\]/,
+			],
+			use: [
+				cache(options.cache),
+				thread({
+					...(PROD ? {} : {poolTimeout: Infinity}), // keep workers alive for more effective watch mode})
+					...options.thread
+				}),
+				{
+					loader: require.resolve('babel-loader'),
+					options: {
+						babelrc: false,
+						compact: false,
+						cacheDirectory: false,
+						cacheCompression: false,
+						highlightCode: true,
+						...(options.babel || {})
+					}
+				},
+			].filter(Boolean)
+		},
+	];
+};
 
 module.exports = {
 	loaders,
