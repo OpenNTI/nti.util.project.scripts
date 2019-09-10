@@ -25,14 +25,14 @@ const call = (cmd, msg) => {
 		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
 };
 
-const runBuild = global.runBuild || async () => {
+const runBuild = global.runBuild || (async () => {
 	//Blank out lib
 	await fs.emptyDir(path.resolve(paths.path, 'lib'));
 
 	await buildBundle();
 
 	await sanityCheck();
-};
+});
 
 
 //Expose unhandled rejected promises.
