@@ -8,7 +8,7 @@ const Cancelable = require('./utils/cancelable');
 const {exec} = require('./utils/call-cmd');
 const buildBundle = require('./utils/build-with-rollup');
 const sanityCheck = require('./utils/sanity-check');
-const paths = require('../config/paths');
+const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
 const DEBUG = process.argv.includes('--debug');
@@ -21,7 +21,7 @@ const signal = new Cancelable();
 const call = (cmd, msg) => {
 	if (msg) { console.log(msg); }
 	return exec(paths.path, cmd, signal)
-		.then(x => (msg && console.log(chalk.green(`${msg} finished.`)), x))
+		.then(x => (msg && console.log(chalk.green(`\n${msg} finished.`)), x))
 		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
 };
 
@@ -46,9 +46,10 @@ process.on('unhandledRejection', err => {
 });
 
 if (!SKIP) {
+	const activeScripts = path.dirname(process.argv[1]);
 	tasks.push(
-		call('node ' + require.resolve('./check'), 'Linting.'),
-		call('node ' + require.resolve('./test'), 'Tests.')
+		call('node ' + path.resolve(activeScripts, './check'), 'Linting.'),
+		call('node ' + path.resolve(activeScripts, './test'), 'Tests.')
 	);
 }
 
