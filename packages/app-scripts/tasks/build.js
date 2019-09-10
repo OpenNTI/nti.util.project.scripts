@@ -23,7 +23,7 @@ global.runBuild = async function () {
 	await fs.ensureDir(path.resolve(paths.path, 'dist/server'));
 
 	//record versions (don't block on this)
-	recordVersions();
+	const p = recordVersions();
 
 	//Copy server code...
 	await copyServerCode();
@@ -36,6 +36,8 @@ global.runBuild = async function () {
 
 	// Run webpack...
 	await buildBundle();
+
+	await p;
 };
 
 require('@nti/lib-scripts/tasks/build');
