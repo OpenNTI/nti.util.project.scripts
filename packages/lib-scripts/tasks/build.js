@@ -3,6 +3,7 @@ const path = require('path');
 
 const chalk = require('chalk');
 const fs = require('fs-extra');
+const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
 const {exec} = require('./utils/call-cmd');
@@ -16,13 +17,15 @@ const DEBUG = process.argv.includes('--debug');
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
 process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 
+const spinner = ora('Building...').start();
+
 const tasks = [];
 const signal = new Cancelable();
 const call = (cmd, msg) => {
-	if (msg) { console.log(msg); }
-	return exec(paths.path, cmd, signal)
-		.then(x => (msg && console.log(chalk.green(`\n${msg} finished.`)), x))
+	const t = exec(paths.path, cmd, signal)
 		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
+	spinner.promise(t, msg);
+	return t;
 };
 
 const runBuild = global.runBuild || (async () => {
@@ -60,8 +63,9 @@ if (!SKIP) {
 }
 
 Promise.all(tasks)
-	.then(() => console.log(chalk.green('\nDone.\n\n')))
+	.then(() => spinner.succeed('Done.'))
 	.catch(er => {
-		console.log(chalk.red('\nFailed.\n\n', er));
+		spinner.fail('Failed');
+		console.log(er);
 		process.exit(1);
 	});
