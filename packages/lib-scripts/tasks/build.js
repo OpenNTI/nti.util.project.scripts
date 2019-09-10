@@ -1,18 +1,39 @@
 'use strict';
-const SKIP = process.argv.includes('--skip-checks');
-const DEBUG = process.argv.includes('--debug');
 const path = require('path');
 
 const chalk = require('chalk');
 const fs = require('fs-extra');
 
-const call = require('./utils/call-cmd');
+const Cancelable = require('./utils/cancelable');
+const {exec} = require('./utils/call-cmd');
 const buildBundle = require('./utils/build-with-rollup');
 const sanityCheck = require('./utils/sanity-check');
 const paths = require('../config/paths');
 
+const SKIP = process.argv.includes('--skip-checks');
+const DEBUG = process.argv.includes('--debug');
+
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
 process.env.NODE_ENV = DEBUG ? 'development' : 'production';
+
+const tasks = [];
+const signal = new Cancelable();
+const call = (cmd, msg) => {
+	if (msg) { console.log(msg); }
+	return exec(paths.path, cmd, signal)
+		.then(x => (msg && console.log(chalk.green(`${msg} finished.`)), x))
+		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
+};
+
+const runBuild = global.runBuild || async () => {
+	//Blank out lib
+	await fs.emptyDir(path.resolve(paths.path, 'lib'));
+
+	await buildBundle();
+
+	await sanityCheck();
+};
+
 
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {
@@ -25,24 +46,21 @@ process.on('unhandledRejection', err => {
 });
 
 if (!SKIP) {
-	call('node', [require.resolve('./check')]);
-	call('node', [require.resolve('./test')]);
+	tasks.push(
+		call('node ' + require.resolve('./check'), 'Linting.'),
+		call('node ' + require.resolve('./test'), 'Tests.')
+	);
 }
 
-//Blank out lib
-fs.emptyDirSync(path.resolve(paths.path, 'lib'));
+tasks.push(runBuild());
 
-(async function () {
+if (!SKIP) {
+	tasks.push(call('npx --quiet @nti/gen-docs', 'Generating docs...'));
+}
 
-	await buildBundle();
-
-	await sanityCheck();
-
-	if (!SKIP) {
-		console.log('\nGenerating docs...\n');
-		call('npx', ['--quiet', '@nti/gen-docs']);
-	}
-
-	console.log(chalk.green('\nDone.\n\n'));
-
-}());
+Promise.all(tasks)
+	.then(() => console.log(chalk.green('\nDone.\n\n')))
+	.catch(er => {
+		console.log(chalk.red('\nFailed.\n\n', er));
+		process.exit(1);
+	});

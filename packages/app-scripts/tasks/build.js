@@ -1,46 +1,30 @@
 'use strict';
-const SKIP = process.argv.includes('--skip-checks');
-const DEBUG = process.argv.includes('--debug');
-process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
-process.env.NODE_ENV = DEBUG ? 'development' : 'production';
-//Expose unhandled rejected promises.
-process.on('unhandledRejection', err => { throw err; });
-
 const path = require('path');
-// const chalk = require('chalk');
 const fs = require('fs-extra');
-const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
-const paths = require('../config/paths');
 
-const copyServerCode = require('./utils/build-copy-server-code');
 const callHook = require('./utils/build-call-hook');
+const copyServerCode = require('./utils/build-copy-server-code');
 const copyStaticAssets = require('./utils/build-copy-static-assets');
 const recordVersions = require('./utils/build-record-versions');
 const buildBundle = require('./utils/build-webpack');
+
+const paths = require('../config/paths');
 
 // Warn and crash if required files are missing
 if (!checkRequiredFiles([paths.appHtml, paths.appIndexJs])) {
 	process.exit(1);
 }
 
+global.runBuild = async function () {
+	//clean dist & ensure client/server directories
+	await fs.emptyDir(path.resolve(paths.path, 'dist'));
+	await fs.ensureDir(path.resolve(paths.path, 'dist/client'));
+	await fs.ensureDir(path.resolve(paths.path, 'dist/server'));
 
-if (!SKIP) {
-	call('node', [require.resolve('./check')]);
-	call('node', [require.resolve('./test')]);
-}
+	//record versions (don't block on this)
+	recordVersions();
 
-//clean dist & ensure client/server directories
-fs.emptyDirSync(path.resolve(paths.path, 'dist'));
-fs.ensureDirSync(path.resolve(paths.path, 'dist/client'));
-fs.ensureDirSync(path.resolve(paths.path, 'dist/server'));
-
-if (!SKIP) {
-	console.log('\nGenerating docs...\n');
-	call('npx', ['--quiet', '@nti/gen-docs']);
-}
-
-(async function () {
 	//Copy server code...
 	await copyServerCode();
 
@@ -52,7 +36,6 @@ if (!SKIP) {
 
 	// Run webpack...
 	await buildBundle();
+};
 
-	//record versions
-	await recordVersions();
-}());
+require('@nti/lib-scripts/tasks/build');
