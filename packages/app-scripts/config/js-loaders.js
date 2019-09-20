@@ -22,6 +22,7 @@ const standardPreloaderEntries = (options = {}) => [
 				root: true,
 				extends: [require.resolve('./eslintrc')]
 			},
+			cache: true,
 			emitWarning: false,
 			eslintPath: require.resolve('eslint'),
 			failOnError: true,

@@ -13,6 +13,7 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
+const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const ProgressBarPlugin = require('@nti/progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 //
@@ -274,7 +275,10 @@ exports = module.exports = {
 		},
 		// Keep the runtime chunk seperated to enable long term caching
 		// https://twitter.com/wSokra/status/969679223278505985
-		runtimeChunk: true,
+		// https://github.com/facebook/create-react-app/issues/5358
+		runtimeChunk: {
+			name: entrypoint => `runtime-${entrypoint.name}`,
+		}
 	},
 
 	performance: false,
@@ -299,9 +303,22 @@ exports = module.exports = {
 		}),
 
 		new HtmlWebpackPlugin({
+			inject: true,
 			alwaysWriteToDisk: true,
 			filename: PROD ? 'page.html' : tempPage(),
-			template: paths.appHtml
+			template: paths.appHtml,
+			minify: {
+				removeComments: false,
+				collapseWhitespace: true,
+				removeRedundantAttributes: true,
+				useShortDoctype: true,
+				removeEmptyAttributes: true,
+				removeStyleLinkTypeAttributes: true,
+				keepClosingSlash: true,
+				minifyJS: true,
+				minifyCSS: true,
+				minifyURLs: true,
+			}
 		}),
 		new HtmlWebpackHarddiskPlugin(),
 		// new PreloadWebpackPlugin({
@@ -311,6 +328,11 @@ exports = module.exports = {
 		// 		/\/no-preload\//
 		// 	]
 		// }),
+
+		// Inlines the webpack runtime script. This script is too small to warrant
+		// a network request.
+		// https://github.com/facebook/create-react-app/issues/5358
+		new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
 
 		...cssPlugins(),
 
