@@ -10,13 +10,12 @@ module.exports = function (api, opts) {
 		presets: [
 			['@babel/preset-env', {
 				shippedProposals: true,
-				corejs: { version: 3, proposals: true },
 				targets: {
 					node: isCI
 						? '8.9.4' //just in case the build server's node is newer than PROD
 						: 'current'
 				},
-				...((opts || {})['@babel/preset-env'] || {}),
+				...(opts || {})['@babel/preset-env']
 			}],
 			['@babel/preset-flow'],
 		],
