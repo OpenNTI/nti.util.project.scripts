@@ -32,12 +32,20 @@ function reportInstalled () {
 		const [path, name] = x.split(':');
 		return (!x) ? null : {
 			name,
-			path
+			path: path.replace(process.cwd(), '.')
 		};
 	})
 		.filter(Boolean)
 		.sort((a, b) => a.name.localeCompare(b.name));
 
-	printLine(JSON.stringify(parsed, null, 2));
+	const nameColWidth = parsed.reduce((max, {name}) => Math.max(max, name.length), 0) + 2;
 
+	printLine('Packages Installed:');
+
+	for (let {name, path} of parsed) {
+		const spaces = new Array(nameColWidth - name.length).join(' ');
+		printLine(`${name}${spaces}${path}`);
+	}
+
+	printLine('-- End of Installed Packages --');
 }
