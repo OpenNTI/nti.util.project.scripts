@@ -28,11 +28,12 @@ if (result === SUCCESS) {
 function reportInstalled () {
 	const {stdout} = call('npm list --long --parseable', {...options, fd: 'pipe'});
 	const data = stdout.toString('utf8');
+	const cwd = process.cwd();
 	const parsed = data.split(/[\r\n]+/).map(x => {
 		const [path, name] = x.split(':');
-		return (!x) ? null : {
+		return (!x || path === cwd) ? null : {
 			name,
-			path: path.replace(process.cwd(), '.')
+			path: path.replace(cwd, '.')
 		};
 	})
 		.filter(Boolean)
