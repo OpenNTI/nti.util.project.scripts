@@ -41,7 +41,8 @@ module.exports = (resolve, rootDir) => {
 		reporters: !isCI ? void 0 : [
 			'default',
 			['jest-junit', {
-				output: 'reports/test-results/index.xml'
+				outputDirectory: 'reports/test-results',
+				outputName: 'index.xml'
 			}]
 		],
 		roots: [
