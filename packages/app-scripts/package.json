@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.14.4",
+  "version": "2.14.5",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -30,7 +30,7 @@
     "@nti/baggage-loader": "^1.0.0",
     "@nti/dev-ssl-config": "^2.12.5",
     "@nti/eslint-config-app-scripts": "^2.12.2",
-    "@nti/lib-scripts": "^2.14.4",
+    "@nti/lib-scripts": "^2.14.5",
     "@nti/progress-bar-webpack-plugin": "^1.13.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
