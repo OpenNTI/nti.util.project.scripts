@@ -8,7 +8,6 @@ module.exports = function (api, opts) {
 	const base = baseConfig(api, {
 		...opts,
 		'@babel/preset-env': {
-			corejs: { version: 3, proposals: true },
 			useBuiltIns: 'entry',
 			targets: env === 'test' ? {
 				node: 'current'

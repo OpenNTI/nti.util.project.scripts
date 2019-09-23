@@ -53,6 +53,7 @@
     "babel-jest": "^24.0.0",
     "chalk": "^2.4.2",
     "ci-info": "^2.0.0",
+    "core-js": "^3.2.1",
     "detect-indent": "^6.0.0",
     "fs-extra": "^8.0.1",
     "inquirer": "^6.0.0",
