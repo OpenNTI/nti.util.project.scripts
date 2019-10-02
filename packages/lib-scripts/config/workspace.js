@@ -22,7 +22,16 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 		return JSON.parse(process.env[ENV_KEY]);
 	}
 
-	const {whitelist = false, blacklist = false, ...options} = fs.readJsonSync(workspace, { throws: false }) || {};
+	try {
+		var data = fs.readJSONSync(workspace);
+	} catch (e) {
+		if (e.code !== 'ENOENT') {
+			console.error('[workspace] Error:', e.message);
+			process.exit(1);
+		}
+	}
+
+	const {whitelist = false, blacklist = false, ...options} = data || {};
 	const workspaceDir = path.resolve(path.dirname(workspace), options.path || '.');
 	const assumeInstalled = options.ignoreInstallState;
 	const packages = {};
