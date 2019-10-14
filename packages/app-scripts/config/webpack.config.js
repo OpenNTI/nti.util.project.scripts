@@ -100,6 +100,7 @@ exports = module.exports = {
 		crypto: 'empty',
 	},
 
+	stats: 'errors-only',
 	target: 'web',
 
 	resolve: {
