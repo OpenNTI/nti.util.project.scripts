@@ -94,10 +94,7 @@ const loaders = (options = {}) => {
 			],
 			use: [
 				cache(options.cache),
-				thread({
-					...(PROD ? {} : {poolTimeout: Infinity}), // keep workers alive for more effective watch mode})
-					...options.thread
-				}),
+				thread(options.thread),
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
