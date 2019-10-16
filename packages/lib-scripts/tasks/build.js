@@ -66,7 +66,11 @@ if (!WORKER) {
 	tasks.push(call(process.argv.join(' '), 'Building...'));
 
 	Promise.all(tasks)
-		.then(() => spinner.succeed('Done.'))
+		.then(() => {
+			try {
+				spinner.succeed('Done.');
+			} catch {/* ignore */}
+		})
 		.catch(er => {
 			spinner.fail('Failed');
 			console.log(er);
