@@ -50,6 +50,7 @@ module.exports = (resolve, rootDir) => {
 				? paths.appModules.replace(paths.path, '<rootDir>')
 				: '<rootDir>/src/'
 		],
+		globalSetup: resolve('config/jest/global-setup.js'),
 		setupFiles: [
 			'raf/polyfill',
 			resolve('config/polyfills.js')
