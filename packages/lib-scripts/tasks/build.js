@@ -69,7 +69,7 @@ if (!WORKER) {
 		.then(() => {
 			try {
 				spinner.succeed('Done.');
-			} catch {/* ignore */}
+			} catch (e) {/* ignore */}
 		})
 		.catch(er => {
 			spinner.fail('Failed');
