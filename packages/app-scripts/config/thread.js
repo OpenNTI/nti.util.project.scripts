@@ -1,17 +1,25 @@
 'use strict';
-const threadLoader = require('thread-loader');
-
 const {PROD} = require('./env');
 
+let threadLoader;
+
 module.exports = function thread (options = {}) {
+	if(!process.env.NTI_THREADED_BUILD) {
+		return;
+	}
+
 	if (typeof options !== 'object') {
 		options = {};
 	}
 
-	threadLoader.warmup(options, [
-		'babel-loader',
-		require.resolve('./babel.config.js')
-	]);
+	if (!threadLoader) {
+		threadLoader = require('thread-loader');
+		threadLoader.warmup(options, [
+			'babel-loader',
+			require.resolve('./babel.config.js')
+		]);
+	}
+
 
 	return {
 		loader: require.resolve('thread-loader'),
