@@ -1,7 +1,8 @@
 'use strict';
 
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-extra');
+const r = require('escape-string-regexp');
 const {isCI} = require('ci-info');
 
 // Make sure any symlinks in the project folder are resolved:
@@ -34,11 +35,13 @@ const nodePaths = (process.env.NODE_PATH || '')
 	.filter(folder => !path.isAbsolute(folder))
 	.map(resolveApp);
 
+const nodeModules = resolveApp('node_modules');
 const packageJson = resolveApp('package.json');
-// const ownPackageJson = require('../package.json');
-// const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
-// const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
-
+const ownPath = resolveOwn('.');
+const ownPackageJson = fs.readJsonSync(resolveOwn('package.json'));
+const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
+const [scope] = ownPackageJson.name.split('/');
+const ntiModules = new RegExp(`^(${r(nodeModules)}).*${r(scope)}`);
 
 function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
@@ -60,8 +63,8 @@ module.exports = {
 	packageJson,
 	pacakgeLock: resolveApp('package-lock.json'),
 	packageMain: resolveApp(require(packageJson).main),
-	nodeModules: resolveApp('node_modules'),
-	ntiModules: resolveApp('node_modules/@nti'),
+	nodeModules,
+	ntiModules,
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),
 
@@ -69,7 +72,7 @@ module.exports = {
 	*	Import custom properties from @nti/style-common when present.
 	*	This allows postcss to fill in fallback rules for custom properties:
 	*	Assuming --mycolor: red,
-	*	
+	*
 	*		[input]
 	*		color: var(--mycolor);
 	*
@@ -89,6 +92,6 @@ module.exports = {
 
 	nodePaths: nodePaths,
 
-	ownPath: resolveOwn('.'),
-	ownPackageJson: resolveOwn('package.json'),
+	ownPath,
+	ownPackageJson: ownPackagePath,
 };

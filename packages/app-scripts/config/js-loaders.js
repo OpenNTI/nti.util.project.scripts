@@ -49,7 +49,7 @@ const preloaders = (options = {}) => [
 		enforce: 'pre',
 		include: [
 			paths.src,
-			path.join(paths.nodeModules, '@nti'),
+			paths.ntiModules,
 			//Only lint|baggage source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
 			...(options.include || options.includes || [])
