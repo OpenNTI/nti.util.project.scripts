@@ -28,18 +28,20 @@ if (!isWorker && (process.stdout.isTTY || isCI)) {
 
 	const browsers = browserslist(query).reduce(dedupe, {});
 	const combine = (key) => [key, browsers[key].join(', ')].join(' ');
+	const selected = Object.keys(browsers).map(combine).sort(byLocale).join('\n  ');
 
 	console.log(`
 Selected Browser targets:
-  ${chalk.bold.blue(
-		Object.keys(browsers).map(combine).sort(byLocale).join('\n  ')
-	)}
-
+  ${chalk.bold.blue(selected)}
+${NTI_DEV_BROWSER ? `
+Dev environemnt variable ${chalk.bold.underline('is set')}:
+  ${chalk.bold('NTI_DEV_BROWSER')}="${chalk.bold.blue(NTI_DEV_BROWSER)}"
+` : `
 Default targets are defined in ${chalk.grey('@nti/lib-scripts/config/browserlist')}.
 Developers may locally override this using the environment variable:
 
   ${chalk.bold.blue('NTI_DEV_BROWSER')}="last 1 chrome version"
-
+`}
 Test queries and coverage here: ${chalk.bold.blue('http://browserl.ist')}
 
 `);
