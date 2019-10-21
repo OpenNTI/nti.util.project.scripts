@@ -4,7 +4,7 @@ if [ $# -eq 0 ]; then
 	lerna exec "exec $SCRIPTPATH/${0##*/} \$LERNA_PACKAGE_NAME" --parallel --loglevel error
 	echo "Publishing...";
 	if [ "$?" -eq 0 ]; then
-		lerna publish prerelease --no-git-tag-version --no-push --npm-tag=next --canary --exact --progress --force-publish --yes
+		lerna publish prerelease --no-git-tag-version --no-push --dist-tag=next --canary --exact --progress --force-publish --yes
 	fi
 	exit $?;
 fi
