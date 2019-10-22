@@ -50,7 +50,12 @@ const sass = (options = {}) => ({
 	loader: require.resolve('sass-loader'),
 	options: {
 		sourceMap: true,
-		...options
+		implementation: require('sass'),
+		...options,
+		sassOptions: {
+			fiber: require('fibers'),
+			...options.sassOptions,
+		},
 	}
 });
 
