@@ -56,6 +56,15 @@ EOF
 	PACKAGE=`node -e "console.log((o => o.name+'@'+o.version)(require('./package.json')))"`
 	EXISTS=`npm view $PACKAGE`
 	if [ ${#EXISTS} == 0 ] ; then
+		NAME=`npm view . .name`
+		VERSIONS=`npm view . .versions --json | jq -r '.[]'`;
+		for i in $VERSIONS;
+		do
+			if [[ "$i" == *alpha ]]
+				npm unpublish $NAME@$i
+			fi
+		done
+
 		npm publish --tag alpha
 	fi
 
