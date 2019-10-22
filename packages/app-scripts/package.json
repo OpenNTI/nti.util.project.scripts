@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.15.0",
+  "version": "2.15.1",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -30,7 +30,7 @@
     "@nti/baggage-loader": "^1.0.0",
     "@nti/dev-ssl-config": "^2.12.5",
     "@nti/eslint-config-app-scripts": "^2.12.2",
-    "@nti/lib-scripts": "^2.15.0",
+    "@nti/lib-scripts": "^2.15.1",
     "@nti/progress-bar-webpack-plugin": "^1.13.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
@@ -45,7 +45,7 @@
     "core-js": "^3.2.1",
     "css-loader": "^3.0.0",
     "eslint-loader": "^2.2.0",
-    "fibers":"^4.0.1",
+    "fibers": "^4.0.1",
     "file-loader": "^4.0.0",
     "fs-extra": "^8.0.1",
     "get-port": "^5.0.0",
