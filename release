@@ -53,21 +53,23 @@ EOF
 
 	#replace the package.json with the temp...
 	mv .package-alpha.json package.json
-	PACKAGE=`node -e "console.log((o => o.name+'@'+o.version)(require('./package.json')))"`
-	EXISTS=`npm view $PACKAGE`
+
+	PACKAGE_ID=`node -e "process.stdout.write((o => o.name+'@'+o.version)(require('./package.json')))"`
+	PACKAGE_NAME=${PACKAGE_ID%@*}
+
+	EXISTS=`npm view $PACKAGE_ID`
 	if [ ${#EXISTS} == 0 ] ; then
-		NAME=`npm view . .name`
 		VERSIONS=`npm view . .versions --json | jq -r '.[]'`;
 		for i in $VERSIONS;
 		do
-			if [[ "$i" == *alpha ]]
-				npm unpublish $NAME@$i
+			if [[ "$i" == *alpha ]] ; then
+				npm unpublish $PACKAGE_NAME@$i
 			fi
 		done
 
 		npm publish --tag alpha
 	fi
 
-	git checkout package.json
+	git checkout package.json &> /dev/null
 	)
 done
