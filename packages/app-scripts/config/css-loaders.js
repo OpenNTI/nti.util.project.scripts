@@ -1,11 +1,11 @@
 'use strict';
 const path = require('path');
 const browsers = require('@nti/lib-scripts/config/browserlist');
+const paths = require('@nti/lib-scripts/tasks/utils/current-script-paths');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const cache = require('./cache');
 const {PROD} = require('./env');
-const paths = require('./paths');
 const workspaceLinks = require('./workspace-links');
 
 const style = () => (
@@ -80,7 +80,7 @@ const loaders = (options = {}) => [
 			paths.ntiModules,
 			//Only lint|baggage source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-		],
+		].filter(Boolean),
 		use: [
 			style(),
 			cache(),
