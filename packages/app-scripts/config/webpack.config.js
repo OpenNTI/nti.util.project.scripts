@@ -194,7 +194,7 @@ exports = module.exports = {
 						}
 					},
 
-					...cssLoaders({
+					...cssLoaders(paths, {
 						sass: {
 							sassOptions: {
 								includePaths: [

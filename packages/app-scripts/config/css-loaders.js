@@ -1,7 +1,6 @@
 'use strict';
 const path = require('path');
 const browsers = require('@nti/lib-scripts/config/browserlist');
-const paths = require('@nti/lib-scripts/tasks/utils/current-script-paths');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const cache = require('./cache');
@@ -20,7 +19,7 @@ const css = (options = {}) => ({
 	}
 });
 
-const postCss = (options = {}) => ({
+const postCss = (paths, options = {}) => ({
 	loader: require.resolve('postcss-loader'),
 	options: {
 		sourceMap: true,
@@ -59,14 +58,14 @@ const sass = (options = {}) => ({
 	}
 });
 
-const loaders = (options = {}) => [
+const loaders = (paths, options = {}) => [
 	{
 		test: /\.s(a|c)ss$/,
 		use: [
 			style(),
 			cache(),
 			css(),
-			postCss(),
+			postCss(paths),
 			resolveUrl(),
 			sass(options.sass)
 		]
@@ -89,7 +88,7 @@ const loaders = (options = {}) => [
 					localIdentName: '[local]--[hash:base64:8]'
 				}
 			}),
-			postCss(),
+			postCss(paths),
 			resolveUrl()
 		]
 	},
@@ -100,7 +99,7 @@ const loaders = (options = {}) => [
 			style(),
 			cache(),
 			css(),
-			postCss(),
+			postCss(paths),
 			resolveUrl()
 		]
 	}

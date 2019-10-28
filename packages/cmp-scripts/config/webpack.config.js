@@ -137,7 +137,7 @@ exports = module.exports = {
 						}
 					},
 
-					...cssLoaders()
+					...cssLoaders(paths)
 
 				].filter(Boolean)
 			}
