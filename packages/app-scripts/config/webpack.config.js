@@ -68,6 +68,8 @@ exports = module.exports = {
 				.replace(/\/\//g, '/')
 	},
 
+	// Turning source maps of will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
+	// devtool: !PROD && 'cheap-module-source-map',
 	devtool: 'cheap-module-source-map',
 
 	// Some libraries import Node modules but don't use them in the browser.
