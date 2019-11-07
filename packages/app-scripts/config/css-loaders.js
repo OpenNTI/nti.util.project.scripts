@@ -98,7 +98,7 @@ const loaders = (paths, options = {}) => [
 		use: [
 			style(),
 			cache(),
-			css(),
+			css({importLoaders: 2}),
 			postCss(paths),
 			resolveUrl()
 		]
