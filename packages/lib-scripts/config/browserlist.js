@@ -4,7 +4,7 @@ const browserslist = require('browserslist');
 const chalk = require('chalk');
 const {isCI} = require('ci-info');
 
-const isWorker = process.argv.some(x => (/thread-loader.*worker/ig).test(x));
+const isWorker = process.argv.some(x => (/thread-loader.*worker/ig).test(x)) || process.env.NTI_BROWSER_LIST_PRINTED != null;
 
 const hasValue = x => x && x !== 'null';
 
@@ -18,6 +18,7 @@ const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROW
 
 
 if (!isWorker && (process.stdout.isTTY || isCI)) {
+	process.env.NTI_BROWSER_LIST_PRINTED = true;
 	const byLocale = (a, b) => a.localeCompare(b);
 	const getName = n => (agents[n] || {}).browser || n;
 	const getVers = (o, n) => o[n] = (o[n] || []);
