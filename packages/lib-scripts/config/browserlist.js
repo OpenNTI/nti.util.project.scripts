@@ -6,9 +6,11 @@ const {isCI} = require('ci-info');
 
 const isWorker = process.argv.some(x => (/thread-loader.*worker/ig).test(x));
 
+const hasValue = x => x && x !== 'null';
+
 // Test queries and coverage here: http://browserl.ist
 const { NTI_DEV_BROWSER } = process.env;
-const query = module.exports = !isCI && NTI_DEV_BROWSER ? NTI_DEV_BROWSER.split(',') : [
+const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROWSER.split(',') : [
 	'> 1% in US',
 	'last 2 versions',
 	'not dead',
@@ -33,10 +35,10 @@ if (!isWorker && (process.stdout.isTTY || isCI)) {
 	console.log(`
 Selected Browser targets:
   ${chalk.bold.blue(selected)}
-${NTI_DEV_BROWSER ? `
+${hasValue(NTI_DEV_BROWSER) ? `
 Dev environemnt variable ${chalk.bold.underline('is set')}:
   ${chalk.bold('NTI_DEV_BROWSER')}="${chalk.bold.blue(NTI_DEV_BROWSER)}"
-` : `
+` : isCI ? '' : `
 Default targets are defined in ${chalk.grey('@nti/lib-scripts/config/browserlist')}.
 Developers may locally override this using the environment variable:
 
