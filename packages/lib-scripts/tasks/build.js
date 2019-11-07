@@ -75,7 +75,7 @@ if (!WORKER) {
 		})
 		.catch(er => {
 			spinner.fail('Failed');
-			console.log(er);
+			console.log(er.stack || er.message || er);
 			process.exit(1);
 		});
 }

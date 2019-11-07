@@ -46,7 +46,7 @@ module.exports = function build (config = require('../../config/webpack.config')
 function handleFailure (err) {
 	process.stdout.write('\r\x1b[K'); //clear the current line
 	console.log(chalk.red('Failed to compile.\n'));
-	console.log((err.message || err) + '\n');
+	console.log((err.stack || err.message || err) + '\n');
 	process.exit(1);
 }
 
