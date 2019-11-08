@@ -27,6 +27,13 @@ module.exports = function (api, opts) {
 			['@babel/plugin-proposal-class-properties', { loose: true }],
 			['@babel/plugin-proposal-export-default-from'],
 			['@babel/plugin-proposal-export-namespace-from'],
+
+			// Stage 3, will be in @babel/preset-env soon...babel itself already uses these.
+			// Defining plugins twice is a harmless noop. Will clean these out once babel adds
+			// them to the main preset.
+			['@babel/plugin-proposal-optional-chaining'],
+			['@babel/plugin-proposal-nullish-coalescing-operator'],
+
 			['@babel/plugin-syntax-dynamic-import'],
 		]
 	};
