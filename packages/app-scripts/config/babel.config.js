@@ -21,7 +21,11 @@ module.exports = function (api, opts) {
 		...base,
 		'presets': [
 			...base.presets,
-			['@babel/preset-react', { development: dev }],
+			['@babel/preset-react', {
+				development: dev,
+				useBuiltIns: true,
+				useSpread: true,
+			}],
 		],
 		'plugins': [
 			!dev && '@babel/plugin-transform-runtime',
