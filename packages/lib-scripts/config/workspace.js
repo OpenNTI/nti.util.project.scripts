@@ -14,7 +14,7 @@ function include (file, whitelist, blacklist) {
 		return false;
 	}
 
-	if (whitelist && !isListed(whitelist)) {
+	if (whitelist && !isListed(file, whitelist)) {
 		return false;
 	}
 
