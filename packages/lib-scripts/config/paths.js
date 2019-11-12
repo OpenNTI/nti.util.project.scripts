@@ -93,5 +93,5 @@ module.exports = {
 	nodePaths: nodePaths,
 
 	ownPath,
-	ownPackageJson: ownPackagePath,
+	ownPackageJson: resolveOwn('package.json'),
 };
