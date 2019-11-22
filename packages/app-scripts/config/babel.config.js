@@ -23,7 +23,7 @@ module.exports = function (api, opts) {
 			...base.presets,
 			['@babel/preset-react', {
 				development: dev,
-				useBuiltIns: true,
+				// useBuiltIns: true,
 				useSpread: true,
 			}],
 		],

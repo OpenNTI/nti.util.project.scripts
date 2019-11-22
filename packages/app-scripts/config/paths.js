@@ -41,6 +41,7 @@ function resolveOwn (relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
+const serverComponent = exists(resolveApp('src/server'), resolveOwn('server'));
 
 module.exports = {
 	...paths,
@@ -58,7 +59,9 @@ module.exports = {
 	DIST_SERVER: resolveApp('dist/server'),
 	PAGE: resolveApp('dist/client/page.html'),
 
-	serverComponent: exists(resolveApp('src/server'), resolveOwn('server')),
+	serverComponent,
+	pageContentComponent: paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
+	pageContentComponentDest: resolveApp(path.join(serverComponent, 'ssr-entry/index.js')),
 	baseConfig: resolveOwn('server/config/env.json'),
 	localConfig: exists(resolveApp('config/service.json')),
 

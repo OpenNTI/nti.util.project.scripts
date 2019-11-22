@@ -14,6 +14,7 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
+const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const ProgressBarPlugin = require('@nti/progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
@@ -24,9 +25,15 @@ const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
 const {loaders: jsLoaders, preloaders: jsPreloaders} = require('./js-loaders');
 const {PROD, ENV} = require('./env');
 const paths = require('./paths');
-const pkg = require(paths.packageJson);
+const pkg = paths.package;
 const workspaceLinks = require('./workspace-links');
 
+const Configs = exports = module.exports = [];
+const ContentGlobalDefinitions = new webpack.DefinePlugin({
+	'BUILD_SOURCE': gitRevision,
+	'BUILD_PACKAGE_NAME': JSON.stringify(pkg.name),
+	'BUILD_PACKAGE_VERSION': JSON.stringify(pkg.version)
+});
 
 function isNTIPackage (x) {
 	const prefix = `${paths.nodeModules}/@nti/`;
@@ -44,7 +51,82 @@ function tempPage () {
 	return tempPage.file || (tempPage.file = tmp.fileSync().name);
 }
 
-exports = module.exports = {
+
+function getLoaderRules (server) {
+	return [
+		{ parser: {
+			// Disable non-standard language features
+			requireInclude: !PROD, // disable require.include in production (the dev server uses this tho)
+			requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
+			requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
+		} },
+
+		...jsPreloaders(),
+
+		{
+			oneOf: [
+				{
+					test: /.*/,
+					resourceQuery: /for-download/,
+					loader: 'file-loader',
+					options: {
+						name: 'resources/files/[hash]/[name].[ext]'
+					}
+				},
+
+				...jsLoaders({
+					babel: {
+						sourceType: 'unambiguous',
+						presets: [
+							require.resolve('./babel.config.js'),
+							PROD && [require.resolve('babel-preset-minify'), {
+								builtIns: false,
+								mangle: false,
+								deadcode: false,
+								simplify: false,
+								evaluate: false,
+								consecutiveAdds: false
+							}]
+						].filter(Boolean),
+					}
+				}),
+
+				{
+					test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
+					loader: require.resolve('url-loader'),
+					options: {
+						limit: 50,
+						name: 'resources/images/[hash].[ext]',
+						mimeType: 'image/[ext]'
+					}
+				},
+
+				{
+					test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
+					loader: require.resolve('file-loader'),
+					options: {
+						name: 'resources/fonts/[hash].[ext]'
+					}
+				},
+
+				...cssLoaders(paths, {
+					server,
+					sass: {
+						sassOptions: {
+							includePaths: [
+								paths.resolveApp('src/main/resources/scss')
+							]
+						}
+					}
+				}),
+
+			].filter(Boolean)
+		}
+	].filter(Boolean);
+}
+
+
+const ClientConfig = {
 	mode: ENV,
 	bail: PROD,
 	entry: {
@@ -122,75 +204,7 @@ exports = module.exports = {
 
 	module: {
 		strictExportPresence: true,
-		rules: [
-			{ parser: {
-				// Disable non-standard language features
-				requireInclude: !PROD, // disable require.include in production (the dev server uses this tho)
-				requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
-				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
-			} },
-
-			...jsPreloaders(),
-
-			{
-				oneOf: [
-					{
-						test: /.*/,
-						resourceQuery: /for-download/,
-						loader: 'file-loader',
-						options: {
-							name: 'resources/files/[hash]/[name].[ext]'
-						}
-					},
-
-					...jsLoaders({
-						babel: {
-							sourceType: 'unambiguous',
-							presets: [
-								require.resolve('./babel.config.js'),
-								PROD && [require.resolve('babel-preset-minify'), {
-									builtIns: false,
-									mangle: false,
-									deadcode: false,
-									simplify: false,
-									evaluate: false,
-									consecutiveAdds: false
-								}]
-							].filter(Boolean),
-						}
-					}),
-
-					{
-						test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
-						loader: require.resolve('url-loader'),
-						options: {
-							limit: 50,
-							name: 'resources/images/[hash].[ext]',
-							mimeType: 'image/[ext]'
-						}
-					},
-
-					{
-						test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
-						loader: require.resolve('file-loader'),
-						options: {
-							name: 'resources/fonts/[hash].[ext]'
-						}
-					},
-
-					...cssLoaders(paths, {
-						sass: {
-							sassOptions: {
-								includePaths: [
-									paths.resolveApp('src/main/resources/scss')
-								]
-							}
-						}
-					}),
-
-				].filter(Boolean)
-			}
-		].filter(Boolean)
+		rules: getLoaderRules()
 	},
 
 	optimization: {
@@ -333,11 +347,7 @@ exports = module.exports = {
 
 		...cssPlugins(),
 
-		new webpack.DefinePlugin({
-			'BUILD_SOURCE': gitRevision,
-			'BUILD_PACKAGE_NAME': JSON.stringify(pkg.name),
-			'BUILD_PACKAGE_VERSION': JSON.stringify(pkg.version)
-		}),
+		ContentGlobalDefinitions,
 
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.
@@ -350,3 +360,41 @@ exports = module.exports = {
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 	].filter(Boolean)
 };
+
+Configs.push(ClientConfig);
+
+if (paths.pageContentComponent) {
+	Configs.push({
+		...ClientConfig,
+
+		module: {
+			strictExportPresence: true,
+			rules: getLoaderRules(true)
+		},
+
+		optimization: {},
+		node: false,
+		target: 'node',
+		devtool: false,
+
+		output: {
+			path: path.dirname(paths.pageContentComponentDest),
+			filename: path.basename(paths.pageContentComponentDest),
+			libraryTarget: 'commonjs2'
+		},
+
+		entry: paths.pageContentComponent,
+
+		plugins: [
+			...cssPlugins({}, true),
+
+			ContentGlobalDefinitions,
+
+			!isCI && new ProgressBarPlugin({
+				format: '  server build [:bar] ' + chalk.green.bold(':percent') + ' (:elapsed seconds)',
+			}),
+
+			new IgnoreEmitPlugin(/resources/)
+		]
+	});
+}

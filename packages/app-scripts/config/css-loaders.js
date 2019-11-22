@@ -7,8 +7,8 @@ const cache = require('./cache');
 const {PROD} = require('./env');
 const workspaceLinks = require('./workspace-links');
 
-const style = () => (
-	!PROD ? 'style-loader' : MiniCssExtractPlugin.loader
+const style = (server) => (
+	(!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader
 );
 
 const css = (options = {}) => ({
@@ -65,7 +65,7 @@ const loaders = (paths, options = {}) => [
 	{
 		test: /\.s(a|c)ss$/,
 		use: [
-			style(),
+			style(options.server),
 			cache(),
 			css(),
 			postCss(paths),
@@ -84,7 +84,7 @@ const loaders = (paths, options = {}) => [
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
 		].filter(Boolean),
 		use: [
-			style(),
+			style(options.server),
 			cache(),
 			css({
 				modules: {
@@ -99,7 +99,7 @@ const loaders = (paths, options = {}) => [
 	{
 		test: /\.css$/,
 		use: [
-			style(),
+			style(options.server),
 			cache(),
 			css({importLoaders: 2}),
 			postCss(paths),
@@ -108,8 +108,8 @@ const loaders = (paths, options = {}) => [
 	}
 ];
 
-const plugins = (options = {}) => [
-	PROD && new MiniCssExtractPlugin({
+const plugins = (options = {}, server = false) => [
+	(PROD || server) && new MiniCssExtractPlugin({
 		ignoreOrder: true,
 		filename: 'resources/[name]-[contenthash].css',
 		...(options.miniCssExtract || {})

@@ -37,9 +37,10 @@ const nodePaths = (process.env.NODE_PATH || '')
 
 const nodeModules = resolveApp('node_modules');
 const packageJson = resolveApp('package.json');
+const _package = fs.readJsonSync(packageJson);
 const ownPath = resolveOwn('.');
 const ownPackageJson = fs.readJsonSync(resolveOwn('package.json'));
-const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
+// const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
 const [scope] = ownPackageJson.name.split('/');
 const ntiModules = new RegExp(`^(${r(nodeModules)}).*${r(scope)}`);
 
@@ -60,9 +61,10 @@ module.exports = {
 	userProfile: path.resolve(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']),
 
 	path: resolveApp('.'),
+	package: _package,
 	packageJson,
 	pacakgeLock: resolveApp('package-lock.json'),
-	packageMain: resolveApp(require(packageJson).main),
+	packageMain: resolveApp(_package.main),
 	nodeModules,
 	ntiModules,
 	src: resolveApp('src'),
