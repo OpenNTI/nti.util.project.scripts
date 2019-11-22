@@ -16,21 +16,17 @@ try {
 
 exports = module.exports = {
 
-	register (expressApp, config) {
-		const resolveDev = (dev) ? dev.setupDeveloperMode(config) : Promise.resolve();
+	async register (expressApp, config) {
+		const devmode = (dev) ? await dev.setupDeveloperMode(config) : null;
 
-		return resolveDev.then(devmode => {
+		if (devmode) {
+			(expressApp.parent || expressApp).use(devmode.middleware); //serve in-memory compiled sources/assets
+		}
 
-			if (devmode) {
-				(expressApp.parent || expressApp).use(devmode.middleware); //serve in-memory compiled sources/assets
-			}
-
-			return {
-				devmode,
-
-				assets
-			};
-		});
+		return {
+			devmode,
+			assets
+		};
 	}
 
 };
