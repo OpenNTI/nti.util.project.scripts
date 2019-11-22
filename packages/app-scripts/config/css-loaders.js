@@ -34,6 +34,9 @@ const postCss = (paths, options = {}) => ({
 				},
 				importFrom: paths.cssCustomProperties,
 				stage: 3,
+				features: {
+					'nesting-rules': true
+				}
 			}),
 		],
 		...options
