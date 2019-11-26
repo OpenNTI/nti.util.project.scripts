@@ -46,7 +46,7 @@
     "css-loader": "^3.0.0",
     "eslint-loader": "^3.0.2",
     "fibers": "^4.0.1",
-    "file-loader": "^4.0.0",
+    "file-loader": "^5.0.2",
     "fs-extra": "^8.0.1",
     "get-port": "^5.0.0",
     "html-webpack-harddisk-plugin": "^1.0.1",
