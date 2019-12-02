@@ -1,6 +1,6 @@
 {
   "name": "@nti/dev-ssl-config",
-  "version": "2.12.5",
+  "version": "2.18.0",
   "main": "src/index.js",
   "scripts": {},
   "repository": {
