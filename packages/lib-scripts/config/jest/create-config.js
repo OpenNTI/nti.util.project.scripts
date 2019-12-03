@@ -23,6 +23,12 @@ module.exports = (resolve, rootDir) => {
 		? paths.testsSetup
 		: undefined;
 
+	const setupFilesAfterEnv = [resolve('config/jest/setup-after-env.js')];
+
+	if (setupTestsFile) {
+		setupFilesAfterEnv.push(setupTestsFile);
+	}
+
 	const config = {
 		// clearMocks: true,
 		// resetMocks: true,
@@ -55,7 +61,7 @@ module.exports = (resolve, rootDir) => {
 			'raf/polyfill',
 			resolve('config/polyfills.js')
 		],
-		setupFilesAfterEnv: setupTestsFile ? [setupTestsFile] : null,
+		setupFilesAfterEnv,
 		testPathIgnorePatterns: [
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
 		],
