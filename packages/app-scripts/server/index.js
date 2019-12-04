@@ -20,7 +20,7 @@ exports = module.exports = {
 		const devmode = (dev) ? await dev.setupDeveloperMode(config) : null;
 
 		if (devmode) {
-			(expressApp.parent || expressApp).use(devmode.middleware); //serve in-memory compiled sources/assets
+			expressApp.use(devmode.middleware); //serve in-memory compiled sources/assets
 		}
 
 		return {
