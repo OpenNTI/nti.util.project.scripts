@@ -17,6 +17,6 @@
   "dependencies": {
     "ci-info": "^2.0.0",
     "fs-extra": "^8.0.1",
-    "semver": "^6.0.0"
+    "semver": "^7.0.0"
   }
 }
