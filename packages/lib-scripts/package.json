@@ -75,6 +75,6 @@
     "rollup-plugin-json": "^4.0.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-string": "^3.0.0",
-    "semver": "^6.0.0"
+    "semver": "^7.0.0"
   }
 }
