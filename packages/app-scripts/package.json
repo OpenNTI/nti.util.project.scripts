@@ -34,6 +34,7 @@
     "@nti/progress-bar-webpack-plugin": "^1.13.0",
     "@nti/util-git-rev": "^1.0.0",
     "@nti/web-service": "^1.13.0",
+    "abortcontroller-polyfill": "^1.4.0",
     "babel-loader": "^8.0.0",
     "babel-preset-minify": "0.x.x",
     "cache-loader": "^4.0.1",
