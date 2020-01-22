@@ -52,7 +52,7 @@
     "@nti/eslint-config-lib-scripts": "^2.12.2",
     "@nti/git-state": "^4.1.0",
     "@nti/install-snapshots": "^2.18.0",
-    "babel-jest": "^24.0.0",
+    "babel-jest": "^25.1.0",
     "chalk": "^3.0.0",
     "ci-info": "^2.0.0",
     "core-js": "^3.2.1",
