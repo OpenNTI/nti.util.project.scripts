@@ -1,12 +1,12 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
-const {worker} = require('cluster');
+const { worker } = require('cluster');
 const readline = require('readline');
 const path = require('path');
 const url = require('url');
 const { HTTPS, getHTTPS } = require('@nti/dev-ssl-config');
 
-function clearLine (n) {
+function clearLine(n) {
 	const fn = console[n] || console.debug;
 	console[n] = (...args) => {
 		const [first] = args;
@@ -20,16 +20,16 @@ function clearLine (n) {
 
 const ensureArray = x => Array.isArray(x) ? x : [x];
 
-exports.setupDeveloperMode = async function setupDeveloperMode (config) {
-	for(let n of ['info', 'log', 'debug']) { clearLine(n); }
+exports.setupDeveloperMode = async function setupDeveloperMode(config) {
+	for (let n of ['info', 'log', 'debug']) { clearLine(n); }
 	const getPort = require('get-port');
 	const webpack = require('webpack');
 	const WebpackServer = require('webpack-dev-server');
 
 	const paths = require('../../config/paths');
-	const [clientConfig,serverConfig] = ensureArray(require('../../config/webpack.config'));
+	const [clientConfig, serverConfig] = ensureArray(require('../../config/webpack.config'));
 
-	const {debug = false, server} = config;
+	const { debug = false, server } = config;
 
 	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
 	const api = url.parse(server);
@@ -51,17 +51,18 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		}
 	}
 
-	const serverBundleCompiler =  serverConfig && webpack({
+	const serverBundleCompiler = serverConfig && webpack({
 		...serverConfig,
 	});
 	const serverBundleWatcher = serverBundleCompiler && serverBundleCompiler.watch({
 		// watch options
-	}, (err, stats) => {});
+	}, (err, stats) => { });
 
 	const webpackServer = new WebpackServer(webpack(clientConfig), {
 		allowedHosts: ['.dev', '.local', '.localhost'],
-		hot: true,
-		hotOnly: true,
+		// hot: true,
+		// hotOnly: true,
+
 		// This proxy will only work from the direct dev-server port. Only used for debugging.
 		// proxy: {
 		// 	'*': `http://${apiHost}:${apiPort}/`
