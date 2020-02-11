@@ -70,7 +70,7 @@ function getLoaderRules (server) {
 					resourceQuery: /for-download/,
 					loader: 'file-loader',
 					options: {
-						name: 'resources/files/[hash]/[name].[ext]'
+						name: 'resources/files/[contenthash]/[name].[ext]'
 					}
 				},
 
@@ -96,7 +96,7 @@ function getLoaderRules (server) {
 					loader: require.resolve('url-loader'),
 					options: {
 						limit: 50,
-						name: 'resources/images/[hash].[ext]',
+						name: 'resources/images/[contenthash].[ext]',
 						mimeType: 'image/[ext]'
 					}
 				},
@@ -105,7 +105,7 @@ function getLoaderRules (server) {
 					test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
 					loader: require.resolve('file-loader'),
 					options: {
-						name: 'resources/fonts/[hash].[ext]'
+						name: 'resources/fonts/[contenthash].[ext]'
 					}
 				},
 
