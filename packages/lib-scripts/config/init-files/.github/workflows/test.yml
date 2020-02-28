@@ -15,16 +15,22 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-    - uses: actions/setup-node@v1
-      with:
-        node-version: '12.x'
+      - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.actions_repo_access }}
+          global-credentials: true
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - name: npm config
+        run: |
+          npm config set loglevel warn
+          npm config set progress false
+          npm config set '@nti:registry' 'https://npm.nextthought.com'
 
-    - run: npm config set '@nti:registry' 'https://npm.nextthought.com'
-    - run: npm install --no-progress --silent
-    - run: npm test
-    - run: npm run check --if-present
-
+      - run: npm install
+      - run: npm test
+      - run: npm run check --if-present
 
     # TODO: Setup code coverage/test result reporting?
     # TODO: Publish Docs?
