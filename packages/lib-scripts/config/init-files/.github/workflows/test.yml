@@ -12,18 +12,19 @@ env:
   CI: true
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
+
     - run: npm config set '@nti:registry' 'https://npm.nextthought.com'
-    - name: Test
-      run: npm it
-    - name: Lint
-      run: npm run check --if-present
+    - run: npm install --no-progress --silent
+    - run: npm test
+    - run: npm run check --if-present
+
 
     # TODO: Setup code coverage/test result reporting?
     # TODO: Publish Docs?
