@@ -18,8 +18,9 @@ const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const ProgressBarPlugin = require('@nti/progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const { branchSync, commitSync } = require('@nti/git-state');
 //
-const gitRevision = JSON.stringify(require('@nti/util-git-rev'));
+const gitRevision = p => JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
 
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
 const {loaders: jsLoaders, preloaders: jsPreloaders} = require('./js-loaders');
@@ -30,7 +31,7 @@ const workspaceLinks = require('./workspace-links');
 
 const Configs = exports = module.exports = [];
 const ContentGlobalDefinitions = new webpack.DefinePlugin({
-	'BUILD_SOURCE': gitRevision,
+	'BUILD_SOURCE': gitRevision(paths.path),
 	'BUILD_PACKAGE_NAME': JSON.stringify(pkg.name),
 	'BUILD_PACKAGE_VERSION': JSON.stringify(pkg.version)
 });
