@@ -9,6 +9,8 @@ module.exports = function run (scriptFile, name, args) {
 	const result = spawnSync('node',
 		[
 			inspect && '--inspect-brk',
+			'--harmony-optional-chaining',
+			'--harmony-nullish',
 			'--max-old-space-size=8192',
 			scriptFile
 		].filter(Boolean).concat(args),
