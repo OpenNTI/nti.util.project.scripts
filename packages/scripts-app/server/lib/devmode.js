@@ -4,7 +4,7 @@ const { worker } = require('cluster');
 const readline = require('readline');
 // const path = require('path');
 const url = require('url');
-const { HTTPS, getHTTPS } = require('@nti/dev-ssl-config');
+const { getHTTPS } = require('@nti/dev-ssl-config');
 
 function clearLine (n) {
 	const fn = console[n] || console.debug;
@@ -29,13 +29,12 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	const paths = require('../../config/paths');
 	const [clientConfig, serverConfig] = ensureArray(require('../../config/webpack.config'));
 
-	const { debug = false, server } = config;
+	const {
+		debug = false,
+		// server,
+	} = config;
 
-	const domain = url.parse(paths.publicUrl).hostname || 'localhost';
-	const api = url.parse(server);
-
-	// eslint-disable-next-line no-unused-vars
-	const apiPort = api.port, apiHost = api.hostname || 'localhost';
+	const domain = url.parse(paths.publicUrl).hostname || 'app.localhost';
 
 
 	const devPort = config['webpack-dev-server'] || await getPort();
@@ -43,8 +42,9 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	clientConfig.output.path = '/';
 	clientConfig.output.publicPath = config.basepath;
 
+	const https = await getHTTPS();
 
-	if (devPort !== 0 && HTTPS) {
+	if (devPort !== 0 && https) {
 		for (let entry of Object.keys(clientConfig.entry)) {
 			const e = clientConfig.entry[entry];
 			e.unshift(`webpack-dev-server/client?http://${domain}:${devPort}`);
@@ -63,19 +63,14 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// hot: true,
 		// hotOnly: true,
 
-		// This proxy will only work from the direct dev-server port. Only used for debugging.
-		// proxy: {
-		// 	'*': `http://${apiHost}:${apiPort}/`
-		// },
-
 		// Webpack Dev Server gets confused when setting this... content is served from memory.
 		// The output.publicPath covers us here.
 		// publicPath: config.basepath,
 
-		https: getHTTPS(),
+		https,
 		compress: true,
 		contentBase: paths.assetsRoot,
-		public: `localhost:${devPort}`,
+		public: `${domain}:${devPort}`,
 		overlay: {
 			errors: true,
 			warnings: false,
