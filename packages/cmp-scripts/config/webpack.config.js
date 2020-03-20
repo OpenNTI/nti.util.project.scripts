@@ -161,7 +161,7 @@ exports = module.exports = {
 		},
 		proxy: [{
 			context: ['/content', '/dataserver2'],
-			target: 'http://localhost:8082',
+			target: 'https://app.localhost',
 		}],
 		stats: 'errors-only',
 	},

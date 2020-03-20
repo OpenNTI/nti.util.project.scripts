@@ -3,15 +3,17 @@
 const DEBUG = process.argv.includes('--debug');
 const INSPECT = process.argv.includes('--inspect-service');
 const os = require('os');
-const chalk = require('chalk');
-const fs = require('fs-extra');
-const colorz = require('json-colorz');
 const path = require('path');
 const url = require('url');
+
+const chalk = require('chalk');
+const fs = require('fs-extra');
+const color = require('json-colorz');
 const tmp = require('tmp');
 const call = require('@nti/lib-scripts/tasks/utils/call-cmd');
 
 const paths = require('../config/paths');
+
 const merge = require('./utils/merge-config');
 
 const write = (...args) => console.log(...args);
@@ -24,8 +26,8 @@ if (paths.appBuildHook) {
 	call(process.argv[0], [paths.appBuildHook]);
 }
 
-
-const {hostname = 'localhost', protocol, port} = url.parse(paths.publicUrl || 'proxy://localhost:8083/');
+const publicUrl = paths.publicUrl || 'https://app.localhost:8083/';
+const {protocol, port = 8083} = url.parse(publicUrl);
 
 const service = require.resolve('@nti/web-service/src/index.js');
 const servicePath = path.dirname(service);
@@ -40,7 +42,11 @@ if (DEBUG && localConfig) write('Loaded local config override.');
 if (DEBUG) write(`Loading base config: ${chalk.magenta(paths.baseConfig)}`);
 
 const config = merge(fs.readJsonSync(paths.baseConfig), localConfig);
-const server = Object.assign(url.parse(config.development.server), {hostname, host: null});
+const server = new URL(config.development.server || '/dataserver2/', publicUrl);
+
+// We will use the default port now for communicating to the dataserver.
+// If we set this to the app port, the app will have to proxy /dataserver2/ calls... and that seems messy...
+server.port = '';
 
 if (DEBUG && localConfig) write('Merged baseConfig with local override...');
 
@@ -48,7 +54,7 @@ if (DEBUG) write(`Setting port to ${chalk.magenta(port)}`);
 if (DEBUG) write('Appending app to config...');
 Object.assign(config.development, {
 	port,
-	server: server.format(),
+	server: server.toString(),
 	apps:[
 		...config.development.apps,
 		{
@@ -63,7 +69,7 @@ fs.writeJsonSync(tempConfig.name, config);
 
 if (DEBUG) {
 	writeHeading('Resolved Config:\n');
-	colorz(config);
+	color(config);
 }
 
 writeHeading('Starting web-service.');
