@@ -2,7 +2,6 @@
 const path = require('path');
 const eslintFormatter = require('react-dev-utils/eslintFormatter');
 
-const cache = require('./cache');
 const thread = require('./thread');
 const {PROD} = require('./env');
 const paths = require('./paths');
@@ -93,14 +92,13 @@ const loaders = (options = {}) => {
 				/[/\\\\]react(-dom)?[/\\\\]/,
 			],
 			use: [
-				cache(options.cache),
 				thread(options.thread),
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
 						babelrc: false,
 						compact: false,
-						cacheDirectory: false,
+						cacheDirectory: true,
 						cacheCompression: false,
 						highlightCode: true,
 						...(options.babel || {})

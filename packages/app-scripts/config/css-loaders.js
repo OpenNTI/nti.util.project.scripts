@@ -3,7 +3,6 @@ const path = require('path');
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const cache = require('./cache');
 const {PROD} = require('./env');
 const workspaceLinks = require('./workspace-links');
 
@@ -66,7 +65,6 @@ const loaders = (paths, options = {}) => [
 		test: /\.s(a|c)ss$/,
 		use: [
 			style(options.server),
-			cache(),
 			css(),
 			postCss(paths),
 			resolveUrl(),
@@ -85,7 +83,6 @@ const loaders = (paths, options = {}) => [
 		].filter(Boolean),
 		use: [
 			style(options.server),
-			cache(),
 			css({
 				modules: {
 					localIdentName: '[local]--[hash:base64:8]'
@@ -100,7 +97,6 @@ const loaders = (paths, options = {}) => [
 		test: /\.css$/,
 		use: [
 			style(options.server),
-			cache(),
 			css({importLoaders: 2}),
 			postCss(paths),
 			resolveUrl()
