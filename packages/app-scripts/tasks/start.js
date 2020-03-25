@@ -78,8 +78,6 @@ if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
 
 call(process.argv[0], [
 	INSPECT && '--inspect-brk',
-	'--harmony-optional-chaining',
-	'--harmony-nullish',
 	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 	service,
 	DEBUG && '--debug',
