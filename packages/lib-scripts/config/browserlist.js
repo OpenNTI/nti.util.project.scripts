@@ -15,7 +15,7 @@ const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROW
 	'not dead',
 	// Dropping IE will result in about a 21% drop in bundled JS size. (uncompressed)
 	// It will also give a potential 25% speedup to build time. (based on a 2013-MacBookPro)
-	'IE 11',// 'not ie 6-11',
+	'not IE 6-11',//'IE 11',
 ];
 
 
