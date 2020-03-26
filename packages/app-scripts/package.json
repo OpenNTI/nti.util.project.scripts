@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.20.0",
+  "version": "2.20.1",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -31,7 +31,7 @@
     "@nti/dev-ssl-config": "^2.18.0",
     "@nti/eslint-config-app-scripts": "^2.18.6",
     "@nti/git-state": "NextThought/git-state",
-    "@nti/lib-scripts": "^2.20.0",
+    "@nti/lib-scripts": "^2.20.1",
     "@nti/progress-bar-webpack-plugin": "^1.13.0",
     "@nti/web-service": "NextThought/nti.web.service",
     "abortcontroller-polyfill": "^1.4.0",
