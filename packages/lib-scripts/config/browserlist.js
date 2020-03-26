@@ -12,9 +12,9 @@ const hasValue = x => x && x !== 'null';
 const { NTI_DEV_BROWSER } = process.env;
 const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROWSER.split(',') : [
 	'> 1% in US and last 2 versions',
-	'Edge >=17',
+	'Edge >= 17',
 	'not dead',
-	'not IE',
+	'not IE >= 0',
 ];
 
 
