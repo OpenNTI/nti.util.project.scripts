@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 'use strict';
+const fs = require('fs');
 const all = require('./gather');
 const deleteSecret = require('./del');
 const setSecret = require('./set');
@@ -13,14 +14,17 @@ const common = y => y
 	.positional('name', { describe: 'name of secret', type: 'string', default: 'actions_repo_access' });
 
 
+const data = process.stdin.isTTY ? null : fs.readFileSync(0, 'utf-8');
+
 require('yargs')
+	.command(`set${data ? '' : ' <value>'} [name]`, 'set a secret',
+		y => data
+			? common(y)
+			: common(y)
+				.positional('value', { describe: 'value of secret', type: 'string' }),
 
-	.command('set <value> [name]', 'set a secret',
-		y => common(y)
-			.positional('value', { describe: 'value of secret', type: 'string' }),
-
-		async ({ name, value, repo, ...opts }) => {
-			if (opts.all) {
+		async ({ name, value = data, repo, all }) => {
+			if (all) {
 				await all(r => setSecret(name, value, r));
 			} else {
 				await setSecret(name, value, repo);
@@ -37,6 +41,6 @@ require('yargs')
 			}
 		}
 	)
-
 	.help('help')
 	.argv;
+
