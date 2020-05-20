@@ -52,7 +52,7 @@
     "@nti/eslint-config-lib-scripts": "^2.12.2",
     "@nti/git-state": "NextThought/git-state",
     "@nti/install-snapshots": "^2.19.2",
-    "@rollup/plugin-commonjs": "^11.0.1",
+    "@rollup/plugin-commonjs": "^12.0.0",
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^7.0.0",
     "babel-jest": "^26.0.1",
