@@ -11,6 +11,7 @@ module.exports = function (api, opts) {
 		compact: false,
 		presets: [
 			['@babel/preset-env', {
+				loose: true,
 				shippedProposals: true,
 				corejs: env.useBuiltIns ? { version: 3, proposals: true } : void 0,
 				targets: {
