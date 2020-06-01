@@ -25,7 +25,6 @@ const workspaceLinks = (!PROD && paths.workspace)
 	? getWorkspace(paths.workspace, paths.packageJson)
 	: {};
 
-
 //TODO: Figure out how to inherit webpack config from app-scripts and mutate to target cmp-scripts needs so we
 //		can maintain one set of loader/workspace implementations.
 
@@ -74,6 +73,21 @@ exports = module.exports = {
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
+
+			...(
+				// just in case these modules aren't used in the host project, don't blow up if they aren't present.
+				['react', 'react-dom']
+					.reduce(
+						(o, mod) => {
+							try {
+								o[mod] = path.dirname(require.resolve(path.join(mod, 'package.json')));
+							}
+							catch {/*not found*/}
+							return o;
+						},
+						{}
+					)
+			),
 		},
 	},
 

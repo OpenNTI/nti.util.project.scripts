@@ -186,6 +186,21 @@ const ClientConfig = {
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
+
+			...(
+				// just in case these modules aren't used in the host project, don't blow up if they aren't present.
+				['react', 'react-dom']
+					.reduce(
+						(o, mod) => {
+							try {
+								o[mod] = path.dirname(require.resolve(path.join(mod, 'package.json')));
+							}
+							catch {/*not found*/}
+							return o;
+						},
+						{}
+					)
+			),
 		},
 	},
 
