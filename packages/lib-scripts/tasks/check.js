@@ -12,7 +12,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 process.env.BABEL_ENV = process.env.BABEL_ENV || process.env.NODE_ENV;
 
 call('eslint', [
-	...(isCI ? ['--quiet'] : []),
 	'--ext',
 	'.js,.jsx',
 	paths.src,
