@@ -4,90 +4,55 @@ Repo of project scripts. These scripts manage releasing as well as dev dependenc
 
 ## Build Statuses
 
- <style>
- #grid {
-  display:grid;
-  gap: 1em;
-  grid-template-columns: repeat(auto-fill, minmax(20vw, 3fr));
- }
-</style>
+[![nti.web.app](https://github.com/NextThought/nti.web.app/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.app/actions)<br/>
+[![nti.web.environments](https://github.com/NextThought/nti.web.environments/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.environments/actions)<br/>
+[![nti.web.login](https://github.com/NextThought/nti.web.login/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.login/actions)<br/>
+[![nti.web.mobile](https://github.com/NextThought/nti.web.mobile/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.mobile/actions)<br/>
 
-<div id="grid">
-<status-badge repo="NextThought/nti.web.service"></status-badge>
-<status-badge repo="NextThought/nti.web.mobile"></status-badge>
-<status-badge repo="NextThought/nti.web.login"></status-badge>
-<status-badge repo="NextThought/nti.web.app"></status-badge>
-<status-badge repo="NextThought/nti.web.video"></status-badge>
-<status-badge repo="NextThought/nti.web.modeled-content"></status-badge>
-<status-badge repo="NextThought/nti.web.client"></status-badge>
-<status-badge repo="NextThought/nti.web.assignment-editor"></status-badge>
-<status-badge repo="NextThought/nti.web.commons"></status-badge>
-<status-badge repo="NextThought/nti.web.whiteboard"></status-badge>
-<status-badge repo="NextThought/nti.web.discussions"></status-badge>
-<status-badge repo="NextThought/nti.web.content"></status-badge>
-<status-badge repo="NextThought/nti.util.logger"></status-badge>
-<status-badge repo="NextThought/nti.util.detection.touch"></status-badge>
-<status-badge repo="NextThought/nti.util.git.rev"></status-badge>
-<status-badge repo="NextThought/nti.util.ios-version"></status-badge>
-<status-badge repo="NextThought/nti.lib.dom"></status-badge>
-<status-badge repo="NextThought/nti.lib.anchors"></status-badge>
-<status-badge repo="NextThought/nti.lib.interfaces"></status-badge>
-<status-badge repo="NextThought/nti.lib.whiteboard"></status-badge>
-<status-badge repo="NextThought/nti.lib.ranges"></status-badge>
-<status-badge repo="NextThought/nti.lib.ntiids"></status-badge>
-<status-badge repo="NextThought/nti.lib.content-processing"></status-badge>
-<status-badge repo="NextThought/nti.lib.store"></status-badge>
-<status-badge repo="NextThought/nti.lib.dispatcher"></status-badge>
-<status-badge repo="NextThought/nti.lib.locale"></status-badge>
-<status-badge repo="NextThought/nti.lib.commons"></status-badge>
-<status-badge repo="NextThought/nti.lib.analytics"></status-badge>
-<status-badge repo="NextThought/nti.lib.vendor"></status-badge>
-<status-badge repo="NextThought/nti.web.storage"></status-badge>
-<status-badge repo="NextThought/nti.lib.decorators"></status-badge>
-<status-badge repo="NextThought/nti.util.project.scripts"></status-badge>
-<status-badge repo="NextThought/nti.lib.store.connector"></status-badge>
-<status-badge repo="NextThought/nti.web.course"></status-badge>
-<status-badge repo="NextThought/nti.web.editor"></status-badge>
-<status-badge repo="NextThought/nti.web.catalog"></status-badge>
-<status-badge repo="NextThought/nti.web.contacts"></status-badge>
-<status-badge repo="NextThought/nti.web.searc h"></status-badge>
-<status-badge repo="NextThought/nti.web.session"></status-badge>
-<status-badge repo="NextThought/nti.web.charts"></status-badge>
-<status-badge repo="NextThought/nti.web.routing"></status-badge>
-<status-badge repo="NextThought/nti.web.reports"></status-badge>
-<status-badge repo="NextThought/nti.util.dashboard"></status-badge>
-<status-badge repo="NextThought/nti.web.help"></status-badge>
-<status-badge repo="NextThought/nti.web.profiles"></status-badge>
-<status-badge repo="NextThought/nti.web.integrations"></status-badge>
-<status-badge repo="NextThought/nti.web.library"></status-badge>
-<status-badge repo="NextThought/nti.web.payments"></status-badge>
-<status-badge repo="NextThought/nti.web.calendar"></status-badge>
-<status-badge repo="NextThought/nti.web.notifications"></status-badge>
-<status-badge repo="NextThought/nti.web.environments"></status-badge>
-</div>
-
-<template id="badge">
-    <a href="$repo" target="_blank" rel="noopener noreferrer">
-        <img alt="Build Status" width="156" height="20"/>
-    </a>
-</template>
-
-<script type="text/javascript">
-    const template = x => document.getElementById(x).content.cloneNode(true);
-    customElements.define('status-badge',
-        class extends HTMLElement {
-            constructor() {
-                super();
-                this.attachShadow({mode: 'open'});
-                this.shadowRoot.appendChild(template('badge'));
-                const repo = `http://github.com/${this.getAttribute('repo')}`;
-                const link = this.shadowRoot.querySelector('a');
-                const img = this.shadowRoot.querySelector('img');
-                link.setAttribute('href', repo);
-                img.setAttribute('src', `${repo}/workflows/Project%20Health/badge.svg`)
-                const label = document.createElement('span');
-                label.textContent =  this.getAttribute('repo');
-                link.appendChild(label);
-            }
-    });
-</script>
+---
+[![nti.lib.analytics](https://github.com/NextThought/nti.lib.analytics/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.analytics/actions)<br/>
+[![nti.lib.anchors](https://github.com/NextThought/nti.lib.anchors/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.anchors/actions)<br/>
+[![nti.lib.commons](https://github.com/NextThought/nti.lib.commons/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.commons/actions)<br/>
+[![nti.lib.content-processing](https://github.com/NextThought/nti.lib.content-processing/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.content-processing/actions)<br/>
+[![nti.lib.decorators](https://github.com/NextThought/nti.lib.decorators/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.decorators/actions)<br/>
+[![nti.lib.dispatcher](https://github.com/NextThought/nti.lib.dispatcher/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.dispatcher/actions)<br/>
+[![nti.lib.dom](https://github.com/NextThought/nti.lib.dom/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.dom/actions)<br/>
+[![nti.lib.interfaces](https://github.com/NextThought/nti.lib.interfaces/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.interfaces/actions)<br/>
+[![nti.lib.locale](https://github.com/NextThought/nti.lib.locale/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.locale/actions)<br/>
+[![nti.lib.ntiids](https://github.com/NextThought/nti.lib.ntiids/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.ntiids/actions)<br/>
+[![nti.lib.ranges](https://github.com/NextThought/nti.lib.ranges/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.ranges/actions)<br/>
+[![nti.lib.store.connector](https://github.com/NextThought/nti.lib.store.connector/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.store.connector/actions)<br/>
+[![nti.lib.store](https://github.com/NextThought/nti.lib.store/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.store/actions)<br/>
+[![nti.lib.vendor](https://github.com/NextThought/nti.lib.vendor/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.vendor/actions)<br/>
+[![nti.lib.whiteboard](https://github.com/NextThought/nti.lib.whiteboard/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.whiteboard/actions)<br/>
+[![nti.util.dashboard](https://github.com/NextThought/nti.util.dashboard/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.util.dashboard/actions)<br/>
+[![nti.util.detection.](https://github.com/NextThought/nti.util.detection.touch/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.util.detection.touch/actions)<br/>
+[![nti.util.git.rev](https://github.com/NextThought/nti.util.git.rev/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.util.git.rev/actions)<br/>
+[![nti.util.ios-version](https://github.com/NextThought/nti.util.ios-version/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.util.ios-version/actions)<br/>
+[![nti.util.logger](https://github.com/NextThought/nti.util.logger/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.util.logger/actions)<br/>
+[![nti.web.assignment-editor](https://github.com/NextThought/nti.web.assignment-editor/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.assignment-editor/actions)<br/>
+[![nti.web.calendar](https://github.com/NextThought/nti.web.calendar/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.calendar/actions)<br/>
+[![nti.web.catalog](https://github.com/NextThought/nti.web.catalog/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.catalog/actions)<br/>
+[![nti.web.charts](https://github.com/NextThought/nti.web.charts/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.charts/actions)<br/>
+[![nti.web.client](https://github.com/NextThought/nti.web.client/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.client/actions)<br/>
+[![nti.web.commons](https://github.com/NextThought/nti.web.commons/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.commons/actions)<br/>
+[![nti.web.contacts](https://github.com/NextThought/nti.web.contacts/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.contacts/actions)<br/>
+[![nti.web.content](https://github.com/NextThought/nti.web.content/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.content/actions)<br/>
+[![nti.web.course](https://github.com/NextThought/nti.web.course/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.course/actions)<br/>
+[![nti.web.discussions](https://github.com/NextThought/nti.web.discussions/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.discussions/actions)<br/>
+[![nti.web.editor](https://github.com/NextThought/nti.web.editor/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.editor/actions)<br/>
+[![nti.web.help](https://github.com/NextThought/nti.web.help/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.help/actions)<br/>
+[![nti.web.integrations](https://github.com/NextThought/nti.web.integrations/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.integrations/actions)<br/>
+[![nti.web.library](https://github.com/NextThought/nti.web.library/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.library/actions)<br/>
+[![nti.web.modeled-](https://github.com/NextThought/nti.web.modeled-content/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.modeled-content/actions)<br/>
+[![nti.web.notifications](https://github.com/NextThought/nti.web.notifications/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.notifications/actions)<br/>
+[![nti.web.payments](https://github.com/NextThought/nti.web.payments/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.payments/actions)<br/>
+[![nti.web.profiles](https://github.com/NextThought/nti.web.profiles/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.profiles/actions)<br/>
+[![nti.web.reports](https://github.com/NextThought/nti.web.reports/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.reports/actions)<br/>
+[![nti.web.routing](https://github.com/NextThought/nti.web.routing/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.routing/actions)<br/>
+[![nti.web.search](https://github.com/NextThought/nti.web.search/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.search/actions)<br/>
+[![nti.web.service](https://github.com/NextThought/nti.web.service/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.service/actions)<br/>
+[![nti.web.session](https://github.com/NextThought/nti.web.session/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.session/actions)<br/>
+[![nti.web.storage](https://github.com/NextThought/nti.web.storage/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.storage/actions)<br/>
+[![nti.web.video](https://github.com/NextThought/nti.web.video/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.video/actions)<br/>
+[![nti.web.whiteboard](https://github.com/NextThought/nti.web.whiteboard/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.whiteboard/actions)<br/>
