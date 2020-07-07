@@ -2,6 +2,7 @@
 const fs = require('fs-extra');
 const { call } = require('./util');
 
+call('npm run build');
 call('npm pack');
 
 for( let f of fs.readdirSync(process.cwd())) {

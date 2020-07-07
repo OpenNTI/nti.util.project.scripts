@@ -10,6 +10,8 @@ if (!publishConfig || !publishConfig.registry) {
 	return process.exit(1);
 }
 
+call('npm run build');
+
 if (isSnapshot) {
 	if (!/-alpha/.test(version)) {
 		printLine('Version %s, does not have an alpha tag. Aborting.', version);
