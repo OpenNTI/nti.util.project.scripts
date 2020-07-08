@@ -6,7 +6,7 @@ const path = require('path');
 const { printLine, print } = require('./util');
 
 const cwd = process.cwd();
-
+printLine('::group::Clean');
 [
 	'node_modules',
 	'reports'
@@ -16,3 +16,4 @@ const cwd = process.cwd();
 	fs.removeSync(dir);
 	printLine('done.');
 });
+printLine('::endgroup::')
