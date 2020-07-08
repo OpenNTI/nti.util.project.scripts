@@ -16,29 +16,3 @@ if ! git diff-index --quiet --cached HEAD; then
 fi
 
 lerna publish --yes
-
-DIRS=packages/*
-for f in $DIRS;
-do
-	if [ ! -d $f ] ; then
-		continue
-	fi
-
-	(
-	cd $f;
-
-	PACKAGE_ID=`node -e "process.stdout.write((o => o.name+'@'+o.version)(require('./package.json')))"`
-	PACKAGE_NAME=${PACKAGE_ID%@*}
-
-	EXISTS=`npm view $PACKAGE_ID`
-	if [ ${#EXISTS} == 0 ] ; then
-		VERSIONS=`npm view . .versions --json | jq -r '.[]'`;
-		for i in $VERSIONS;
-		do
-			if [[ "$i" == *alpha ]] ; then
-				npm unpublish $PACKAGE_NAME@$i
-			fi
-		done
-	fi
-	)
-done
