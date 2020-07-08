@@ -18,7 +18,7 @@ if (isSnapshot) {
 
 	pkg.version = v.format();
 
-	print('Preparing: %s@%s ... ', name, pkg.version);
+	print('::group::Preparing: %s@%s ... ', name, pkg.version);
 
 	fs.removeSync(lockfile);
 
@@ -38,3 +38,4 @@ if (isSnapshot) {
 }
 
 printLine('done.');
+printLine('::endgroup::');
