@@ -28,7 +28,9 @@ if (isSnapshot) {
 			[json.dependencies, json.devDependencies].forEach(deps =>
 				deps && Object.keys(deps)
 					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-					.forEach(x => (o => o[x] = 'alpha')(deps))),
+					.forEach(x => (o => {
+						o[x] = o[x].split('#'); // strip anchors
+					})(deps))),
 			json
 		))(pkg),
 		{spaces: 2}

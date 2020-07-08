@@ -18,41 +18,14 @@ fi
 lerna publish --yes
 
 DIRS=packages/*
-
 for f in $DIRS;
 do
 	if [ ! -d $f ] ; then
 		continue
 	fi
 
-	if [[ -f "${f}/.skip-alpha" ]] ; then
-		continue
-	fi
-
 	(
 	cd $f;
-
-	# point all "nti-" dependencies to the snapshot tag.
-	node <<EOF > .package-alpha.json
-		process.stdout.write(
-			JSON.stringify(
-				(json => ([
-						json.dependencies,
-						json.devDependencies
-					].forEach(deps =>
-						deps && Object.keys(deps)
-							.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-							.forEach(x => (o => o[x] = 'alpha')(deps))
-					),
-					json.version = json.version + '-alpha',
-					json
-				))(require('./package.json')), void 0, 2
-			)
-		)
-EOF
-
-	#replace the package.json with the temp...
-	mv .package-alpha.json package.json
 
 	PACKAGE_ID=`node -e "process.stdout.write((o => o.name+'@'+o.version)(require('./package.json')))"`
 	PACKAGE_NAME=${PACKAGE_ID%@*}
@@ -66,10 +39,6 @@ EOF
 				npm unpublish $PACKAGE_NAME@$i
 			fi
 		done
-
-		npm publish --tag alpha
 	fi
-
-	git checkout package.json &> /dev/null
 	)
 done
