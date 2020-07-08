@@ -13,7 +13,7 @@ const options = {
 	}
 };
 
-printLine('Installing dependencies ... ');
+printLine('::group::Installing dependencies ... ');
 const {status:result} = call(`npm ${!lockfileExists() ? 'i' : 'ci'} --no-progress`, options);
 if (result === SUCCESS) {
 	printLine('done.');
@@ -48,5 +48,7 @@ function reportInstalled () {
 		printLine(`${name}${spaces}${path}`);
 	}
 
+
 	printLine('-- End of Installed Packages --');
+	printLine('::endgroup::');
 }

@@ -1,7 +1,7 @@
 'use strict';
 const { call, printLine, print, lockfileExists } = require('./util');
 
-print('Installing dependencies ... ');
+print('::group::Installing dependencies ... ');
 
 call(`npm ${!lockfileExists() ? 'i' : 'ci'} --no-progress`, {
 	env: {
@@ -11,5 +11,5 @@ call(`npm ${!lockfileExists() ? 'i' : 'ci'} --no-progress`, {
 		NODE_ENV: 'development'
 	}
 });
-
 printLine('done.');
+printLine('::endgroup::');
