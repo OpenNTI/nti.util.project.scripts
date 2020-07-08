@@ -29,7 +29,7 @@ if (isSnapshot) {
 				deps && Object.keys(deps)
 					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
 					.forEach(x => (o => {
-						o[x] = o[x].split('#'); // strip anchors
+						o[x] = o[x].split('#')[0]; // strip anchors
 					})(deps))),
 			json
 		))(pkg),
