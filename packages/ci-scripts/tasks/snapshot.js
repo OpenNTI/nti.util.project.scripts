@@ -1,9 +1,11 @@
 // snapshot
 'use strict';
 
-const { printHeader, getPackageNameAndVersion } = require('./util');
+const { printLine, printHeader, getPackageNameAndVersion } = require('./util');
 const { name, version } = getPackageNameAndVersion();
+printLine('::group::')
 printHeader('Preparing snapshot build:\n  %s@%s', name, version);
+printLine('::endgroup::')
 
 require('./clean');
 
