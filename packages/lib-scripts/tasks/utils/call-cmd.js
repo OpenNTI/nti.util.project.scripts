@@ -15,6 +15,10 @@ function call (cmd, args, opts = STDIO, printStdError = false) {
 		}
 		process.exit(result.status);
 	}
+
+	if (result.stdout) {
+		return result.stdout.toString('utf8');
+	}
 }
 
 

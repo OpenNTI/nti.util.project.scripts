@@ -9,9 +9,13 @@ const call = require('./utils/call-cmd');
 
 const write = x => console.log(chalk.cyan('\n' + x));
 
-write('Updating lock file...');
+const usesLocks = /true/i.test(call('npm', ['config', 'get', 'package-lock'], {stdio: 'pipe'}));
+if (usesLocks) {
 
-fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
-fs.removeSync(path.resolve(paths.path, 'node_modules'));
+	write('Updating lock file...');
 
-call('npm', ['install', '--no-progress']);
+	fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
+	fs.removeSync(path.resolve(paths.path, 'node_modules'));
+
+	call('npm', ['install', '--no-progress']);
+}
