@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - master
+    paths-ignore:
+      - '*.yml'
+  repository_dispatch:
+    types: [snapshot]
 
 env:
   CI: true
