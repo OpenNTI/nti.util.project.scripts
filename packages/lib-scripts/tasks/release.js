@@ -79,7 +79,7 @@ async function preflightChecks () {
 	const locked = await usesLock();
 
 	if (branch === 'master' && locked && !process.argv.includes('--skip-lock-refresh')) {
-		tasks.unshift('update-locks');
+		tasks.unshift('update-lock');
 	}
 
 	if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
