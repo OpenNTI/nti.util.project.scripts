@@ -50,6 +50,13 @@ jobs:
           npm config set '@nti:registry' "$NPM_REGISTRY"
           npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
 
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: install dependencies
         run: npm install
 
