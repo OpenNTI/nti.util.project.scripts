@@ -9,7 +9,7 @@ on:
 jobs:
   Sync:
     runs-on: ubuntu-latest
-    name: Test
+    name: Sync
     # only sync from master
     if: github.ref == 'refs/heads/master'
     steps:
