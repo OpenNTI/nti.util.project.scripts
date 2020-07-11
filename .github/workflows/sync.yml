@@ -1,3 +1,5 @@
+name: Project Sync
+
 on:
   push:
     # only sync files in the init-files directories
