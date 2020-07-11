@@ -10,8 +10,6 @@ on:
     branches:
       - master
       - 'maint-*'
-    paths-ignore:
-      - '*.yml'
     tags:
       - 'v[0-9]+*'
 
