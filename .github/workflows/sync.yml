@@ -1,0 +1,26 @@
+on:
+  push:
+    # only sync files in the init-files directories
+    paths:
+      - 'packages/*/config/init-files/**'
+  repository_dispatch:
+    types: [sync]
+
+jobs:
+  Sync:
+    runs-on: ubuntu-latest
+    name: Test
+    # only sync from master
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup
+        run: (cd actions/sync; npm i &> ./npm.log)
+
+      - name: Sync
+        uses: ./actions/sync
+        with:
+          token: ${{ secrets.MY_GITHUB_TOKEN }}
+          # targets:
