@@ -1,14 +1,12 @@
 /* eslint-disable camelcase */
 'use strict';
 const core = require('@actions/core');
-const github = require('@actions/github');
-
-const {links} = require('./links');
+const {getOctokit} = require('@actions/github');
 
 const token = core.getInput('token');
 const targets = core.getInput('targets').split(',');
 const ignored = core.getInput('ignored').split(',');
-const octokit = github.getOctokit(token);
+const github = getOctokit(token);
 
 Object.assign(exports, {
 	list,
@@ -24,17 +22,12 @@ async function list () {
 	const out = [];
 	console.log('Fetching list of repositories...');
 
-	let page = 1, done = false;
-	do {
-		const {data, status, /*url,*/ headers} = await octokit.repos.listForOrg({ org: 'NextThought', per_page: 100, page: page++ });
-		// console.debug(status, url);
+	const opts = github.repos.listForOrg.endpoint.merge({ org: 'NextThought' });
+	const data = await github.paginate(opts);
 
-		done = status !== 200 || !links(headers.link).next;
-
-		out.push(
-			...data.map(x => x.full_name).filter(wanted)
-		);
-	} while(!done);
+	out.push(
+		...data.map(x => x.full_name).filter(wanted)
+	);
 
 	return out;
 }
