@@ -5,10 +5,15 @@ const core = require('@actions/core');
 
 const {list} = require('./list');
 const {clone} = require('./clone');
-const {sync} = require('./sync');
+const {sync, hasChanges} = require('./sync');
 
 async function main () {
 	try {
+		if (!await hasChanges()) {
+			console.log('No changes to sync.');
+			return;
+		}
+
 		await fs.mkdir('repos');
 
 		for (const repo of await list()) {

@@ -1,11 +1,22 @@
 'use strict';
 const {join} = require('path');
 const {promises: fs} = require('fs');
+
+const {context} = require('@actions/github');
+
 const {exec} = require('../../../packages/lib-scripts/tasks/utils/call-cmd');
 
 Object.assign(exports, {
 	sync,
+	hasChanges,
 });
+
+let FILES_TO_SYNC = null;
+
+async function listChangedFiles  (dir) {
+	const files = await exec(dir, 'git diff-tree --no-commit-id --name-only -r HEAD');
+	return files.trim().split('\n').map(x => join(dir, x));
+}
 
 async function listDirectory (dir) {
 	const out = [];
@@ -18,28 +29,53 @@ async function listDirectory (dir) {
 	return out;
 }
 
-async function getSources (script) {
+async function hasChanges () {
+	return getSources('has-changes');
+}
+
+async function computeDiff () {
 	const cwd = process.cwd();
 	const get = x => `${cwd}/packages/${x}-scripts/config/init-files/`;
-	const [lib, app, cmp] = await Promise.all([
+	const [changes, lib, app, cmp] = await Promise.all([
+		context.eventName === 'push' && listChangedFiles(cwd),
 		listDirectory(get('lib')),
 		listDirectory(get('app')),
 		listDirectory(get('cmp')),
 	]);
 
+
 	const pattern = new RegExp(get('(lib|app|cmp)'));
 
+	let changed = false;
 	const toMap = (o, p) => {
 		const key = p.replace(pattern, '').replace(/(.+)\.dotfile$/i, '.$1');
-		o[key] = p;
+		if (!changes || changes.includes(p)) {
+			changed = true;
+			o[key] = p;
+		}
 		return o;
 	};
 
-	return {
-		[script]: {},
+	const groups = {
 		'lib-scripts': lib.reduce(toMap, {}),
 		'app-scripts': [...lib,...app].reduce(toMap, {}),
 		'cmp-scripts': [...lib,...cmp].reduce(toMap, {}),
+	};
+
+	return {
+		...groups,
+		'has-changes': changed,
+	};
+}
+
+async function getSources (script) {
+	if (!FILES_TO_SYNC) {
+		FILES_TO_SYNC = computeDiff();
+	}
+
+	return {
+		[script]: {},
+		...(await FILES_TO_SYNC),
 	}[script];
 }
 
@@ -59,9 +95,14 @@ async function sync (dir) {
 		console.warn('"%s" does not appear to use our templates. Skipping.', dir);
 		return;
 	}
-	const targets = await getSources(script);
+	const targets = Object.entries(await getSources(script));
 
-	await Promise.all(Object.entries(targets)
+	if (targets.length === 0) {
+		console.debug('No changes');
+		return;
+	}
+
+	await Promise.all(targets
 		.map(([t,src]) => exec(dir, [
 			'cp', src, join(dir,t)].join(' ')
 		))
@@ -69,16 +110,19 @@ async function sync (dir) {
 
 	const diff = (await exec(dir, 'git diff')).trim();
 
-	if (diff) {
-		for (let f of Object.keys(targets)) {
-			await exec(dir, 'git add -f ' + f);
-		}
-
-		console.log('Updated: ', dir);
-		console.log(await exec(dir, [
-			'git commit -m ":wrench: Synchronize project files from updated templates"',
-			// 'git show HEAD',
-			'git push'
-		].join(';')));
+	if (!diff) {
+		console.debug('No changes');
+		return;
 	}
+
+	for (let [f] of targets) {
+		await exec(dir, 'git add -f ' + f);
+	}
+
+	console.log('Updated: ', dir);
+	console.log(await exec(dir, [
+		'git commit -m ":wrench: Synchronize project files from updated templates"',
+		// 'git show HEAD',
+		'git push'
+	].join(';')));
 }
