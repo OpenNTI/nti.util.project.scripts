@@ -9,6 +9,7 @@ import gitState from '@nti/git-state';
 import { listProjects, isProject } from './list.js';
 import { exec } from './exec.js';
 import { write, readJSON } from './utils.js';
+import { updateLock } from './update-lock.js';
 
 process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
 const DATE = new Date().toString();
@@ -73,7 +74,7 @@ export async function checkStatus (dir) {
 
 	return {
 		dir,
-		command,
+		command: /^(.+)-scripts$/.test(command) ? command : void 0,
 		pkg,
 		...status,
 		...await resolveRemote(remote),
@@ -111,14 +112,9 @@ async function whatChanged (dir, from, to = 'HEAD') {
 export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
 	// const skipChecks = process.argv.includes('--skip-checks');
 	const tasks = [];//skipChecks ? [] : ['check', 'test'];
-	const locked = await usesLock(dir);
 
 	if (await checkLockfile(dir) === false) {
 		return false;
-	}
-
-	if (branch === 'master' && locked && !process.argv.includes('--skip-lock-refresh')) {
-		tasks.unshift('update-lock');
 	}
 
 	if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
@@ -176,10 +172,18 @@ export async function checkLockfile (dir) {
 
 export async function performRelease (tasks, {dir, branch, repo, command, pkg, url}, major) {
 	// const call = (x, args = []) => exec(dir, [x, ...args].join(' '));
-	const call = (x, args = []) => write(dir, [x, ...args].join(' '));
+	const call = async (x, args = []) => write(dir, [x, ...args].join(' '));
 	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
+	if (branch === 'master' && !process.argv.includes('--skip-lock-refresh')) {
+		await updateLock(dir);
+	}
+
 	for (let task of tasks) {
+		if (!command) {
+			continue;
+		}
+
 		write(chalk.cyan('\nRunning: Task: ' + chalk.underline.magenta(task)));
 		await call(command, [task]);
 	}
@@ -188,7 +192,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 	const version = semver.inc(pkg.version, inc);
 	const newTag = `v${version}`;
 	const nextVersion = semver.inc(version, 'minor') + '-alpha';
-	const lock = await usesLock();
+	const lock = await usesLock(dir);
 	const packageFiles = [
 		'package.json',
 		lock && 'package-lock.json'
