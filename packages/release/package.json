@@ -11,6 +11,7 @@
     "chalk": "^4.1.0",
     "inquirer": "^7.3.2",
     "lock-verify": "^2.2.0",
+    "netrc": "0.1.4",
     "semver": "^7.3.2"
   }
 }
