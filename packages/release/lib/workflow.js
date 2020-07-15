@@ -23,5 +23,9 @@ export async function releaseProject (repository) {
 
 	const tasks = await preflightChecks(repository, major);
 
-	await performRelease(tasks, repository, major);
+	if (tasks !== false) {
+		await performRelease(tasks || [], repository, major);
+	} else {
+		process.exit(1);
+	}
 }

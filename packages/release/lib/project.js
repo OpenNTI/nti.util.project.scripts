@@ -153,7 +153,7 @@ export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
 export async function checkLockfile (dir) {
 	if (!await usesLock(dir)) {return;}
 
-	const {warnings = [], errors = [], status} = await lockVerify(dir);
+	const {warnings = [], errors = [], status} = await lockVerify(dir).catch(() => ({}));
 
 	warnings.forEach(e => write(chalk.yellow('%s %s'), chalk.underline('Warning:'), e));
 	if (warnings.length > 0) {
