@@ -1,16 +1,21 @@
 import chalk from 'chalk';
 
-import {not} from './utils.js';
+import {not, getTermSize} from './utils.js';
 
 //#region utilities
 
-function label (x, max) {
-	const name = x.shortRepo?.padEnd(max);
+function label (x, maxNameLength, maxTagLength) {
+	const dirty = x.dirty ? '!' : '';
+	const name = x.shortName?.padEnd(maxNameLength);
+	const ahead = x.ahead ? `↑${x.ahead}` : '';
+	const behind = x.behind ? `↓${x.behind}` : '';
+	const queue = [ahead, behind, dirty].filter(Boolean).join(' ');
+
 	const info = !x.metadataOnlyChanges && x.commitsSinceTag
-		? `${(x.commitsSinceTag + ' commits since ').padStart(19)}${x.lastTag}`
+		? `${(x.commitsSinceTag + ' commits since ').padStart(19)}${x.lastTag.padEnd(maxTagLength)}`
 		: '';
 
-	return `${name} ${info}`;
+	return `${name} ${info}\t${chalk.bold(queue)}`;
 }
 //#endregion
 
@@ -25,15 +30,18 @@ export function WhatKindOfRelease (repositories) {
 }
 
 
-export function WhatRepositories (repositories) {
+export async function WhatRepositories (repositories) {
+	const {lines} = await getTermSize();
+
 	return {
 		message: 'Which projects do you want to release?',
 		type: 'checkbox',
-		pageSize: 15,
+		pageSize: lines - 2,
 		loop: false,
 		choices ({type = 'release'}) {
 			let choices = repositories;
-			const maxNameLength = choices.reduce((n, p) => Math.max(n, p.shortRepo?.length || 0), 0);
+			const maxNameLength = choices.reduce((n, p) => Math.max(n, p.shortName?.length || 0), 0);
+			const maxTagLength = choices.reduce((n, p) => Math.max(n, p.lastTag?.length || 0), 0);
 			const valid = type === 'release'
 				? x => x.branch !== 'master' && 'Not on master branch'
 				: x => !x.branch.startsWith('maint-') && 'Not on a maintenance branch';
@@ -52,10 +60,10 @@ export function WhatRepositories (repositories) {
 
 			return choices
 				.map(x => ({
-					short: x.shortRepo,
-					name: label(x, maxNameLength),
+					short: x.shortName,
+					name: label(x, maxNameLength, maxTagLength),
 					value: x,
-					disabled: valid(x)
+					disabled: x.dirty ? 'dirty' : valid(x)
 				}));
 		},
 		name: 'queue'

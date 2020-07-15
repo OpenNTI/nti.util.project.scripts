@@ -11,7 +11,6 @@ import { exec } from './exec.js';
 import { write, readJSON } from './utils.js';
 
 process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
-const skipChecks = process.argv.includes('--skip-checks');
 const DATE = new Date().toString();
 
 const usesLock = async (dir) => (await exec(dir, 'npm config get package-lock')) === 'true';
@@ -20,7 +19,28 @@ const gitStatus = promisify(gitState.check);
 
 export async function getRepositories (dir = process.cwd()) {
 	const projects = (await isProject(dir)('.')) ? [ dir ] : await listProjects(dir);
-	return Promise.all(projects.map(checkStatus));
+	const repos = await Promise.all(projects.map(checkStatus));
+
+	repos.sort((a, b) => {
+		const {command: a1} = a;
+		const {command: b1} = b;
+
+		const c = a.repo.localeCompare(b.repo);
+
+		if (a1 !== b1 ) {
+			if (a1 === 'app-scripts') {
+				return -1;
+			}
+
+			if (b1 === 'app-scripts') {
+				return 1;
+			}
+		}
+
+		return c;
+	});
+
+	return repos;
 }
 
 
@@ -36,26 +56,27 @@ export async function checkStatus (dir) {
 		return {
 			url,
 			repo,
-			shortRepo: repo.split('/')[1],
+			shortName: repo.split('/')[1],
 		};
 	}
 
-	const {branch, dirty, behind, remoteBranch = null} = await gitStatus(dir);
+	// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
+	const {remoteBranch:remote = null, ...status} = await gitStatus(dir);
 
-	if (!dirty && behind) {
+	if (!status.dirty && status.behind) {
 		await exec(dir, 'git pull -r');
+		status.behind = 0;
 	}
+
 	const pkg = await readJSON(join(dir, 'package.json'));
 	const [command] = pkg.scripts?.test?.split?.(' ') ?? [];
 
 	return {
 		dir,
-		behind,
-		branch,
-		dirty,
 		command,
 		pkg,
-		...await resolveRemote(remoteBranch),
+		...status,
+		...await resolveRemote(remote),
 		...await hasChanges(dir)
 	};
 }
@@ -88,8 +109,9 @@ async function whatChanged (dir, from, to = 'HEAD') {
 
 
 export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
-	const tasks = skipChecks ? [] : ['check', 'test'];
-	const locked = await usesLock();
+	// const skipChecks = process.argv.includes('--skip-checks');
+	const tasks = [];//skipChecks ? [] : ['check', 'test'];
+	const locked = await usesLock(dir);
 
 	if (await checkLockfile(dir) === false) {
 		return false;
@@ -133,7 +155,7 @@ export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
 
 
 export async function checkLockfile (dir) {
-	if (!await usesLock()) {return;}
+	if (!await usesLock(dir)) {return;}
 
 	const {warnings = [], errors = [], status} = await lockVerify(dir);
 
@@ -153,7 +175,8 @@ export async function checkLockfile (dir) {
 
 
 export async function performRelease (tasks, {dir, branch, repo, command, pkg, url}, major) {
-	const call = (x, args = []) => exec(dir, [x, ...args].join(' '));
+	// const call = (x, args = []) => exec(dir, [x, ...args].join(' '));
+	const call = (x, args = []) => write(dir, [x, ...args].join(' '));
 	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 	for (let task of tasks) {
