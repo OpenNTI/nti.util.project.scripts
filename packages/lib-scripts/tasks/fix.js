@@ -1,3 +1,4 @@
+//TODO: Move out to standalone command
 'use strict';
 const chalk = require('chalk');
 const inquirer = require('inquirer');
@@ -14,7 +15,7 @@ const write = (...x) => console.log(...x);
 const toList = (x) => x && x.stdout && x.stdout.toString('utf8').split(/[\r\n]+/).filter(Boolean);
 const call = (cmd, ...args) => spawnSync(cmd, args, {
 	cwd,
-	env: Object.assign({}, process.env),
+	env: { ...process.env},
 	stdio: [null, 'pipe', null],
 	maxBuffer: 1024 * 1024 //1MB max
 });
