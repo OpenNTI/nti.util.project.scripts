@@ -1,8 +1,10 @@
 import chalk from 'chalk';
 
-import {not, getTermSize} from './utils.js';
+import {arg, not, getTermSize} from './utils.js';
 
 //#region utilities
+const showMetaChanges = arg('--include-meta-changes', 'workspace:Do not filter out repositories with meta only changes');
+const all = arg('--all', 'workspace:List all available repositories (changed or not)');
 
 function label (x, maxNameLength, maxTagLength) {
 	const dirty = x.dirty ? '!' : '';
@@ -11,7 +13,10 @@ function label (x, maxNameLength, maxTagLength) {
 	const behind = x.behind ? `↓${x.behind}` : '';
 	const queue = [ahead, behind, dirty].filter(Boolean).join(' ');
 
-	const info = !x.metadataOnlyChanges && x.commitsSinceTag
+	const relevant = !x.metadataOnlyChanges || showMetaChanges;
+	const showInfo = x.commitsSinceTag && relevant;
+
+	const info = showInfo
 		? `${(x.commitsSinceTag + ' commits since ').padStart(19)}${x.lastTag.padEnd(maxTagLength)}`
 		: '';
 
@@ -42,6 +47,8 @@ export async function WhatRepositories (repositories) {
 			let choices = repositories;
 			const maxNameLength = choices.reduce((n, p) => Math.max(n, p.shortName?.length || 0), 0);
 			const maxTagLength = choices.reduce((n, p) => Math.max(n, p.lastTag?.length || 0), 0);
+			const changed = x => x.commitsSinceTag > 0;
+			const metaOnly = x => x.metadataOnlyChanges;
 			const valid = type === 'release'
 				? x => x.branch !== 'master' && 'Not on master branch'
 				: x => !x.branch.startsWith('maint-') && 'Not on a maintenance branch';
@@ -54,8 +61,11 @@ export async function WhatRepositories (repositories) {
 				}
 			}
 
-			if (type === 'release' && !process.argv.includes('--all')) {
-				choices = choices.filter(x => !x.metadataOnlyChanges);
+			if (type === 'release' && !all) {
+				choices = choices.filter(changed);
+				if (!showMetaChanges) {
+					choices = choices.filter(not(metaOnly));
+				}
 			}
 
 			return choices

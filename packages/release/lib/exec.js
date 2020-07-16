@@ -16,6 +16,9 @@ export async function exec (cwd, command) {
 	});
 }
 
+export function execSync (cwd, command) {
+	return child_process.execSync(command, {cwd}).toString('utf8').trim();
+}
 
 export function call (cmd, args, opts = STDIO, printStdError = false) {
 	const env = opts.env || process.env;

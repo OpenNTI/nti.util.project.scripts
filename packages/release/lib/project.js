@@ -8,10 +8,13 @@ import gitState from '@nti/git-state';
 
 import { listProjects, isProject } from './list.js';
 import { exec } from './exec.js';
-import { write, readJSON } from './utils.js';
+import { arg, write, readJSON } from './utils.js';
 import { updateLock } from './update-lock.js';
 
-process.env.__NTI_RELEASING = !process.argv.includes('--allow-workspace');
+process.env.__NTI_RELEASING = !arg('--allow-workspace', 'repo:Allow workspace links in builds that support them');
+// const skipChecks = arg('--skip-checks', 'repo:Skip tests and linting');
+const SKIP_LOCK_REFRESH = arg('--skip-lock-refresh', 'repo:Prevent regeneration of node_modules and lockfile');
+const DRY_RUN = !arg('--dry-run', 'repo:Print actions instead of executing them');
 const DATE = new Date().toString();
 
 const usesLock = async (dir) => (await exec(dir, 'npm config get package-lock')) === 'true';
@@ -110,7 +113,6 @@ async function whatChanged (dir, from, to = 'HEAD') {
 
 
 export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
-	// const skipChecks = process.argv.includes('--skip-checks');
 	const tasks = [];//skipChecks ? [] : ['check', 'test'];
 
 	if (await checkLockfile(dir) === false) {
@@ -171,11 +173,13 @@ export async function checkLockfile (dir) {
 
 
 export async function performRelease (tasks, {dir, branch, repo, command, pkg, url}, major) {
-	// const call = (x, args = []) => exec(dir, [x, ...args].join(' '));
-	const call = async (x, args = []) => write(dir, [x, ...args].join(' '));
+	const call = DRY_RUN
+		? async (x, args = []) => write(dir, [x, ...args].join(' '))
+		: async (x, args = []) => exec(dir, [x, ...args].join(' '));
+
 	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
-	if (branch === 'master' && !process.argv.includes('--skip-lock-refresh')) {
+	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
 		await updateLock(dir);
 	}
 

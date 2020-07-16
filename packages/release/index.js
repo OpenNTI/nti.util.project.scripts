@@ -2,7 +2,7 @@ import chalk from 'chalk';
 
 import { getRepositories } from './lib/project.js';
 import { releaseProject, releaseWorkspace } from './lib/workflow.js';
-import { write } from './lib/utils.js';
+import { arg, readJSONSync, write } from './lib/utils.js';
 
 
 async function main () {
@@ -20,6 +20,14 @@ async function main () {
 	}
 
 	return releaseWorkspace(repositories);
+}
+
+if(arg('--help,-?', 'This message')) {
+	write(`
+Usage: npx @nti/release [flags]
+release version: ${readJSONSync(new URL('./package.json', import.meta.url)).version}
+${arg.known}`);
+	process.exit(0);
 }
 
 

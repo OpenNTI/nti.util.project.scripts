@@ -12,6 +12,7 @@
     "inquirer": "^7.3.2",
     "lock-verify": "^2.2.0",
     "netrc": "0.1.4",
-    "semver": "^7.3.2"
+    "semver": "^7.3.2",
+    "word-wrap": "^1.2.3"
   }
 }
