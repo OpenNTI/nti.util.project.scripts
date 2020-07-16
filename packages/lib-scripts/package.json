@@ -49,7 +49,7 @@
     "@babel/runtime": "^7.8.4",
     "@nti/daily-tasks": "^2.20.3",
     "@nti/eslint-config-lib-scripts": "^2.21.0",
-    "@nti/git-state": "NextThought/git-state",
+    "@nti/git-state": "^5.0.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^8.0.0",
