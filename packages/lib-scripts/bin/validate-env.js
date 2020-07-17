@@ -5,8 +5,8 @@ const semver = require('semver');
 const getVersion = require('./get-version');
 
 const minVersions = {
-	npm: '5.6.0',
-	node: '8.9.4',
+	npm: '6.0.0',
+	node: '14.5.0',
 };
 
 for (let cmd of Object.keys(minVersions)) {
