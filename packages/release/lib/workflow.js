@@ -18,7 +18,11 @@ export async function releaseWorkspace (repositories) {
 
 	const [apps, libs] = responses.queue.reduce((a, x) => (a[x.command === 'app-scripts' ? 0 : 1].push(x), a), [[], []]);
 
-	for (const repository of [...libs, ...apps]) {
+	for (const repository of libs) {
+		await releaseProject(repository);
+	}
+
+	for (const repository of apps) {
 		await releaseProject(repository);
 	}
 }

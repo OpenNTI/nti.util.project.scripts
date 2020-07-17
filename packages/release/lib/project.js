@@ -12,9 +12,9 @@ import { arg, write, readJSON } from './utils.js';
 import { updateLock } from './update-lock.js';
 
 process.env.__NTI_RELEASING = !arg('--allow-workspace', 'repo:Allow workspace links in builds that support them');
-// const skipChecks = arg('--skip-checks', 'repo:Skip tests and linting');
+// const SKIP_CHECKS = arg('--skip-checks', 'repo:Skip tests and linting');
 const SKIP_LOCK_REFRESH = arg('--skip-lock-refresh', 'repo:Prevent regeneration of node_modules and lockfile');
-const DRY_RUN = !arg('--dry-run', 'repo:Print actions instead of executing them');
+const DRY_RUN = true;//arg('--dry-run', 'repo:Print actions instead of executing them');
 const DATE = new Date().toString();
 
 const usesLock = async (dir) => (await exec(dir, 'npm config get package-lock')) === 'true';
@@ -113,7 +113,7 @@ async function whatChanged (dir, from, to = 'HEAD') {
 
 
 export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
-	const tasks = [];//skipChecks ? [] : ['check', 'test'];
+	const tasks = [];//SKIP_CHECKS ? [] : ['check', 'test'];
 
 	if (await checkLockfile(dir) === false) {
 		return false;
