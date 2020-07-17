@@ -90,7 +90,7 @@ export async function maybeClone () {
 					},
 					...teams.map(x => ({
 						name: x.name,
-						value: octokit.teams.listReposInOrg.endpoint.merge({ org, team_slug: x.slug })
+						value: octokit.teams.listReposInOrg.endpoint.merge({ org, 'team_slug': x.slug })
 					}))
 				]
 			}
