@@ -1,0 +1,120 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/actions/sync"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/command-daily-tasks"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/command-fix"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/command-gen-docs"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/command-release"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/command-snapshot"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/dev-ssl-config"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/github-api"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/lint-config-app-scripts"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/lint-config-lib-scripts"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/lint-config-styles"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/scripts-app"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/scripts-app/server"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/scripts-ci"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/scripts-cmp"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
+
+  - package-ecosystem: npm
+    directory: "/packages/scripts-lib"
+    schedule:
+      interval: weekly
+    labels:
+      - "dependencies"
