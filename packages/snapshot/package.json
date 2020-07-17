@@ -1,0 +1,14 @@
+{
+  "name": "@nti/snapshot",
+  "version": "1.0.0",
+  "description": "",
+  "bin": {
+    "snapshot": "index.js"
+  },
+  "main": "index.js",
+  "type": "module",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@nti/github-api": "^1.0.0"
+  }
+}
