@@ -68,6 +68,13 @@ export async function WhatRepositories (repositories) {
 				}
 			}
 
+			if (choices.length === 0) {
+				return [{
+					name: 'No repositories found to release',
+					disabled: 'Go make some changes'
+				}];
+			}
+
 			return choices
 				.map(x => ({
 					short: x.shortName,

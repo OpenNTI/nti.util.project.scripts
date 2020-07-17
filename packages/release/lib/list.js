@@ -10,7 +10,7 @@ export const isProject = dir => async file => {
 	if(list && list.includes('.git') && list.includes('package.json')) {
 		try {
 			const {scripts, releaseMode = 'auto'} = await readJSON(join(target, 'package.json'));
-			return releaseMode !== 'interactive' && 'release' in scripts && target;
+			return releaseMode !== 'interactive' && scripts && 'release' in scripts && target;
 		} catch (err) {
 			console.warn(err.message);
 		}

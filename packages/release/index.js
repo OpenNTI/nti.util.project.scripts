@@ -1,17 +1,23 @@
 import chalk from 'chalk';
 
 import { getRepositories } from './lib/project.js';
-import { releaseProject, releaseWorkspace } from './lib/workflow.js';
+import { releaseProject, releaseWorkspace, maybeClone } from './lib/workflow.js';
 import { arg, readJSONSync, write } from './lib/utils.js';
 
 
 async function main () {
 	const dir = process.cwd();
-	const repositories = await getRepositories(dir);
+	let repositories = await getRepositories(dir);
 
 	if (repositories.length === 0) {
-		write('\n\n' + chalk.red(chalk.underline(dir) + ': Could not find any repositories to release.') + '\n\n');
-		process.exit(1);
+		write('\n' + chalk.red(chalk.underline(dir) + ': Could not find any repositories to release.') + '\n\n');
+
+		await maybeClone();
+		repositories = await getRepositories(dir);
+
+		if(!repositories?.length) {
+			process.exit(1);
+		}
 	}
 
 
