@@ -1,2 +1,2 @@
 'use strict';
-require('@nti/lib-scripts/tasks/fix');
+import('@nti/fix');
