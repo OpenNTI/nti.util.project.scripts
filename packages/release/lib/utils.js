@@ -28,8 +28,9 @@ export async function getTermSize () {
 	}
 }
 
-export function getTermSizeSync (output = execSync('.', 'resize')) {
+export function getTermSizeSync (output) {
 	try {
+		if (!output) {output = execSync('.', 'resize');}
 		const {COLUMNS, LINES} = output.split('\n').reduce((o, line, key, value) => ([key, value] = line.split('='), o[key] = parseInt(value, 10), o), {});
 
 		return {
