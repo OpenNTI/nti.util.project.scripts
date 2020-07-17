@@ -3,9 +3,8 @@ import netrc from 'netrc';
 import inquirer from 'inquirer';
 import octokit from '@octokit/rest';
 
-import {write} from './utils.js';
-
 let github;
+const write = (...args) => console.log(...args);
 
 async function getToken () {
 	const rc = netrc();
@@ -72,7 +71,7 @@ async function checkCredentials (token) {
 }
 
 
-export async function getGithubAPI () {
+export default async function getGithubAPI () {
 	return github || (github = Promise.resolve()
 		.then(getToken)
 		.then(token => new octokit.Octokit({auth: `token ${token}`})));

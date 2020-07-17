@@ -1,0 +1,14 @@
+{
+  "name": "@nti/github-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "@octokit/rest": "^18.0.0",
+    "chalk": "^4.1.0",
+    "inquirer": "^7.3.2",
+    "netrc": "0.1.4"
+  }
+}

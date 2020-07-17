@@ -1,11 +1,11 @@
 
 import inquirer from 'inquirer';
 import cliProgress from 'cli-progress';
+import getGithubAPI from '@nti/github-api';
 
 import { preflightChecks, performRelease } from './project.js';
 import { WhatKindOfRelease, WhatRepositories } from './questions.js';
 import { arg } from './utils.js';
-import { getGithubAPI } from './config.js';
 import { exec } from './exec.js';
 
 const FORCE_MAJOR = arg('--major', 'repo:Force a major version bump');
