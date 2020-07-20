@@ -14,7 +14,7 @@ Object.assign(exports, {
 let FILES_TO_SYNC = null;
 
 async function listChangedFiles  (dir) {
-	const from = context.event?.before;
+	const {before: from} = context.event || {};
 	const to = context.sha;
 	const command = from ? `git diff --name-only ${from} ${to}` : 'git diff-tree --no-commit-id --name-only -r HEAD';
 	const files = await exec(dir, command);
