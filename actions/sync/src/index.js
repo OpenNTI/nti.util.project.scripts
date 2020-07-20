@@ -14,7 +14,6 @@ async function main () {
 			return;
 		}
 
-		return;
 		await fs.mkdir('repos');
 
 		for (const repo of await list()) {
