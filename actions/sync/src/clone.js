@@ -1,7 +1,7 @@
 'use strict';
 const core = require('@actions/core');
 
-const {exec} = require('../../../packages/lib-scripts/tasks/utils/call-cmd');
+const {exec} = require('../../../packages/scripts-lib/tasks/utils/call-cmd');
 
 const token = core.getInput('token');
 

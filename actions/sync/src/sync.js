@@ -4,7 +4,7 @@ const {promises: fs} = require('fs');
 
 const {context} = require('@actions/github');
 
-const {exec} = require('../../../packages/lib-scripts/tasks/utils/call-cmd');
+const {exec} = require('../../../packages/scripts-lib/tasks/utils/call-cmd');
 
 Object.assign(exports, {
 	sync,
@@ -14,7 +14,10 @@ Object.assign(exports, {
 let FILES_TO_SYNC = null;
 
 async function listChangedFiles  (dir) {
-	const files = await exec(dir, 'git diff-tree --no-commit-id --name-only -r HEAD');
+	const from = context.event?.before;
+	const to = context.sha;
+	const command = from ? `git diff --name-only ${from} ${to}` : 'git diff-tree --no-commit-id --name-only -r HEAD';
+	const files = await exec(dir, command);
 	return files.trim().split('\n').map(x => join(dir, x));
 }
 
@@ -43,7 +46,7 @@ async function computeDiff () {
 		listDirectory(get('cmp')),
 	]);
 
-
+console.log(changes);
 	const pattern = new RegExp(get('(lib|app|cmp)'));
 
 	let changed = false;
