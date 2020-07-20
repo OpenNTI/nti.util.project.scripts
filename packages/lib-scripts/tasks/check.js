@@ -1,6 +1,4 @@
 'use strict';
-const {isCI} = require('ci-info');
-
 const paths = require('../config/paths');
 const call = require('./utils/call-cmd');
 
