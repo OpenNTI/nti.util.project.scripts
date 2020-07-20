@@ -1,7 +1,7 @@
 {
-  "name": "@nti/codestyle-jsx",
+  "name": "@nti/stylelint-config-standard",
   "version": "2.21.0",
-  "description": "NextThought code style standard",
+  "description": "NextThought css style standard",
   "main": "index.js",
   "repository": {
     "type": "git",
@@ -12,12 +12,8 @@
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
-  "peerDependencies": {
-    "react": "*",
-    "webpack": "*"
-  },
   "dependencies": {
-    "@nti/codestyle-js": "^2.21.0",
-    "eslint-plugin-react": "^7.12.1"
+    "stylelint": "^13.0.0",
+    "stylelint-config-standard": "^20.0.0"
   }
 }
