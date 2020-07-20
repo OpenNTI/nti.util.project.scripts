@@ -35,7 +35,7 @@ async function hasChanges () {
 
 async function computeDiff () {
 	const cwd = process.cwd();
-	const get = x => `${cwd}/packages/${x}-scripts/config/init-files/`;
+	const get = x => `${cwd}/packages/scripts-${x}/config/init-files/`;
 	const [changes, lib, app, cmp] = await Promise.all([
 		context.eventName === 'push' && listChangedFiles(cwd),
 		listDirectory(get('lib')),
