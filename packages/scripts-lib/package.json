@@ -1,6 +1,6 @@
 {
   "name": "@nti/lib-scripts",
-  "version": "2.22.0",
+  "version": "2.23.0",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -47,10 +47,10 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/preset-flow": "^7.8.3",
     "@babel/runtime": "^7.8.4",
-    "@nti/daily-tasks": "^2.20.3",
-    "@nti/eslint-config-lib-scripts": "^2.21.0",
-    "@nti/fix": "^1.0.0",
-    "@nti/release": "^1.0.0",
+    "@nti/daily-tasks": "^2.23.0",
+    "@nti/eslint-config-lib-scripts": "^2.23.0",
+    "@nti/fix": "^2.23.0",
+    "@nti/release": "^2.23.0",
     "@rollup/plugin-commonjs": "^14.0.0",
     "@rollup/plugin-json": "^4.0.1",
     "@rollup/plugin-node-resolve": "^8.0.0",
