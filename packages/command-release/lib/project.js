@@ -174,13 +174,17 @@ export async function checkLockfile (dir) {
 
 export async function performRelease (tasks, {dir, branch, repo, command, pkg, url}, major) {
 	const call = DRY_RUN
-		? async (x, args = []) => write(dir, [x, ...args].join(' '))
+		? async (x, args = []) => write('[dry run] in', dir, [x, ...args].join(' '))
 		: async (x, args = []) => exec(dir, [x, ...args].join(' '));
 
 	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
-		await updateLock(dir);
+		if (DRY_RUN) {
+			write('[dry run]: Update lockfile...')
+		} else {
+			await updateLock(dir);
+		}
 	}
 
 	for (let task of tasks) {
