@@ -165,6 +165,7 @@ export async function checkLockfile (dir) {
 	if (!status) {
 		errors.forEach(e => write(chalk.red('%s %s'), chalk.underline('Error:'), e));
 		write('');
+		write(chalk.red('in ' + chalk.bold(dir +':')));
 		write(chalk.red(chalk.bold('Check that package-lock.json is in sync with package.json')));
 		write('');
 		return false;
@@ -177,7 +178,8 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		? async (x, args = []) => write('[dry run] in', dir, [x, ...args].join(' '))
 		: async (x, args = []) => exec(dir, [x, ...args].join(' '));
 
-	write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
+	write(chalk.cyan(chalk.underline(pkg.name) + ' Working on branch: ' + chalk.underline.magenta(branch)));
+	// write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
 		if (DRY_RUN) {
