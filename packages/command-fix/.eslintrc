@@ -1,5 +1,5 @@
 {
-	"extends": "../codestyle-js/index.js",
+	"extends": "../lint-config-lib-scripts/index.js",
 	"parser": "babel-eslint",
 	"parserOptions": {
 		"ecmaVersion": 2019,
