@@ -1,6 +1,6 @@
 {
   "name": "@nti/release",
-  "version": "2.23.2",
+  "version": "2.23.3",
   "description": "",
   "bin": {
     "release": "index.js"
@@ -10,7 +10,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@nti/git-state": "^5.0.0",
-    "@nti/github-api": "^2.23.0",
+    "@nti/github-api": "^2.23.3",
     "chalk": "^4.1.0",
     "cli-progress": "^3.8.2",
     "inquirer": "^7.3.2",
