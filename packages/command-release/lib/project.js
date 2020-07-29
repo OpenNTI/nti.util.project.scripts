@@ -165,7 +165,7 @@ export async function checkLockfile (dir) {
 	if (!status) {
 		errors.forEach(e => write(chalk.red('%s %s'), chalk.underline('Error:'), e));
 		write('');
-		write(chalk.red('in ' + chalk.bold(dir +':')));
+		write(chalk.red('in ' + chalk.bold(dir + ':')));
 		write(chalk.red(chalk.bold('Check that package-lock.json is in sync with package.json')));
 		write('');
 		return false;
@@ -183,7 +183,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 
 	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
 		if (DRY_RUN) {
-			write('[dry run]: Update lockfile...')
+			write('[dry run]: Update lockfile...');
 		} else {
 			await updateLock(dir);
 		}
@@ -218,7 +218,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 	// git commit -m "$VERSION" > /dev/null
 	await call('git', ['commit', '-m', version]);
 	// git tag "v$VERSION" -m "Cut on $DATE"
-	await call('git', ['tag', newTag, '-m', `Cut on ${DATE}`]);
+	await call('git', ['tag', newTag, '-m', `"Cut on ${DATE}"`]);
 
 
 	if (branch === 'master') {
