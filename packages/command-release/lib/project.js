@@ -115,10 +115,6 @@ async function whatChanged (dir, from, to = 'HEAD') {
 export async function preflightChecks ({dir, branch, dirty, pkg}, major) {
 	const tasks = [];//SKIP_CHECKS ? [] : ['check', 'test'];
 
-	if (await checkLockfile(dir) === false) {
-		return false;
-	}
-
 	if(!/^(master|(maint-\d+\.\d+))$/.test(branch)) {
 		write('\n\n'
 			+ chalk.red('You cannot release a version while on feature branch: ' + chalk.underline(branch)
@@ -183,6 +179,10 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 
 	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
 		await updateLock(dir, DRY_RUN);
+	}
+
+	if (await checkLockfile(dir) === false) {
+		return false;
 	}
 
 	for (let task of tasks) {
