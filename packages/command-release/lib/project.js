@@ -182,11 +182,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 	// write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));
 
 	if (branch === 'master' && !SKIP_LOCK_REFRESH) {
-		if (DRY_RUN) {
-			write('[dry run]: Update lockfile...');
-		} else {
-			await updateLock(dir);
-		}
+		await updateLock(dir, DRY_RUN);
 	}
 
 	for (let task of tasks) {

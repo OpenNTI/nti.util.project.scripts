@@ -5,12 +5,18 @@ import { write } from './utils.js';
 import { exec } from './exec.js';
 
 
-export async function updateLock (dir) {
-	const usesLocks = /true/i.test(await exec(dir, 'npm config get package-lock'));
+export async function updateLock (dir, dryRun) {
+	const output = await exec(dir, 'npm config get package-lock');
+	const usesLocks = /true/i.test(output);
 	if (!usesLocks) {
-		write('Updating lock file...');
-		await fs.rmdir(join(dir, 'node_modules'), { recursive: true });
-		await fs.unlink(join(dir, 'package-lock.json')).catch(Boolean);
-		await exec(dir, 'npm install --no-progress');
+		if (dryRun) {
+			write('[dry run]: npm config get package-lock: $o', output);
+			write('[dry run]: Will update lockfile...');
+		} else {
+			write('Updating lock file...');
+			await fs.rmdir(join(dir, 'node_modules'), { recursive: true });
+			await fs.unlink(join(dir, 'package-lock.json')).catch(Boolean);
+			await exec(dir, 'npm install --no-progress');
+		}
 	}
 }
