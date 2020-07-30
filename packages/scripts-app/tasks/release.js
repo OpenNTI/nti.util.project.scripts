@@ -1,2 +1,2 @@
 'use strict';
-import('@nti/release');
+require('@nti/lib-scripts/tasks/release');

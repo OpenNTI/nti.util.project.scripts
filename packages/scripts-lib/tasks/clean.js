@@ -27,5 +27,5 @@ if (dirs.length) {
 
 	write('Done.');
 } else {
-	write('Nonthing to do.');
+	write('Nothing to do.');
 }
