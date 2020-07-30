@@ -8,10 +8,10 @@ import { exec } from './exec.js';
 export async function updateLock (dir, dryRun) {
 	const output = await exec(dir, 'npm config get package-lock');
 	const usesLocks = /true/i.test(output);
-	if (!usesLocks) {
+	if (usesLocks) {
 		if (dryRun) {
-			write('[dry run]: npm config get package-lock: $o', output);
 			write('[dry run]: Will update lockfile...');
+			write('[dry run]:  because: "npm config get package-lock": %o', output);
 		} else {
 			write('Updating lock file...');
 			await fs.rmdir(join(dir, 'node_modules'), { recursive: true });
