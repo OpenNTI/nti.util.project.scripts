@@ -2,7 +2,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const escape = /[|\\{}()[\]^$+*?.]/g;
+const escapePattern = /[|\\{}()[\]^$+*?.]/g;
 const isModule = RegExp.prototype.test.bind(/\/node_modules\//);
 
 Object.assign(exports, {
@@ -28,7 +28,7 @@ function resolveAppDir (start, dep) {
 	}
 
 	if (dep && !dep.test) {
-		dep = new RegExp(`^${dep.replace(escape, '\\$&')}$`);
+		dep = new RegExp(`^${dep.replace(escapePattern, '\\$&')}$`);
 	}
 
 	return resolve(start) || start;

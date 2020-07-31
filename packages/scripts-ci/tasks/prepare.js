@@ -17,8 +17,8 @@ if (isSnapshot) {
 	v.prerelease.push(stamp);
 
 	pkg.version = v.format();
-	printLine('::set-env name=SNAPSHOT_ID::'+name+'@'+pkg.version);
-	printLine('::set-output name=version::'+pkg.version);
+	printLine('::set-env name=SNAPSHOT_ID::' + name + '@' + pkg.version);
+	printLine('::set-output name=version::' + pkg.version);
 	print('Preparing: %s@%s ... ', name, pkg.version);
 
 	fs.removeSync(lockfile);

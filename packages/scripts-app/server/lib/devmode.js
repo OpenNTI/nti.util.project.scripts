@@ -2,11 +2,11 @@
 'use strict';
 const { worker } = require('cluster');
 const readline = require('readline');
-const path = require('path');
+// const path = require('path');
 const url = require('url');
 const { HTTPS, getHTTPS } = require('@nti/dev-ssl-config');
 
-function clearLine(n) {
+function clearLine (n) {
 	const fn = console[n] || console.debug;
 	console[n] = (...args) => {
 		const [first] = args;
@@ -20,7 +20,7 @@ function clearLine(n) {
 
 const ensureArray = x => Array.isArray(x) ? x : [x];
 
-exports.setupDeveloperMode = async function setupDeveloperMode(config) {
+exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	for (let n of ['info', 'log', 'debug']) { clearLine(n); }
 	const getPort = require('get-port');
 	const webpack = require('webpack');

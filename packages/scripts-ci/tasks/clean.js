@@ -16,4 +16,4 @@ printLine('::group::Clean');
 	fs.removeSync(dir);
 	printLine('done.');
 });
-printLine('::endgroup::')
+printLine('::endgroup::');

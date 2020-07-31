@@ -19,7 +19,7 @@ function updateNodeModules () {
 	write('\tUpdate node_modules and package-lock:');
 
 	if (lastMod.getDate() !== now.getDate()) {
-		write('\t\tpackage-lock is out of date, updating...')
+		write('\t\tpackage-lock is out of date, updating...');
 		fs.removeSync(packageLockPath);
 		fs.removeSync(nodeModulesPath);
 		call('npm', ['install']);
