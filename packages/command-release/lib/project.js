@@ -220,7 +220,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 
 	if (branch === 'master') {
 		write(chalk.cyan(`\nSetting up next release version: ${chalk.underline.magenta(nextVersion)}...`));
-		await fs.remove(join(dir, 'package-lock.json')); // unlock dependencies
+		await fs.unlink(join(dir, 'package-lock.json')); // unlock dependencies
 
 		// npm --no-git-tag-version version $VERSION > /dev/null
 		await call('npm', ['--no-git-tag-version', 'version', nextVersion], {stdio: null});
