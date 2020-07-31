@@ -1,6 +1,6 @@
 {
   "name": "@nti/snapshot",
-  "version": "2.23.3",
+  "version": "2.23.7",
   "description": "",
   "bin": {
     "snapshot": "index.js"
