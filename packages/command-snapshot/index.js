@@ -3,7 +3,9 @@ import { execSync as exec } from 'child_process';
 
 import getGithubAPI from '@nti/github-api';
 
-const run = x => exec(x).toString('utf8').trim() || '';
+process.exitCode = 1;
+
+const run = x => exec(x, {stdio: 'pipe'}).toString('utf8').trim() || '';
 try {
 	const currentBranch = run('git rev-parse --abbrev-ref HEAD');
 	// const currentBranch = run('git branch --show-current');
@@ -33,6 +35,7 @@ async function dispatch (owner, repo, repoId) {
 			event_type: 'snapshot',
 		});
 		console.log(`(${repoId}) Snapshot event dispatched.`);
+		process.exitCode = 0;
 	}
 	catch (e) {
 		console.error(e.message || e);
