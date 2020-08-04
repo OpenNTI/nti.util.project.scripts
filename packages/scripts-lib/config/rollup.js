@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 
-const babel = require('rollup-plugin-babel');
+const babel = require('@rollup/plugin-babel');
 // const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { eslint } = require('rollup-plugin-eslint');
@@ -59,7 +59,6 @@ module.exports = {
 			babel({
 				configFile: path.join(resolveScriptDir(), 'config', 'babel.config.js'),
 				babelrc: false,
-				runtimeHelpers: true,
 				exclude: 'node_modules/**'
 			}),
 			// commonjs({ ignoreGlobal: true }),
