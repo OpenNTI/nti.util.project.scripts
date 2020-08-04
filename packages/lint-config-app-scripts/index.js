@@ -10,7 +10,6 @@ function getReactVersion () {
 }
 
 module.exports = {
-	parser: 'babel-eslint',
 	extends: [
 		require.resolve('@nti/eslint-config-lib-scripts'),
 		'plugin:react/recommended'

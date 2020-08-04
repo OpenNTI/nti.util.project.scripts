@@ -27,7 +27,7 @@
   "dependencies": {
     "@nti/app-scripts": "^2.23.8",
     "@nti/lib-scripts": "^2.23.8",
-    "core-js": "^3.2.1",
+    "core-js": "^3.6.5",
     "webpack-cli": "^3.0.8"
   }
 }
