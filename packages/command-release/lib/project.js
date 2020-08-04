@@ -18,6 +18,7 @@ const SKIP_LOCK_REFRESH = arg('--skip-lock-refresh', 'repo:Prevent regeneration 
 const DRY_RUN = arg('--dry-run', 'repo:Print actions instead of executing them');
 const DATE = new Date().toString();
 
+const exists = async file => fs.stat(file).then(() => true, () => false);
 const usesLock = async (dir) => (await exec(dir, 'npm config get package-lock')) === 'true';
 const gitStatus = promisify(gitState.check);
 
@@ -220,7 +221,11 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 
 	if (branch === 'master') {
 		write(chalk.cyan(`\nSetting up next release version: ${chalk.underline.magenta(nextVersion)}...`));
-		await fs.unlink(join(dir, 'package-lock.json')); // unlock dependencies
+		const lockfile = join(dir, 'package-lock.json');
+		// unlock dependencies
+		if (await exists(lockfile)) {
+			await fs.unlink(lockfile);
+		}
 
 		// npm --no-git-tag-version version $VERSION > /dev/null
 		await call('npm', ['--no-git-tag-version', 'version', nextVersion], {stdio: null});
