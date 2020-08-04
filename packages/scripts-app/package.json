@@ -43,7 +43,7 @@
     "circular-dependency-plugin": "^5.2.0",
     "compression-webpack-plugin": "^4.0.0",
     "core-js": "^3.6.5",
-    "css-loader": "^3.4.2",
+    "css-loader": "^4.2.0",
     "eslint-loader": "^4.0.0",
     "fibers": "^5.0.0",
     "file-loader": "^6.0.0",
