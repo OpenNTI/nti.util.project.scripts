@@ -7,8 +7,15 @@
   },
   "main": "index.js",
   "type": "module",
+  "files": [
+    "index.js"
+  ],
+  "scripts": {
+    "prepack": "npx rollup -c ../../rollup.config.js",
+    "postpack": "git checkout ./index.js"
+  },
   "license": "UNLICENSED",
-  "dependencies": {
+  "devDependencies": {
     "@nti/git-state": "^5.0.0",
     "chalk": "^4.1.0",
     "inquirer": "^7.3.2",

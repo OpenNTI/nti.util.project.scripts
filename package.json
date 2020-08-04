@@ -24,6 +24,11 @@
   "releaseMode": "interactive",
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
-    "lerna": "^3.4.3"
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-commonjs": "^15.0.0",
+    "@rollup/plugin-node-resolve": "^9.0.0",
+    "lerna": "^3.22.1",
+    "rollup-plugin-preserve-shebang": "^1.0.1",
+    "rollup": "^2.26.3"
   }
 }
