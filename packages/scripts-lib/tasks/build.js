@@ -7,8 +7,6 @@ const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
 const {exec} = require('./utils/call-cmd');
-const buildBundle = require('./utils/build-with-rollup');
-const sanityCheck = require('./utils/sanity-check');
 const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
@@ -34,6 +32,9 @@ const call = (cmd, msg) => {
 const runBuild = global.runBuild || (async () => {
 	//Blank out lib
 	await fs.emptyDir(path.resolve(paths.path, 'lib'));
+
+	const buildBundle = require('./utils/build-with-rollup');
+	const sanityCheck = require('./utils/sanity-check');
 
 	await buildBundle();
 
