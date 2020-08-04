@@ -224,7 +224,11 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		const lockfile = join(dir, 'package-lock.json');
 		// unlock dependencies
 		if (await exists(lockfile)) {
-			await fs.unlink(lockfile);
+			if (DRY_RUN) {
+				write('[dry run] in', dir, 'rm', lockfile);
+			} else {
+				await fs.unlink(lockfile);
+			}
 		}
 
 		// npm --no-git-tag-version version $VERSION > /dev/null
