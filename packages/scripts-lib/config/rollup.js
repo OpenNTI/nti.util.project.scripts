@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 
-const babel = require('@rollup/plugin-babel');
+const { babel } = require('@rollup/plugin-babel');
 // const commonjs = require('@rollup/plugin-commonjs');
 const json = require('@rollup/plugin-json');
 const { eslint } = require('rollup-plugin-eslint');
