@@ -1,6 +1,6 @@
 {
   "name": "@nti/clone",
-  "version": "2.23.12",
+  "version": "2.24.5",
   "description": "",
   "bin": {
     "clone": "index.js"
@@ -10,7 +10,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@nti/git-state": "^5.0.0",
-    "@nti/github-api": "^2.23.3",
+    "@nti/github-api": "^2.24.5",
     "cli-progress": "^3.8.2",
     "inquirer": "^7.3.2",
     "ora": "^5.0.0",

@@ -1,6 +1,6 @@
 {
   "name": "@nti/fix",
-  "version": "2.23.7",
+  "version": "2.24.5",
   "description": "",
   "bin": {
     "fix": "index.js"
