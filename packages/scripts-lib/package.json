@@ -4,14 +4,7 @@
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
-    "build": "./bin/run.js",
-    "check": "./bin/run.js",
-    "fix": "./bin/run.js",
-    "clean": "./bin/run.js",
-    "lib-scripts": "./bin/cli.js",
-    "release": "./bin/run.js",
-    "start": "./bin/run.js",
-    "test": "./bin/run.js"
+    "lib-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"

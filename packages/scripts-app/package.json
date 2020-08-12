@@ -3,8 +3,7 @@
   "version": "2.24.6",
   "description": "app-specific scripts & dependencies",
   "bin": {
-    "app-scripts": "./bin/cli.js",
-    "snapshot": "./bin/cli.js"
+    "app-scripts": "./bin/cli.js"
   },
   "scripts": {
     "test": "jest"
