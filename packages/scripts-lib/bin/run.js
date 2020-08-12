@@ -35,7 +35,7 @@ if (!scripts[script]) {
 	args.unshift();//remove '--' since we aren't using NPM to run the script.
 
 	spawn(cmd, [...sargs, ...args], { env: process.env, stdio: 'inherit' });
-	return;
+	process.exit();
 }
 
 spawn('npm', ['run', script, ...args], { env: process.env, stdio: 'inherit' });
