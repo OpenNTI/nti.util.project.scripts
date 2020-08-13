@@ -10,7 +10,7 @@ if (!publishConfig || !publishConfig.registry) {
 	return process.exit(1);
 }
 
-call('npm run build -- --skip-checks');
+call('npm run build --if-present -- --skip-checks');
 
 if (isSnapshot) {
 	if (!/-alpha/.test(version)) {
