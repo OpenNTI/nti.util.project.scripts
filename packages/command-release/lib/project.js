@@ -183,7 +183,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		await updateLock(dir, DRY_RUN);
 	}
 
-	if (await checkLockfile(dir) === false) {
+	else if (await checkLockfile(dir) === false) {
 		return false;
 	}
 
