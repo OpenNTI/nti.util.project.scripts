@@ -15,27 +15,21 @@ module.exports = function (api, opts) {
 				shippedProposals: true,
 				corejs: env.useBuiltIns ? { version: 3, proposals: true } : void 0,
 				targets: {
-					node: isCI
-						? '8.9.4' //just in case the build server's node is newer than PROD
-						: 'current'
+					node: 'current'
 				},
 				...env
 			}],
 			['@babel/preset-flow'],
 		],
 		plugins: [
+			// The decorators proposal is dead as we knew it, I plan to remove this plugin
+			// once all the usage of legacy decorators has been removed/converted.
 			['@babel/plugin-proposal-decorators', { legacy: true }],
 			['@babel/plugin-proposal-class-properties', { loose: true }],
-			['@babel/plugin-proposal-export-default-from'],
-			['@babel/plugin-proposal-export-namespace-from'],
 
-			// Stage 3, will be in @babel/preset-env soon...babel itself already uses these.
-			// Defining plugins twice is a harmless noop. Will clean these out once babel adds
-			// them to the main preset.
-			['@babel/plugin-proposal-optional-chaining'],
-			['@babel/plugin-proposal-nullish-coalescing-operator'],
-
-			['@babel/plugin-syntax-dynamic-import'],
+			// I'm still hoping this makes it into the language, but if it doesn't get
+			// traction by years end, I plan to remove it. (by Jan/Feb 2021)
+			['@babel/plugin-proposal-export-default-from']
 		]
 	};
 };
