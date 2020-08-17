@@ -2,7 +2,6 @@
 const path = require('path');
 
 const chalk = require('chalk');
-const fs = require('fs-extra');
 const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
@@ -29,17 +28,7 @@ const call = (cmd, msg) => {
 	return t;
 };
 
-const runBuild = global.runBuild || (async () => {
-	//Blank out lib
-	await fs.emptyDir(path.resolve(paths.path, 'lib'));
-
-	const buildBundle = require('./utils/build-with-rollup');
-	const sanityCheck = require('./utils/sanity-check');
-
-	await buildBundle();
-
-	await sanityCheck();
-});
+const runBuild = global.runBuild || require('./utils/default-run-build');
 
 
 //Expose unhandled rejected promises.
