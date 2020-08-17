@@ -7,7 +7,7 @@ const silent = {fd: 'ignore', forgive: true};
 
 if (!publishConfig || !publishConfig.registry) {
 	printLine('Refusing to publish without a publishConfig.registry set');
-	return process.exit(1);
+	process.exit(1);
 }
 
 call('npm run build --if-present -- --skip-checks');
@@ -15,7 +15,7 @@ call('npm run build --if-present -- --skip-checks');
 if (isSnapshot) {
 	if (!/-alpha/.test(version)) {
 		printLine('Version %s, does not have an alpha tag. Aborting.', version);
-		return process.exit(1);
+		process.exit(1);
 	}
 
 	const {stdout} = call(`npm view ${name} .versions --json`, {...silent, fd: 'pipe'});
