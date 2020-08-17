@@ -1,14 +1,14 @@
 'use strict';
 const chalk = require('chalk');
-const path = require('path');
 const fs = require('fs-extra');
-const {outputs} = require('../config/rollup');
+
 const {resolveApp, src, path: root} = require('../config/paths');
 
 const write = x => console.log(chalk.cyan('\n' + x));
 const dirs = [
-	...outputs.map(x => path.dirname(x.file)),
+	resolveApp('dist'),
 	resolveApp('docs'),
+	resolveApp('lib'),
 	resolveApp('reports')
 ]
 	.reduce((a, x) => a.includes(x) ? a : [...a, x], [])

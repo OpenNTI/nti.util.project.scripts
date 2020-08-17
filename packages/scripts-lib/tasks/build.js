@@ -28,8 +28,6 @@ const call = (cmd, msg) => {
 	return t;
 };
 
-const runBuild = global.runBuild || require('./utils/default-run-build');
-
 
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {
@@ -42,19 +40,18 @@ process.on('unhandledRejection', err => {
 });
 
 if (WORKER) {
-	runBuild();
+	global.runBuild(); // Die if this is not defined.
 }
+else {
+	if (!SKIP) {
+		const activeScripts = path.dirname(process.argv[1]);
+		tasks.push(
+			call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
+			call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
+			call('npx --quiet @nti/gen-docs', 'Generating docs...')
+		);
+	}
 
-if (!WORKER && !SKIP) {
-	const activeScripts = path.dirname(process.argv[1]);
-	tasks.push(
-		call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
-		call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
-		call('npx --quiet @nti/gen-docs', 'Generating docs...')
-	);
-}
-
-if (!WORKER) {
 	tasks.push(call(process.argv.join(' '), 'Building...'));
 
 	Promise.all(tasks)
