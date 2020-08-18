@@ -2,6 +2,8 @@
 const chalk = require('chalk');
 
 global.NTI_INIT_TO_COPY = [
+	'.github/workflows/release.yml',
+	'.github/workflows/snapshot.yml',
 	'stylelintrc.dotfile'
 ];
 global.NTI_INIT_TO_REMOVE = [

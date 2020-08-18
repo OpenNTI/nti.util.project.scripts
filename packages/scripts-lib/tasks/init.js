@@ -93,6 +93,7 @@ writePackageJson(pkg, {spaces: indent});
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const ToCopy = [
+	'.github/workflows/checks.yml',
 	'babel.config.js',
 	'editorconfig.dotfile',
 	'eslintignore.dotfile',
@@ -159,6 +160,5 @@ console.log(`
 	${chalk.blue('npm run release')}: to cut a release
 	${chalk.blue('npm run build')}:   to run a build (produce artifacts only)
 	${chalk.blue('npm run clean')}:   to clean project (remove build artifacts)
-	${chalk.blue('npm run install-shapshots')}:   to use snapshot dependencies
 
 `);
