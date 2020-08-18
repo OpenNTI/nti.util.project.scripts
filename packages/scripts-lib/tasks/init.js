@@ -18,6 +18,7 @@ const scriptBinName = scriptPackageName.replace(/^@nti\//, '');
 const combindedDeps = { ...libPkg.dependencies, ...ownPkg.dependencies, ...global.NTI_INIT_DROP_DEPENDENCIES || {}};
 const dropDeps = [
 	'babel-register',
+	'Jenkinsfile',
 	'json-loader',
 	'nti-unittesting-clientside',
 	'rollup-plugin-image',
@@ -101,7 +102,6 @@ const ToCopy = [
 	'gitignore.dotfile',
 	'npmignore.dotfile',
 	'jest.config.js',
-	'Jenkinsfile',
 	...(global.NTI_INIT_TO_COPY || [])
 ];
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
