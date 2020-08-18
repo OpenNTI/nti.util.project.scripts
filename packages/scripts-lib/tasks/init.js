@@ -95,10 +95,12 @@ writePackageJson(pkg, {spaces: indent});
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const initFilePrefix = path.resolve(__dirname, '..', 'config', 'init-files');
-const ToCopy = new Set([
-	...listFiles(initFilePrefix),
-	...(global.NTI_INIT_TO_COPY || [])
-]);
+const ToCopy = [
+	...(new Set([//de-duplicate
+		...listFiles(initFilePrefix),
+		...(global.NTI_INIT_TO_COPY || [])
+	]))
+].sort();
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
 for (let file of ToCopy) {
 	const lib = path.resolve(initFilePrefix, file);
