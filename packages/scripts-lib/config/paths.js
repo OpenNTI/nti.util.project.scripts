@@ -39,9 +39,14 @@ const nodeModules = resolveApp('node_modules');
 const packageJson = resolveApp('package.json');
 const _package = fs.readJsonSync(packageJson);
 const ownPath = resolveOwn('.');
-const ownPackageJson = fs.readJsonSync(resolveOwn('package.json'));
-// const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
-const [scope] = ownPackageJson.name.split('/');
+const ownPackageJson = resolveOwn('package.json');
+if (!fs.existsSync(ownPackageJson)) {
+	console.log(ownPackageJson, 'does not exist.');
+	process.exit(1);
+}
+const _ownPackage = fs.readJsonSync(ownPackageJson);
+// const ownPackagePath = resolveApp(`node_modules/${_ownPackage.name}`);
+const [scope] = _ownPackage.name.split('/');
 const ntiModules = new RegExp(`^(${r(nodeModules)}).*${r(scope)}`);
 
 function resolveOwn (relativePath) {
@@ -52,7 +57,7 @@ function exists (testPath, fallback) {
 	return fs.existsSync(testPath) ? testPath : fallback;
 }
 
-// config: we're in ./node_modules/{ownPackageJson.name}/config/
+// config: we're in ./node_modules/{_ownPackage.name}/config/
 module.exports = {
 	exists,
 	resolveApp,
@@ -63,7 +68,7 @@ module.exports = {
 	path: resolveApp('.'),
 	package: _package,
 	packageJson,
-	pacakgeLock: resolveApp('package-lock.json'),
+	packageLock: resolveApp('package-lock.json'),
 	packageMain: resolveApp(_package.main),
 	nodeModules,
 	ntiModules,
@@ -92,8 +97,8 @@ module.exports = {
 		)
 	),
 
-	nodePaths: nodePaths,
+	nodePaths,
 
 	ownPath,
-	ownPackageJson: resolveOwn('package.json'),
+	ownPackageJson,
 };
