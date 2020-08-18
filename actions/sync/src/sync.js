@@ -46,7 +46,7 @@ async function computeDiff () {
 		listDirectory(get('cmp')),
 	]);
 
-console.log(changes);
+	console.log(changes);
 	const pattern = new RegExp(get('(lib|app|cmp)'));
 
 	let changed = false;
