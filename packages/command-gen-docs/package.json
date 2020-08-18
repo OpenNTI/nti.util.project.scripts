@@ -13,7 +13,7 @@
     "docs"
   ],
   "author": "nextthought",
-  "license": "UNLICENCED",
+  "license": "UNLICENSED",
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },

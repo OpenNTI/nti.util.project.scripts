@@ -8,7 +8,7 @@
     "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
   },
   "author": "nextthought",
-  "license": "UNLICENCED",
+  "license": "UNLICENSED",
   "publishConfig": {
     "registry": "https://npm.nextthought.com"
   },
