@@ -160,7 +160,7 @@ console.log(`
 
 `);
 
-if (fs.existsSync(paths.resolveApp('.git')) {
+if (fs.existsSync(paths.resolveApp('.git'))) {
 	console.log(`
 
 	Staging changes to git.
