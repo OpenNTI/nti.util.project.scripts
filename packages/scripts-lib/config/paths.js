@@ -37,15 +37,19 @@ const nodePaths = (process.env.NODE_PATH || '')
 
 const nodeModules = resolveApp('node_modules');
 const packageJson = resolveApp('package.json');
-const _package = fs.readJsonSync(packageJson);
-const ownPath = resolveOwn('.');
-const ownPackageJson = resolveOwn('package.json');
-if (!fs.existsSync(ownPackageJson)) {
-	console.log(ownPackageJson, 'does not exist.');
+if (!fs.existsSync(packageJson)) {
+	console.log(packageJson, 'does not exist.');
 	process.exit(1);
 }
+
+const _package = fs.readJsonSync(packageJson);
+
+// OWN = this script's package.
+const ownPath = resolveOwn('.');
+const ownPackageJson = resolveOwn('package.json');
 const _ownPackage = fs.readJsonSync(ownPackageJson);
 // const ownPackagePath = resolveApp(`node_modules/${_ownPackage.name}`);
+
 const [scope] = _ownPackage.name.split('/');
 const ntiModules = new RegExp(`^(${r(nodeModules)}).*${r(scope)}`);
 
