@@ -1,11 +1,11 @@
 'use strict';
+const { resolve } = require('path');
+const { listFiles } = require('@nti/lib-scripts/tasks/utils/read-dir');
 const chalk = require('chalk');
 
-global.NTI_INIT_TO_COPY = [
-	'.github/workflows/release.yml',
-	'.github/workflows/snapshot.yml',
-	'stylelintrc.dotfile'
-];
+const initFilePrefix = resolve(__dirname, '..', 'config', 'init-files');
+
+global.NTI_INIT_TO_COPY = listFiles(initFilePrefix);
 global.NTI_INIT_TO_REMOVE = [
 	'webpack.config.js'
 ];

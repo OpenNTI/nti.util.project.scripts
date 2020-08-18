@@ -8,6 +8,7 @@ const currentScriptsPaths = require('./utils/current-script-paths');
 const call = require('./utils/call-cmd');
 const readPackageJson = require('./utils/read-package-json');
 const writePackageJson = require('./utils/write-package-json');
+const { listFiles } = require('./utils/read-dir.js');
 
 
 const {json: pkg, indent} = readPackageJson();
@@ -93,20 +94,14 @@ writePackageJson(pkg, {spaces: indent});
 
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
-const ToCopy = [
-	'.github/workflows/checks.yml',
-	'babel.config.js',
-	'editorconfig.dotfile',
-	'eslintignore.dotfile',
-	'eslintrc.dotfile',
-	'gitignore.dotfile',
-	'npmignore.dotfile',
-	'jest.config.js',
+const initFilePrefix = path.resolve(__dirname, '..', 'config', 'init-files');
+const ToCopy = new Set([
+	...listFiles(initFilePrefix),
 	...(global.NTI_INIT_TO_COPY || [])
-];
+]);
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
 for (let file of ToCopy) {
-	const lib = path.resolve(paths.ownPath, 'config', 'init-files', file);
+	const lib = path.resolve(initFilePrefix, file);
 	const cur = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files', file);
 
 	//to make dotfiles easier to bundle and not auto-ignored, lets call them '.dotfile's...and rename them on copy.
