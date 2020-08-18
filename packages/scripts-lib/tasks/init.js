@@ -159,3 +159,12 @@ console.log(`
 	${chalk.blue('npm run clean')}:   to clean project (remove build artifacts)
 
 `);
+
+if (fs.existsSync(paths.resolveApp('.git')) {
+	console.log(`
+
+	Staging changes to git.
+`);
+	call('git', ['add',  '.', '-f'], {stdio: 'pipe'}, true);
+	call('git', ['reset', 'node_modules'], {stdio: 'pipe'}, true);
+}
