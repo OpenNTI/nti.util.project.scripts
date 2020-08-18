@@ -139,7 +139,7 @@ if (ToRemove.length > 0) {
 }
 
 if (!SKIP_REGEN) {
-	write(`Regenerate: ${chalk.magenta('package-lock.json', 'node_modules')}...`);
+	write(`Regenerate: ${chalk.magenta('node_modules')}...`);
 	fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
 	fs.removeSync(path.resolve(paths.path, 'node_modules'));
 	call('npm', ['install'], {stdio: 'inherit'}, true);
