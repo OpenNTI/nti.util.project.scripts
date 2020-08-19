@@ -1,15 +1,7 @@
 'use strict';
-const { resolve } = require('path');
-const { listFiles } = require('@nti/lib-scripts/tasks/utils/read-dir');
 const chalk = require('chalk');
 
-const initFilePrefix = resolve(__dirname, '..', 'config', 'init-files');
-
-global.NTI_INIT_TO_COPY = listFiles(initFilePrefix);
-global.NTI_INIT_TO_REMOVE = [
-	'webpack.config.js'
-];
-global.NTI_INIT_SCRIPT_START = 'app-scripts start';
+global.NTI_INIT_SCRIPTS = {start: 'app-scripts start'};
 
 global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
 	Object.assign(pkg, {

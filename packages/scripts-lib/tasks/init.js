@@ -34,6 +34,7 @@ const getFinalFilename = (file) =>
 		: file;
 
 
+const unTab = (strings, ...keys) => strings.map((x, i) => x + (keys[i] || '')).join('').replace(/\t+/g, '\t');
 
 const write = x => console.log(chalk.cyan('\n' + x));
 
@@ -74,16 +75,18 @@ delete pkg.scripts['postversion'];
 delete pkg.scripts['prepack'];
 delete pkg.scripts['prepublish'];
 delete pkg.scripts['install-snapshots'];
-// 	b) set "test": "${scriptBinName} test"
-pkg.scripts['test'] = global.NTI_INIT_SCRIPT_TEST || `${scriptBinName} test`;
-// 	c) set "start": "${scriptBinName} test --watch"
-pkg.scripts['start'] = global.NTI_INIT_SCRIPT_START || `${scriptBinName} test --watch`;
-// 	d) set "prepublish": "${scriptBinName} build"
-pkg.scripts['build'] = global.NTI_INIT_SCRIPT_BUILD || global.NTI_INIT_SCRIPT_PREPACK || `${scriptBinName} build`;
-pkg.scripts['clean'] = global.NTI_INIT_SCRIPT_CLEAN || `${scriptBinName} clean`;
-pkg.scripts['check'] = global.NTI_INIT_SCRIPT_CHECK || `${scriptBinName} check`;
-pkg.scripts['release'] = global.NTI_INIT_SCRIPT_RELEASE || `${scriptBinName} release`;
-pkg.scripts['fix'] = global.NTI_INIT_SCRIPT_FIX || `${scriptBinName} fix`;
+Object.assign(pkg.scripts, {
+	// 	b) set "test": "${scriptBinName} test"
+	test:		`${scriptBinName} test`,
+	// 	c) set "start": "${scriptBinName} test --watch"
+	start:		`${scriptBinName} test --watch`,
+	// 	d) set "prepublish": "${scriptBinName} build"
+	build:		`${scriptBinName} build`,
+	clean:		`${scriptBinName} clean`,
+	check:		`${scriptBinName} check`,
+	release:	`${scriptBinName} release`,
+	fix:		`${scriptBinName} fix`,
+}, global.NTI_INIT_SCRIPTS || {});
 
 if (global.NTI_INIT_PACKAGE_HOOK) {
 	global.NTI_INIT_PACKAGE_HOOK(pkg);
@@ -95,22 +98,40 @@ writePackageJson(pkg, {spaces: indent});
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const initFilePrefix = path.resolve(__dirname, '..', 'config', 'init-files');
+const initFilePrefix2 = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files');
+const templatePrefix = path.resolve(currentScriptsPaths.ownPath, 'template');
+const getInitFileSrc = (file, a, b) => (
+	a = path.resolve(initFilePrefix, file),
+	b = path.resolve(initFilePrefix2, file),
+	fs.existsSync(a) ? a : fs.existsSync(b) ? b : null);
+const getTemplateSrc = (file) => (
+	file = path.resolve(templatePrefix, file),
+	fs.existsSync(file) ? file : null);
+
 const ToCopy = [
-	...(new Set([//de-duplicate
-		...listFiles(initFilePrefix),
-		...(global.NTI_INIT_TO_COPY || [])
+	...(new Set([
+		//de-duplicate and merge the lib-scripts and the currently running script's init files
+		...listFiles(initFilePrefix), ...listFiles(initFilePrefix2),
+		...listFiles(templatePrefix),
 	]))
 ].sort();
 write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
 for (let file of ToCopy) {
-	const lib = path.resolve(initFilePrefix, file);
-	const cur = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files', file);
+	const src = getInitFileSrc(file) || getTemplateSrc(file);
+
+	if (!src) {
+		console.log(unTab`
+			${chalk.yellow.bold('WARNING:')} Bad init file reference: ${chalk.underline(file)}
+			Could not find in template nor config/init-files
+		`);
+		continue;
+	}
 
 	//to make dotfiles easier to bundle and not auto-ignored, lets call them '.dotfile's...and rename them on copy.
 	const outFile = getFinalFilename(file);
 
 	fs.copySync(
-		fs.existsSync(cur) ? cur : lib,
+		src,
 		path.resolve(paths.path, outFile)
 	);
 }
@@ -128,6 +149,8 @@ const ToRemove = [
 	'release.sh',
 	'snapshot.sh',
 	'pre-commit.sample',
+	'webpack.config.js',
+	'webpack.config.test.js',
 	...AdditionalToRemove
 ].filter(x => fs.existsSync(x) && !NotToRemove.includes(x));
 

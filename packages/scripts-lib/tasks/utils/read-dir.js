@@ -9,10 +9,13 @@ Object.assign(module.exports, {
 
 function readdir (dir) {
 	const out = [];
-	for (let file of fs.readdirSync(dir)) {
-		file = join(dir,file);
-		const stat = fs.statSync(file);
-		out.push(...(stat.isDirectory() ? readdir(file) : [file]));
+
+	if (fs.existsSync(dir)) {
+		for (let file of fs.readdirSync(dir)) {
+			file = join(dir,file);
+			const stat = fs.statSync(file);
+			out.push(...(stat.isDirectory() ? readdir(file) : [file]));
+		}
 	}
 
 	return out;
