@@ -39,12 +39,20 @@ process.on('unhandledRejection', err => {
 	process.exit(1);
 });
 
+const activeScripts = path.dirname(process.argv[1]);
+
 if (WORKER) {
-	global.runBuild(); // Die if this is not defined.
+	(async () => {
+		if (global.runBuild) {
+			await exec(paths.path, 'node ' + path.resolve(activeScripts, './clean'));
+			global.runBuild();
+		} else {
+			console.log('This project is not built nor packaged individually.');
+		}
+	})();
 }
 else {
 	if (!SKIP) {
-		const activeScripts = path.dirname(process.argv[1]);
 		tasks.push(
 			call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
 			call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
