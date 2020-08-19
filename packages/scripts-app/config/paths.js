@@ -59,6 +59,20 @@ module.exports = {
 	DIST_SERVER: resolveApp('dist/server'),
 	PAGE: resolveApp('dist/client/page.html'),
 
+	/**
+	 *	Import custom properties from @nti/style-common when present.
+	 *	This allows postcss to fill in fallback rules for custom properties:
+	 *	Assuming --mycolor: red,
+	 *
+	 *		[input]
+	 *		color: var(--mycolor);
+	 *
+	 *		[output]
+	 *		color: red;
+	 *		color: var(--mycolor);
+	 */
+	cssCustomProperties: exists(resolveApp('node_modules/@nti/style-common/variables.css'), null),
+
 	serverComponent,
 	pageContentComponent: paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
 	pageContentComponentDest: resolveApp(path.join(serverComponent, 'ssr-entry/index.js')),
