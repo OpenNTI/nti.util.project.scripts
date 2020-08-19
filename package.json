@@ -6,7 +6,8 @@
   "scripts": {
     "test": "lerna exec \"eslint ./ --fix\"",
     "release": "./release",
-    "postinstall": "lerna bootstrap --hoist"
+    "postinstall": "lerna bootstrap --hoist",
+    "clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\""
   },
   "repository": {
     "type": "git",
