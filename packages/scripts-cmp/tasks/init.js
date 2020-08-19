@@ -11,4 +11,8 @@ global.NTI_INIT_SCRIPTS = {
 
 global.NTI_INIT_DROP_DEPENDENCIES = require('@nti/app-scripts/package.json').dependencies;
 
+global.NTI_INIT_PACKAGE_HOOK = (pkg) => {
+	pkg.devDependencies['@nti/style-common'] = 'NextThought/nti.style.common';
+};
+
 require('@nti/lib-scripts/tasks/init');
