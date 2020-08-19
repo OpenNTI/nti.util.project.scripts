@@ -35,7 +35,6 @@ const getFinalFilename = (file) =>
 
 
 const unTab = (strings, ...keys) => strings.map((x, i) => x + (keys[i] || '')).join('').replace(/\t+/g, '\t');
-
 const write = x => console.log(chalk.cyan('\n' + x));
 
 write(`Updating: ${chalk.magenta.underline('pacakge.json')}`);
@@ -65,6 +64,8 @@ delete pkg['jest'];
 delete pkg['jest-junit'];
 
 // 4) update scripts:
+pkg.main = 'src/index.js';
+delete pkg.module;
 // 	a) unset 'preversion', 'postversion', 'bump', 'prebump', 'postbump'
 delete pkg.scripts['bump'];
 delete pkg.scripts['prebump'];
