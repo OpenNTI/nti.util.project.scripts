@@ -69,8 +69,8 @@ module.exports = (resolve, rootDir) => {
 		testURL: 'http://localhost',
 		transform: {
 			'^.+\\.(js|jsx|mjs)$': resolve('config/jest/babelTransform.js'),
-			'^.+\\.css$': resolve('config/jest/cssTransform.js'),
-			'^(?!.*\\.(js|jsx|css|json)$)': resolve('config/jest/fileTransform.js'),
+			'^.+\\.(scss|css)$': resolve('config/jest/cssTransform.js'),
+			'^(?!.*\\.(js|jsx|json|css|scss)$)': resolve('config/jest/fileTransform.js'),
 		},
 		transformIgnorePatterns: [],
 		moduleNameMapper: {
