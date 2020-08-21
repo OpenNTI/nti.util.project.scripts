@@ -137,6 +137,13 @@ module.exports = {
 		'radix': 'error',
 		'require-atomic-updates': (PROD || IN_IDE) ? 'warn' : 'off',
 		'semi': 'error',
+		'sort-imports': ['warn', {
+			'ignoreCase': false,
+			'ignoreDeclarationSort': true,
+			'ignoreMemberSort': false,
+			'memberSyntaxSortOrder': ['none', 'all', 'multiple', 'single'],
+			'allowSeparatedGroups': true
+		}],
 		'space-before-blocks': ['warn', 'always'],
 		'space-before-function-paren': ['warn', {'anonymous': 'always', 'named': 'always'}],
 		'space-infix-ops': ['error', {'int32Hint': true}],
@@ -151,7 +158,14 @@ module.exports = {
 			'devDependencies': ['**/test/*.js', '**/*.spec.js']
 		}],
 		// 'import/no-unresolved': ['error', {'commonjs': true}],
-		'import/order': ['warn', {'newlines-between': 'always', 'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index']}],
+		'import/order': ['warn', {
+			'newlines-between': 'always',
+			'groups': ['builtin', 'external', 'internal', 'parent', 'sibling', 'index', 'unknown', 'object'],
+			'alphabetize': {
+				'order': 'asc',
+				'caseInsensitive': true
+			}
+		}],
 		'import/no-amd': 'error',
 		'import/no-commonjs': 'error',
 		'import/no-webpack-loader-syntax': 'error'
