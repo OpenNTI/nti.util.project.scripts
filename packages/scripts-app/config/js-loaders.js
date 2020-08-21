@@ -32,15 +32,7 @@ const standardPreloaderEntries = (options = {}) => [
 		}
 	},
 
-];
-
-// legacy baggage-load; remove once we've weaned ourselves off of sass
-const BAGGAGE_LOADER = {
-	loader: require.resolve('@nti/baggage-loader'),
-	options: {
-		'[file].scss': {}
-	}
-};
+].filter(Boolean);
 
 const preloaders = (options = {}) => [
 	{
@@ -49,7 +41,7 @@ const preloaders = (options = {}) => [
 		include: [
 			paths.src,
 			paths.ntiModules,
-			//Only lint|baggage source files in workspaceLinks
+			//Only lint source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
 			...(options.include || options.includes || [])
 		],
@@ -57,26 +49,20 @@ const preloaders = (options = {}) => [
 			path.join(paths.src, 'main/js/legacy'),
 			...(options.exclude || [])
 		],
-		use: [
-			...standardPreloaderEntries(options),
-			BAGGAGE_LOADER,
-		].filter(Boolean)
+		use: standardPreloaderEntries(options)
 	},
 	// legacy lint
 	{
 		test: jsTestExp,
 		enforce: 'pre',
 		include: path.join(paths.src, 'main/js/legacy'),
-		use: [
-			...standardPreloaderEntries({
-				...options,
-				eslint: {
-					...options.eslint,
-					useEslintrc: true
-				}
-			}),
-			BAGGAGE_LOADER,
-		].filter(Boolean)
+		use: standardPreloaderEntries({
+			...options,
+			eslint: {
+				...options.eslint,
+				useEslintrc: true
+			}
+		})
 	}
 ];
 

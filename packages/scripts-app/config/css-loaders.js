@@ -78,7 +78,7 @@ const loaders = (paths, options = {}) => [
 			paths.src,
 			paths.testApp,
 			paths.ntiModules,
-			//Only lint|baggage source files in workspaceLinks
+			//Only lint source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
 		].filter(Boolean),
 		use: [
