@@ -27,7 +27,15 @@
   "dependencies": {
     "@nti/app-scripts": "^2.26.1",
     "@nti/lib-scripts": "^2.26.1",
+    "@storybook/addon-actions": "^6.0.13",
+    "@storybook/addon-essentials": "^6.0.13",
+    "@storybook/addon-links": "^6.0.13",
+    "@storybook/react": "^6.0.13",
     "core-js": "^3.6.5",
+    "react-is": "^16.13.1",
     "webpack-cli": "^3.0.8"
+  },
+  "peerDependencies": {
+    "@nti/style-common": "*"
   }
 }
