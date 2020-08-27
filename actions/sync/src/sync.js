@@ -1,5 +1,5 @@
 'use strict';
-const {join} = require('path');
+const {basename, dirname, join} = require('path');
 const {promises: fs} = require('fs');
 
 const {context} = require('@actions/github');
@@ -101,9 +101,16 @@ async function sync (dir) {
 	const targets = Object.entries(await getSources(script));
 
 	if (targets.length === 0) {
-		console.debug('No changes');
+		console.debug(`${basename(dir)}: No changes`);
 		return;
 	}
+
+	// ensure target directories exist
+	await Promise.all(targets
+		.map(([t]) => exec(dir, [
+			'mkdir', '-p', dirname(join(dir,t))].join(' ')
+		))
+	);
 
 	await Promise.all(targets
 		.map(([t,src]) => exec(dir, [
@@ -114,7 +121,7 @@ async function sync (dir) {
 	const diff = (await exec(dir, 'git diff')).trim();
 
 	if (!diff) {
-		console.debug('No changes');
+		console.debug(`${basename(dir)}: No changes`);
 		return;
 	}
 
