@@ -122,7 +122,7 @@ async function sync (dir) {
 		await exec(dir, 'git add -f ' + f);
 	}
 
-	const diff = (await exec(dir, 'git diff')).trim();
+	const diff = (await exec(dir, 'git diff --staged')).trim();
 	if (!diff) {
 		console.debug(`${basename(dir)}: No changes`);
 		return;
