@@ -46,7 +46,7 @@ async function computeDiff () {
 		listDirectory(get('cmp')),
 	]);
 
-	console.log(changes);
+	console.log(changes ? `Changed files to sync: ${changes}` : 'All files will be synchronized.');
 	const pattern = new RegExp(get('(lib|app|cmp)'));
 
 	let changed = false;
@@ -95,7 +95,7 @@ async function resolve (dir) {
 async function sync (dir) {
 	const script = await resolve(dir);
 	if (!script) {
-		console.warn('"%s" does not appear to use our templates. Skipping.', dir);
+		console.warn('"%s" does not appear to use our templates. Skipping.', basename(dir));
 		return;
 	}
 	const targets = Object.entries(await getSources(script));
@@ -118,21 +118,20 @@ async function sync (dir) {
 		))
 	);
 
-	const diff = (await exec(dir, 'git diff')).trim();
+	for (let [f] of targets) {
+		await exec(dir, 'git add -f ' + f);
+	}
 
+	const diff = (await exec(dir, 'git diff')).trim();
 	if (!diff) {
 		console.debug(`${basename(dir)}: No changes`);
 		return;
 	}
 
-	for (let [f] of targets) {
-		await exec(dir, 'git add -f ' + f);
-	}
-
 	console.log('Updated: ', dir);
 	console.log(await exec(dir, [
 		'git commit -m ":wrench: Synchronize project files from updated templates"',
-		// 'git show HEAD',
-		'git push'
+		'git show HEAD',
+		// 'git push'
 	].join(';')));
 }
