@@ -131,7 +131,7 @@ async function sync (dir) {
 	console.log('Updated: ', dir);
 	console.log(await exec(dir, [
 		'git commit -m ":wrench: Synchronize project files from updated templates"',
-		'git show HEAD',
-		// 'git push'
+		// 'git show HEAD',
+		'git push'
 	].join(';')));
 }
