@@ -3,7 +3,7 @@ const IN_ATOM = 'ATOM_HOME' in process.env;
 const IN_VSCODE = 'VSCODE_PID' in process.env;
 const IN_IDE = IN_ATOM || IN_VSCODE;
 const PROD = process.env.NODE_ENV === 'production';
-const DEV = !PROD || IN_IDE;
+const DEV = PROD ? false : IN_IDE;
 
 // The ESLint browser environment defines all browser globals as valid,
 // even though most people don't know some of them exist (e.g. `name` or `status`).
