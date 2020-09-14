@@ -22,23 +22,25 @@ const postCss = (paths, options = {}) => ({
 	loader: require.resolve('postcss-loader'),
 	options: {
 		sourceMap: true,
-		plugins: () => [
-			require('postcss-flexbugs-fixes'),
-			require('postcss-preset-env')({
-				browsers,
-				autoprefixer: {
-					overrideBrowserslist: browsers,
-					flexbox: 'no-2009',
-					grid: true,
-				},
-				importFrom: paths.cssCustomProperties,
-				stage: 3,
-				features: {
-					'nesting-rules': true
-				}
-			}),
-		],
-		...options
+		postcssOptions: {
+			plugins: [
+				require('postcss-flexbugs-fixes'),
+				require('postcss-preset-env')({
+					browsers,
+					autoprefixer: {
+						overrideBrowserslist: browsers,
+						flexbox: 'no-2009',
+						grid: true,
+					},
+					importFrom: paths.cssCustomProperties,
+					stage: 3,
+					features: {
+						'nesting-rules': true
+					}
+				}),
+			],
+			...options
+		}
 	}
 });
 
