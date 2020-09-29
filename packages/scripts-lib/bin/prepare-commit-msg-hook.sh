@@ -1,9 +1,4 @@
 #!/bin/bash
-if [ -f .git/hooks/prepare-commit-msg ]; then
-    .git/hooks/prepare-commit-msg
-    exit
-fi
-
 if [ -z "$BRANCHES_TO_SKIP" ]; then
   BRANCHES_TO_SKIP=(master develop test)
 fi
