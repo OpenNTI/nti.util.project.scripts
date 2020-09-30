@@ -25,9 +25,6 @@ if (paths.appBuildHook) {
 	call(process.argv[0], [paths.appBuildHook]);
 }
 
-const publicUrl = paths.publicUrl || 'https://app.localhost:8083/';
-const {protocol, port = 8083} = new URL(publicUrl);
-
 const service = require.resolve('@nti/web-service/src/index.js');
 const servicePath = path.dirname(service);
 
@@ -41,17 +38,11 @@ if (DEBUG && localConfig) write('Loaded local config override.');
 if (DEBUG) write(`Loading base config: ${chalk.magenta(paths.baseConfig)}`);
 
 const config = merge(fs.readJsonSync(paths.baseConfig), localConfig);
-const serverURL = new URL(config.development.server || '/dataserver2/', publicUrl);
-// We only care about the pathname if its the defaults.
-const server = serverURL.protocol !== protocol ? serverURL.href : serverURL.pathname;
 
 if (DEBUG && localConfig) write('Merged baseConfig with local override...');
 
-if (DEBUG) write(`Setting port to ${chalk.magenta(port)}`);
 if (DEBUG) write('Appending app to config...');
 Object.assign(config.development, {
-	port,
-	server,
 	apps:[
 		...config.development.apps,
 		{
@@ -73,7 +64,6 @@ writeHeading('Starting web-service.');
 
 const args = [
 	'--env', 'development',
-	'--protocol', protocol.replace(/:$/,''),
 	'--config', tempConfig.name
 ];
 
