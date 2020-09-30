@@ -80,8 +80,16 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 		return has;
 	});
 
-	for (let key of Object.keys(aliases)) {
-		console.log('[workspace] Mapping %s => %s', key.replace(/[\^\\]/g, ''), aliases[key]);
+	if (DEBUG) {
+		for (let key of Object.keys(aliases)) {
+			console.log('[workspace] Mapping %s => %s', key.replace(/[\^\\]/g, ''), aliases[key]);
+		}
+	}
+	else {
+		const {length: count} = Object.keys(aliases);
+		if (count > 0) {
+			console.log(`[workspace] Linked ${count} modules from workspace...`);
+		}
 	}
 
 	process.env[ENV_KEY] = JSON.stringify(aliases);

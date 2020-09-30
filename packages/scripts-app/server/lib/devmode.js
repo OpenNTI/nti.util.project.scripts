@@ -2,8 +2,6 @@
 'use strict';
 const { worker } = require('cluster');
 const readline = require('readline');
-// const path = require('path');
-const url = require('url');
 const { getHTTPS } = require('@nti/dev-ssl-config');
 
 function clearLine (n) {
@@ -34,7 +32,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// server,
 	} = config;
 
-	const domain = url.parse(paths.publicUrl).hostname || 'app.localhost';
+	// const domain = 'app.localhost';
 
 
 	const devPort = config['webpack-dev-server'] || await getPort();
@@ -47,7 +45,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	if (devPort !== 0 && https) {
 		for (let entry of Object.keys(clientConfig.entry)) {
 			const e = clientConfig.entry[entry];
-			e.unshift(`webpack-dev-server/client?http://${domain}:${devPort}`);
+			e.unshift(`webpack-dev-server/client?http://0.0.0.0:${devPort}`);
 		}
 	}
 
@@ -67,33 +65,37 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		// The output.publicPath covers us here.
 		// publicPath: config.basepath,
 
+		injectClient: false,
+		injectHot: false,
+		liveReload: false,
+
 		https,
 		compress: true,
 		contentBase: paths.assetsRoot,
-		public: `${domain}:${devPort}`,
+
 		overlay: {
 			errors: true,
 			warnings: false,
 		},
-
+		logLevel: 'error',
 		stats: {
-			version: debug,
-			hash: debug,
-			timings: debug,
+			preset: 'errors-only',
 
 			assets: false,
-
-			chunks: false,
+			children: false,
 			chunkModules: false,
 			chunkOrigins: false,
-
-			modules: false,
-			children: false,
-
+			chunks: false,
 			colors: true,
-			reasons: debug,
-			errorDetails: true,
 			entrypoints: false,
+			errorDetails: true,
+			hash: debug,
+			modules: false,
+			moduleTrace: true,
+			reasons: debug,
+			timings: true,
+			version: true,
+
 		}
 	});
 

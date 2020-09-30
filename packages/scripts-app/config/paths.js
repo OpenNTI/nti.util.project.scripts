@@ -9,8 +9,6 @@ const paths = require('@nti/lib-scripts/config/paths');
 // const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
 // const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
 
-const envPublicUrl = process.env.PUBLIC_URL;
-
 const {exists, resolveApp} = paths;
 
 //eslint-disable-next-line no-shadow
@@ -26,14 +24,10 @@ function ensureSlash (path, needsSlash) {
 }
 
 
-function getPublicUrl (packageJson) {
-	return envPublicUrl || require(packageJson).homepage;
-}
-
 function getServedPath (packageJson) {
-	const publicUrl = getPublicUrl(packageJson);
-	const servedUrl = envPublicUrl ||
-	(publicUrl ? url.parse(publicUrl).pathname : '/');
+	const homepage = packageJson?.homepage;
+	const servedUrl = process.env.PUBLIC_URL ||
+	(homepage ? url.parse(homepage).pathname : '/');
 	return ensureSlash(servedUrl, true);
 }
 
@@ -52,7 +46,6 @@ module.exports = {
 	appBuildHook: exists(resolveApp('config/build-hook.js')),
 	testsSetup: resolveApp('src/main/js/__test__/setup.js'),
 
-	publicUrl: getPublicUrl(resolveApp('package.json')),
 	servedPath: getServedPath(resolveApp('package.json')),
 
 	DIST_CLIENT: resolveApp('dist/client'),
