@@ -7,7 +7,8 @@
     "test": "lerna exec \"eslint ./ --fix\"",
     "release": "./release",
     "postinstall": "lerna bootstrap --hoist",
-    "clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\""
+    "clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\"",
+    "sync": "gh api repos/:owner/:repo/dispatches -X POST --field event_type=sync"
   },
   "repository": {
     "type": "git",
