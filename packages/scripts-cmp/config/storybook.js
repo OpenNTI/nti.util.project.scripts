@@ -1,5 +1,6 @@
 'use strict';
-const WebpackConfig = require('./webpack.config.js');
+const webpack = require('webpack');
+const CommonWebpackConfig = require('./webpack.config.js');
 
 module.exports = {
 	'stories': [
@@ -11,21 +12,31 @@ module.exports = {
 		'@storybook/addon-essentials'
 	],
 
-	webpackFinal: (config) => ({
-		...config,
+	webpackFinal: (storybookConfig) => ({
+		...storybookConfig,
 		resolve: {
-			...config.resolve,
+			...storybookConfig.resolve,
 			alias: {
-				...config.resolve.alias,
-				...WebpackConfig.resolve.alias
+				...storybookConfig.resolve.alias,
+				...CommonWebpackConfig.resolve.alias
 			}
 		},
 		module: {
-			...config.module,
-			rules: WebpackConfig.module.rules
+			...storybookConfig.module,
+			rules: CommonWebpackConfig.module.rules
+		},
+		devServer: {
+			...storybookConfig.devServer,
+			proxy: [
+				...storybookConfig.devServer.proxy,
+				...CommonWebpackConfig.devServer.proxy,
+			]
 		},
 		plugins: [
-			...config.plugins,
+			new webpack.DefinePlugin({
+				$AppConfig: { server: '/dataserver2/' }
+			}),
+			...storybookConfig.plugins,
 		]
 	})
 };
