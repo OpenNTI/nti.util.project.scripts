@@ -25,7 +25,7 @@ function ensureSlash (path, needsSlash) {
 
 
 function getServedPath (packageJson) {
-	const homepage = packageJson?.homepage;
+	const homepage = require(packageJson).homepage;
 	const servedUrl = process.env.PUBLIC_URL ||
 	(homepage ? url.parse(homepage).pathname : '/');
 	return ensureSlash(servedUrl, true);
