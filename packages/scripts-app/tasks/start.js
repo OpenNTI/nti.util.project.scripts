@@ -15,6 +15,10 @@ const paths = require('../config/paths');
 
 const merge = require('./utils/merge-config');
 
+const CONSUMED_FLAGS = new Set([
+	'--inspect-service',
+]);
+
 const write = (...args) => console.log(...args);
 const writeHeading = x => write(`\n${chalk.underline.magenta(x)}`);
 
@@ -64,7 +68,8 @@ writeHeading('Starting web-service.');
 
 const args = [
 	'--env', 'development',
-	'--config', tempConfig.name
+	'--config', tempConfig.name,
+	...process.argv.slice(1).filter(x => CONSUMED_FLAGS.has(x))
 ];
 
 if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
@@ -73,7 +78,6 @@ call(process.argv[0], [
 	INSPECT && '--inspect-brk',
 	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 	service,
-	DEBUG && '--debug',
 	...args
 ].filter(Boolean), {
 	env: {
