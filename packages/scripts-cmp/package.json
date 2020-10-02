@@ -28,6 +28,7 @@
     "@nti/app-scripts": "^2.27.9",
     "@nti/lib-scripts": "^2.27.9",
     "@storybook/addon-actions": "^6.0.13",
+    "@storybook/addon-controls": "^6.0.22",
     "@storybook/addon-essentials": "^6.0.13",
     "@storybook/addon-links": "^6.0.13",
     "@storybook/react": "^6.0.13",
