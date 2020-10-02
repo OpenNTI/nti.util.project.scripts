@@ -155,7 +155,7 @@ module.exports = {
 		'import/no-duplicates': 'warn',
 		'import/no-extraneous-dependencies': ['error', {
 			'bundledDependencies': true,
-			'devDependencies': ['**/test/*.js', '**/*.spec.js']
+			'devDependencies': ['**/test/*.js', '**/*.spec.js',  '**/*.stories.js']
 		}],
 		// 'import/no-unresolved': ['error', {'commonjs': true}],
 		'import/order': ['warn', {
