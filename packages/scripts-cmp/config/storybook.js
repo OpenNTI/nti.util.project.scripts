@@ -2,6 +2,19 @@
 const webpack = require('webpack');
 const CommonWebpackConfig = require('./webpack.config.js');
 
+function getEntry(currentEntry, newEntry) {
+    if (typeof currentEntry === 'string') {
+        currentEntry = [currentEntry];
+    }
+    if (Array.isArray(currentEntry)) {
+        return [newEntry, ...currentEntry];
+    }
+    for (const [key, val] of Object.entries(currentEntry)) {
+        currentEntry[key] = getEntry(val, newEntry);
+    }
+    return currentEntry;
+}
+
 module.exports = {
 	'stories': [
 		'../src/**/*.stories.mdx',
@@ -16,6 +29,7 @@ module.exports = {
 
 	webpackFinal: (storybookConfig) => ({
 		...storybookConfig,
+		entry: getEntry(storybookConfig.entry ?? [], require.resolve('./storybook-config')),
 		resolve: {
 			...storybookConfig.resolve,
 			alias: {
@@ -28,16 +42,13 @@ module.exports = {
 			rules: CommonWebpackConfig.module.rules
 		},
 		devServer: {
-			...storybookConfig.devServer,
+			...(storybookConfig.devServer ?? {}),
 			proxy: [
-				...storybookConfig.devServer.proxy,
+				...(storybookConfig.devServer?.proxy ?? []),
 				...CommonWebpackConfig.devServer.proxy,
 			]
 		},
 		plugins: [
-			new webpack.DefinePlugin({
-				$AppConfig: { server: '/dataserver2/' }
-			}),
 			...storybookConfig.plugins,
 		]
 	})
