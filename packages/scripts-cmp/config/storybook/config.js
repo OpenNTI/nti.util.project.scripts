@@ -1,6 +1,5 @@
 'use strict';
-const webpack = require('webpack');
-const CommonWebpackConfig = require('./webpack.config.js');
+const CommonWebpackConfig = require('../webpack.config.js');
 
 function getEntry(currentEntry, newEntry) {
     if (typeof currentEntry === 'string') {
@@ -29,7 +28,7 @@ module.exports = {
 
 	webpackFinal: (storybookConfig) => ({
 		...storybookConfig,
-		entry: getEntry(storybookConfig.entry ?? [], require.resolve('./storybook-config')),
+		entry: getEntry(storybookConfig.entry, require.resolve('./globals')),
 		resolve: {
 			...storybookConfig.resolve,
 			alias: {
@@ -42,7 +41,7 @@ module.exports = {
 			rules: CommonWebpackConfig.module.rules
 		},
 		devServer: {
-			...(storybookConfig.devServer ?? {}),
+			...storybookConfig.devServer,
 			proxy: [
 				...(storybookConfig.devServer?.proxy ?? []),
 				...CommonWebpackConfig.devServer.proxy,
