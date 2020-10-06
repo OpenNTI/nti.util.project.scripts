@@ -69,7 +69,7 @@ writeHeading('Starting web-service.');
 const args = [
 	'--env', 'development',
 	'--config', tempConfig.name,
-	...process.argv.slice(1).filter(x => CONSUMED_FLAGS.has(x))
+	...process.argv.slice(1).filter(x => !CONSUMED_FLAGS.has(x))
 ];
 
 if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
