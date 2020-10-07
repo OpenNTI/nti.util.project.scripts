@@ -6,17 +6,16 @@ require('./validate-env.js');
 
 const exec = x => execSync(x).toString('utf8').trim();
 
-const hooks = join(exec('git rev-parse --show-toplevel'), '.git', 'hooks');
 const hookSrc = [
 	join(__dirname, 'pre-commit-hook.sh'),
 	join(__dirname, 'prepare-commit-msg-hook.sh')
 ];
 
-(async () => {
+async function installHooks (basepath) {
 	const [ , ...out] = await Promise.all([
-		mkdir(hooks, {recursive: true}),
+		mkdir(basepath, {recursive: true}),
 		...hookSrc.map(async x => ({
-			dest: join(hooks, basename(x, '-hook.sh')),
+			dest: join(basepath, basename(x, '-hook.sh')),
 			content: await readFile(x)
 		}))
 	]);
@@ -24,5 +23,21 @@ const hookSrc = [
 	await Promise.all(out.map(x =>
 		writeFile(x.dest, x.content, {mode: 0o777})
 	));
+}
+
+
+(async () => {
+	let hooks;
+	try {
+		hooks = [
+			join(exec('git rev-parse --show-toplevel'), '.git', 'hooks')
+		];
+	} catch {
+		// not in a git repo
+		hooks = [];
+		console.log('Not GIT: %s\n%o', process.cwd(), process.argv);
+	}
+
+	await Promise.all(hooks.map(installHooks));
 
 })().catch(x => console.error(x.stack || x));
