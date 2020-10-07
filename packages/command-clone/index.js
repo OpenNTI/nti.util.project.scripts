@@ -1,11 +1,13 @@
 #!/usr/bin/env node
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 import ora from 'ora';
 
 import { getRepositories } from './lib/list.js';
 import { clone } from './lib/workflow.js';
 
-const options = yargs.usage('Usage: $0 [options]')
+const options = yargs(hideBin(process.argv))
+	.usage('Usage: $0 [options]')
 	.option('user', {
 		describe: 'Scope to the current user',
 		type: 'boolean'
