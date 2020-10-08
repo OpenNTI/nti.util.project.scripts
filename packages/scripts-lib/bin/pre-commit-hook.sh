@@ -3,4 +3,7 @@
 # unset ATOM_HOME
 set -e
 export NODE_ENV=production
-npx @nti/pre-commit
+JS=$(git diff --diff-filter=d --cached --name-only ***.{cjs,js,jsx,mjs})
+if [[ ! -z "$JS" ]]; then
+	npx @nti/pre-commit
+fi
