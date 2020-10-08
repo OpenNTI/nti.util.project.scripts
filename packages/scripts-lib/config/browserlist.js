@@ -4,7 +4,9 @@ const browserslist = require('browserslist');
 const chalk = require('chalk');
 const {isCI} = require('ci-info');
 
-const isWorker = process.argv.some(x => (/thread-loader.*worker/ig).test(x)) || process.env.NTI_BROWSER_LIST_PRINTED != null;
+const LINTER = /eslint$/i.test(process.argv[1]);
+
+const isWorker = LINTER || process.argv.some(x => (/thread-loader.*worker/ig).test(x)) || process.env.NTI_BROWSER_LIST_PRINTED != null;
 
 const hasValue = x => x && x !== 'null';
 

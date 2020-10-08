@@ -82,7 +82,7 @@ module.exports = {
 	extends: 'eslint:recommended',
 	parser: '@babel/eslint-parser',
 	parserOptions: {
-		ecmaVersion: 2018,
+		ecmaVersion: new Date().getFullYear(),
 		sourceType: 'module',
 		ecmaFeatures: {
 			legacyDecorators: true,
