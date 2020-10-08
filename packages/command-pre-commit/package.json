@@ -1,0 +1,11 @@
+{
+  "name": "@nti/pre-commit",
+  "version": "1.0.0",
+  "description": "Pre-commit hook",
+  "main": "index.js",
+  "author": "nextthought",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "eslint": "^7.0.0"
+  }
+}
