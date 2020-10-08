@@ -1,5 +1,6 @@
-'use strict';
+#!/usr/bin/env node
 const { execSync } = require('child_process');
+
 const { ESLint } = require('eslint');
 
 const run = x => execSync(x, {stdio: 'pipe'}).toString('utf8').trim();
@@ -23,6 +24,7 @@ async function main () {
 	}
 
 	process.exitCode = errors > 0 ? 1 : 0;
+
 }
 
 

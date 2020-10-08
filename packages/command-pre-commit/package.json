@@ -9,6 +9,6 @@
     "pre-commit": "index.js"
   },
   "dependencies": {
-    "eslint": "^7.0.0"
+    "eslint": "^7.6.0"
   }
 }

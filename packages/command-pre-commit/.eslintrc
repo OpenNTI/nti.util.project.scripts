@@ -1,0 +1,17 @@
+{
+	"extends": "../lint-config-lib-scripts/index.js",
+	"parser": "espree",
+	"parserOptions": {
+		"ecmaVersion": 2020,
+		"sourceType": "script"
+	},
+	"env": {
+		"es6": true,
+		"node": true,
+		"browser": false
+	},
+	"rules": {
+		"import/no-unresolved": 0,
+		"no-console": 0
+	}
+}
