@@ -5,6 +5,9 @@
   "main": "index.js",
   "author": "nextthought",
   "license": "UNLICENSED",
+  "bin": {
+    "pre-commit": "index.js"
+  },
   "dependencies": {
     "eslint": "^7.0.0"
   }
