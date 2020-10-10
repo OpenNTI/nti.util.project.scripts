@@ -6,7 +6,7 @@
   "scripts": {
     "test": "lerna exec \"eslint ./ --fix\"",
     "release": "./release",
-    "postinstall": "lerna bootstrap --hoist",
+    "##postinstall": "lerna bootstrap --hoist",
     "clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\"",
     "sync": "gh api repos/:owner/:repo/dispatches -X POST --field event_type=sync"
   },
@@ -26,5 +26,8 @@
   "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
   "devDependencies": {
     "lerna": "^3.4.3"
-  }
+  },
+  "workspaces": [
+    "packages/*"
+  ]
 }
