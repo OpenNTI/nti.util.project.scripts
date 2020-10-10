@@ -1,5 +1,4 @@
 'use strict';
-const chalk = require('chalk');
 
 global.NTI_INIT_SCRIPTS = {start: 'app-scripts start'};
 

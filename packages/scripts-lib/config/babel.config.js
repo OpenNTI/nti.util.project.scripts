@@ -1,5 +1,4 @@
 'use strict';
-const {isCI} = require('ci-info');
 
 module.exports = function (api, opts) {
 	api.cache.using(() => process.env.NODE_ENV);

@@ -1,17 +1,17 @@
 'use strict';
 const CommonWebpackConfig = require('../webpack.config.js');
 
-function getEntry(currentEntry, newEntry) {
-    if (typeof currentEntry === 'string') {
-        currentEntry = [currentEntry];
-    }
-    if (Array.isArray(currentEntry)) {
-        return [newEntry, ...currentEntry];
-    }
-    for (const [key, val] of Object.entries(currentEntry)) {
-        currentEntry[key] = getEntry(val, newEntry);
-    }
-    return currentEntry;
+function getEntry (currentEntry, newEntry) {
+	if (typeof currentEntry === 'string') {
+		currentEntry = [currentEntry];
+	}
+	if (Array.isArray(currentEntry)) {
+		return [newEntry, ...currentEntry];
+	}
+	for (const [key, val] of Object.entries(currentEntry)) {
+		currentEntry[key] = getEntry(val, newEntry);
+	}
+	return currentEntry;
 }
 
 module.exports = {
