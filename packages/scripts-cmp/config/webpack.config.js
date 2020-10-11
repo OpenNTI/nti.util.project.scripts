@@ -48,13 +48,6 @@ exports = module.exports = {
 
 	devtool: 'cheap-module-source-map',
 
-	node: {
-		dgram: 'empty',
-		fs: 'empty',
-		net: 'empty',
-		tls: 'empty',
-	},
-
 	target: 'web',
 
 	resolve: {
@@ -92,9 +85,6 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
-			// Disable require.ensure as it's not a standard language feature.
-			{ parser: { requireEnsure: false } },
-
 			{
 				oneOf: [
 					...jsLoaders(),
@@ -118,7 +108,7 @@ exports = module.exports = {
 						loader: require.resolve('url-loader'),
 						options: {
 							limit: 50,
-							name: 'assets/[name]-[hash].[ext]',
+							name: 'assets/[name]-[contenthash].[ext]',
 							mimeType: 'image/[ext]',
 						},
 					},
@@ -127,7 +117,7 @@ exports = module.exports = {
 						test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
 						loader: require.resolve('file-loader'),
 						options: {
-							name: 'assets/fonts/[hash].[ext]',
+							name: 'assets/fonts/[contenthash].[ext]',
 						},
 					},
 
@@ -135,7 +125,7 @@ exports = module.exports = {
 						test: /\.(eot|ttf|woff)$/,
 						loader: require.resolve('file-loader'),
 						query: {
-							name: 'assets/fonts/[name]-[hash].[ext]',
+							name: 'assets/fonts/[name]-[contenthash].[ext]',
 						},
 					},
 

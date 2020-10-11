@@ -72,15 +72,6 @@ function tempPage() {
 function getLoaderRules(server) {
 	return [
 		{
-			parser: {
-				// Disable non-standard language features
-				requireInclude: !PROD, // disable require.include in production (the dev server uses this tho)
-				requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
-				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
-			},
-		},
-
-		{
 			oneOf: [
 				{
 					test: /.*/,
@@ -156,8 +147,8 @@ const ClientConfig = {
 	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
 	output: {
 		path: paths.DIST_CLIENT,
-		filename: 'js/[name]-[hash:8].js',
-		chunkFilename: 'js/[name]-[hash:8].js',
+		filename: 'js/[name]-[contenthash:8].js',
+		chunkFilename: 'js/[name]-[contenthash:8].js',
 		publicPath: paths.servedPath || '/',
 		// devtoolModuleFilenameTemplate: info =>
 		// 	path.relative(
@@ -173,21 +164,16 @@ const ClientConfig = {
 		? 'source-map'
 		: 'cheap-module-source-map',
 
-	// Some libraries import Node modules but don't use them in the browser.
-	// Tell Webpack to provide empty mocks for them so importing them works.
-	node: {
-		dgram: 'empty',
-		fs: 'empty',
-		net: 'empty',
-		tls: 'empty',
-		child_process: 'empty',
-		crypto: 'empty',
-	},
-
 	stats: 'errors-only',
 	target: 'web',
 
 	resolve: {
+		fallback: {
+			buffer: require.resolve('buffer'),
+			os: require.resolve('os-browserify/browser'),
+			path: require.resolve('path-browserify'),
+			stream: require.resolve('stream-browserify'),
+		},
 		modules: [
 			paths.appModules,
 			// This needs to point to the `./node_modules` dir... not the resolved one... once everyone is on the npm7 workspace structure we can delete this.
@@ -238,55 +224,54 @@ const ClientConfig = {
 
 	optimization: {
 		minimize: PROD,
-		minimizer: [
-			// This is only used in production mode
-			new TerserPlugin({
-				terserOptions: {
-					parse: {
-						// We want terser to parse ecma 8 code. However, we don't want it
-						// to apply any minification steps that turns valid ecma 5 code
-						// into invalid ecma 5 code. This is why the 'compress' and 'output'
-						// sections only apply transformations that are ecma 5 safe
-						// https://github.com/facebook/create-react-app/pull/4234
-						ecma: 8,
-					},
-					compress: {
-						ecma: 5,
-						warnings: false,
-						// Disabled because of an issue with Uglify breaking seemingly valid code:
-						// https://github.com/facebook/create-react-app/issues/2376
-						// Pending further investigation:
-						// https://github.com/mishoo/UglifyJS2/issues/2011
-						comparisons: false,
-						// Disabled because of an issue with Terser breaking valid code:
-						// https://github.com/facebook/create-react-app/issues/5250
-						// Pending further investigation:
-						// https://github.com/terser-js/terser/issues/120
-						inline: 2,
-					},
-					mangle: {
-						safari10: true,
-					},
-					// Added for profiling in devtools
-					keep_classnames: true,
-					keep_fnames: true,
-					output: {
-						ecma: 5,
-						comments: false,
-						// Turned on because emoji and regex is not minified properly using default
-						// https://github.com/facebook/create-react-app/issues/2488
-						ascii_only: true,
-					},
-				},
-				parallel: true,
-				cache: true,
-				sourceMap,
-			}),
-		].filter(Boolean),
+		// minimizer: [
+		// 	// This is only used in production mode
+		// 	new TerserPlugin({
+		// 		terserOptions: {
+		// 			parse: {
+		// 				// We want terser to parse ecma 8 code. However, we don't want it
+		// 				// to apply any minification steps that turns valid ecma 5 code
+		// 				// into invalid ecma 5 code. This is why the 'compress' and 'output'
+		// 				// sections only apply transformations that are ecma 5 safe
+		// 				// https://github.com/facebook/create-react-app/pull/4234
+		// 				ecma: 8
+		// 			},
+		// 			compress: {
+		// 				ecma: 5,
+		// 				warnings: false,
+		// 				// Disabled because of an issue with Uglify breaking seemingly valid code:
+		// 				// https://github.com/facebook/create-react-app/issues/2376
+		// 				// Pending further investigation:
+		// 				// https://github.com/mishoo/UglifyJS2/issues/2011
+		// 				comparisons: false,
+		// 				// Disabled because of an issue with Terser breaking valid code:
+		// 				// https://github.com/facebook/create-react-app/issues/5250
+		// 				// Pending further investigation:
+		// 				// https://github.com/terser-js/terser/issues/120
+		// 				inline: 2,
+		// 			},
+		// 			mangle: {
+		// 				safari10: true
+		// 			},
+		// 			// Added for profiling in devtools
+		// 			keep_classnames: true,
+		// 			keep_fnames: true,
+		// 			output: {
+		// 				ecma: 5,
+		// 				comments: false,
+		// 				// Turned on because emoji and regex is not minified properly using default
+		// 				// https://github.com/facebook/create-react-app/issues/2488
+		// 				ascii_only: true
+		// 			}
+		// 		},
+		// 		parallel: true,
+		// 		cache: true,
+		// 		sourceMap,
+		// 	}),
+		// ].filter(Boolean),
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
-			name: true,
 			cacheGroups: {
 				shared: {
 					reuseExistingChunk: true,
@@ -379,7 +364,7 @@ const ClientConfig = {
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
 
-		PROD && new CompressionPlugin({ cache: false }),
+		PROD && new CompressionPlugin(),
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

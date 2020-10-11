@@ -1,14 +1,24 @@
-/*globals BUILD_SOURCE, BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION, Element, CharacterData, DocumentType*/
+/*globals window, globalThis, BUILD_SOURCE, BUILD_PACKAGE_NAME, BUILD_PACKAGE_VERSION, Element, CharacterData, DocumentType*/
 'use strict';
 require('core-js/stable');
 require('regenerator-runtime/runtime');
 require('whatwg-fetch');
 require('abortcontroller-polyfill/dist/polyfill-patch-fetch');
 
-global['revision'] = typeof BUILD_SOURCE !== 'undefined' && BUILD_SOURCE;
-global['BUILD_PACKAGE_NAME'] =
+// webpack@5 doesn't inject node polyfill automatically
+let g =
+	typeof globalThis !== 'undefined'
+		? globalThis
+		: typeof window === 'undefined'
+		? global
+		: window.global || window;
+g.process = g.process || {};
+g.process.env = g.process.env || {};
+
+g['revision'] = typeof BUILD_SOURCE !== 'undefined' && BUILD_SOURCE;
+g['BUILD_PACKAGE_NAME'] =
 	typeof BUILD_PACKAGE_NAME !== 'undefined' && BUILD_PACKAGE_NAME;
-global['BUILD_PACKAGE_VERSION'] = global['version'] =
+g['BUILD_PACKAGE_VERSION'] = g['version'] =
 	typeof BUILD_PACKAGE_VERSION !== 'undefined' && BUILD_PACKAGE_VERSION;
 
 if (typeof document !== 'undefined') {
