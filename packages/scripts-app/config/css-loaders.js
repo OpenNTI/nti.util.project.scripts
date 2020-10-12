@@ -6,9 +6,12 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const {PROD} = require('./env');
 const workspaceLinks = require('./workspace-links');
 
-const style = (server) => (
-	(!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader
-);
+const style = (server) => ({
+	loader: (!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader,
+	options: {
+		esModule: false
+	}
+});
 
 const css = (options = {}) => ({
 	loader: require.resolve('css-loader'),
