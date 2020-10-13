@@ -17,7 +17,6 @@ if (isSnapshot) {
 	v.prerelease.push(stamp);
 
 	pkg.version = v.format();
-	printLine('::set-env name=SNAPSHOT_ID::' + name + '@' + pkg.version);
 	printLine('::set-output name=SNAPSHOT_ID::' + name + '@' + pkg.version);
 	printLine('::set-output name=version::' + pkg.version);
 	print('Preparing: %s@%s ... ', name, pkg.version);
