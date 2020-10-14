@@ -51,5 +51,5 @@ export async function maybeClone () {
 		return;
 	}
 
-	await call('npx --quiet @nti/clone');
+	await call('npx --yes -p @nti/clone clone');
 }

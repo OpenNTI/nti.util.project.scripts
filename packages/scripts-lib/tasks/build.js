@@ -56,7 +56,7 @@ else {
 		tasks.push(
 			call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
 			call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
-			call('npx --quiet @nti/gen-docs', 'Generating docs...')
+			call('npx --yes -p @nti/gen-docs gen-docs', 'Generating docs...')
 		);
 	}
 

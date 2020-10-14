@@ -1,6 +1,6 @@
 'use strict';
 try {
-	require('child_process').execSync('npx --yes @nti/snapshot', {stdio: 'inherit'});
+	require('child_process').execSync('npx --yes -p @nti/snapshot snapshot', {stdio: 'inherit'});
 } catch {
 	/* */
 }
