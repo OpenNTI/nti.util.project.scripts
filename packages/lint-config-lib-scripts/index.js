@@ -127,6 +127,15 @@ module.exports = {
 		'no-new': 'error',
 		'no-prototype-builtins': 'warn',
 		'no-restricted-globals': ['error'].concat(restrictedGlobals),
+		'no-restricted-modules': ['warn', {
+			'paths':[{
+				'name': 'classnames/bind',
+				'message': 'This usage can lead to accidental css-module mapping.'
+			},{
+				'name': 'url',
+				'message': 'Use the global `URL` instead.'
+			}],
+		}],
 		'no-shadow': ['warn', {'builtinGlobals': false, 'hoist': 'never', 'allow': ['done']}],
 		'no-throw-literal': 'error',
 		'no-unused-vars': ['warn', {'args': 'none'}],
