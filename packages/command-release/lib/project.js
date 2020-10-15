@@ -232,12 +232,12 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		}
 
 		// npm --no-git-tag-version version $VERSION > /dev/null
-		await call('npm', ['--no-git-tag-version', 'version', nextVersion], {stdio: null});
+		await call('npm', ['--no-git-tag-version', 'version', `"${nextVersion}"`], {stdio: null});
 
 		// git add package.json package-lock.json
 		await call('git', ['add', ...packageFiles]);
 		// git commit -m "$VERSION" > /dev/null
-		await call('git', ['commit', '-m', nextVersion]);
+		await call('git', ['commit', '-m', `"${nextVersion}"`]);
 	}
 
 	write(chalk.cyan(`\n${chalk.underline('Pushing')} changes to remote...`));
