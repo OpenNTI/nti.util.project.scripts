@@ -1,5 +1,6 @@
 'use strict';
 const CommonWebpackConfig = require('../webpack.config.js');
+// const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
 
 function getEntry (currentEntry, newEntry) {
 	if (typeof currentEntry === 'string') {
@@ -48,6 +49,7 @@ module.exports = {
 			]
 		},
 		plugins: [
+			// new BitBarWebpackProgressPlugin(),
 			...storybookConfig.plugins,
 		]
 	})

@@ -6,6 +6,7 @@ const path = require('path');
 const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
 
 //Webpack plugins:
+// const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -181,6 +182,7 @@ exports = module.exports = {
 	},
 
 	plugins: [
+		// !PROD && new BitBarWebpackProgressPlugin(),
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
 			exclude: /node_modules/,
