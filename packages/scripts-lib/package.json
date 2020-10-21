@@ -1,6 +1,6 @@
 {
   "name": "@nti/lib-scripts",
-  "version": "2.28.10",
+  "version": "2.28.11",
   "description": "library scripts & dependencies",
   "main": "./bin/cli.js",
   "bin": {
@@ -37,7 +37,7 @@
     "@babel/runtime": "^7.11.2",
     "@nti/daily-tasks": "^2.28.0",
     "@nti/eslint-config-lib-scripts": "^2.28.8",
-    "@nti/pre-commit": "^2.28.10",
+    "@nti/pre-commit": "^2.28.11",
     "babel-jest": "^26.0.1",
     "chalk": "^4.1.0",
     "ci-info": "^2.0.0",
