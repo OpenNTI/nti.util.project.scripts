@@ -9,6 +9,8 @@
     "pre-commit": "index.js"
   },
   "dependencies": {
-    "eslint": "^7.6.0"
+    "@nti/stylelint-config-standard": "^2.28.0",
+    "eslint": "^7.6.0",
+    "stylelint": "^13.7.2"
   }
 }
