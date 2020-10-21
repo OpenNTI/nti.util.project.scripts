@@ -37,6 +37,6 @@
     "webpack-cli": "^3.0.8"
   },
   "peerDependencies": {
-    "@nti/style-common": "*"
+    "@nti/style-common": "NextThought/nti.style.common"
   }
 }
