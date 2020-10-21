@@ -3,6 +3,7 @@
 module.exports = {
 	'extends': 'stylelint-config-standard',
 	'rules': {
+		'selector-type-no-unknown': null,
 		'no-descending-specificity': null,
 		'indentation': 'tab',
 		'selector-list-comma-newline-after': null,
