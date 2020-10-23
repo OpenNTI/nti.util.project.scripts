@@ -212,7 +212,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 
 	write(chalk.cyan(`\nCommitting release version ${chalk.underline.magenta(version)}, tagging...`));
 	// git add package.json package-lock.json
-	await call('git', ['add', ...packageFiles]);
+	await call('git', ['add', ...packageFiles, '-f']);
 	// git commit -m "$VERSION" > /dev/null
 	await call('git', ['commit', '-m', version]);
 	// git tag "v$VERSION" -m "Cut on $DATE"
@@ -235,7 +235,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		await call('npm', ['--no-git-tag-version', 'version', `"${nextVersion}"`], {stdio: null});
 
 		// git add package.json package-lock.json
-		await call('git', ['add', ...packageFiles]);
+		await call('git', ['add', ...packageFiles, '-f']);
 		// git commit -m "$VERSION" > /dev/null
 		await call('git', ['commit', '-m', `"${nextVersion}"`]);
 	}
