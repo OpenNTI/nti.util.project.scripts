@@ -17,24 +17,12 @@ process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 process.env.NTI_DEV_BROWSER = null; // Prevent dev env from producing a chrome-only build
 process.env.__NTI_WORKSPACE = JSON.stringify({}); // Prevent dev workspace links in build
 
-const spinner = ora('Building...').start();
-
-const tasks = [];
-const signal = new Cancelable();
-const call = (cmd, msg) => {
-	const t = exec(paths.path, cmd, signal)
-		.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
-	ora.promise(t, msg);
-	return t;
-};
-
-
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {
 	if (err.message === 'Warnings or errors were found') {
 		console.log(chalk.red(err.message));
 	} else {
-		console.error(chalk.red(err.stack));
+		console.error(chalk.red(err.stack || err));
 	}
 	process.exit(1);
 });
@@ -52,6 +40,17 @@ if (WORKER) {
 	})();
 }
 else {
+	const spinner = ora('Building...').start();
+	const tasks = [];
+	const signal = new Cancelable();
+	const call = (cmd, msg) => {
+		const t = exec(paths.path, cmd, signal)
+			.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
+		ora.promise(t, msg);
+		return t;
+	};
+
+
 	if (!SKIP) {
 		tasks.push(
 			call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
