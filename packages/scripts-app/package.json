@@ -67,7 +67,7 @@
     "sass": "^1.25.0",
     "sass-loader": "^10.0.1",
     "style-loader": "^2.0.0",
-    "terser-webpack-plugin": "^4.0.0",
+    "terser-webpack-plugin": "^5.0.1",
     "thread-loader": "^3.0.0",
     "tmp": "0.x.x",
     "uglifyjs-webpack-plugin": "^2.2.0",
