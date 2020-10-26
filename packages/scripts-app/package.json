@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.28.15",
+  "version": "2.28.16",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -30,7 +30,7 @@
     "@nti/dev-ssl-config": "^2.28.0",
     "@nti/eslint-config-app-scripts": "^2.28.8",
     "@nti/git-state": "^5.0.0",
-    "@nti/lib-scripts": "^2.28.14",
+    "@nti/lib-scripts": "^2.28.16",
     "@nti/stylelint-config-standard": "^2.28.13",
     "@nti/web-service": "^1.39.0",
     "abortcontroller-polyfill": "^1.4.0",
