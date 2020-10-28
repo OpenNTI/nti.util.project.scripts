@@ -138,7 +138,7 @@ module.exports = {
 		}],
 		'no-shadow': ['warn', {'builtinGlobals': false, 'hoist': 'never', 'allow': ['done']}],
 		'no-throw-literal': 'error',
-		'no-unused-vars': ['warn', {'args': 'none'}],
+		'no-unused-vars': ['error', {'ignoreRestSiblings': true, 'args': 'none'}],
 		'no-use-before-define': ['error', 'nofunc'],
 		'no-var': 'error',
 		'prefer-object-spread': 'warn',
