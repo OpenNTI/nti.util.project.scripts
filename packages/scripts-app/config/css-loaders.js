@@ -90,6 +90,7 @@ const loaders = (paths, options = {}) => [
 			style(options.server),
 			css({
 				modules: {
+					exportLocalsConvention: 'camelCase',
 					localIdentName: '[local]--[hash:base64:8]'
 				}
 			}),
