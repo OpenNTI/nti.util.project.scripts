@@ -40,10 +40,9 @@ const preloaders = (options = {}) => [
 		enforce: 'pre',
 		include: [
 			paths.src,
-			paths.ntiModules,
 			//Only lint source files in workspaceLinks
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-			...(options.include || options.includes || [])
+			...(options.include || [])
 		],
 		exclude: [
 			path.join(paths.src, 'main/js/legacy'),
