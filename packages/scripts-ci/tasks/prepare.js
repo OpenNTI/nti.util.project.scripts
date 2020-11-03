@@ -30,7 +30,10 @@ if (isSnapshot) {
 				deps && Object.keys(deps)
 					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
 					.forEach(x => (o => {
-						o[x] = o[x].split('#')[0]; // strip anchors
+						const [src, ver] = o[x].split('#');
+						if (semver.validRange(ver)) {
+							o[x] = src; // strip anchors
+						}
 					})(deps))),
 			json
 		))(pkg),
