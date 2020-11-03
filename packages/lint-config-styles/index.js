@@ -1,17 +1,15 @@
 'use strict';
 
 module.exports = {
-	'extends': 'stylelint-config-standard',
+	'extends': [
+		'stylelint-config-standard',
+		'stylelint-config-css-modules',
+	],
 	'rules': {
+		'indentation': 'tab',
 		'selector-type-no-unknown': null,
 		'no-descending-specificity': null,
-		'indentation': 'tab',
 		'selector-list-comma-newline-after': null,
-		'selector-pseudo-class-no-unknown': [true, {
-			ignorePseudoClasses: [
-				'global' // css modules use :global to break out of selector uglification
-			]
-		}],
 		'declaration-block-single-line-max-declarations': 3,
 		'at-rule-no-unknown': [true, {
 			'ignoreAtRules': [
@@ -23,7 +21,8 @@ module.exports = {
 				'function',
 				'if',
 				'include',
-				'mixin'
+				'mixin',
+				'value',
 			]
 		}]
 	}
