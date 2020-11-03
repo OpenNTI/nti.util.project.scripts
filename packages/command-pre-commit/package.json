@@ -1,6 +1,6 @@
 {
   "name": "@nti/pre-commit",
-  "version": "2.28.13",
+  "version": "2.28.20",
   "description": "Pre-commit hook",
   "main": "index.js",
   "author": "nextthought",
@@ -9,7 +9,7 @@
     "pre-commit": "index.js"
   },
   "dependencies": {
-    "@nti/stylelint-config-standard": "^2.28.13",
+    "@nti/stylelint-config-standard": "^2.28.20",
     "eslint": "^7.6.0",
     "stylelint": "^13.7.2"
   }
