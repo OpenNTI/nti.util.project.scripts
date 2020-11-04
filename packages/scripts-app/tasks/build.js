@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const fs = require('fs-extra');
-const checkRequiredFiles = require('react-dev-utils/checkRequiredFiles');
+const checkRequiredFiles = require('./utils/check-required-files');
 
 const callHook = require('./utils/build-call-hook');
 const copyServerCode = require('./utils/build-copy-server-code');

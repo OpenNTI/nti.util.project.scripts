@@ -1,7 +1,7 @@
 'use strict';
 const chalk = require('chalk');
 const {isCI} = require('ci-info');
-const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
+const formatMessages = require('webpack-format-messages');
 const webpack = require('webpack');
 const paths = require('../../config/paths');
 const pkg = require(paths.packageJson);
@@ -17,7 +17,7 @@ module.exports = function build (config = require('../../config/webpack.config')
 				return reject(err);
 			}
 
-			const messages = formatWebpackMessages(stats.toJson({}, true));
+			const messages = formatMessages(stats);
 
 			if (messages.errors.length) {
 				return reject(new Error(messages.errors.join('\n\n')));

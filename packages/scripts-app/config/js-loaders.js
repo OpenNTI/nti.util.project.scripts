@@ -1,70 +1,14 @@
 'use strict';
 const path = require('path');
-const eslintFormatter = require('react-dev-utils/eslintFormatter');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const webpack = require('webpack');
 
 const thread = require('./thread');
-const {PROD} = require('./env');
+const {ENV, PROD} = require('./env');
 const paths = require('./paths');
 const workspaceLinks = require('./workspace-links');
 
 const jsTestExp = /\.m?jsx?$/;
-
-// options is a mapping of loader => options for that loader, e.g. {eslint: {useEslintrc: false}}
-const standardPreloaderEntries = (options = {}) => [
-	!PROD && {
-		// First, run the linter.
-		// It's important to do this before Babel processes the JS.
-		loader: require.resolve('eslint-loader'),
-		options: {
-			useEslintrc: false,
-			baseConfig: {
-				root: true,
-				extends: [require.resolve('./eslintrc')]
-			},
-			cache: true,
-			emitWarning: false,
-			eslintPath: require.resolve('eslint'),
-			failOnError: true,
-			failOnWarning: false,
-			formatter: eslintFormatter,
-			ignore: false,
-			...(options.eslint || {})
-		}
-	},
-
-].filter(Boolean);
-
-const preloaders = (options = {}) => [
-	{
-		test: jsTestExp,
-		enforce: 'pre',
-		include: [
-			paths.src,
-			//Only lint source files in workspaceLinks
-			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-			...(options.include || [])
-		],
-		exclude: [
-			path.join(paths.src, 'main/js/legacy'),
-			...(options.exclude || [])
-		],
-		use: standardPreloaderEntries(options)
-	},
-	// legacy lint
-	{
-		test: jsTestExp,
-		enforce: 'pre',
-		include: path.join(paths.src, 'main/js/legacy'),
-		use: standardPreloaderEntries({
-			...options,
-			eslint: {
-				...options.eslint,
-				useEslintrc: true
-			}
-		})
-	}
-];
-
 
 const loaders = (options = {}) => {
 
@@ -94,8 +38,35 @@ const loaders = (options = {}) => {
 	];
 };
 
+const plugins = () => [
+	!PROD && new ESLintPlugin({
+		baseConfig: {
+			root: true,
+			extends: [require.resolve('./eslintrc')]
+		},
+
+		context: paths.path,
+		files: [
+			paths.src,
+			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
+		].filter(Boolean)
+			.map(x => path.relative(paths.path, x) + '/'),
+
+		extensions: ['js', 'jsx', 'mjs', 'cjs'],
+
+		eslintPath: require.resolve('eslint'),
+		// failOnError: true,
+		// failOnWarning: false,
+		// formatter: eslintFormatter
+	}),
+	new webpack.DefinePlugin({
+		'process.browser': JSON.stringify(true),
+		'process.env.NODE_ENV': JSON.stringify(ENV),
+	}),
+];
+
 module.exports = {
 	loaders,
-	preloaders,
-	pattern: jsTestExp
+	pattern: jsTestExp,
+	plugins,
 };

@@ -14,7 +14,6 @@ const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
-const InlineChunkHtmlPlugin = require('react-dev-utils/InlineChunkHtmlPlugin');
 const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
@@ -23,8 +22,9 @@ const { branchSync, commitSync } = require('@nti/git-state');
 //
 const gitRevision = p => JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
 
+const InlineChunkHtmlPlugin = require('./InlineChunkHtmlPlugin');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
-const {loaders: jsLoaders, preloaders: jsPreloaders} = require('./js-loaders');
+const {loaders: jsLoaders, plugins: jsPlugins} = require('./js-loaders');
 const {PROD, ENV} = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
@@ -62,8 +62,6 @@ function getLoaderRules (server) {
 			requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
 			requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
 		} },
-
-		...jsPreloaders(),
 
 		{
 			oneOf: [
@@ -294,6 +292,8 @@ const ClientConfig = {
 	performance: false,
 
 	plugins: [
+		...jsPlugins(),
+		...cssPlugins(),
 		!PROD && new BitBarWebpackProgressPlugin(),
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
@@ -354,8 +354,6 @@ const ClientConfig = {
 		// a network request.
 		// https://github.com/facebook/create-react-app/issues/5358
 		new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
-
-		...cssPlugins(),
 
 		ContentGlobalDefinitions,
 

@@ -16,7 +16,7 @@ const paths = require('./paths');
 const ENV = 'development';
 const PROD = false;
 
-const {loaders: jsLoaders, preloaders: jsPreloaders} = require('@nti/app-scripts/config/js-loaders');
+const {loaders: jsLoaders, plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
 
 const pkg = require(paths.packageJson);
@@ -98,11 +98,6 @@ exports = module.exports = {
 			// Disable require.ensure as it's not a standard language feature.
 			{ parser: { requireEnsure: false } },
 
-			...jsPreloaders({
-				include: [
-					paths.testApp
-				]
-			}),
 
 			{
 				oneOf: [
@@ -197,6 +192,7 @@ exports = module.exports = {
 			}
 		}),
 
+		...jsPlugins(),
 		...cssPlugins({
 			miniCssExtract: {
 				filename: 'index.generated.css'
