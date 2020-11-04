@@ -7,6 +7,7 @@ const thread = require('./thread');
 const {ENV, PROD} = require('./env');
 const paths = require('./paths');
 const workspaceLinks = require('./workspace-links');
+const workspaceContext = path.dirname(paths.path);
 
 const jsTestExp = /\.m?jsx?$/;
 
@@ -45,12 +46,12 @@ const plugins = () => [
 			extends: [require.resolve('./eslintrc')]
 		},
 
-		context: paths.path,
+		context: workspaceContext,
 		files: [
 			paths.src,
 			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
 		].filter(Boolean)
-			.map(x => path.relative(paths.path, x) + '/'),
+			.map(x => path.relative(workspaceContext, x) + '/'),
 
 		extensions: ['js', 'jsx', 'mjs', 'cjs'],
 
