@@ -23,6 +23,7 @@ const { branchSync, commitSync } = require('@nti/git-state');
 const gitRevision = p => JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
 
 const InlineChunkHtmlPlugin = require('./InlineChunkHtmlPlugin');
+const cacheDir = require('./cache-dir');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
 const {loaders: jsLoaders, plugins: jsPlugins} = require('./js-loaders');
 const {PROD, ENV} = require('./env');
@@ -362,7 +363,7 @@ const ClientConfig = {
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
 
-		PROD && new CompressionPlugin(),
+		PROD && new CompressionPlugin({ cache: cacheDir('webpack-compression-plugin') }),
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
