@@ -1,5 +1,6 @@
 'use strict';
 const CommonWebpackConfig = require('../webpack.config.js');
+const {plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
 // const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
 
 function getEntry (currentEntry, newEntry) {
@@ -51,6 +52,7 @@ module.exports = {
 		},
 		plugins: [
 			// new BitBarWebpackProgressPlugin(),
+			...jsPlugins(),
 			...storybookConfig.plugins,
 		]
 	})
