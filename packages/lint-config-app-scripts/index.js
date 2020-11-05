@@ -32,6 +32,14 @@ module.exports = {
 		}
 	},
 
+	globals: {
+		// '$AppConfig': 'readonly',
+
+		//Global Template Literal Tags:
+		'css': 'readonly',
+		'styled': 'readonly'
+	},
+
 	rules: {
 		'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
 

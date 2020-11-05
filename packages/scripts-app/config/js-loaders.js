@@ -39,6 +39,12 @@ const loaders = (options = {}) => {
 						...(options.babel || {})
 					}
 				},
+				{
+					loader: 'astroturf/loader',
+					options: {
+						extension: '.module.css',
+					},
+				},
 			].filter(Boolean)
 		},
 	];
@@ -68,6 +74,10 @@ const plugins = () => [
 	new webpack.DefinePlugin({
 		'process.browser': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify(ENV),
+	}),
+	new webpack.ProvidePlugin({
+		css: ['astroturf', 'css'],
+		styled: ['astroturf', 'styled'],
 	}),
 ];
 
