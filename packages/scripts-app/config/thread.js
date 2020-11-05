@@ -24,7 +24,8 @@ module.exports = function thread (options = {}) {
 	return {
 		loader: require.resolve('thread-loader'),
 		options: {
-			poolParallelJobs: 50,
+			// workerParallelJobs: 50,
+			workers: require('os').cpus(),
 			...(PROD ? {} : {poolTimeout: Infinity}), // keep workers alive for more effective watch mode})
 			...options
 		}
