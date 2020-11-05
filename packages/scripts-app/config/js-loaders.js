@@ -2,6 +2,7 @@
 const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const webpack = require('webpack');
+const findCacheDir = require('find-cache-dir'); //a dep of babel-loader
 
 const thread = require('./thread');
 const {ENV, PROD} = require('./env');
@@ -12,6 +13,10 @@ const workspaceContext = path.dirname(paths.path);
 const jsTestExp = /\.m?jsx?$/;
 
 const loaders = (options = {}) => {
+	const loader = require.resolve('babel-loader');
+	const [root] = loader.split('node_modules');
+	// use workspace root for cache, or fallback to default location
+	const cacheDirectory = findCacheDir({ cwd: root, name: 'babel-loader' }) || true;
 
 	return [
 		{
@@ -24,11 +29,11 @@ const loaders = (options = {}) => {
 			use: [
 				thread(options.thread),
 				{
-					loader: require.resolve('babel-loader'),
+					loader,
 					options: {
 						babelrc: false,
 						compact: false,
-						cacheDirectory: true,
+						cacheDirectory,
 						cacheCompression: false,
 						highlightCode: true,
 						...(options.babel || {})
