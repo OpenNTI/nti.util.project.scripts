@@ -49,7 +49,6 @@ const loaders = (options = {}) => {
 
 const plugins = () => [
 	!PROD && new ESLintPlugin({
-		useEslintrc:false,
 		baseConfig: {
 			root: true,
 			extends: [require.resolve('./eslintrc')]
