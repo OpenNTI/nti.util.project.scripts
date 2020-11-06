@@ -26,7 +26,7 @@ const loaders = (options = {}) => {
 			use: [
 				thread(options.thread),
 				{
-					loader,
+					loader: require.resolve('babel-loader'),
 					options: {
 						babelrc: false,
 						compact: false,
