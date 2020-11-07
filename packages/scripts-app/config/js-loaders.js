@@ -3,8 +3,6 @@ const path = require('path');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const webpack = require('webpack');
 
-const cacheDir = require('./cache-dir');
-const thread = require('./thread');
 const {ENV, PROD} = require('./env');
 const paths = require('./paths');
 const workspaceLinks = require('./workspace-links');
@@ -13,7 +11,6 @@ const workspaceContext = path.dirname(paths.path);
 const jsTestExp = /\.m?jsx?$/;
 
 const loaders = (options = {}) => {
-	const cacheDirectory = cacheDir('babel-loader');
 
 	return [
 		{
@@ -24,13 +21,11 @@ const loaders = (options = {}) => {
 				/[/\\\\]react(-dom)?[/\\\\]/,
 			],
 			use: [
-				thread(options.thread),
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
 						babelrc: false,
-						compact: false,
-						cacheDirectory,
+						cacheDirectory: false,
 						cacheCompression: false,
 						highlightCode: true,
 						...(options.babel || {})
