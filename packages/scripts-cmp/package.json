@@ -27,6 +27,7 @@
   "dependencies": {
     "@nti/app-scripts": "^2.29.5",
     "@nti/lib-scripts": "^2.28.20",
+    "@nti/style-common": "NextThought/nti.style.common",
     "@storybook/addon-actions": "^6.0.0",
     "@storybook/addon-controls": "^6.0.0",
     "@storybook/addon-docs": "^6.0.0",
@@ -36,8 +37,5 @@
     "core-js": "^3.6.5",
     "react-is": "^17.0.1",
     "webpack-cli": "^3.0.8"
-  },
-  "peerDependencies": {
-    "@nti/style-common": "NextThought/nti.style.common"
   }
 }
