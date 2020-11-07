@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.29.5",
+  "version": "2.29.7",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -37,8 +37,8 @@
     "astroturf": "^0.10.5",
     "babel-loader": "^8.0.6",
     "bitbar-webpack-progress-plugin": "^1.0.0",
-    "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "cache-loader": "^4.1.0",
+    "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "chalk": "^4.1.0",
     "ci-info": "^2.0.0",
     "circular-dependency-plugin": "^5.2.0",
