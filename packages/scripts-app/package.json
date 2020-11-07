@@ -36,7 +36,6 @@
     "abortcontroller-polyfill": "^1.4.0",
     "astroturf": "^0.10.5",
     "babel-loader": "^8.0.6",
-    "bitbar-webpack-progress-plugin": "^1.0.0",
     "cache-loader": "^4.1.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
     "chalk": "^4.1.0",

@@ -8,7 +8,6 @@ const {isCI} = require('ci-info');
 const tmp = require('tmp');
 const chalk = require('chalk');
 //Webpack plugins:
-const BitBarWebpackProgressPlugin = require('bitbar-webpack-progress-plugin');
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
@@ -309,7 +308,6 @@ const ClientConfig = {
 	plugins: [
 		...jsPlugins(),
 		...cssPlugins(),
-		!PROD && new BitBarWebpackProgressPlugin(),
 		DEBUG && new CircularDependencyPlugin({
 			// exclude detection of files based on a RegExp
 			exclude: /node_modules/,
