@@ -23,6 +23,7 @@ const { branchSync, commitSync } = require('@nti/git-state');
 const gitRevision = p => JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
 
 const InlineChunkHtmlPlugin = require('./InlineChunkHtmlPlugin');
+const cacheDir = require('./cache-dir');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
 const {loaders: jsLoaders, plugins: jsPlugins} = require('./js-loaders');
 const thread = require('./thread');
@@ -117,6 +118,12 @@ function getLoaderRules (server) {
 				(rule.loader ? rule : {
 					...rule,
 					use: [
+						{
+							loader: 'cache-loader',
+							options: {
+								cacheDirectory: cacheDir('nti-build')
+							}
+						},
 						thread(),
 						...rule.use
 					]
