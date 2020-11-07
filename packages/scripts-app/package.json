@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.29.4",
+  "version": "2.29.5",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -27,7 +27,7 @@
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.11.0",
     "@babel/preset-react": "^7.10.4",
-    "@nti/dev-ssl-config": "^2.28.0",
+    "@nti/dev-ssl-config": "^2.29.5",
     "@nti/eslint-config-app-scripts": "^2.29.2",
     "@nti/git-state": "^5.0.0",
     "@nti/lib-scripts": "^2.28.20",
