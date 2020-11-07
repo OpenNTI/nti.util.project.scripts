@@ -79,6 +79,9 @@ export async function getSSLFlags () {
 	{dim ) If you are running buildout locally, then define the environment variable above pointing to the buildout directory.}
 
 	`.replace(/^(\t)+/gm, '  '));
+		if (process.connected) {
+			process.kill(process.ppid, 'SIGKILL');
+		}
 		process.exit(1);
 	}
 
