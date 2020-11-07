@@ -126,7 +126,7 @@ function getLoaderRules (server) {
 						},
 						thread(),
 						...rule.use
-					]
+					].filter(Boolean)
 				}))
 		}
 	].filter(Boolean);
