@@ -38,6 +38,7 @@
     "babel-loader": "^8.0.6",
     "bitbar-webpack-progress-plugin": "^1.0.0",
     "case-sensitive-paths-webpack-plugin": "^2.3.0",
+    "cache-loader": "^4.1.0",
     "chalk": "^4.1.0",
     "ci-info": "^2.0.0",
     "circular-dependency-plugin": "^5.2.0",
