@@ -22,7 +22,7 @@ module.exports = function thread (options = {}) {
 
 
 	return {
-		loader: require.resolve('thread-loader'),
+		loader: threadLoader,
 		options: {
 			// workerParallelJobs: 50,
 			workers: require('os').cpus(),

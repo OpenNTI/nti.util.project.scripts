@@ -25,6 +25,7 @@ const gitRevision = p => JSON.stringify(`branch: ${branchSync(p)} [${commitSync(
 const InlineChunkHtmlPlugin = require('./InlineChunkHtmlPlugin');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('./css-loaders');
 const {loaders: jsLoaders, plugins: jsPlugins} = require('./js-loaders');
+const thread = require('./thread');
 const {PROD, ENV} = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
@@ -112,7 +113,14 @@ function getLoaderRules (server) {
 					}
 				}),
 
-			].filter(Boolean)
+			].filter(Boolean).map(rule =>
+				(rule.loader ? rule : {
+					...rule,
+					use: [
+						thread(),
+						...rule.use
+					]
+				}))
 		}
 	].filter(Boolean);
 }
