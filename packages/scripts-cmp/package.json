@@ -36,6 +36,6 @@
     "@storybook/react": "^6.0.0",
     "core-js": "^3.6.5",
     "react-is": "^17.0.1",
-    "webpack-cli": "^3.0.8"
+    "webpack-cli": "^4.2.0"
   }
 }
