@@ -134,7 +134,7 @@ function getLoaderRules (server) {
 
 const ClientConfig = {
 	mode: ENV,
-	bail: PROD,
+	bail: true,
 	entry: {
 		index: [
 			require.resolve('./polyfills'),
