@@ -23,10 +23,20 @@ module.exports = (resolve, rootDir) => {
 		? paths.testsSetup
 		: undefined;
 
+	const setupFiles = [
+		'raf/polyfill',
+		resolve('config/polyfills.js'),
+	];
+
 	const setupFilesAfterEnv = [resolve('config/jest/setup-after-env.js')];
 
 	if (setupTestsFile) {
 		setupFilesAfterEnv.push(setupTestsFile);
+	}
+
+	const scriptsPackageLocalSetup = path.join(configDir, 'jest-setup.js');
+	if (fs.existsSync(scriptsPackageLocalSetup)) {
+		setupFiles.push(scriptsPackageLocalSetup);
 	}
 
 	const config = {
@@ -57,10 +67,7 @@ module.exports = (resolve, rootDir) => {
 				: '<rootDir>/src/'
 		],
 		globalSetup: resolve('config/jest/global-setup.js'),
-		setupFiles: [
-			'raf/polyfill',
-			resolve('config/polyfills.js')
-		],
+		setupFiles,
 		setupFilesAfterEnv,
 		testPathIgnorePatterns: [
 			'<rootDir>[/\\\\](build|docs|node_modules|scripts)[/\\\\]',
