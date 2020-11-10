@@ -1,12 +1,15 @@
+/* eslint-env jest */
 'use strict';
 const React = require('react');
 
-Object.assign(global, {
-	css: () => new Proxy({}, {
+Object.defineProperty(global, 'css', {
+	value: () => new Proxy({}, {
 		get: (_, property) => property
-	}),
+	})
+});
 
-	styled: new Proxy((tag) => {
+Object.defineProperty(global, 'styled', {
+	value: new Proxy((tag) => {
 		const TagTemplate = () => (props) => React.createElement(tag, props);
 
 		TagTemplate.attrs = (p) => {
@@ -18,4 +21,18 @@ Object.assign(global, {
 	},{
 		get: (_, tag) => global.styled(tag)
 	})
+});
+
+Object.defineProperty(global, 'matchMedia', {
+	writable: true,
+	value: jest.fn().mockImplementation(query => ({
+		matches: false,
+		media: query,
+		onchange: null,
+		addListener: jest.fn(), // Deprecated
+		removeListener: jest.fn(), // Deprecated
+		addEventListener: jest.fn(),
+		removeEventListener: jest.fn(),
+		dispatchEvent: jest.fn(),
+	})),
 });
