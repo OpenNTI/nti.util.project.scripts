@@ -83,6 +83,7 @@ module.exports = (resolve, rootDir) => {
 		moduleNameMapper: {
 			...(isCI ? null : workspaceLinks),
 			'(^@nti\\/extjs)': '$1', // exclude @nti/extjs from the src dir mapping that follows
+			'(^@nti\\/[^\\/]*scripts/?.*)': '$1', // exclude @nti/scripts from the src dir mapping that follows
 			'^@nti\\/([^\\/]+)': '@nti/$1/src',
 		},
 		resolver: resolve('config/jest/resolver.js')
