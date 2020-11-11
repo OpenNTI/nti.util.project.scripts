@@ -1,3 +1,5 @@
+import { execSync as exec } from 'child_process';
+
 import chalk from 'chalk';
 import netrc from 'netrc';
 import inquirer from 'inquirer';
@@ -75,4 +77,55 @@ export default async function getGithubAPI () {
 	return github || (github = Promise.resolve()
 		.then(getToken)
 		.then(token => new octokit.Octokit({auth: `token ${token}`})));
+}
+
+/**
+ * @typedef {Object} RepositoryRef
+ * @property {string} owner
+ * @property {string} repo
+ */
+
+/**
+ *
+ * @param {string|RepositoryRef} to -
+ * @param {string} eventType -
+ * @returns {void}
+ */
+export async function dispatchEvent (to, eventType) {
+	const {owner, repo, repoId = [owner,repo].join('/')} = typeof to === 'string' ? resolveGithubProject(to) : to;
+	const api = await getGithubAPI();
+	await api.repos.createDispatchEvent({
+		owner,
+		repo,
+		// eslint-disable-next-line camelcase
+		event_type: eventType,
+	});
+
+	return {
+		message: `(${repoId}) ${eventType} event dispatched.`
+	};
+}
+
+export function resolveGithubProject (dir = process.cwd()) {
+	const run = x => exec(x, {cwd: dir, stdio: 'pipe'}).toString('utf8').trim() || '';
+	try {
+		const currentBranch = run('git rev-parse --abbrev-ref HEAD');
+		// const currentBranch = run('git branch --show-current');
+		const remoteBranch = run(`git rev-parse --abbrev-ref ${currentBranch}@{upstream}`);
+		const [origin] = remoteBranch.split('/');
+		const url = run(`git remote get-url ${origin}`);
+		const [, repoId] = url.match(/github.com[:/](.+?)(?:\.git)?$/i) ?? [];
+
+		const [owner, repo] = repoId?.split('/') ?? [];
+		if (!owner || !repo) {
+			throw new Error('NOT_GITHUB_REMOTE');
+		}
+		return {
+			owner,
+			repo,
+			repoId
+		};
+	} catch {
+		throw new Error('Not in a git repository?');
+	}
 }
