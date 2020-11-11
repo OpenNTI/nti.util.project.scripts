@@ -1,17 +1,19 @@
 import { promisify } from 'util';
 import { join } from 'path';
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 
 import chalk from 'chalk';
 import semver from 'semver';
 import lockVerify from 'lock-verify';
 import gitState from '@nti/git-state';
+import {dispatchEvent} from '@nti/github-api';
 
 import { listProjects, isProject } from './list.js';
 import { exec } from './exec.js';
 import { arg, write, readJSON } from './utils.js';
 import { updateLock } from './update-lock.js';
 
+const CI = !!process.env.CI;
 process.env.__NTI_RELEASING = !arg('--allow-workspace', 'repo:Allow workspace links in builds that support them');
 // const SKIP_CHECKS = arg('--skip-checks', 'repo:Skip tests and linting');
 const SKIP_LOCK_REFRESH = arg('--skip-lock-refresh', 'repo:Prevent regeneration of node_modules and lockfile');
@@ -171,10 +173,26 @@ export async function checkLockfile (dir) {
 }
 
 
+function hasReleaseWorkflow (dir) {
+	return existsSync(join(dir, '.github/workflows/create-release.yml'));
+}
+
+
 export async function performRelease (tasks, {dir, branch, repo, command, pkg, url}, major) {
 	const call = DRY_RUN
 		? async (x, args = []) => write('[dry run] in', dir, [x, ...args].join(' '))
 		: async (x, args = []) => exec(dir, [x, ...args].join(' '));
+
+	if (!CI && hasReleaseWorkflow(dir)) {
+		if (DRY_RUN) {
+			write(`[dry run] Will dispatch release-next event to github actions: ${dir}`);
+			return;
+		}
+
+		const {message} = await dispatchEvent(dir, 'release-next');
+		write(message);
+		return;
+	}
 
 	write(chalk.cyan(chalk.underline(pkg.name) + ' Working on branch: ' + chalk.underline.magenta(branch)));
 	// write(chalk.cyan('Working on branch: ' + chalk.underline.magenta(branch)));

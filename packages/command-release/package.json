@@ -10,6 +10,7 @@
   "license": "UNLICENSED",
   "dependencies": {
     "@nti/git-state": "^5.0.0",
+    "@nti/github-api": "^2.28.0",
     "chalk": "^4.1.0",
     "inquirer": "^7.3.2",
     "lock-verify": "^2.2.0",
