@@ -1,11 +1,14 @@
 
+import fuzzy from 'fuzzy';
 import inquirer from 'inquirer';
+import inquirerCheckboxPlusPrompt from 'inquirer-checkbox-plus-prompt';
 import cliProgress from 'cli-progress';
 import getGithubAPI from '@nti/github-api';
 import ora from 'ora';
 
 import { exec } from './exec.js';
 
+inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
 
 export async function clone (options) {
 	const octokit = await getGithubAPI();
@@ -140,30 +143,38 @@ async function selectProtocol ({protocol}) {
 }
 
 async function selectRepositories ({spinner, octokit, scope, all, existing}) {
-	const toValue = x => ({https: x.clone_url, ssh: x.ssh_url, git: x.git_url});
+	const toValue = x => ({name: x.name, fullName: x.full_name, https: x.clone_url, ssh: x.ssh_url, git: x.git_url});
 
 	spinner.start();
-	const repositories = await octokit.paginate(scope);
+	const repositories = (await octokit.paginate(scope)).filter(({archived,disabled}) => !archived && !disabled);
 	spinner.stop();
 
 	if (all) {
 		return repositories.map(toValue);
 	}
 
-	const {repos} = await inquirer.prompt([
-		{
-			type: 'checkbox',
-			message: 'Confirm repositories to clone:',
-			name: 'repos',
-			loop: false,
-			choices: repositories.map(x => {
+	const choices = repositories.map(x => {
 				const match = existing.find(({remotes}) => remotes.find(({url}) => [x.clone_url, x.ssh_url, x.git_url].includes(url)));
 				return {
 					name: x.full_name + (!match ? '' : ` (${match.dir})`),
 					disabled: match && 'already exists',
 					value: toValue(x)
 				};
-			}).sort((a, b) => a.name.localeCompare(b.name))
+	}).sort((a, b) => a.name.localeCompare(b.name));
+
+	const {repos} = await inquirer.prompt([
+		{
+			type: 'checkbox-plus',
+			message: 'Confirm repositories to clone:',
+			name: 'repos',
+			highlight: true,
+			searchable: true,
+			loop: false,
+			choices,
+			source: async function (answersSoFar, input) {
+				input = input || '';
+				return fuzzy.filter(input, choices, {extract: x => x.name}).map(x => x.original);
+			}
 		}
 	]);
 
