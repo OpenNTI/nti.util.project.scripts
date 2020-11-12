@@ -37,7 +37,7 @@ const options = yargs(hideBin(process.argv))
 
 
 const spinner = ora('Starting...').start();
-Promise.resolve('/home/jonathan/Workspace/nti')
+Promise.resolve()
 	.then(getRepositories)
 	.then(existing => {
 		spinner.stop();
