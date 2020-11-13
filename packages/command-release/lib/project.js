@@ -183,7 +183,7 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		? async (x, args = []) => write('[dry run] in', dir, [x, ...args].join(' '))
 		: async (x, args = []) => exec(dir, [x, ...args].join(' '));
 
-	if (!CI && hasReleaseWorkflow(dir)) {
+	if (!CI && hasReleaseWorkflow(dir) && branch === 'master') {
 		if (DRY_RUN) {
 			write(`[dry run] Will dispatch release-next event to github actions: ${dir}`);
 			return;
