@@ -1,3 +1,5 @@
+import {promises as fs} from 'fs';
+import path from 'path';
 
 import fuzzy from 'fuzzy';
 import inquirer from 'inquirer';
@@ -9,6 +11,27 @@ import ora from 'ora';
 import { exec } from './exec.js';
 
 inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
+
+function computeName (x, all) {
+	const get = (i) => {
+		let name = i.name.split('.').join('/').replace(/(^nti\/)|(\/git$)/g, '');
+		if (/-/.test(name) && !/\//.test(name)) {
+			name = name.replace(/-/, '/');
+		}
+		return name;
+	};
+
+	let name = get(x);
+	all = all.map(get).filter(n => n !== name);
+	if (all.some(n => name.startsWith(n + '/'))) {
+		const parts = name.split('/');
+		if (parts.length < 3) {throw new Error('Name conflict: ' + name);}
+		const last = parts.pop();
+		name = parts.join('/') + '-' + last;
+	}
+
+	return name;
+}
 
 export async function clone (options) {
 	const octokit = await getGithubAPI();
@@ -38,17 +61,36 @@ export async function clone (options) {
 	}, cliProgress.Presets.rect);
 	cloneProgress.start(repos.length, 0);
 
+	const folders = [];
+
 	try {
 		await Promise.all(repos.map(async x => {
 			try {
-				await exec('.', 'git clone ' + x[protocol]);
+				const alias = options.aliases?.[x.fullName];
+				let dest = alias || computeName(x, repos);
+
+				dest = options.nest ? dest : dest.replace(/[/]/g, '-');
+
+				folders.push({
+					name: !options.nest ? undefined : (alias ? dest : x.name.replace(/^nti./, '')),
+					path: dest,
+				});
+
+				await exec('.', `git clone ${x[protocol]} ${dest}`);
 			} finally {
 				cloneProgress.increment();
 			}
 		}));
-	}finally {
+
+		if (options.workspace) {
+			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));
+			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders}));
+		}
+
+	} finally {
 		cloneProgress.stop();
 	}
+
 }
 
 async function getScope (options) {
@@ -142,11 +184,13 @@ async function selectProtocol ({protocol}) {
 	return protocol;
 }
 
-async function selectRepositories ({spinner, octokit, scope, all, existing}) {
+async function selectRepositories ({spinner, octokit, scope, all, existing, filter}) {
 	const toValue = x => ({name: x.name, fullName: x.full_name, https: x.clone_url, ssh: x.ssh_url, git: x.git_url});
+	const available = x => !x.archived && !x.disabled;
 
 	spinner.start();
-	const repositories = (await octokit.paginate(scope)).filter(({archived,disabled}) => !archived && !disabled);
+	const repositories = (await octokit.paginate(scope))
+		.filter(repo => available(repo) && (!filter || filter(repo)));
 	spinner.stop();
 
 	if (all) {
@@ -154,12 +198,12 @@ async function selectRepositories ({spinner, octokit, scope, all, existing}) {
 	}
 
 	const choices = repositories.map(x => {
-				const match = existing.find(({remotes}) => remotes.find(({url}) => [x.clone_url, x.ssh_url, x.git_url].includes(url)));
-				return {
-					name: x.full_name + (!match ? '' : ` (${match.dir})`),
-					disabled: match && 'already exists',
-					value: toValue(x)
-				};
+		const match = existing.find(({remotes}) => remotes.find(({url}) => [x.clone_url, x.ssh_url, x.git_url].includes(url)));
+		return {
+			name: x.full_name + (!match ? '' : ` (${match.dir})`),
+			disabled: match && 'already exists',
+			value: toValue(x)
+		};
 	}).sort((a, b) => a.name.localeCompare(b.name));
 
 	const {repos} = await inquirer.prompt([

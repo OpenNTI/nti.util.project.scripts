@@ -55,8 +55,8 @@ async function checkStatus (dir) {
 	};
 }
 
-export async function getRepositories (dir = process.cwd()) {
-	const projects = (await isProject(dir)('.')) ? [ dir ] : await listProjects(dir);
+export async function getRepositories (options, dir = process.cwd()) {
+	const projects = (!options.workspace && await isProject(dir)('.')) ? [ dir ] : await listProjects(dir);
 	const repos = await Promise.all(projects.map(checkStatus));
 
 	repos.sort((a, b) => a.remotes[0].url?.localeCompare(b.remotes[0].url) || 0);
