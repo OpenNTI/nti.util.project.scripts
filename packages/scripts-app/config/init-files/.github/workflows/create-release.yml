@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: "14.x"
 
-      - name: configure npm
+      - name: configure env
         env:
           NPM_REGISTRY: ${{ secrets.NPM_REGISTRY }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -33,6 +33,8 @@ jobs:
           npm config set progress false
           npm config set '@nti:registry' "$NPM_REGISTRY"
           npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
+          git config user.email support@nextthought.com
+          git config user.name nti-jarvis
 
       - name: Generate release build
         run: npx @nti/release
