@@ -3,7 +3,9 @@ const IN_ATOM = 'ATOM_HOME' in process.env;
 const IN_VSCODE = 'VSCODE_PID' in process.env;
 const IN_IDE = IN_ATOM || IN_VSCODE;
 const PROD = process.env.NODE_ENV === 'production';
-const DEV = PROD ? false : IN_IDE;
+
+// Lint only runs on webpack in dev mode
+const DEV = PROD ? false : (IN_IDE || !!process.env.__IN_WEBPACK);
 
 // The ESLint browser environment defines all browser globals as valid,
 // even though most people don't know some of them exist (e.g. `name` or `status`).
@@ -122,7 +124,7 @@ module.exports = {
 		'indent': ['error', 'tab'],
 		'no-caller': 'error',
 		'no-console': 'warn',
-		'no-debugger': IN_IDE ? 'off' : DEV ? 'warn' : 'error',
+		'no-debugger': IN_IDE ? 'off' : (DEV ? 'warn' : 'error'),
 		'no-multiple-empty-lines': ['warn', {'max': 3, 'maxBOF': 3, 'maxEOF': 1}],
 		'no-new': 'error',
 		'no-prototype-builtins': 'warn',
@@ -138,7 +140,7 @@ module.exports = {
 		}],
 		'no-shadow': ['warn', {'builtinGlobals': false, 'hoist': 'never', 'allow': ['done']}],
 		'no-throw-literal': 'error',
-		'no-unused-vars': ['error', {'ignoreRestSiblings': true, 'args': 'none'}],
+		'no-unused-vars': [DEV ? 'warn' : 'error', {'ignoreRestSiblings': true, 'args': 'none'}],
 		'no-use-before-define': ['error', 'nofunc'],
 		'no-var': 'error',
 		'prefer-object-spread': 'warn',
