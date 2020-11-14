@@ -10,6 +10,7 @@ const isSs = RegExp.prototype.test.bind(/\.s?css$/);
 const load = x => ({file: x, content: run(`git show ":${x}"`)});
 
 async function main () {
+	process.env.NODE_ENV = 'production';
 	const eslint = new ESLint({ fix: true });
 	const files = (run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? []);
 	const jsFiles = files.filter(isJS).map(load);
