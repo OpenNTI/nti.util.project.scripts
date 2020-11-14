@@ -44,10 +44,12 @@ const loaders = (options = {}) => {
 
 const plugins = () => [
 	!PROD && new ESLintPlugin({
-		baseConfig: {
-			root: true,
-			extends: [require.resolve('./eslintrc')]
-		},
+		// Do NOT define a baseConfig, let eslint find the config in scope
+		// otherwise we can end up redefining plugins and eslint will now
+		// blow up if that happens. To prevent this, we either need to
+		// centralize the config so its located only in one place (ie:
+		// npm 7 workspaces) Or let it find the local config. (which is
+		// what this is now doing at the moment)
 
 		context: workspaceContext,
 		files: [
