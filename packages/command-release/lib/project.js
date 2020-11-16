@@ -11,7 +11,7 @@ import {dispatchEvent} from '@nti/github-api';
 import { listProjects, isProject } from './list.js';
 import { exec } from './exec.js';
 import { arg, write, readJSON } from './utils.js';
-import { updateLock } from './update-lock.js';
+import { updateLock, usesLock } from './update-lock.js';
 
 const CI = !!process.env.CI;
 process.env.__NTI_RELEASING = !arg('--allow-workspace', 'repo:Allow workspace links in builds that support them');
@@ -21,7 +21,6 @@ const DRY_RUN = arg('--dry-run', 'repo:Print actions instead of executing them')
 const DATE = new Date().toString();
 
 const exists = async file => fs.stat(file).then(() => true, () => false);
-const usesLock = async (dir) => (await exec(dir, 'npm config get package-lock')) === 'true';
 const gitStatus = promisify(gitState.check);
 
 
