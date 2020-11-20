@@ -27,6 +27,7 @@ module.exports = {
 		'@storybook/addon-controls',
 		'@storybook/addon-essentials',
 		'@storybook/addon-links',
+		'@storybook/addon-a11y'
 	],
 
 	webpackFinal: (storybookConfig) => ({
