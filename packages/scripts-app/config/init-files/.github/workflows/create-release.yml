@@ -18,6 +18,8 @@ jobs:
 
       - name: clone
         uses: actions/checkout@v2
+        with:
+          ssh-key: ${{ secrets.ACTIONS_REPO_ACCESS }}
 
       - name: setup nodejs
         uses: actions/setup-node@v1
@@ -38,3 +40,11 @@ jobs:
 
       - name: Generate release build
         run: npx @nti/release
+
+      - name: notify of failure
+        if: failure()
+        env:
+          LINK: ${{ format('<https://github.com/{0}/actions|{0}@{1} failed to cut release>', github.repository, github.ref) }}
+        run: |
+          MESSAGE="{\"text\": \"#### :stop_sign: $LINK\" }"
+          curl -i -X POST -H 'Content-Type: application/json' -d "$MESSAGE" ${{secrets.MM_HOOK}}
