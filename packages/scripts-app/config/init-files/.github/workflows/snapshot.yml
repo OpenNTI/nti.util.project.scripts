@@ -26,6 +26,8 @@ jobs:
 
       - name: clone
         uses: actions/checkout@v2
+        with:
+          persist-credentials: false
 
       - name: setup nodejs
         uses: actions/setup-node@v1
