@@ -3,7 +3,6 @@ const semver = require('semver');
 const { call, getPackageNameAndVersion, nofail, printLine } = require('./util');
 
 const { isSnapshot, name, version, publishConfig } = getPackageNameAndVersion();
-const silent = {fd: 'ignore', forgive: true};
 
 if (!publishConfig || !publishConfig.registry) {
 	printLine('Refusing to publish without a publishConfig.registry set');
@@ -18,7 +17,7 @@ if (isSnapshot) {
 		process.exit(1);
 	}
 
-	const {stdout} = call(`npm view ${name} .versions --json`, {...silent, fd: 'pipe'});
+	const {stdout} = call(`npm view ${name} .versions --json`, {...nofail, fd: 'pipe'});
 	const prevVersions = parsePrevVersions(stdout);
 
 	//publish the snapshot (will build)
@@ -26,7 +25,7 @@ if (isSnapshot) {
 
 	// move the snapshot tag to the current commit
 	call('git tag snapshot -f', nofail);
-	call('git push origin tag snapshot -f', silent);
+	call('git push origin tag snapshot -f', {...nofail, fd: 'pipe'});
 
 	printLine('Removing previous snapshots:');
 	for (let prevVersion of prevVersions) {
