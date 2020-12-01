@@ -61,6 +61,7 @@ const plugins = () => [
 		extensions: ['js', 'jsx', 'mjs', 'cjs'],
 
 		eslintPath: require.resolve('eslint'),
+		threads: true,
 		// failOnError: true,
 		// failOnWarning: false,
 		// formatter: eslintFormatter
