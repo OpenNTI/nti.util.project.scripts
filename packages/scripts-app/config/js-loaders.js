@@ -10,7 +10,7 @@ const workspaceContext = path.dirname(paths.path);
 
 const jsTestExp = /\.m?jsx?$/;
 
-const loaders = (options = {}) => {
+const loaders = () => {
 
 	return [
 		{
@@ -26,8 +26,12 @@ const loaders = (options = {}) => {
 					options: {
 						cacheDirectory: false,
 						cacheCompression: false,
+						configFile: false,
 						highlightCode: true,
-						...(options.babel || {})
+						sourceType: 'unambiguous',
+						presets: [
+							require.resolve('./babel.config.js'),
+						]
 					}
 				},
 				{
