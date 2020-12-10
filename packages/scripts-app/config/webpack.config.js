@@ -74,14 +74,7 @@ function getLoaderRules (server) {
 					}
 				},
 
-				...jsLoaders({
-					babel: {
-						sourceType: 'unambiguous',
-						presets: [
-							require.resolve('./babel.config.js'),
-						].filter(Boolean),
-					}
-				}),
+				...jsLoaders(),
 
 				{
 					test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,

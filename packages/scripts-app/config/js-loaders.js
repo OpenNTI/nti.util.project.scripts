@@ -24,7 +24,6 @@ const loaders = (options = {}) => {
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
-						babelrc: false,
 						cacheDirectory: false,
 						cacheCompression: false,
 						highlightCode: true,

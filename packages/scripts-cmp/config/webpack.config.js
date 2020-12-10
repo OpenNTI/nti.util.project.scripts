@@ -101,11 +101,7 @@ exports = module.exports = {
 
 			{
 				oneOf: [
-					...jsLoaders({
-						babel: {
-							presets: [require.resolve('./babel.config.js')]
-						}
-					}),
+					...jsLoaders(),
 
 					{
 						test: /-avatar.png$/,
