@@ -16,7 +16,6 @@ const style = (server) => ({
 const css = (options = {}) => ({
 	loader: require.resolve('css-loader'),
 	options: {
-		sourceMap: true,
 		...options
 	}
 });
@@ -24,7 +23,6 @@ const css = (options = {}) => ({
 const postCss = (paths, options = {}) => ({
 	loader: require.resolve('postcss-loader'),
 	options: {
-		sourceMap: true,
 		postcssOptions: {
 			plugins: [
 				require('postcss-flexbugs-fixes'),
@@ -55,7 +53,6 @@ const resolveUrl = (options = {}) => ({
 const sass = (options = {}) => ({
 	loader: require.resolve('sass-loader'),
 	options: {
-		sourceMap: true,
 		implementation: require('sass'),
 		...options,
 		sassOptions: {
