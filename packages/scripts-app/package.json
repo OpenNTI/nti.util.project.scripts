@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.29.29",
+  "version": "2.29.30",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
