@@ -123,6 +123,7 @@ function getLoaderRules (server) {
 	].filter(Boolean);
 }
 
+const sourceMap = !process.env.DISABLE_SOURCE_MAPS;
 
 const ClientConfig = {
 	mode: ENV,
@@ -150,8 +151,7 @@ const ClientConfig = {
 	},
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
-	// devtool: !PROD && 'cheap-module-source-map',
-	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
+	devtool: !sourceMap ? false : PROD ? 'source-map' : 'cheap-module-source-map',
 
 	// Some libraries import Node modules but don't use them in the browser.
 	// Tell Webpack to provide empty mocks for them so importing them works.
@@ -264,7 +264,7 @@ const ClientConfig = {
 				},
 				parallel: true,
 				cache: true,
-				sourceMap: true,
+				sourceMap,
 			}),
 		].filter(Boolean),
 		sideEffects: true,

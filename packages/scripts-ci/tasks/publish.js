@@ -9,6 +9,10 @@ if (!publishConfig || !publishConfig.registry) {
 	process.exit(1);
 }
 
+if (!isSnapshot) {
+	process.env.DISABLE_SOURCE_MAPS = 'yes';
+}
+
 call('npm run build --if-present -- --skip-checks');
 
 if (isSnapshot) {
