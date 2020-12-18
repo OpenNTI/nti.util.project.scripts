@@ -53,6 +53,10 @@
     "html-webpack-plugin": "^4.5.0",
     "ignore-emit-webpack-plugin": "^2.0.2",
     "json-colorz": "0.x.x",
+    "classnames": "^2.2.6",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "prop-types": "^15.7.2",
     "mini-css-extract-plugin": "^1.0.0",
     "normalize.css": "^8.0.1",
     "null-loader": "^4.0.0",
@@ -75,5 +79,11 @@
     "webpack-format-messages": "^2.0.6",
     "whatwg-fetch": "^3.0.0",
     "worker-loader": "^3.0.0"
+  },
+  "peerDependencies": {
+    "classnames": "*",
+    "react": "*",
+    "react-dom": "*",
+    "prop-types": "*"
   }
 }
