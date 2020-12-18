@@ -53,8 +53,9 @@ const resolveUrl = (options = {}) => ({
 const sass = (options = {}) => ({
 	loader: require.resolve('sass-loader'),
 	options: {
-		implementation: require('sass'),
 		...options,
+		implementation: require('sass'),
+		sourceMap: true, // resolve loader requires sourceMaps on for loaders that come before it
 		sassOptions: {
 			fiber: require('fibers'),
 			...options.sassOptions,
