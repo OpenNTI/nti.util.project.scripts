@@ -38,6 +38,6 @@ if (isSnapshot) {
 			})(deps)));
 }
 
-fs.writeFileSync(packageFile, pkg, {spaces: 2});
+fs.writeJsonSync(packageFile, pkg, {spaces: 2});
 
 printLine('done.');
