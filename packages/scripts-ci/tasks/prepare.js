@@ -10,6 +10,10 @@ const {lockfile, packageFile, printLine, print, getPackageNameAndVersion} = requ
 const {name, version, pkg, isSnapshot} = getPackageNameAndVersion();
 const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
 
+// Apps should not have any dependencies ... they are fully baked...
+// drop these keys from the published artifact.
+delete pkg.peerDependencies;
+delete pkg.peerDependenciesMeta;
 
 if (isSnapshot) {
 	const v = semver.parse(version);
@@ -23,22 +27,17 @@ if (isSnapshot) {
 
 	fs.removeSync(lockfile);
 
-	fs.writeJsonSync(
-		packageFile,
-		(json => (
-			[json.dependencies, json.devDependencies].forEach(deps =>
-				deps && Object.keys(deps)
-					.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-					.forEach(x => (o => {
-						const [src, ver] = o[x].split('#');
-						if (semver.validRange(ver)) {
-							o[x] = src; // strip anchors
-						}
-					})(deps))),
-			json
-		))(pkg),
-		{spaces: 2}
-	);
+	[pkg.dependencies, pkg.devDependencies].forEach(deps =>
+		deps && Object.keys(deps)
+			.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
+			.forEach(x => (o => {
+				const [src, ver] = o[x].split('#');
+				if (semver.validRange(ver)) {
+					o[x] = src; // strip anchors
+				}
+			})(deps)));
 }
+
+fs.writeFileSync(packageFile, pkg, {spaces: 2});
 
 printLine('done.');
