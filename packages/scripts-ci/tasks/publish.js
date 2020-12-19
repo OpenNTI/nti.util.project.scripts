@@ -28,7 +28,8 @@ if (isSnapshot) {
 	call('npm publish --tag alpha');
 
 	// move the snapshot tag to the current commit
-	call('git tag snapshot -f', nofail);
+	// call('git tag snapshot -f', nofail);
+	call(`git tag snapshot -f -m "Cut on ${new Date()}"`, nofail);
 	call('git push origin tag snapshot -f', {...nofail, fd: 'pipe'});
 
 	printLine('Removing previous snapshots:');
