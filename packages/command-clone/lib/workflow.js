@@ -84,7 +84,7 @@ export async function clone (options) {
 
 		if (options.workspace) {
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));
-			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders}));
+			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders}, null, '  '));
 		}
 
 	} finally {
