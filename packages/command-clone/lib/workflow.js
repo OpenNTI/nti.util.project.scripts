@@ -64,7 +64,9 @@ export async function clone (options) {
 	const folders = [];
 
 	try {
-		await Promise.all(repos.map(async x => {
+		const useSubmodules = options.existing.includes(process.cwd()) && !options['no-submodules'];
+
+		const run = async x => {
 			try {
 				const alias = options.aliases?.[x.fullName];
 				let dest = alias || computeName(x, repos);
@@ -76,11 +78,25 @@ export async function clone (options) {
 					path: dest,
 				});
 
-				await exec('.', `git clone ${x[protocol]} ${dest}`);
+				if (useSubmodules) {
+					await exec('.', `git submodule add ${x[protocol]} ${dest}`);
+				}
+				else {
+					await exec('.', `git clone ${x[protocol]} ${dest}`);
+				}
 			} finally {
 				cloneProgress.increment();
 			}
-		}));
+		};
+
+		if (!useSubmodules)	{
+			await Promise.all(repos.map(run));
+		}
+		else {
+			for (const step of repos) {
+				await run(step);
+			}
+		}
 
 		if (options.workspace) {
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));

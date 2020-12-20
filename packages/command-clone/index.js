@@ -5,6 +5,7 @@ import ora from 'ora';
 
 import { getRepositories } from './lib/list.js';
 import { clone } from './lib/workflow.js';
+import { exec } from './lib/exec.js';
 
 const escapeJoin = (prefix, current) => {
 	return (prefix ? `${prefix}|` : '') + current.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
@@ -84,6 +85,14 @@ const options = yargs(hideBin(process.argv))
 		describe: 'Build a vscode workspace file',
 		type: 'boolean'
 	})
+	.option('init-git', {
+		describe: 'Initialize a git repository and add cloned projects as children',
+		type: 'boolean'
+	})
+	.option('no-submodules', {
+		describe: 'Do not use submodules (when running within a git repo)',
+		type: 'boolean'
+	})
 	.help('h')
 	.alias('h', 'help')
 	.strict()
@@ -95,8 +104,20 @@ if (options.preset && PRESETS[options.preset]) {
 
 const spinner = ora('Starting...').start();
 getRepositories(options)
-	.then(existing => {
+	.then(async existing => {
 		spinner.stop();
+
+		if (options['init-git']) {
+			await exec('.', 'git init');
+			if (!options['no-submodules']) {
+				await exec('.', 'git submodule init');
+			}
+
+			if (!existing.includes(process.cwd())) {
+				existing.unshift(process.cwd());
+			}
+		}
+
 		return clone({...options, existing});
 	})
 	.catch(e => {
