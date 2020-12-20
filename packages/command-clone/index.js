@@ -52,15 +52,18 @@ const PRESETS = {
 const options = yargs(hideBin(process.argv))
 	.usage('Usage: $0 [options]')
 	.option('user', {
+		group: 'Selection:',
 		conflicts: ['org', 'team'],
 		describe: 'Scope to the current user',
 		type: 'boolean'
 	})
 	.option('org', {
+		group: 'Selection:',
 		describe: 'Scope to an org',
 		type: 'string'
 	})
 	.option('team', {
+		group: 'Selection:',
 		describe: 'Scope to a team in org',
 		type: 'string'
 	})
@@ -69,6 +72,7 @@ const options = yargs(hideBin(process.argv))
 		choices: ['https', 'ssh', 'git']
 	})
 	.option('all', {
+		group: 'Selection:',
 		describe: 'auto select all repositories',
 		type: 'boolean'
 	})
@@ -77,22 +81,32 @@ const options = yargs(hideBin(process.argv))
 		type: 'boolean'
 	})
 	.option('preset', {
+		group: 'Selection:',
 		conflicts: [ 'all', 'org', 'team', 'user' ],
 		describe: '---',
 		choices: ['webapp']
 	})
 	.option('workspace', {
+		group: 'Workspace:',
 		describe: 'Build a vscode workspace file',
 		type: 'boolean'
 	})
+	.option('workspace.listed', {
+		group: 'Workspace:',
+		description: 'Build a vscode workspace file that lists each repository as a folder.',
+		type: 'boolean'
+	})
 	.option('init-git', {
+		group: 'Workspace:',
 		describe: 'Initialize a git repository and add cloned projects as children',
 		type: 'boolean'
 	})
 	.option('no-submodules', {
+		group: 'Workspace:',
 		describe: 'Do not use submodules (when running within a git repo)',
 		type: 'boolean'
 	})
+	.wrap(process.stdout.columns)
 	.help('h')
 	.alias('h', 'help')
 	.strict()

@@ -61,7 +61,7 @@ export async function clone (options) {
 	}, cliProgress.Presets.rect);
 	cloneProgress.start(repos.length, 0);
 
-	const folders = [];
+	let folders = [];
 
 	try {
 		const useSubmodules = options.existing.includes(process.cwd()) && !options['no-submodules'];
@@ -99,8 +99,11 @@ export async function clone (options) {
 		}
 
 		if (options.workspace) {
+			if (!options.workspace.listed) {
+				folders = [{path: '.'}];
+			}
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));
-			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders}, null, '  '));
+			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders, settings: {}}, null, '  '));
 		}
 
 	} finally {
