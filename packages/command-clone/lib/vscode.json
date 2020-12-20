@@ -1,0 +1,38 @@
+{
+	"settings": {},
+	"extensions": {
+		"recommendations": [
+			"aaron-bond.better-comments",
+			"DavidAnson.vscode-markdownlint",
+			"dbaeumer.vscode-eslint",
+			"eamodio.gitlens",
+			"EditorConfig.EditorConfig",
+			"GitHub.vscode-pull-request-github",
+			"mhutchie.git-graph",
+			"ms-vscode-remote.vscode-remote-extensionpack",
+			"ms-vsliveshare.vsliveshare",
+			"ms-vsonline.vsonline",
+			"streetsidesoftware.code-spell-checker",
+			"stylelint.vscode-stylelint",
+			"usernamehw.errorlens"
+		]
+	},
+	"launch": {
+		"configurations": [
+			{
+				"type": "node",
+				"request": "launch",
+				"name": "Current File",
+				"program": "${workspaceFolder}/node_modules/.bin/jest",
+				"autoAttachChildProcesses": true,
+				"sourceMaps": true,
+				"args": [
+					"--runInBand",
+					"--no-cache",
+					"${fileBasenameNoExtension}"
+				]
+			}
+		],
+		"compounds": []
+	}
+}

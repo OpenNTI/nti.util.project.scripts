@@ -1,5 +1,5 @@
-import {promises as fs} from 'fs';
-import path from 'path';
+import {promises as fs, readFileSync} from 'fs';
+import {join, dirname} from 'path';
 
 import fuzzy from 'fuzzy';
 import inquirer from 'inquirer';
@@ -9,6 +9,8 @@ import getGithubAPI from '@nti/github-api';
 import ora from 'ora';
 
 import { exec } from './exec.js';
+const {pathname} = new URL(import.meta.url);
+const vscodeSettings = JSON.parse(readFileSync(join(dirname(pathname), 'vscode.json'), 'utf-8'));
 
 inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
 
@@ -103,7 +105,7 @@ export async function clone (options) {
 				folders = [{path: '.'}];
 			}
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));
-			fs.writeFile(path.join(process.cwd(), 'nti.code-workspace'), JSON.stringify({folders, settings: {}}, null, '  '));
+			fs.writeFile(join(process.cwd(), 'nextthought.code-workspace'), JSON.stringify({folders, ...vscodeSettings}, null, '  '));
 		}
 
 	} finally {
