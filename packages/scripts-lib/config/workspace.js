@@ -1,9 +1,16 @@
 'use strict';
 const path = require('path');
 const fs = require('fs-extra');
+const {isCI} = require('ci-info');
+const {sync: glob} = require('glob');
 
+const ENV = process.env.NODE_ENV || 'development';
+const PROD = ENV === 'production';
 const DEBUG = process.argv.includes('--debug');
 const ENV_KEY = '__NTI_WORKSPACE';
+const isBlocked = isCI || PROD || !!process.env.__NTI_RELEASING;
+
+const arr = x => Array.isArray(x) ? x : (x ? [x] : []);
 
 function isListed (x, list) {
 	return (Array.isArray(list) && list.find(y => ~x.indexOf(y)));
@@ -21,52 +28,47 @@ function include (file, whitelist, blacklist) {
 	return true;
 }
 
-module.exports = function getWorkspace (workspace, entryPackage, {regexp = false} = {}) {
-	if (process.env[ENV_KEY]) {
-		return JSON.parse(process.env[ENV_KEY]);
+module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
+	if (isBlocked || process.env[ENV_KEY]) {
+		return JSON.parse(process.env[ENV_KEY] || '{}');
 	}
 
-	let data;
-	try {
-		data = fs.readJSONSync(workspace);
-	} catch (e) {
-		if (e.code !== 'ENOENT') {
-			console.error('[workspace] Error:', e.message);
-			process.exit(1);
-		}
-	}
+	const workspaceOptions = readWorkspaceOptions();
+	const {whitelist = false, blacklist = false} = workspaceOptions;
 
-	const {whitelist = false, blacklist = false, ...options} = data || {};
-	const workspaceDir = path.resolve(path.dirname(workspace), options.path || '.');
-	const assumeInstalled = options.ignoreInstallState;
 	const packages = {};
 	const aliases = {};
 	console.log('[workspace] Generating workspace bindings...');
 
-	const list = fs.readdirSync(workspaceDir)
-		.map(x => path.join(workspaceDir, x, 'package.json'))
-		.filter(x => fs.existsSync(x) && x !== entryPackage);
+	listWorkspacePackages(entryPackage, workspaceOptions)
+		.filter(x => {
+			const dir = path.dirname(x);
+			const pkg = fs.readJsonSync(x);
+			const has = Boolean((pkg.module || pkg.main) && pkg.name);
 
-	list.filter(x => {
-		const dir = path.dirname(x);
-		const pkg = fs.readJsonSync(x);
-		const has = Boolean((pkg.module || pkg.main) && pkg.name);
-
-		if (has) {
-			if (!include(x, whitelist, blacklist)) {
-				if (DEBUG) {
-					console.log('[workspace] excluding "%s"', dir);
+			if (has) {
+				if (!include(x, whitelist, blacklist)) {
+					if (DEBUG) {
+						console.log('[workspace] excluding "%s"', dir);
+					}
+					return false;
 				}
-				return false;
-			}
 
-			const entry = path.join(dir, pkg.module || pkg.main);
-			const installed = assumeInstalled || fs.existsSync(path.join(dir, 'node_modules'));
-			if (!fs.existsSync(entry) || !installed) {
-				if (DEBUG || isListed(x, whitelist)) {
-					console.warn('[workspace] Ignoring "%s" because it is not installed.', dir);
+				const entry = path.join(dir, pkg.module || pkg.main);
+				if (!fs.existsSync(entry)) {
+					if (DEBUG) {
+						console.warn('[workspace] Ignoring "%s" because it is missing an entry, or the entry specified does not exist.', dir);
+					}
+					return false;
 				}
-			} else {
+
+				if (!isPackageInstalled(dir, workspaceOptions)) {
+					if (DEBUG || isListed(x, whitelist)) {
+						console.warn('[workspace] Ignoring "%s" because it is not installed.', dir);
+					}
+					return false;
+				}
+
 				if (regexp) {
 					aliases['^' + pkg.name.replace(/([.-/])/g, '\\$1')] = dir;
 				} else {
@@ -75,10 +77,9 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 
 				packages[pkg.name] = pkg;
 			}
-		}
 
-		return has;
-	});
+			return has;
+		});
 
 	if (DEBUG) {
 		for (let key of Object.keys(aliases)) {
@@ -95,3 +96,67 @@ module.exports = function getWorkspace (workspace, entryPackage, {regexp = false
 	process.env[ENV_KEY] = JSON.stringify(aliases);
 	return aliases;
 };
+
+
+function find (file, limit = 4) {
+	const abs = path.resolve(file);
+	const atRoot = path.resolve(path.join('..', file)) === abs;
+
+	const result = glob(abs);
+
+	if (result.length > 0) {
+		return result.length > 1 ? result : result[0];
+	}
+
+	return (limit <= 0 || atRoot) ? null : find(path.join('..', file), limit - 1);
+}
+
+function isPackageInstalled (dir, options) {
+	if (options.ignoreInstallState) {
+		return true;
+	}
+
+	const local = path.join(dir, 'node_modules');
+	const workspace = path.join(options.workspaceDir, 'node_modules');
+
+	return [local, workspace].some(f => fs.existsSync(f));
+}
+
+function readWorkspaceOptions () {
+	const workspace = find('./.workspace.json');
+	try {
+		const data = fs.readJSONSync(workspace);
+		data.workspaceDir = path.resolve(path.dirname(workspace), data.path || '.');
+
+		return data;
+	} catch (e) {
+		if (e.code !== 'ENOENT') {
+			console.error('[workspace] Error:', e.message);
+			process.exit(1);
+		}
+	}
+}
+
+function listWorkspacePackages (entryPackage, {workspaceDir, useVSCodeWorkspace}) {
+	let list;
+	if (useVSCodeWorkspace) {
+		list = arr(find('./*.code-workspace'))
+			// if useVSCodeWorkspace is a string, find it in the found path to filter down
+			.filter(x => useVSCodeWorkspace === true || ~x.indexOf(useVSCodeWorkspace))
+			// read the file in, and use its paths
+			.map(x => fs.readJSONSync(x).folders?.reduce((f, entry) => [...f, entry.path], []))
+			// flatten
+			.reduce((f, e) => [...f, ...(e || [])], [])
+			// Keep the entries looking the same as glob
+			.map(dir => path.join(dir, 'package.json'));
+
+	} else {
+		// Find all the project directories
+		list = glob(path.join('**', 'package.json', {cwd: workspaceDir, ignore: ['**/node_modules/**']}));
+	}
+
+	// ignore npm workspace level package as well as the entry package.
+	const workspacePackage = path.join(workspaceDir, 'package.json');
+
+	return list.filter(x => x !== entryPackage && x !== workspacePackage);
+}

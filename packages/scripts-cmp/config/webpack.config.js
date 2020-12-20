@@ -21,10 +21,7 @@ const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/con
 
 const pkg = require(paths.packageJson);
 
-const getWorkspace = require('@nti/lib-scripts/config/workspace');
-const workspaceLinks = (!PROD && paths.workspace)
-	? getWorkspace(paths.workspace, paths.packageJson)
-	: {};
+const workspaceLinks = require('./workspace-links');
 
 //TODO: Figure out how to inherit webpack config from app-scripts and mutate to target cmp-scripts needs so we
 //		can maintain one set of loader/workspace implementations.
@@ -58,7 +55,7 @@ exports = module.exports = {
 	resolve: {
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
-			...workspaceLinks,
+			...workspaceLinks(),
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,

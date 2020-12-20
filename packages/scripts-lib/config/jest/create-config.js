@@ -10,12 +10,7 @@ const paths = require(path.resolve(configDir, './paths'));
 const getWorkspace = require('../workspace');
 const {testEnvironment} = require(paths.packageJson);
 
-
-const DEV = !isCI;
-
-const workspaceLinks = (DEV && paths.workspace)
-	? getWorkspace(paths.workspace, paths.packageJson, {regexp: true})
-	: {};
+const workspaceLinks = getWorkspace(paths.packageJson, {regexp: true});
 
 module.exports = (resolve, rootDir) => {
 

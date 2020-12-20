@@ -3,7 +3,6 @@
 const path = require('path');
 const fs = require('fs-extra');
 const r = require('escape-string-regexp');
-const {isCI} = require('ci-info');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
@@ -12,7 +11,6 @@ function resolveApp (relativePath) {
 	return path.resolve(appDirectory, relativePath);
 }
 
-const isDevBlocked = isCI || !!process.env.__NTI_RELEASING;
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
@@ -78,14 +76,6 @@ module.exports = {
 	ntiModules,
 	src: resolveApp('src'),
 	testsSetup: resolveApp('src/__test__/setup.js'),
-
-	workspace: isDevBlocked ? null : exists(
-		resolveApp('.workspace.json'),
-		exists(
-			resolveApp('../.workspace.json'),
-			null
-		)
-	),
 
 	nodePaths,
 
