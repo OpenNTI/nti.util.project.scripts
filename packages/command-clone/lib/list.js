@@ -24,7 +24,7 @@ async function checkStatus (dir) {
 	await exec(dir, 'git fetch');
 
 	async function resolveRemotes (branch) {
-		const origins = branch ? [branch.split('/')[0]] : (await exec(dir, 'git remote')).split(/[\r\n]+/);
+		const origins = (branch ? [branch.split('/')[0]] : (await exec(dir, 'git remote')).split(/[\r\n]+/)).filter(Boolean);
 		if (!origins.length) {
 			return [];
 		}
