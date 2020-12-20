@@ -42,7 +42,7 @@ const PRESETS = {
 			'NextThought/nti.web.login': 'app/login',
 			'NextThought/nti.web.environments': 'app/environments',
 			'NextThought/nti.dataserver.docker': 'server',
-			'NextThought/nti.util.project.scripts':'project-scripts',
+			'NextThought/nti.util.project.scripts':'scripts',
 			'NextThought/react-sticky': 'forks/react-sticky',
 			'NextThought/git-state': 'forks/git-state',
 		}
