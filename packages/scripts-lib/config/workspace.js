@@ -144,7 +144,7 @@ function listWorkspacePackages (entryPackage, {workspaceDir, useVSCodeWorkspace}
 			// if useVSCodeWorkspace is a string, find it in the found path to filter down
 			.filter(x => useVSCodeWorkspace === true || ~x.indexOf(useVSCodeWorkspace))
 			// read the file in, and use its paths
-			.map(x => fs.readJSONSync(x).folders?.reduce((f, entry) => [...f, entry.path], []))
+			.map(x => fs.readJSONSync(x).folders?.reduce((f, entry) => [...f, path.join(path.dirname(x), entry.path)], []))
 			// flatten
 			.reduce((f, e) => [...f, ...(e || [])], [])
 			// Keep the entries looking the same as glob
@@ -152,11 +152,13 @@ function listWorkspacePackages (entryPackage, {workspaceDir, useVSCodeWorkspace}
 
 	} else {
 		// Find all the project directories
-		list = glob(path.join('**', 'package.json', {cwd: workspaceDir, ignore: ['**/node_modules/**']}));
+		list = glob(path.join('**', 'package.json'), {cwd: workspaceDir, ignore: ['**/node_modules/**']});
 	}
 
 	// ignore npm workspace level package as well as the entry package.
 	const workspacePackage = path.join(workspaceDir, 'package.json');
 
-	return list.filter(x => x !== entryPackage && x !== workspacePackage);
+	return list
+		.map(x => path.resolve(workspaceDir, x))
+		.filter(x => x !== entryPackage && x !== workspacePackage);
 }
