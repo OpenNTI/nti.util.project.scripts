@@ -42,7 +42,7 @@
     "ci-info": "^2.0.0",
     "circular-dependency-plugin": "^5.2.0",
     "classnames": "^2.2.6",
-    "compression-webpack-plugin": "^6.0.2",
+    "compression-webpack-plugin": "^7.1.0",
     "core-js": "^3.6.5",
     "css-loader": "^5.0.0",
     "eslint-webpack-plugin": "^2.4.1",
