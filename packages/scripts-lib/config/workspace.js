@@ -43,7 +43,11 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 	listWorkspacePackages(entryPackage, workspaceOptions)
 		.filter(x => {
 			const dir = path.dirname(x);
-			const pkg = fs.readJsonSync(x);
+			const pkg = fs.readJsonSync(x, { throws: false });
+			if (!pkg) {
+				console.warn(`[workspace] Ignoring "${dir}". Invalid JSON: ${x}`);
+				return false;
+			}
 			const has = Boolean((pkg.module || pkg.main) && pkg.name);
 
 			if (has) {
@@ -125,10 +129,21 @@ function isPackageInstalled (dir, options) {
 function readWorkspaceOptions () {
 	const workspace = find('./.workspace.json');
 	try {
-		const data = fs.readJSONSync(workspace);
-		data.workspaceDir = path.resolve(path.dirname(workspace), data.path || '.');
+		const content = fs.readFileSync(workspace, 'utf-8');
 
-		return data;
+		let data;
+		try {
+			data = JSON.parse(content);
+		} catch {
+			if (content) {
+				console.warn(`[workspace] Invalid JSON: ${workspace}`);
+			}
+		}
+
+		return {
+			...data,
+			workspaceDir: path.resolve(path.dirname(workspace), data?.path || '.')
+		};
 	} catch (e) {
 		if (e.code !== 'ENOENT') {
 			console.error('[workspace] Error:', e.message);
@@ -144,7 +159,13 @@ function listWorkspacePackages (entryPackage, {workspaceDir, useVSCodeWorkspace}
 			// if useVSCodeWorkspace is a string, find it in the found path to filter down
 			.filter(x => useVSCodeWorkspace === true || ~x.indexOf(useVSCodeWorkspace))
 			// read the file in, and use its paths
-			.map(x => fs.readJSONSync(x).folders?.reduce((f, entry) => [...f, path.join(path.dirname(x), entry.path)], []))
+			.map(x => {
+				const data = fs.readJSONSync(x, { throws: false });
+				if (!data) {
+					console.warn(`[workspace] Ignoring workspace file, invalid JSON: ${x}`);
+				}
+				return data?.folders?.reduce((f, entry) => [...f, path.join(path.dirname(x), entry.path)], []);
+			})
 			// flatten
 			.reduce((f, e) => [...f, ...(e || [])], [])
 			// Keep the entries looking the same as glob
