@@ -70,3 +70,4 @@ jobs:
         run: |
           MESSAGE="{\"text\": \"#### :white_check_mark: $LINK\", \"channel\":\"Jenkins\" }"
           curl -i -X POST -H 'Content-Type: application/json' -d "$MESSAGE" ${{secrets.MM_HOOK}}
+          curl -X POST ${{secrets.WEB_SNAPSHOT_URL}}
