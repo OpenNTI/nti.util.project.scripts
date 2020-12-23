@@ -18,13 +18,12 @@ const PROD = false;
 
 const {loaders: jsLoaders, plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
+const workspaceLinks = require('@nti/app-scripts/config/workspace-links');
 
-const pkg = require(paths.packageJson);
+const {name} = require(paths.packageJson);
 
-const workspaceLinks = require('./workspace-links');
 
-//TODO: Figure out how to inherit webpack config from app-scripts and mutate to target cmp-scripts needs so we
-//		can maintain one set of loader/workspace implementations.
+// Once all test harness instances have been replaced with storybook stories, we can delete this and migrate the important parts to the storybook config file.
 
 exports = module.exports = {
 	mode: ENV,
@@ -193,7 +192,7 @@ exports = module.exports = {
 		}),
 
 		new HtmlWebpackPlugin({
-			title: pkg.name + ': Test Harness',
+			title: `${name}: Test Harness`,
 			template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
 		}),
 
