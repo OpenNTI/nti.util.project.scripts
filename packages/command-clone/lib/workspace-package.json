@@ -1,0 +1,21 @@
+{
+	"name": "@nti/workspace",
+	"version": "1.0.0",
+	"workspaces": [
+		"./app/*",
+		"./forks/*",
+		"./lib/*",
+		"./style/*",
+		"./util/*",
+		"./web/*"
+	],
+	"engine": {
+		"npm": ">=7.0.0",
+		"node": ">=14.0.0"
+	},
+	"dependencies": {
+		"@nti/eslint-config-app-scripts": "*",
+		"@nti/eslint-config-lib-scripts": "*",
+		"@nti/stylelint-config-standard": "*"
+	}
+}

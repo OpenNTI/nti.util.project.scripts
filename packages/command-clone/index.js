@@ -18,7 +18,6 @@ const WEBAPP_REPOSITORY_NAMESPACES = new RegExp(`^nti\\.(${[
 	'web',
 	'util',
 	// 'content.landingpage',
-	// 'config.unittesting',
 ].reduce(escapeJoin, null)})\\..+`, 'i');
 
 
@@ -41,6 +40,7 @@ const PRESETS = {
 			'NextThought/nti.web.mobile': 'app/mobile',
 			'NextThought/nti.web.login': 'app/login',
 			'NextThought/nti.web.environments': 'app/environments',
+			'NextThought/nti.web.service': 'app/service',
 			'NextThought/nti.dataserver.docker': 'server',
 			'NextThought/nti.util.project.scripts':'scripts',
 			'NextThought/react-sticky': 'forks/react-sticky',

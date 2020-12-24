@@ -11,6 +11,8 @@ import ora from 'ora';
 import { exec } from './exec.js';
 const {pathname} = new URL(import.meta.url);
 const vscodeSettings = JSON.parse(readFileSync(join(dirname(pathname), 'vscode.json'), 'utf-8'));
+const npmWorkspacePackage = JSON.parse(readFileSync(join(dirname(pathname), 'workspace-package.json'), 'utf-8'));
+const npmrc = readFileSync(join(dirname(pathname), 'npmrc.ini'), 'utf-8');
 
 inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
 
@@ -104,8 +106,20 @@ export async function clone (options) {
 			if (!options.workspace.listed) {
 				folders = [{path: '.'}];
 			}
+
+			if (!options.nest) {
+				const w = npmWorkspacePackage.workspaces.map(x =>
+					(/.*\/([^/]+)\/.*/).exec(x)?.[1]
+				);
+				npmWorkspacePackage.workspaces = `./(${w.join('|')})-*`;
+			}
+
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));
 			fs.writeFile(join(process.cwd(), 'nextthought.code-workspace'), JSON.stringify({folders, ...vscodeSettings}, null, '  '));
+
+			fs.writeFile(join(process.cwd(), 'package.json'), JSON.stringify(npmWorkspacePackage, null, '  '));
+
+			fs.writeFile(join(process.cwd(), '.npmrc'), npmrc);
 		}
 
 	} finally {
