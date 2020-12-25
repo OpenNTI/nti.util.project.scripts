@@ -5,7 +5,7 @@ const {isCI} = require('ci-info');
 
 //get the 'active' paths
 const setupEnv = require('./setup-env');
-const {config: configDir} = setupEnv();
+const {config: configDir, setupFiles: extSetupFiles, setupFilesAfterEnv: extSetupFilesAfterEnv} = setupEnv();
 const paths = require(path.resolve(configDir, './paths'));
 const getWorkspace = require('../workspace');
 const {testEnvironment} = require(paths.packageJson);
@@ -21,9 +21,13 @@ module.exports = (resolve, rootDir) => {
 	const setupFiles = [
 		'raf/polyfill',
 		resolve('config/polyfills.js'),
+		...extSetupFiles,
 	];
 
-	const setupFilesAfterEnv = [resolve('config/jest/setup-after-env.js')];
+	const setupFilesAfterEnv = [
+		resolve('config/jest/setup-after-env.js'),
+		...extSetupFilesAfterEnv
+	];
 
 	if (setupTestsFile) {
 		setupFilesAfterEnv.push(setupTestsFile);

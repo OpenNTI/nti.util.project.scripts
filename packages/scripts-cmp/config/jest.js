@@ -1,2 +1,2 @@
 'use strict';
-process.env.JEST_ENV = 'jsdom';
+module.exports = require('@nti/app-scripts/config/jest');
