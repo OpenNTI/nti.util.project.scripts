@@ -1,5 +1,6 @@
 /* eslint-env jest */
 'use strict';
+require('@testing-library/jest-dom/extend-expect');
 const React = require('react');
 
 Object.defineProperty(global, 'css', {

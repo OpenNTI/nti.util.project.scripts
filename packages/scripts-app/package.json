@@ -31,8 +31,12 @@
     "@nti/eslint-config-app-scripts": "^2.31.7",
     "@nti/git-state": "^5.0.0",
     "@nti/lib-scripts": "^2.31.7",
+    "@nti/style-common": "NextThought/nti.style.common",
     "@nti/stylelint-config-standard": "^2.28.20",
     "@nti/web-service": "^1.39.0",
+    "@testing-library/jest-dom": "^5.11.5",
+    "@testing-library/react": "^11.2.1",
+    "@testing-library/react-hooks": "^3.4.2",
     "abortcontroller-polyfill": "^1.4.0",
     "astroturf": "^0.10.5",
     "babel-loader": "^8.0.6",
@@ -80,11 +84,5 @@
     "webpack-format-messages": "^2.0.6",
     "whatwg-fetch": "^3.0.0",
     "worker-loader": "^3.0.0"
-  },
-  "peerDependencies": {
-    "classnames": "*",
-    "prop-types": "*",
-    "react": "*",
-    "react-dom": "*"
   }
 }
