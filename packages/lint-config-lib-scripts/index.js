@@ -1,4 +1,5 @@
 'use strict';
+const resolve = require('./resolve');
 const IN_ATOM = 'ATOM_HOME' in process.env;
 const IN_VSCODE = 'VSCODE_PID' in process.env;
 const IN_IDE = IN_ATOM || IN_VSCODE;
@@ -166,7 +167,15 @@ module.exports = {
 		'import/no-duplicates': 'warn',
 		'import/no-extraneous-dependencies': ['error', {
 			'bundledDependencies': true,
-			'devDependencies': ['**/test/*.js', '**/*.spec.js',  '**/*.stories.js']
+			'devDependencies': [
+				'**/test/*.js',
+				'**/*.spec.js',
+				'**/*.stories.js'
+			],
+			'packageDir': [
+				'.',
+				resolve('@nti/lib-scripts'),
+			].filter(Boolean)
 		}],
 		// 'import/no-unresolved': ['error', {'commonjs': true}],
 		'import/order': ['warn', {

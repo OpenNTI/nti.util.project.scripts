@@ -1,4 +1,5 @@
 'use strict';
+const resolve = require('@nti/eslint-config-lib-scripts/resolve');
 // const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 
 function getReactVersion () {
@@ -41,7 +42,16 @@ module.exports = {
 	},
 
 	rules: {
-		'import/no-extraneous-dependencies': ['error', {'devDependencies': true}],
+		'import/no-extraneous-dependencies': ['error', {
+			'bundledDependencies': true,
+			'devDependencies': true,
+			'packageDir': [
+				'.',
+				resolve('@nti/app-scripts'),
+				resolve('@nti/cmp-scripts'),
+				resolve('@nti/lib-scripts'),
+			].filter(Boolean)
+		}],
 
 		//We standarize on using double quotes on JSX props since they look like HTML attributes.
 		//See: http://eslint.org/docs/rules/jsx-quotes
