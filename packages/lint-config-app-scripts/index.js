@@ -1,5 +1,5 @@
 'use strict';
-const resolve = require('@nti/eslint-config-lib-scripts/resolve');
+const {find, resolve} = require('@nti/eslint-config-lib-scripts/resolve');
 // const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
 
 function getReactVersion () {
@@ -46,7 +46,7 @@ module.exports = {
 			'bundledDependencies': true,
 			'devDependencies': true,
 			'packageDir': [
-				'.',
+				find('package.json'),
 				resolve('@nti/app-scripts'),
 				resolve('@nti/cmp-scripts'),
 				resolve('@nti/lib-scripts'),

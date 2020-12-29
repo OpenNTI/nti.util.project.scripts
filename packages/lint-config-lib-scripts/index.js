@@ -1,5 +1,5 @@
 'use strict';
-const resolve = require('./resolve');
+const {resolve, find} = require('./resolve');
 const IN_ATOM = 'ATOM_HOME' in process.env;
 const IN_VSCODE = 'VSCODE_PID' in process.env;
 const IN_IDE = IN_ATOM || IN_VSCODE;
@@ -173,7 +173,7 @@ module.exports = {
 				'**/*.stories.js'
 			],
 			'packageDir': [
-				'.',
+				find('package.json'),
 				resolve('@nti/lib-scripts'),
 			].filter(Boolean)
 		}],
