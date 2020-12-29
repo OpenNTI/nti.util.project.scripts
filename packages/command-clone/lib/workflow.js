@@ -68,7 +68,7 @@ export async function clone (options) {
 	let folders = [];
 
 	try {
-		const useSubmodules = options.existing.includes(process.cwd()) && !options['no-submodules'];
+		const useSubmodules = options.existing.includes(process.cwd()) && options.git;
 
 		const run = async x => {
 			try {
@@ -216,7 +216,7 @@ async function selectProtocol ({protocol}) {
 				choices: [
 					'https',
 					'ssh',
-					'git'
+					// 'git'
 				]
 			}
 		]);

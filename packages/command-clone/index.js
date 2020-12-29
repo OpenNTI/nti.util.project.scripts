@@ -69,7 +69,11 @@ const options = yargs(hideBin(process.argv))
 	})
 	.option('protocol', {
 		describe: 'Set preferred clone protocol',
-		choices: ['https', 'ssh', 'git']
+		choices: [
+			'https',
+			'ssh',
+			// 'git'
+		]
 	})
 	.option('all', {
 		group: 'Selection:',
@@ -97,14 +101,9 @@ const options = yargs(hideBin(process.argv))
 		description: 'Build a vscode workspace file that lists each repository as a folder instead of rooting in the workspace.',
 		type: 'boolean'
 	})
-	.option('init-git', {
+	.option('git', {
 		group: 'Workspace:',
 		describe: 'Initialize a git repository and add cloned projects as children',
-		type: 'boolean'
-	})
-	.option('no-submodules', {
-		group: 'Workspace:',
-		describe: 'Do not use submodules (when running within a git repo)',
 		type: 'boolean'
 	})
 	.wrap(process.stdout.columns)
@@ -122,18 +121,26 @@ getRepositories(options)
 	.then(async existing => {
 		spinner.stop();
 
-		if (options['init-git']) {
+		if (options.git) {
 			await exec('.', 'git init');
-			if (!options['no-submodules']) {
-				await exec('.', 'git submodule init');
+			if (options.protocol === 'git') {
+				delete options.protocol;
 			}
+			await exec('.', 'git submodule init');
+
 
 			if (!existing.includes(process.cwd())) {
 				existing.unshift(process.cwd());
 			}
 		}
-
 		return clone({...options, existing});
+	})
+	.then(async () => {
+		if (!options.git) {
+			return;
+		}
+		await exec('.', 'git add . -f');
+		await exec('.', 'git commit -m "Initial clone"');
 	})
 	.catch(e => {
 		console.error('\n\nOuch... \n',e.stack || e);
