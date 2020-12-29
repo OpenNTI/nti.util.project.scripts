@@ -108,10 +108,17 @@ export async function clone (options) {
 			}
 
 			if (!options.nest) {
-				const w = npmWorkspacePackage.workspaces.map(x =>
-					(/.*\/([^/]+)\/.*/).exec(x)?.[1]
-				);
-				npmWorkspacePackage.workspaces = `./(${w.join('|')})-*`;
+				const wsp = npmWorkspacePackage.workspaces;
+
+				const include = wsp.map(x =>
+					(/^\.\/(.+)\/\*$/).exec(x)?.[1].replace(/\//g, '\\/')).filter(Boolean);
+
+				const exclude = wsp.filter(x => /^!/.test(x));
+
+				npmWorkspacePackage.workspaces = [
+					`./(${include.join('|')})-*`,
+					...exclude
+				];
 			}
 
 			folders.sort((a,b) => (a.name || a.path).localeCompare(b.name || b.path));

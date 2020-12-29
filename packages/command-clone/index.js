@@ -77,6 +77,7 @@ const options = yargs(hideBin(process.argv))
 		type: 'boolean'
 	})
 	.option('nest', {
+		default: true,
 		describe: 'nest repositories into prefix folders',
 		type: 'boolean'
 	})
@@ -93,7 +94,7 @@ const options = yargs(hideBin(process.argv))
 	})
 	.option('workspace.listed', {
 		group: 'Workspace:',
-		description: 'Build a vscode workspace file that lists each repository as a folder.',
+		description: 'Build a vscode workspace file that lists each repository as a folder instead of rooting in the workspace.',
 		type: 'boolean'
 	})
 	.option('init-git', {
