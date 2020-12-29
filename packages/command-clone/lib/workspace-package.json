@@ -16,7 +16,7 @@
 		"clean-dupes": "node -e \"require('glob').sync('./!(node_modules)/**/node_modules/').filter((x, i, a) => !a.slice(0,i).find(y => x.startsWith(y))).forEach(x => fs.promises.rmdir(x, {recursive:true}));\"",
 		"#2": "Lerna isn't compatible with this workspace layout, so we just install it by itself",
 		"install-lerna": "cd scripts; npm install",
-		"install-server": "cs server; npm install",
+		"install-server": "cd server; npm install",
 		"postinstall": "npm run clean-dupes; npm run install-lerna; npm run install-server"
 	},
 	"engines": {
