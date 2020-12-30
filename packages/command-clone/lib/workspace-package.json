@@ -3,7 +3,6 @@
 	"version": "1.0.0",
 	"workspaces": [
 		"./app/*",
-		"./forks/*",
 		"./lib/*",
 		"./style/*",
 		"./util/*",
