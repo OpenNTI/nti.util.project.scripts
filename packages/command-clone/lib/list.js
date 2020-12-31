@@ -61,8 +61,9 @@ export async function getRepositories (options, dir = process.cwd()) {
 		...await listProjects(dir)
 	];
 	const repos = await Promise.all(projects.map(checkStatus));
+	const getURL = x => x?.remotes?.[0]?.url || '';
 
-	repos.sort((a, b) => a.remotes[0].url?.localeCompare(b.remotes[0].url) || 0);
+	repos.sort((a, b) => getURL(a).localeCompare(getURL(b)));
 
 	return repos;
 }
