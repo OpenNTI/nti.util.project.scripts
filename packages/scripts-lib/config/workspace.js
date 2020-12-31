@@ -34,6 +34,10 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 	}
 
 	const workspaceOptions = readWorkspaceOptions();
+	if (!workspaceOptions) {
+		return {};
+	}
+
 	const {whitelist = false, blacklist = false} = workspaceOptions;
 
 	const packages = {};
@@ -129,6 +133,9 @@ function isPackageInstalled (dir, options) {
 function readWorkspaceOptions () {
 	const workspace = find('./.workspace.json');
 	try {
+		if (!workspace) {
+			return null;
+		}
 		const content = fs.readFileSync(workspace, 'utf-8');
 
 		let data;
