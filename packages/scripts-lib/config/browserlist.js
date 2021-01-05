@@ -10,7 +10,6 @@ const isWorker = LINTER || process.argv.some(x => (/thread-loader.*worker/ig).te
 
 const hasValue = x => x && x !== 'null';
 
-// Test queries and coverage here: http://browserl.ist
 const { NTI_DEV_BROWSER } = process.env;
 const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROWSER.split(',') : [
 	'> 1% in US and last 2 versions',
@@ -47,8 +46,6 @@ Developers may locally override this using the environment variable:
 
   ${chalk.bold.blue('NTI_DEV_BROWSER')}="last 1 chrome version"
 `}
-Test queries and coverage here: ${chalk.bold.blue('http://browserl.ist')}
-
 `);
 
 }
