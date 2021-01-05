@@ -1,6 +1,6 @@
 'use strict';
 const {find, resolve} = require('@nti/eslint-config-lib-scripts/resolve');
-// const DEV = process.env.NODE_ENV !== 'production' || 'ATOM_HOME' in process.env;
+const {IN_WEBPACK} = require('@nti/eslint-config-lib-scripts/vars');
 
 function getReactVersion () {
 	try {
@@ -42,10 +42,11 @@ module.exports = {
 	},
 
 	rules: {
-		'import/no-extraneous-dependencies': ['error', {
+		'import/no-extraneous-dependencies': [IN_WEBPACK ? 'off' : 'error', {
 			'bundledDependencies': true,
 			'devDependencies': true,
 			'packageDir': [
+				'.',
 				find('package.json'),
 				resolve('@nti/app-scripts'),
 				resolve('@nti/cmp-scripts'),

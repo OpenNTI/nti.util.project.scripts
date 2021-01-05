@@ -1,12 +1,6 @@
 'use strict';
 const {resolve, find} = require('./resolve');
-const IN_ATOM = 'ATOM_HOME' in process.env;
-const IN_VSCODE = 'VSCODE_PID' in process.env;
-const IN_IDE = IN_ATOM || IN_VSCODE;
-const PROD = process.env.NODE_ENV === 'production';
-
-// Lint only runs on webpack in dev mode
-const DEV = PROD ? false : (IN_IDE || !!process.env.__IN_WEBPACK);
+const {DEV, IN_IDE, IN_WEBPACK, PROD} = require('./vars');
 
 // The ESLint browser environment defines all browser globals as valid,
 // even though most people don't know some of them exist (e.g. `name` or `status`).
@@ -165,7 +159,7 @@ module.exports = {
 		'wrap-iife': ['error', 'any'],
 
 		'import/no-duplicates': 'warn',
-		'import/no-extraneous-dependencies': ['error', {
+		'import/no-extraneous-dependencies': [IN_WEBPACK ? 'off' : 'error', {
 			'bundledDependencies': true,
 			'devDependencies': [
 				'**/test/*.js',
