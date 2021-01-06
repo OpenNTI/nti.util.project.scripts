@@ -26,6 +26,7 @@ const postCss = (paths, options = {}) => ({
 		postcssOptions: {
 			plugins: [
 				require('postcss-flexbugs-fixes'),
+				require('postcss-nested'),
 				require('postcss-preset-env')({
 					browsers,
 					autoprefixer: {
@@ -33,9 +34,13 @@ const postCss = (paths, options = {}) => ({
 						flexbox: 'no-2009',
 						grid: true,
 					},
-					importFrom: paths.cssCustomProperties,
+					importFrom: [
+						paths.cssCustomProperties,
+					],
 					stage: 3,
 					features: {
+						'custom-media-queries': true,
+						'custom-selectors': true,
 						'nesting-rules': true
 					}
 				}),
