@@ -64,7 +64,7 @@ module.exports = {
 	 *		color: red;
 	 *		color: var(--mycolor);
 	 */
-	cssCustomProperties: exists(resolveApp('node_modules/@nti/style-common/variables.css'), null),
+	cssCustomProperties: require.resolve('@nti/style-common/variables.css'),
 
 	serverComponent,
 	pageContentComponent: paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
