@@ -36,7 +36,7 @@
     "@nti/web-service": "NextThought/nti.web.service",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.2.1",
-    "@testing-library/react-hooks": "^3.4.2",
+    "@testing-library/react-hooks": "^4.0.0",
     "abortcontroller-polyfill": "^1.4.0",
     "astroturf": "^0.10.5",
     "babel-loader": "^8.0.6",
