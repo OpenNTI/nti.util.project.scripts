@@ -52,6 +52,12 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 				console.warn(`[workspace] Ignoring "${dir}". Invalid JSON: ${x}`);
 				return false;
 			}
+			if (isLinked(x, pkg.name)) {
+				if (DEBUG) {
+					console.log('[workspace] excluding "%s", because its natively linked by npm.', dir);
+				}
+				return false;
+			}
 			const has = Boolean((pkg.module || pkg.main) && pkg.name);
 
 			if (has) {
@@ -189,4 +195,15 @@ function listWorkspacePackages (entryPackage, {workspaceDir, useVSCodeWorkspace}
 	return list
 		.map(x => path.resolve(workspaceDir, x))
 		.filter(x => x !== entryPackage && x !== workspacePackage);
+}
+
+
+function isLinked (pkgPath, name) {
+	try {
+		const s = require.resolve(path.join(name, 'package.json'));
+		return s === pkgPath || fs.realpathSync(s) === pkgPath;
+	} catch {
+		//
+	}
+	return false;
 }
