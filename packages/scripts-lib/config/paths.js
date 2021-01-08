@@ -12,6 +12,18 @@ function resolveApp (relativePath) {
 }
 
 
+function find (file, limit = 10) {
+	const abs = path.resolve(file);
+	const atRoot = path.resolve(path.join('..', file)) === abs;
+
+	if (fs.existsSync(abs)) {
+		return abs;
+	}
+
+	return (limit <= 0 || atRoot) ? null : find(path.join('..', file), limit - 1);
+}
+
+
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
 // https://github.com/facebookincubator/create-react-app/issues/253.
@@ -33,7 +45,7 @@ const nodePaths = (process.env.NODE_PATH || '')
 	.filter(folder => !path.isAbsolute(folder))
 	.map(resolveApp);
 
-const nodeModules = resolveApp('node_modules');
+const nodeModules = find('node_modules');
 const packageJson = resolveApp('package.json');
 if (!fs.existsSync(packageJson)) {
 	console.log(packageJson, 'does not exist.');
