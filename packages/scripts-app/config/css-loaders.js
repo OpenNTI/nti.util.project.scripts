@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const {PROD} = require('./env');
 const workspaceLinks = require('./workspace-links');
+const NotInNodeModules = /^((?!\/node_modules\/).)+$/i;
 
 const style = (server) => ({
 	loader: (!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -68,51 +69,56 @@ const sass = (options = {}) => ({
 	}
 });
 
-const loaders = (paths, options = {}) => [
-	{
-		test: /\.s(a|c)ss$/,
-		use: [
-			style(options.server),
-			css(),
-			postCss(paths),
-			resolveUrl(),
-			sass(options.sass)
-		]
-	},
+const loaders = (paths, options = {}) => {
+	const ntiStyleDirs = [
+		paths.src,
+		paths.testApp,
+		paths.ntiModules,
+		NotInNodeModules,
+		//Only process source files in workspaceLinks
+		...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
+	].filter(Boolean);
 
-	{
-		test: /\.css$/,
-		include: [
-			paths.src,
-			paths.testApp,
-			paths.ntiModules,
-			//Only process source files in workspaceLinks
-			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
-		].filter(Boolean),
-		use: [
-			style(options.server),
-			css({
-				modules: {
-					exportGlobals: true,
-					exportLocalsConvention: 'camelCase',
-					localIdentName: '[local]--[hash:base64:8]'
-				}
-			}),
-			postCss(paths),
-			resolveUrl()
-		]
-	},
+	return [
+		{
+			test: /\.s(a|c)ss$/,
+			use: [
+				style(options.server),
+				css(),
+				postCss(paths),
+				resolveUrl(),
+				sass(options.sass)
+			]
+		},
 
-	{
-		test: /\.css$/,
-		use: [
-			style(options.server),
-			css({importLoaders: 2}),
-			postCss(paths),
-			resolveUrl()
-		]
-	}
-];
+		{
+			test: /\.css$/,
+			include: ntiStyleDirs,
+			use: [
+				style(options.server),
+				css({
+					modules: {
+						exportGlobals: true,
+						exportLocalsConvention: 'camelCase',
+						localIdentName: '[local]--[hash:base64:8]'
+					}
+				}),
+				postCss(paths),
+				// resolveUrl()
+			]
+		},
+
+		{
+			test: /\.css$/,
+			exclude: ntiStyleDirs,
+			use: [
+				style(options.server),
+				css({importLoaders: 1}),
+				postCss(paths),
+			]
+		}
+	];
+};
 
 const plugins = (options = {}, server = false) => [
 	(PROD || server) && new MiniCssExtractPlugin({

@@ -170,7 +170,8 @@ const ClientConfig = {
 	resolve: {
 		modules: [
 			paths.appModules,
-			paths.nodeModules,
+			// This needs to point to the `./node_modules` dir... not the resolved one... once everyone is on the npm7 workspace structure we can delete this.
+			paths.resolveApp('node_modules'),
 			'node_modules',//needed for conflicted versions of modules that get nested, but attempt last.
 		],
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
