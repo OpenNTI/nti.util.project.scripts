@@ -8,7 +8,7 @@ import cliProgress from 'cli-progress';
 import getGithubAPI from '@nti/github-api';
 import ora from 'ora';
 
-import { exec } from './exec.js';
+import { checkSSH, exec } from './exec.js';
 const {pathname} = new URL(import.meta.url);
 const vscodeSettings = JSON.parse(readFileSync(join(dirname(pathname), 'vscode.json'), 'utf-8'));
 const npmWorkspacePackage = JSON.parse(readFileSync(join(dirname(pathname), 'workspace-package.json'), 'utf-8'));
@@ -18,20 +18,14 @@ inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
 
 function computeName (x, all) {
 	const get = (i) => {
-		let name = i.name.split('.').join('/').replace(/(^nti\/)|(\/git$)/g, '');
-		if (/-/.test(name) && !/\//.test(name)) {
-			name = name.replace(/-/, '/');
-		}
-		return name;
+		const [name, ...parts] = i.name.replace(/(^nti[./])|([./]git$)/g, '').split(/[./]/);
+		return join(name, parts.join('-'));
 	};
 
 	let name = get(x);
 	all = all.map(get).filter(n => n !== name);
 	if (all.some(n => name.startsWith(n + '/'))) {
-		const parts = name.split('/');
-		if (parts.length < 3) {throw new Error('Name conflict: ' + name);}
-		const last = parts.pop();
-		name = parts.join('/') + '-' + last;
+		throw new Error('Name conflict: ' + name);
 	}
 
 	return name;
@@ -65,7 +59,9 @@ export async function clone (options) {
 	}, cliProgress.Presets.rect);
 	cloneProgress.start(repos.length, 0);
 
-	let folders = [];
+	let folders = options.existing
+		.map(x => x.dir.replace(process.cwd() + '/', ''))
+		.filter(x => x && x !== '/');
 
 	try {
 		const useSubmodules = options.existing.includes(process.cwd()) && options.git;
@@ -77,10 +73,9 @@ export async function clone (options) {
 
 				dest = options.nest ? dest : dest.replace(/[/]/g, '-');
 
-				folders.push({
-					name: !options.nest ? undefined : (alias ? dest : x.name.replace(/^nti./, '')),
-					path: dest,
-				});
+				if (!folders.includes(dest)) {
+					folders.push(dest);
+				}
 
 				if (useSubmodules) {
 					await exec('.', `git submodule add ${x[protocol]} ${dest}`);
@@ -105,6 +100,10 @@ export async function clone (options) {
 		if (options.workspace) {
 			if (!options.workspace.listed) {
 				folders = [{path: '.'}];
+			} else {
+				folders = folders
+					.sort((a, b) => a.localeCompare(b))
+					.map(x => ({ name: x, path: x }));
 			}
 
 			if (!options.nest) {
@@ -206,6 +205,11 @@ async function getOrgScope ({octokit, spinner, org, ...options}) {
 
 async function selectProtocol ({protocol}) {
 	if (!/^(https|ssh|git)$/.test(protocol)) {
+		const useSSH = await checkSSH();
+		if (useSSH) {
+			return 'ssh';
+		}
+
 		const response = await inquirer.prompt([
 			{
 				type: 'list',
@@ -236,7 +240,7 @@ async function selectRepositories ({spinner, octokit, scope, all, existing, filt
 	spinner.stop();
 
 	if (all) {
-		return repositories.map(toValue);
+		return repositories.map(toValue).filter(x => !existing.find(y => y.fullName === x.fullName));
 	}
 
 	const choices = repositories.map(x => {

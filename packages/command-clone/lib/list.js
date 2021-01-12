@@ -16,12 +16,27 @@ const isProject = dir => async file => {
 };
 
 async function listProjects (dir) {
-	return (await Promise.all((await fs.readdir(dir)).map(isProject(dir)))).filter(Boolean);
+	const check = isProject(dir);
+	let out = [];
+	for (const file of await fs.readdir(dir)) {
+		const project = await check(file);
+		if (project) {
+			out = [...out, project];
+			continue;
+		}
+
+		const target = join(dir, file);
+		const stat = await fs.stat(target);
+		if (stat.isDirectory()) {
+			out = [...out, ...(await listProjects(target))];
+		}
+	}
+	return out;
 }
 
-async function checkStatus (dir) {
+async function resolveDetails (dir) {
 	// get the latest git state from remote
-	await exec(dir, 'git fetch');
+	// await exec(dir, 'git fetch');
 
 	async function resolveRemotes (branch) {
 		const origins = (branch ? [branch.split('/')[0]] : (await exec(dir, 'git remote')).split(/[\r\n]+/)).filter(Boolean);
@@ -48,10 +63,12 @@ async function checkStatus (dir) {
 		status.behind = 0;
 	}
 
+	const remotes = await resolveRemotes();
 	return {
 		dir,
 		...status,
-		remotes: await resolveRemotes()
+		remotes,
+		fullName: remotes?.[0]?.repo
 	};
 }
 
@@ -60,7 +77,7 @@ export async function getRepositories (options, dir = process.cwd()) {
 		...(await isProject(dir)('.') ? [ dir ] : []),
 		...await listProjects(dir)
 	];
-	const repos = await Promise.all(projects.map(checkStatus));
+	const repos = await Promise.all(projects.map(resolveDetails));
 	const getURL = x => x?.remotes?.[0]?.url || '';
 
 	repos.sort((a, b) => getURL(a).localeCompare(getURL(b)));
