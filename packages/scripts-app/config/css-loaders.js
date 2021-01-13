@@ -63,7 +63,7 @@ const sass = (options = {}) => ({
 		implementation: require('sass'),
 		sourceMap: true, // resolve loader requires sourceMaps on for loaders that come before it
 		sassOptions: {
-			fiber: require('fibers'),
+			fiber: false,
 			...options.sassOptions,
 		},
 	}
