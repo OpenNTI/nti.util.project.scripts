@@ -27,7 +27,7 @@ async function listProjects (dir) {
 
 		const target = join(dir, file);
 		const stat = await fs.stat(target);
-		if (stat.isDirectory()) {
+		if (stat.isDirectory() && file !== 'node_modules') {
 			out = [...out, ...(await listProjects(target))];
 		}
 	}
