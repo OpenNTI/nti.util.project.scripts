@@ -140,14 +140,10 @@ const ClientConfig = {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[hash:8].js',
 		chunkFilename: 'js/[name]-[hash:8].js',
-		pathinfo: !PROD,
 		publicPath: paths.servedPath || '/',
 		devtoolModuleFilenameTemplate: info =>
-			path.resolve(info.absoluteResourcePath)
-				.replace(path.resolve(paths.path), paths.servedPath)
-				.replace('src/main', '')
-				.replace(/\\/g, '/')
-				.replace(/\/\//g, '/')
+			path.relative(path.resolve(paths.path), path.resolve(info.absoluteResourcePath))
+
 	},
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
