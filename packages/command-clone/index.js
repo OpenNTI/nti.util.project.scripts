@@ -43,6 +43,7 @@ const PRESETS = {
 			'NextThought/nti.web.service': 'app/service',
 			'NextThought/nti.dataserver.docker': 'server',
 			'NextThought/nti.util.project.scripts':'scripts',
+			'NextThought/foundation-sites-fork': 'forks/foundation-sites',
 			'NextThought/react-sticky': 'forks/react-sticky',
 			'NextThought/git-state': 'forks/git-state',
 		}
