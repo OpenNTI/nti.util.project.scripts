@@ -16,7 +16,15 @@
 		"#2": "Lerna isn't compatible with this workspace layout, so we just install it by itself",
 		"install-lerna": "cd scripts; npm install",
 		"install-server": "cd server; npm install",
-		"postinstall": "npm run clean-dupes; npm run install-lerna; npm run install-server"
+		"#3": "There appears to be a bug with workspace installs not installing dev/bundled dependencies... so we will install the service independently",
+		"install-service": "cd app/service; npm install",
+		"preinstall": "npm run clean-dupes",
+		"install": "concurrently \"npm:install-lerna\" \"npm:install-service\" \"npm:build\"",
+		"postinstall": "npm run install-server",
+		"build": "concurrently \"npm:build-*\"",
+		"build-login": "cd app/login; npm run build -- --skip-checks",
+		"build-mobile": "cd app/mobile; npm run build -- --skip-checks",
+		"build-webapp": "cd app/webapp; npm run build -- --skip-checks"
 	},
 	"engines": {
 		"npm": ">=7.0.0",
@@ -25,6 +33,7 @@
 	"dependencies": {
 		"@nti/eslint-config-app-scripts": "*",
 		"@nti/eslint-config-lib-scripts": "*",
-		"@nti/stylelint-config-standard": "*"
+		"@nti/stylelint-config-standard": "*",
+		"concurrently": "^5.3.0"
 	}
 }
