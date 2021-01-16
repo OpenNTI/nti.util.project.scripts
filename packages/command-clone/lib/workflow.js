@@ -55,6 +55,7 @@ export async function clone (options) {
 	}
 
 	const cloneProgress = new cliProgress.SingleBar({
+		clearOnComplete: true,
 		format: 'cloning [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}'
 	}, cliProgress.Presets.rect);
 	cloneProgress.start(repos.length, 0);
