@@ -111,6 +111,7 @@ module.exports = {
 		'import'
 	],
 
+	reportUnusedDisableDirectives: true,
 	rules: {
 		'camelcase': ['error', {'properties': 'always'}],
 		'curly': ['error', 'all'],
