@@ -54,7 +54,7 @@ module.exports = {
 			].filter(Boolean)
 		}],
 
-		//We standarize on using double quotes on JSX props since they look like HTML attributes.
+		//We standardize on using double quotes on JSX props since they look like HTML attributes.
 		//See: http://eslint.org/docs/rules/jsx-quotes
 		'jsx-quotes': ['warn', 'prefer-double'],
 
@@ -69,10 +69,10 @@ module.exports = {
 		// This is NOT an error.
 		'react/display-name': ['warn'],
 
-		// Do not require prop-type validaion for very common props provided by the system.
-		'react/prop-types': ['warn', { ignore: ['children', 'className']}],
+		// Do not require prop-type validation for very common props provided by the system.
+		'react/prop-types': ['warn', { ignore: ['children', 'className'], skipUndeclared: true}],
 
-		//JSX should always be wrapped in parentheses... especically when multiline.
+		//JSX should always be wrapped in parentheses... especially when multiline.
 		//See: https://github.com/yannickcr/eslint-plugin-react/blob/master/docs/rules/wrap-multilines.md
 		'react/jsx-wrap-multilines': ['warn', {
 			'declaration': 'parens-new-line',
