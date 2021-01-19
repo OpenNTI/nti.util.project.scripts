@@ -38,7 +38,8 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 		return {};
 	}
 
-	const {whitelist = false, blacklist = false} = workspaceOptions;
+	const {debug, verbose, whitelist = false, blacklist = false} = workspaceOptions;
+	const LOG = verbose || debug || DEBUG;
 
 	const packages = {};
 	const aliases = {};
@@ -53,7 +54,7 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 				return false;
 			}
 			if (isLinked(x, pkg.name)) {
-				if (DEBUG) {
+				if (LOG) {
 					console.log('[workspace] excluding "%s", because its natively linked by npm.', dir);
 				}
 				return false;
@@ -62,7 +63,7 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 
 			if (has) {
 				if (!include(x, whitelist, blacklist)) {
-					if (DEBUG) {
+					if (LOG) {
 						console.log('[workspace] excluding "%s"', dir);
 					}
 					return false;
@@ -70,14 +71,14 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 
 				const entry = path.join(dir, pkg.module || pkg.main);
 				if (!fs.existsSync(entry)) {
-					if (DEBUG) {
+					if (LOG) {
 						console.warn('[workspace] Ignoring "%s" because it is missing an entry, or the entry specified does not exist.', dir);
 					}
 					return false;
 				}
 
 				if (!isPackageInstalled(dir, workspaceOptions)) {
-					if (DEBUG || isListed(x, whitelist)) {
+					if (LOG || isListed(x, whitelist)) {
 						console.warn('[workspace] Ignoring "%s" because it is not installed.', dir);
 					}
 					return false;
@@ -95,7 +96,7 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 			return has;
 		});
 
-	if (DEBUG) {
+	if (LOG) {
 		for (let key of Object.keys(aliases)) {
 			console.log('[workspace] Mapping %s => %s', key.replace(/[\^\\]/g, ''), aliases[key]);
 		}
@@ -137,25 +138,56 @@ function isPackageInstalled (dir, options) {
 }
 
 function readWorkspaceOptions () {
-	const workspace = find('./.workspace.json');
-	try {
-		if (!workspace) {
+
+	function read (file) {
+		if (!file) {
 			return null;
 		}
-		const content = fs.readFileSync(workspace, 'utf-8');
+		const content = fs.readFileSync(file, 'utf-8');
 
-		let data;
 		try {
-			data = JSON.parse(content);
+			return JSON.parse(content);
 		} catch {
 			if (content) {
-				console.warn(`[workspace] Invalid JSON: ${workspace}`);
+				console.warn(`[workspace] Invalid JSON: ${file}`);
 			}
 		}
+	}
+
+
+	const workspace = find('./.workspace.json');
+	const workspacePackage = find('../package.json');
+	const KEY = 'nextthought-workspace-options';
+	try {
+		const wkp = read(workspace);
+		const pkg = read(workspacePackage);
+		const opts = pkg?.[KEY];
+
+		if (!wkp && !opts ) {
+			if (pkg) {
+				console.warn('[workspace] Missing "%s" in ', KEY, workspacePackage);
+				process.exit();
+			}
+			return null;
+		}
+
+		if (wkp && opts && path.dirname(workspace) === path.dirname(workspacePackage)) {
+			console.warn('[workspace] Two configuration files found.\n' +
+				'The values in %s will be merged with the values in "%s",' +
+				' under the key: "%s"',
+			workspace,
+			workspacePackage,
+			KEY);
+		}
+
+		const data = {
+			...wkp,
+			...opts,
+		};
 
 		return {
 			...data,
-			workspaceDir: path.resolve(path.dirname(workspace), data?.path || '.')
+			workspaceDir: path.resolve(path.dirname(workspace || workspacePackage), data?.path || '.')
 		};
 	} catch (e) {
 		if (e.code !== 'ENOENT') {
