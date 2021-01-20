@@ -10,8 +10,6 @@ const {
 	NTI_BUILDOUT_PATH = '/VALUE_NOT_SET/this/path/does/not/exist/',
 } = process.env;
 
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
-
 async function getCertPaths () {
 	const DOCKER = await getDockerCert();
 	const CA_ROOT = path.join(NTI_BUILDOUT_PATH, 'etc/pki/localhost');

@@ -1,5 +1,6 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
+const {globalAgent} = require('https');
 const { worker } = require('cluster');
 const readline = require('readline');
 const { getHTTPS } = require('@nti/dev-ssl-config');
@@ -41,6 +42,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 	clientConfig.output.publicPath = config.basepath;
 
 	const https = await getHTTPS();
+	globalAgent.options.rejectUnauthorized = false;
 
 	if (devPort !== 0 && https) {
 		for (let entry of Object.keys(clientConfig.entry)) {
