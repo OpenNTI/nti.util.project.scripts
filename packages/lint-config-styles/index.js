@@ -11,6 +11,7 @@ module.exports = {
 		'no-descending-specificity': null,
 		'selector-list-comma-newline-after': null,
 		'declaration-block-single-line-max-declarations': 3,
+		'max-empty-lines': null,
 		'at-rule-no-unknown': [true, {
 			'ignoreAtRules': [
 				'at-root',
