@@ -7,7 +7,7 @@ import readFile from './read';
 import getTempFile from './temp';
 
 const {
-	NTI_BUILDOUT_PATH = '/VALUE_NOT_SET/this/path/does/not/exist/',
+	NTI_BUILDOUT_PATH = '/VALUE_NOT_SET/this/path/does/not/exist',
 } = process.env;
 
 async function getCertPaths () {
@@ -24,7 +24,7 @@ async function getCertPaths () {
 }
 
 export async function getHTTPS () {
-	const hint = e => 'NTI_BUILDOUT_PATH' in process.env && console.debug(e.message.replace(NTI_BUILDOUT_PATH, '$NTI_BUILDOUT_PATH/'));
+	const hint = e => 'NTI_BUILDOUT_PATH' in process.env && console.debug(e.message.replace(NTI_BUILDOUT_PATH.replace(/\/$/,''), '$NTI_BUILDOUT_PATH'));
 	const NULL = (e) => (hint(e), void null);
 	const { KEY, CERT } = await getCertPaths();
 
@@ -63,8 +63,8 @@ export async function getSSLFlags () {
 		const error = DOCKER
 			? 'Docker containers are running but failed to give ssl certs'
 			: 'NTI_BUILDOUT_PATH' in process.env
-				? chalk`NTI_BUILDOUT_PATH is invalid.`
-				: chalk`Cannot pick a path to take. {bold Docker} containers are {underline not} running and the environment variable {bold NTI_BUILDOUT_PATH} is not defined. Resolve one or the other.`;
+				? chalk`The environment variable NTI_BUILDOUT_PATH is defined but invalid.`
+				: chalk`Cannot pick a path to take. {bold Docker} containers are {underline not} running, and the environment variable {bold NTI_BUILDOUT_PATH} is not defined. Resolve one or the other.`;
 
 		console.error(chalk`
 
@@ -73,7 +73,7 @@ export async function getSSLFlags () {
 	Dev server will not work until this is resolved.
 
 	{bold.dim Tips:}
-	{dim ) Start the docker containers and/or make sure http://localhost responds to requests.}
+	{dim ) Start the docker containers and/or make sure http://localhost responds to requests.} ${DOCKER ? '' : chalk`{dim (currently }{bold.dim not} {dim responding)}`}
 	{dim ) If you are running buildout locally, then define the environment variable above pointing to the buildout directory.}
 
 	`.replace(/^(\t)+/gm, '  '));
