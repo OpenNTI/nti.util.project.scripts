@@ -64,7 +64,7 @@ export async function getSSLFlags () {
 			? 'Docker containers are running but failed to give ssl certs'
 			: 'NTI_BUILDOUT_PATH' in process.env
 				? chalk`NTI_BUILDOUT_PATH is invalid.`
-				: chalk`{bold Docker} containers are {underline not} running and the environment variable {bold NTI_BUILDOUT_PATH} is not defined.`;
+				: chalk`Cannot pick a path to take. {bold Docker} containers are {underline not} running and the environment variable {bold NTI_BUILDOUT_PATH} is not defined. Resolve one or the other.`;
 
 		console.error(chalk`
 
@@ -73,7 +73,7 @@ export async function getSSLFlags () {
 	Dev server will not work until this is resolved.
 
 	{bold.dim Tips:}
-	{dim ) Start the docker container}
+	{dim ) Start the docker containers and/or make sure http://localhost responds to requests.}
 	{dim ) If you are running buildout locally, then define the environment variable above pointing to the buildout directory.}
 
 	`.replace(/^(\t)+/gm, '  '));
