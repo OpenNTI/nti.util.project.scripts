@@ -4,7 +4,8 @@ const { mkdir, readFile, writeFile } = require('fs').promises;
 const { join, basename } = require('path');
 require('./validate-env.js');
 
-const exec = x => execSync(x).toString('utf8').trim();
+const cwd = () => process.env.INIT_CWD ?? process.cwd();
+const exec = x => execSync(x, {cwd: cwd()}).toString('utf8').trim();
 
 const hookSrc = [
 	join(__dirname, 'pre-commit-hook.sh'),
@@ -35,7 +36,7 @@ async function installHooks (basepath) {
 	} catch {
 		// not in a git repo
 		hooks = [];
-		console.log('Not GIT: %s\n%o', process.cwd(), process.argv);
+		console.log('Not GIT: %s\n%o', cwd(), process.argv);
 	}
 
 	await Promise.all(hooks.map(installHooks));

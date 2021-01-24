@@ -3,8 +3,8 @@
 # unset ATOM_HOME
 set -e
 export NODE_ENV=production
-JS=$(git diff --diff-filter=d --cached --name-only ***.{cjs,js,jsx,mjs})
-if [[ ! -z "$JS" ]]; then
+CODE=$(git diff --diff-filter=d --cached --name-only ***.{cjs,js,jsx,mjs,css,scss,sass})
+if [[ ! -z "$CODE" ]]; then
 	if [[ `npx -v` = 7* ]]; then
 		npx --yes @nti/pre-commit
 	else
