@@ -67,7 +67,7 @@ module.exports = {
 		'react/jsx-pascal-case': ['warn', { 'allowAllCaps': true }],
 
 		// This is NOT an error.
-		'react/display-name': ['warn'],
+		'react/display-name': ['off'],
 
 		// Do not require prop-type validation for very common props provided by the system.
 		'react/prop-types': ['warn', { ignore: ['children', 'className'], skipUndeclared: true}],
