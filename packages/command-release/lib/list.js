@@ -9,8 +9,8 @@ export const isProject = dir => async file => {
 	const list = stat.isDirectory() && await fs.readdir(target);
 	if(list && list.includes('.git') && list.includes('package.json')) {
 		try {
-			const {scripts, releaseMode = 'auto'} = await readJSON(join(target, 'package.json'));
-			return releaseMode !== 'interactive' && scripts && 'release' in scripts && target;
+			const {workspaces, scripts, releaseMode = 'auto'} = await readJSON(join(target, 'package.json'));
+			return workspaces == null && releaseMode !== 'interactive' && scripts && 'release' in scripts && target;
 		} catch (err) {
 			console.warn(err.message);
 		}
@@ -18,7 +18,20 @@ export const isProject = dir => async file => {
 };
 
 export async function listProjects (dir = process.cwd()) {
-	const projects = (await Promise.all((await fs.readdir(dir)).map(isProject(dir)))).filter(Boolean);
+	const check = isProject(dir);
+	let out = [];
+	for (const file of await fs.readdir(dir)) {
+		const project = await check(file);
+		if (project) {
+			out = [...out, project];
+			continue;
+		}
 
-	return projects;
+		const target = join(dir, file);
+		const stat = await fs.stat(target);
+		if (stat.isDirectory() && file !== 'node_modules') {
+			out = [...out, ...(await listProjects(target))];
+		}
+	}
+	return out;
 }
