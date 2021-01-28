@@ -156,7 +156,23 @@ module.exports = {
 		'space-infix-ops': ['error', {'int32Hint': true}],
 		'space-unary-ops': ['warn', { 'words': true, 'nonwords': false }],
 		'strict': ['error', 'never'],
-		'valid-jsdoc': 'warn',
+		'valid-jsdoc': ['warn', {
+			'prefer': {
+				'arg': 'param',
+				'argument': 'param',
+				'constructor': 'class',
+				'return': 'returns',
+				'virtual': 'abstract'
+			},
+			'preferType': {
+				'Boolean': 'boolean',
+				'Number': 'number',
+				'object': 'Object',
+				'String': 'string'
+			},
+			'requireParamDescription': false,
+			'requireReturnDescription': false
+		}],
 		'wrap-iife': ['error', 'any'],
 
 		'import/no-duplicates': 'warn',
