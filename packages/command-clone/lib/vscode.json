@@ -3,18 +3,34 @@
 	"extensions": {
 		"recommendations": [
 			"aaron-bond.better-comments",
-			"DavidAnson.vscode-markdownlint",
+			"adamhartford.vscode-base64",
+			"adpyke.codesnap",
+			"artdiniz.quitcontrol-vscode",
+			"atlassian.atlascode",
+			"britesnow.vscode-toggle-quotes",
+			"christian-kohler.path-intellisense",
+			"davidanson.vscode-markdownlint",
 			"dbaeumer.vscode-eslint",
 			"eamodio.gitlens",
-			"EditorConfig.EditorConfig",
-			"GitHub.vscode-pull-request-github",
+			"editorconfig.editorconfig",
+			"euskadi31.json-pretty-printer",
+			"formulahendry.auto-rename-tag",
+			"github.vscode-pull-request-github",
+			"jakewilson.vscode-placeholder-images",
+			"jpoissonnier.vscode-styled-components",
 			"mhutchie.git-graph",
+			"mikestead.dotenv",
+			"mrmlnc.vscode-scss",
 			"ms-vscode-remote.vscode-remote-extensionpack",
 			"ms-vsliveshare.vsliveshare",
 			"ms-vsonline.vsonline",
+			"sleistner.vscode-fileutils",
 			"streetsidesoftware.code-spell-checker",
 			"stylelint.vscode-stylelint",
-			"usernamehw.errorlens"
+			"tht13.html-preview-vscode",
+			"usernamehw.errorlens",
+			"visualstudioexptteam.vscodeintellicode",
+			"wmaurer.change-case"
 		]
 	},
 	"launch": {
