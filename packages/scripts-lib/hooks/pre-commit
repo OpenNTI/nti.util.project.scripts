@@ -1,10 +1,14 @@
 #!/bin/sh
 . "$(dirname $0)/_/husky.sh"
 
-for i in $(git diff --diff-filter=d --cached --name-only);
-do
-	if [[ $i =~ (([cm]?jsx?)|(s?[ca]ss))$ ]]; then
-		npx @nti/pre-commit;
-		exit 0;
+x=`pwd`
+while [ "$x" != "/" ] ; do
+    x=`dirname "$x"`;
+	if [ -f $x/node_modules/.bin/pre-commit ]; then
+		PATH=$x/node_modules/.bin:$PATH;
+		break;
 	fi
 done
+
+# installed by @nti/lib-scripts (-> @nti/pre-commit)
+pre-commit
