@@ -2,6 +2,7 @@
 const { execSync } = require('child_process');
 const { mkdir, readFile, writeFile } = require('fs').promises;
 const { join, basename } = require('path');
+const {isCI} = require('ci-info');
 require('./validate-env.js');
 
 const cwd = () => process.env.INIT_CWD ?? process.cwd();
@@ -28,6 +29,9 @@ async function installHooks (basepath) {
 
 
 (async () => {
+	if (isCI) {
+		return;
+	}
 	let hooks;
 	try {
 		hooks = [
