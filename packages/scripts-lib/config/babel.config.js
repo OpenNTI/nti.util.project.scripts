@@ -24,11 +24,7 @@ module.exports = function (api, opts) {
 			// The decorators proposal is dead as we knew it, I plan to remove this plugin
 			// once all the usage of legacy decorators has been removed/converted.
 			['@babel/plugin-proposal-decorators', { legacy: true }],
-			['@babel/plugin-proposal-class-properties', { loose: true }],
-
-			// I'm still hoping this makes it into the language, but if it doesn't get
-			// traction by years end, I plan to remove it. (by Jan/Feb 2021)
-			['@babel/plugin-proposal-export-default-from']
+			['@babel/plugin-proposal-class-properties', { loose: true }]
 		]
 	};
 };
