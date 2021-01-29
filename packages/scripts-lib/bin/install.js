@@ -1,9 +1,8 @@
 'use strict';
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
-// const { mkdir, readFile, writeFile } = require('fs').promises;
+const { existsSync, unlink } = require('fs');
 const {
-	// basename,
 	join,
 	relative
 } = require('path');
@@ -22,13 +21,27 @@ async function install (p = cwd()) {
 	}
 	const dir = relative(p, hooksDir);
 	try {
+		try {
+			const gitHooksPrefix = join(exec('git rev-parse --show-toplevel', p), '.git', 'hooks');
+			const oldHooks = [
+				join(gitHooksPrefix, 'pre-commit'),
+				join(gitHooksPrefix, 'prepare-commit-msg')
+			];
+			
+			for (const file of oldHooks) {
+				if (existsSync(file)) {
+					unlink(file);
+				}
+			}
+		} catch { /**/ }
+
 		process.stderr.write(
 			exec('husky install ' + dir, p)
 		);
 	} catch (e) {
 		if (/(.git can't be found)|(not allowed)/.test(e)) {
-			console.error('\n\n\n\nWorkspace detected (%s)\n\n\n\n', p);
 			if (p === cwd()) {
+				console.error('\n\n\n\nWorkspace detected (%s)\n\n\n\n', p);
 				return (await listProjects(p)).map(install);
 			} 
 
