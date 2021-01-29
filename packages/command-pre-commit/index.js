@@ -28,38 +28,40 @@ function getStyleLint () {
 
 async function main () {
 	const files = (run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? []);
-	const jsFiles = files.filter(isJS).map(load);
-	const ssFiles = files.filter(isSs).map(load);
 
 	let errors = 0;
-	for (const {file, content} of jsFiles) {
-		const eslint = getESLint();
-		const results = await eslint.lintText(content, {filePath: file});
+	for (const change of files) {
+		const {file, content} = (isJS(change) || isSs(change)) ? load(change) : {};
 
-		errors = results.reduce((a,r) => a + r.errorCount, errors);
+		if (isJS(change)) {
+			const eslint = getESLint();
+			const results = await eslint.lintText(content, {filePath: file});
 
-		const formatter = await eslint.loadFormatter('stylish');
-		const resultText = formatter.format(results);
-		process.stderr.write(resultText);
-	}
+			errors = results.reduce((a,r) => a + r.errorCount, errors);
 
-	for (const {file, content} of ssFiles) {
-		const stylelint = getStyleLint();
-		const results = await stylelint.lint({
-			config: require('@nti/stylelint-config-standard'),
-			// configOverrides: {
-			// 	rules: {
-			// 		'no-missing-end-of-source-newline': false,
-			// 	}
-			// },
-			code: content,
-			codeFilename: file,
-			formatter: 'string',
-		});
-		if (results.errored) {
-			errors++;
+			const formatter = await eslint.loadFormatter('stylish');
+			const resultText = formatter.format(results);
+			process.stderr.write(resultText);
 		}
-		process.stderr.write(results.output);
+
+		if (isSs(change)) {
+			const stylelint = getStyleLint();
+			const results = await stylelint.lint({
+				config: require('@nti/stylelint-config-standard'),
+				// configOverrides: {
+				// 	rules: {
+				// 		'no-missing-end-of-source-newline': false,
+				// 	}
+				// },
+				code: content,
+				codeFilename: file,
+				formatter: 'string',
+			});
+			if (results.errored) {
+				errors++;
+			}
+			process.stderr.write(results.output);
+		}
 	}
 
 	process.exitCode = errors > 0 ? 1 : 0;
