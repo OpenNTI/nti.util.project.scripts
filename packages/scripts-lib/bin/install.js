@@ -1,7 +1,7 @@
 'use strict';
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
-const { existsSync, unlink } = require('fs');
+const { existsSync, unlink, appendFileSync } = require('fs');
 const {
 	join,
 	relative
@@ -14,10 +14,16 @@ const exec = (x, work = cwd()) => execSync(x, {cwd: work, env: process.env}).toS
 
 const hooksDir = join(process.cwd(), 'hooks');
 
-async function install (root = cwd(), leaf) {
-	if (isCI) {
+const log = (msg) => appendFileSync(join(cwd(), '.install.log'), msg + '\n');
+
+
+async function install (root = cwd(), leaf = false) {
+	if (isCI || /\/\.npm|tmp\//.test(hooksDir)) {
 		return;
 	}
+
+	log(`New install: ${process.env.INIT_CWD}\t\t${process.cwd()}\t\t${hooksDir}`);
+
 	const execInRoot = cmd => exec(cmd, root);
 	const hooksRelativeToRoot = relative(root, hooksDir);
 	try {
@@ -32,12 +38,13 @@ async function install (root = cwd(), leaf) {
 			for (const file of oldHooks) {
 				if (existsSync(file)) {
 					unlink(file);
+					log(`Removed: ${file}`);
 				}
 			}
 		} catch { /**/ }
 
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
-		process.stderr.write(
+		log(
 			execInRoot('husky install ' + hooksRelativeToRoot)
 		);
 	} catch (e) {
@@ -45,12 +52,13 @@ async function install (root = cwd(), leaf) {
 		if (/(.git can't be found)|(not allowed)/.test(e)) {
 			if (root === cwd() && !leaf) {
 
-				console.info('\n\n\n\nWorkspace detected (%s)\n', root);
-				return (await listProjects(root))
-					.map(x => install(x, true));
+				log(`Workspace detected (${root})`);
+				return Promise.all((await listProjects(root))
+					.map(x => install(x, true)));
 			}
 
 			if (leaf) {
+				log(`Setting hooks dir ${root} to ${hooksRelativeToRoot}`);
 				return execInRoot(`git config core.hooksPath ${hooksRelativeToRoot}`);
 			}
 		}
