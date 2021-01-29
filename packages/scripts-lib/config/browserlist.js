@@ -1,10 +1,9 @@
 'use strict';
 const {agents} = require('caniuse-lite/dist/unpacker/agents');
 const browserslist = require('browserslist');
-const chalk = require('chalk');
 const {isCI} = require('ci-info');
 
-const LINTER = /eslint$/i.test(process.argv[1]);
+const LINTER = /pre-commit|eslint$/i.test(process.argv[1]);
 
 const isWorker = LINTER || process.argv.some(x => (/thread-loader.*worker/ig).test(x)) || process.env.NTI_BROWSER_LIST_PRINTED != null;
 
@@ -20,6 +19,7 @@ const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROW
 
 
 if (!isWorker && (process.stdout.isTTY || isCI)) {
+	const chalk = require('chalk');
 	process.env.NTI_BROWSER_LIST_PRINTED = true;
 	const byLocale = (a, b) => a.localeCompare(b);
 	const getName = n => (agents[n] || {}).browser || n;

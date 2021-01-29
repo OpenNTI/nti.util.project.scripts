@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/bin/sh
+. "$(dirname $0)/_/husky.sh"
+
+set +e
+
 if [ -z "$BRANCHES_TO_SKIP" ]; then
   BRANCHES_TO_SKIP=(master develop test)
 fi

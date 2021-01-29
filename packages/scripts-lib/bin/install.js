@@ -1,48 +1,46 @@
 'use strict';
 const { execSync } = require('child_process');
-const { mkdir, readFile, writeFile } = require('fs').promises;
-const { join, basename } = require('path');
-const {isCI} = require('ci-info');
+const { isCI } = require('ci-info');
+// const { mkdir, readFile, writeFile } = require('fs').promises;
+const {
+	// basename,
+	join,
+	relative
+} = require('path');
+const { listProjects } = require('./list');
 require('./validate-env.js');
 
+
 const cwd = () => process.env.INIT_CWD ?? process.cwd();
-const exec = x => execSync(x, {cwd: cwd()}).toString('utf8').trim();
+const exec = (x, work = cwd()) => execSync(x, {cwd: work, env: process.env}).toString('utf8').trim();
 
-const hookSrc = [
-	join(__dirname, 'pre-commit-hook.sh'),
-	join(__dirname, 'prepare-commit-msg-hook.sh')
-];
+const hooksDir = join(process.cwd(), 'hooks');
 
-async function installHooks (basepath) {
-	const [ , ...out] = await Promise.all([
-		mkdir(basepath, {recursive: true}),
-		...hookSrc.map(async x => ({
-			dest: join(basepath, basename(x, '-hook.sh')),
-			content: await readFile(x)
-		}))
-	]);
-
-	await Promise.all(out.map(x =>
-		writeFile(x.dest, x.content, {mode: 0o777})
-	));
-}
-
-
-(async () => {
+async function install (p = cwd()) {
 	if (isCI) {
 		return;
 	}
-	let hooks;
+	const dir = relative(p, hooksDir);
 	try {
-		hooks = [
-			join(exec('git rev-parse --show-toplevel'), '.git', 'hooks')
-		];
-	} catch {
-		// not in a git repo
-		hooks = [];
-		console.log('Not GIT: %s\n%o', cwd(), process.argv);
+		process.stderr.write(
+			exec('husky install ' + dir, p)
+		);
+	} catch (e) {
+		if (/(.git can't be found)|(not allowed)/.test(e)) {
+			console.error('\n\n\n\nWorkspace detected (%s)\n\n\n\n', p);
+			if (p === cwd()) {
+				return (await listProjects(p)).map(install);
+			} 
+
+			return exec(`git config core.hooksPath ${dir}`, p);
+		}
+
+		throw e;
 	}
+}
 
-	await Promise.all(hooks.map(installHooks));
-
-})().catch(x => console.error(x.stack || x));
+install()
+	.catch(x => {
+		console.error(x.stack || x);
+		process.exitCode = 1;
+	});

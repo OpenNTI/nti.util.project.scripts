@@ -1,13 +1,10 @@
 #!/bin/sh
-unset VSCODE_PID
-unset ATOM_HOME
-set -e
-export NODE_ENV=production
+. "$(dirname $0)/_/husky.sh"
 
 for i in $(git diff --diff-filter=d --cached --name-only);
 do
 	if [[ $i =~ (([cm]?jsx?)|(s?[ca]ss))$ ]]; then
-		npx --no-install @nti/pre-commit;
-		break;
+		npx @nti/pre-commit;
+		exit 0;
 	fi
 done
