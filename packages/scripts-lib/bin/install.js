@@ -14,7 +14,7 @@ const exec = (x, work = cwd()) => execSync(x, {cwd: work, env: process.env}).toS
 
 const hooksDir = join(process.cwd(), 'hooks');
 
-const log = (msg) => appendFileSync('~/.install.log', msg + '\n');
+const log = (msg) => appendFileSync(join(process.env.HOME, '.install.log'), msg + '\n');
 
 
 async function install (root = cwd(), leaf = false) {
