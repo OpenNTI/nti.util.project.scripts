@@ -14,7 +14,7 @@ const exec = (x, work = cwd()) => execSync(x, {cwd: work, env: process.env}).toS
 
 const hooksDir = join(process.cwd(), 'hooks');
 
-const log = (msg) => appendFileSync(join(cwd(), '.install.log'), msg + '\n');
+const log = (msg) => appendFileSync('~/.install.log', msg + '\n');
 
 
 async function install (root = cwd(), leaf = false) {
@@ -22,7 +22,9 @@ async function install (root = cwd(), leaf = false) {
 		return;
 	}
 
-	log(`New install: ${process.env.INIT_CWD}\t\t${process.cwd()}\t\t${hooksDir}`);
+	if (!leaf) {
+		log(`New install:\n\t${process.env.INIT_CWD}\n\t${process.cwd()}\n\t${hooksDir}`);
+	}
 
 	const execInRoot = cmd => exec(cmd, root);
 	const hooksRelativeToRoot = relative(root, hooksDir);
