@@ -65,7 +65,7 @@ async function install (root = cwd(), leaf = false) {
 			}
 		} catch { /**/ }
 
-		if (!usesScripts(root)) {
+		if (leaf && !usesScripts(root)) {
 			log('Ignored, path does not use nti.scripts: ' + root);
 			return;
 		}
