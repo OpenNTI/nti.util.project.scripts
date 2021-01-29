@@ -1,10 +1,10 @@
 'use strict';
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
-const { existsSync, unlink, appendFileSync } = require('fs');
+const { existsSync, unlink, appendFileSync, fstat, readFileSync } = require('fs');
 const {
 	join,
-	relative
+	relative,
 } = require('path');
 const { listProjects } = require('./list');
 require('./validate-env.js');
@@ -17,6 +17,23 @@ const logFile = join(process.env.HOME, '.nti-install.log');
 const log = existsSync(logFile)
 	? (msg) => appendFileSync(logFile, msg + '\n')
 	: (x) => console.log(x);
+
+
+function usesScripts (dir) {
+	try {
+		const {dependencies, devDependencies} = JSON.parse(readFileSync(join(dir, 'package.json')));
+		const scripts = [
+			'@nti/app-scripts',
+			'@nti/cmp-scripts',
+			'@nti/lib-scripts',
+		];
+		return scripts.some(x => x in dependencies || x in devDependencies);
+
+	} catch {
+		// if package.json doesn't exist the answer is false.
+	}
+	return false;
+}
 
 
 async function install (root = cwd(), leaf = false) {
@@ -48,6 +65,12 @@ async function install (root = cwd(), leaf = false) {
 			}
 		} catch { /**/ }
 
+		if (!usesScripts(root)) {
+			log('Ignored, path does not use nti.scripts: ' + root);
+			return;
+		}
+
+		log('husky install: ' + hooksRelativeToRoot);
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
 		log(
 			execInRoot('husky install ' + hooksRelativeToRoot)
@@ -56,19 +79,33 @@ async function install (root = cwd(), leaf = false) {
 
 		if (/(.git can't be found)|(not allowed)/.test(e)) {
 			if (root === cwd() && !leaf) {
-
 				log(`Workspace detected (${root})`);
 				return Promise.all((await listProjects(root))
 					.map(x => install(x, true)));
 			}
 
 			if (leaf) {
-				log(`Setting hooks dir ${root} to ${hooksRelativeToRoot}`);
+				log(`Setting hooks dir for ${root} to ${hooksRelativeToRoot}`);
 				return execInRoot(`git config core.hooksPath ${hooksRelativeToRoot}`);
 			}
 		}
 
 		throw e;
+
+	} finally {
+		try {
+			// If in a git repo, get the configured hooks dir
+			const p = execInRoot('git config core.hooksPath');
+			if (p) {
+				// Throw an error if the path 'p' is not tracked
+				execInRoot('git ls-files --error-unmatch ' + p);
+				// If we didn't throw, then the file is tracked and we are
+				// in the project-scripts project, remove the hook.
+				execInRoot('git config --unset core.hooksPath');
+			}
+		} catch {
+			// If it throws, we are good... if it doesn't then we cleaned up.
+		}
 	}
 }
 
