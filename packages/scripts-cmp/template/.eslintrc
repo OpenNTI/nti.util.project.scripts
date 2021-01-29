@@ -1,6 +1,0 @@
-{
-	"extends": "../../lint-config-app-scripts",
-	"rules": {
-		"import/no-extraneous-dependencies": 0
-	}
-}
