@@ -213,6 +213,11 @@ export async function performRelease (tasks, {dir, branch, repo, command, pkg, u
 		await call(command, [task]);
 	}
 
+	const LastYear = new Date().getFullYear() - 1;
+	if (branch === 'master' && semver.parse(pkg.version)?.major === LastYear) {
+		major = true;
+	}
+
 	const inc = branch === 'master' ? (major ? 'major' : 'minor') : 'patch';
 	const version = semver.inc(pkg.version, inc);
 	const newTag = `v${version}`;
