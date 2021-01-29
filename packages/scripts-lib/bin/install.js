@@ -8,17 +8,20 @@ const {
 } = require('path');
 const { listProjects } = require('./list');
 require('./validate-env.js');
-
 const cwd = () => process.env.INIT_CWD ?? process.cwd();
 const exec = (x, work = cwd()) => execSync(x, {cwd: work, env: process.env}).toString('utf8').trim();
 
 const hooksDir = join(process.cwd(), 'hooks');
 
-const log = (msg) => appendFileSync(join(process.env.HOME, '.install.log'), msg + '\n');
+const logFile = join(process.env.HOME, '.nti-install.log');
+const log = existsSync(logFile)
+	? (msg) => appendFileSync(logFile, msg + '\n')
+	: (x) => console.log(x);
 
 
 async function install (root = cwd(), leaf = false) {
 	if (isCI || /\/\.npm|tmp\//.test(hooksDir)) {
+		log(`Ignored install:\n\t${process.env.INIT_CWD}\n\t${process.cwd()}\n\t${hooksDir}`);
 		return;
 	}
 
