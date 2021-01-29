@@ -1,7 +1,7 @@
 'use strict';
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
-const { existsSync, unlink, appendFileSync, fstat, readFileSync } = require('fs');
+const { existsSync, unlink, appendFileSync, readFileSync } = require('fs');
 const {
 	join,
 	relative,
