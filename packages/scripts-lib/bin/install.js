@@ -21,13 +21,15 @@ const log = existsSync(logFile)
 
 function usesScripts (dir) {
 	try {
-		const {dependencies, devDependencies} = JSON.parse(readFileSync(join(dir, 'package.json')));
+		const {name, dependencies, devDependencies} = JSON.parse(readFileSync(join(dir, 'package.json')));
 		const scripts = [
 			'@nti/app-scripts',
 			'@nti/cmp-scripts',
 			'@nti/lib-scripts',
 		];
-		return scripts.some(x => x in dependencies || x in devDependencies);
+
+		return name === '@nti/project-scripts'
+			|| scripts.some(x => x in dependencies || x in devDependencies);
 
 	} catch {
 		// if package.json doesn't exist the answer is false.
@@ -70,7 +72,6 @@ async function install (root = cwd(), leaf = false) {
 			return;
 		}
 
-		log('husky install: ' + hooksRelativeToRoot);
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
 		log(
 			execInRoot('husky install ' + hooksRelativeToRoot)
@@ -94,7 +95,7 @@ async function install (root = cwd(), leaf = false) {
 
 	} finally {
 		try {
-			// If in a git repo, get the configured hooks dir
+			// If in a git repo, get the configured hooks dir (will throw if not a git repo)
 			const p = execInRoot('git config core.hooksPath');
 			if (p) {
 				// Throw an error if the path 'p' is not tracked
