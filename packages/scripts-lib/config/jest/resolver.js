@@ -6,6 +6,8 @@ const fs = require('fs-extra');
 
 const CACHE = {};
 
+const NTI_MAPPED = /^@nti\/[^/]+\/src$/;
+
 module.exports = function (request, context) {
 	// try {
 	const { basedir, rootDir } = context;
@@ -25,16 +27,32 @@ module.exports = function (request, context) {
 		}
 	}
 
+	const ntiContext = {
+		...context,
+		packageFilter(pkg, pkgFile, dir) {
+			dir = (dir || pkgFile).replace(/package\.json$/, '');
+			if (pkg.module && fs.existsSync(path.join(dir, pkg.module))) {
+				return {
+					...pkg,
+					main: pkg.module
+				};
+			}
+
+			return pkg;
+		}
+	};
+
 	const key = request + '|' + JSON.stringify(context);
+	const resolveOpts = request.startsWith('@nti/') ? ntiContext : context;
 	try {
 		if (CACHE[key]) {
 			return CACHE[key];
 		}
 
-		return CACHE[key] = resolve.sync(request, context);
+		return CACHE[key] = resolve.sync(request, resolveOpts);
 	} catch (e) {
 		return CACHE[key] = resolve.sync(request, {
-			...context,
+			...resolveOpts,
 			basedir: rootDir || basedir
 		});
 	}
