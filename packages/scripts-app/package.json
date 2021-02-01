@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.31.48",
+  "version": "2.31.49",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -30,7 +30,7 @@
     "@nti/dev-ssl-config": "^2.31.33",
     "@nti/eslint-config-app-scripts": "^2.31.36",
     "@nti/git-state": "^5.0.0",
-    "@nti/lib-scripts": "^2.31.48",
+    "@nti/lib-scripts": "^2.31.49",
     "@nti/style-common": "NextThought/nti.style.common",
     "@nti/stylelint-config-standard": "^2.31.34",
     "@nti/web-service": "^1.42.0",
