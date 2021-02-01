@@ -8,6 +8,7 @@ const {
 } = paths;
 
 module.exports = function copyStaticAssets () {
+	//TODO: Ensure SRC_SERVER is a directory not a file.
 	return fs.copySync(
 		SRC_SERVER,
 		DIST_SERVER
