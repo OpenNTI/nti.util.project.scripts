@@ -156,7 +156,9 @@ module.exports = {
 		'space-infix-ops': ['error', {'int32Hint': true}],
 		'space-unary-ops': ['warn', { 'words': true, 'nonwords': false }],
 		'strict': ['error', 'never'],
-		'valid-jsdoc': ['warn', {
+		'valid-jsdoc': ['error', {
+			// Please follow https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
+			// https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html
 			'prefer': {
 				'arg': 'param',
 				'argument': 'param',
