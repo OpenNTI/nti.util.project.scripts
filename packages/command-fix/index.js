@@ -95,6 +95,10 @@ inquirer.prompt([
 
 
 function handleResponse ({fix = list[0]}) {
+	if (!fix) {
+		write('\n\nNothing to do. Exiting.');
+		return;
+	}
 	// const call = write;
 	const {tag, maint} = fix;
 	const maintRemote = `remotes/origin/${maint}`;
