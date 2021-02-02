@@ -27,7 +27,7 @@
 		"build-webapp": "cd app/webapp; npm run build -- --skip-checks"
 	},
 	"engines": {
-		"npm": ">=7.0.0",
+		"npm": ">=7.5.2",
 		"node": ">=14.0.0"
 	},
 	"dependencies": {
