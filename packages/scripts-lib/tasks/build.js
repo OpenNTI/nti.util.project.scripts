@@ -45,17 +45,19 @@ else {
 	const signal = new Cancelable();
 	const task = (p, label) => {
 		if (typeof p === 'string') {
-			p = exec(paths.path, `node ${path.resolve(activeScripts,p)}`, signal)
-				.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
+			p = exec(paths.path, p, signal)
+				.catch(x => x !== 'canceled' && (console.error(x), signal.cancel(), Promise.reject(x)));
 		}
 		ora.promise(p, label);
+		return p;
 	};
+	const subTask = (t, label) => task(`node ${path.resolve(activeScripts,t)}`, label);
 
 
 	if (!SKIP) {
 		tasks.push(
-			task('./check', 'Linting...'),
-			task('./test', 'Tests...'),
+			subTask('./check', 'Linting...'),
+			subTask('./test', 'Tests...'),
 			task(exec.npx('@nti/gen-docs'), 'Generating docs...')
 		);
 	}
