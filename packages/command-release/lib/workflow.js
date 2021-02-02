@@ -4,7 +4,7 @@ import inquirer from 'inquirer';
 import { preflightChecks, performRelease } from './project.js';
 import { WhatKindOfRelease, WhatRepositories } from './questions.js';
 import { arg } from './utils.js';
-import { call } from './exec.js';
+import { npx } from './exec.js';
 
 const FORCE_MAJOR = arg('--major', 'repo:Force a major version bump');
 
@@ -51,5 +51,5 @@ export async function maybeClone () {
 		return;
 	}
 
-	await call('npx --yes -p @nti/clone clone');
+	await npx('@nti/clone');
 }

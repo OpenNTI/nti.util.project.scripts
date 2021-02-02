@@ -1,6 +1,8 @@
 /* eslint-disable camelcase */
 import * as child_process from 'child_process';
 
+import semver from 'semver';
+
 const STDIO = { stdio: 'inherit' };
 
 export async function exec (cwd, command) {
@@ -33,5 +35,22 @@ export function call (cmd, args, opts = STDIO, printStdError = false) {
 
 	if (result.stdout) {
 		return result.stdout.toString('utf8');
+	}
+}
+
+export async function npx (cmd, cwd = process.cwd()) {
+	try {
+		if (npx.needsFlag == null) {
+			const version = execSync(cwd, 'npx --version');
+			npx.needsFlag = semver.satisfies(version, '>=7.0.0');
+		}
+
+		return call([
+			'npx',
+			...(npx.needsFlag ? ['--yes'] : []),
+			cmd,
+		].join(' '));
+	} catch (e) {
+		throw new Error('Failed to execute npx.\b\nCaused by:' + (e.stack || e.message));
 	}
 }

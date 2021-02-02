@@ -43,23 +43,24 @@ else {
 	const spinner = ora('Building...').start();
 	const tasks = [];
 	const signal = new Cancelable();
-	const call = (cmd, msg) => {
-		const t = exec(paths.path, cmd, signal)
-			.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
-		ora.promise(t, msg);
-		return t;
+	const task = (p, label) => {
+		if (typeof p === 'string') {
+			p = exec(paths.path, `node ${path.resolve(activeScripts,p)}`, signal)
+				.catch(x => x !== 'canceled' && (signal.cancel(), Promise.reject(x)));
+		}
+		ora.promise(p, label);
 	};
 
 
 	if (!SKIP) {
 		tasks.push(
-			call('node ' + path.resolve(activeScripts, './check'), 'Linting...'),
-			call('node ' + path.resolve(activeScripts, './test'), 'Tests...'),
-			call('npx --yes -p @nti/gen-docs gen-docs', 'Generating docs...')
+			task('./check', 'Linting...'),
+			task('./test', 'Tests...'),
+			task(exec.npx('@nti/gen-docs'), 'Generating docs...')
 		);
 	}
 
-	tasks.push(call(process.argv.join(' '), 'Building...'));
+	tasks.push(task(process.argv.join(' '), 'Building...'));
 
 	Promise.all(tasks)
 		.then(() => {

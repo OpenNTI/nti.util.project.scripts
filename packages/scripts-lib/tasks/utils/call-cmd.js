@@ -1,5 +1,6 @@
 'use strict';
-const {spawnSync, exec} = require('child_process');
+const {spawnSync, exec, execSync} = require('child_process');
+const semver = require('semver');
 
 const STDIO = { stdio: 'inherit' };
 
@@ -46,3 +47,23 @@ call.exec = (cwd, cmd, cancelable) => new Promise((finish, fail) => {
 		}
 	});
 });
+
+
+call.npx = npx;
+
+async function npx (cmd, cwd = process.cwd()) {
+	try {
+		if (npx.needsFlag == null) {
+			const version = execSync('npx --version', {cwd}).toString('utf8').trim();
+			npx.needsFlag = semver.satisfies(version, '>=7.0.0');
+		}
+
+		return call([
+			'npx',
+			...(npx.needsFlag ? ['--yes'] : []),
+			cmd,
+		].join(' '));
+	} catch (e) {
+		throw new Error('Failed to execute npx.\b\nCaused by:' + (e.stack || e.message));
+	}
+}
