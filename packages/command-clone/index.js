@@ -148,6 +148,16 @@ if (options.preset && PRESETS[options.preset]) {
 			await exec('.', 'git commit -m "Initial clone"');
 		}
 
+
+		if (options.workspace) {
+			console.log(`
+			Your workspace is ready to install. From here, run: npm install
+
+			If you have a local buildout of the dataserver, or do not want
+			to run the container build step, set environment variable
+			NTI_SKIP_DOCKER to any non-empty value.
+			`.replace(/\t/g, ''));
+		}
 	}
 	catch(e) {
 		console.error('\n\nOuch... \n',e.stack || e);
