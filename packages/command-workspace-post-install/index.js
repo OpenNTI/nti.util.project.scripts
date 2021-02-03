@@ -63,9 +63,8 @@ function cleanDupes () {
 	});
 
 	// Server requires its dependencies (content packages/client settings) be locally present (under its own node_modules)
-	execSync('npm install', {
+	execSync('npm install --silent', {
 		cwd: resolve('./server'),
 		stdio: 'inherit'
 	});
-
 })();
