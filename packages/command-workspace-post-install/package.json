@@ -1,0 +1,14 @@
+{
+  "name": "@nti/workspace-post-install",
+  "version": "2.31.53",
+  "description": "",
+  "bin": {
+    "workspace-post-install": "index.js"
+  },
+  "main": "index.js",
+  "type": "module",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ora": "^5.3.0"
+  }
+}
