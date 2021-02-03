@@ -122,9 +122,11 @@ if (options.preset && PRESETS[options.preset]) {
 	Object.assign(options, PRESETS[options.preset]);
 }
 
-const spinner = ora('Starting...').start();
-getRepositories(options)
-	.then(async existing => {
+
+(async () => {
+	const spinner = ora('Starting...').start();
+	try {
+		const existing = await getRepositories(options);
 		spinner.stop();
 
 		if (options.git) {
@@ -139,16 +141,15 @@ getRepositories(options)
 				existing.unshift(process.cwd());
 			}
 		}
-		return clone({...options, existing});
-	})
-	.then(async () => {
-		if (!options.git) {
-			return;
-		}
-		await exec('.', 'git add . -f');
-		await exec('.', 'git commit -m "Initial clone"');
-	})
-	.catch(e => {
-		console.error('\n\nOuch... \n',e.stack || e);
-	});
+		await clone({...options, existing});
 
+		if (options.git) {
+			await exec('.', 'git add . -f');
+			await exec('.', 'git commit -m "Initial clone"');
+		}
+
+	}
+	catch(e) {
+		console.error('\n\nOuch... \n',e.stack || e);
+	}
+})();
