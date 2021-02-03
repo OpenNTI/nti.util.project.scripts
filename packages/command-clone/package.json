@@ -1,6 +1,6 @@
 {
   "name": "@nti/clone",
-  "version": "2.31.53",
+  "version": "2.32.0",
   "description": "",
   "bin": {
     "clone": "index.js"
