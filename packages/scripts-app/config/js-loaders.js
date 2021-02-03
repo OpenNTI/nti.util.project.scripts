@@ -31,7 +31,9 @@ const loaders = () => {
 						sourceType: 'unambiguous',
 						presets: [
 							require.resolve('./babel.config.js'),
-						]
+						],
+						// Webpack 4 will blow up if these are not enabled...
+						plugins: ['@babel/plugin-proposal-nullish-coalescing-operator', '@babel/plugin-proposal-optional-chaining']
 					}
 				},
 				{
