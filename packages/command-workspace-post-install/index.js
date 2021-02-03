@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import {exec, execSync} from 'child_process';
 import {promises as fs} from 'fs';
 import {dirname, resolve} from 'path';
