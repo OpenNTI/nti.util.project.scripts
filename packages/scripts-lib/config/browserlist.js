@@ -1,23 +1,30 @@
+//#region Imports, constants, utils
 'use strict';
 const {agents} = require('caniuse-lite/dist/unpacker/agents');
 const browserslist = require('browserslist');
 const {isCI} = require('ci-info');
 
 const LINTER = /pre-commit|eslint$/i.test(process.argv[1]);
-
 const isWorker = LINTER || process.argv.some(x => (/thread-loader.*worker/ig).test(x)) || process.env.NTI_BROWSER_LIST_PRINTED != null;
-
 const hasValue = x => x && x !== 'null';
-
 const { NTI_DEV_BROWSER } = process.env;
+//#endregion
+
+/********************************************
+ * This is our main supported browser query *
+ ********************************************/
 const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROWSER.split(',') : [
-	'> 1% in US and last 2 versions',
-	'Edge >= 17',
+	// This is the primary set:
+	'> 1% and last 2 versions',
+	// The last non-chromium Edge
+	// 'Edge 17',
+	// We should keep these for good measure.
 	'not dead',
+	// No IEs, dead or not
 	'not IE >= 0',
 ];
 
-
+//#region debug logging
 if (!isWorker && (process.stdout.isTTY || isCI)) {
 	const chalk = require('chalk');
 	process.env.NTI_BROWSER_LIST_PRINTED = true;
@@ -49,3 +56,4 @@ Developers may locally override this using the environment variable:
 `);
 
 }
+//#endregion
