@@ -101,7 +101,7 @@ export async function clone (options) {
 		}
 
 		if (options.workspace) {
-			if (!options.workspace.listed) {
+			if (options.workspace.nested) {
 				folders = [{path: '.'}];
 			} else {
 				folders = folders

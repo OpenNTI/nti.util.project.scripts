@@ -94,7 +94,7 @@ const options = yargs(hideBin(process.argv))
 	})
 	.option('workspace', {
 		group: 'Workspace:',
-		describe: 'Build a vscode workspace file',
+		describe: 'Build a vscode workspace file (defaults to the listed variant)',
 		type: 'boolean'
 	})
 	.option('workspace.listed', {
@@ -102,9 +102,14 @@ const options = yargs(hideBin(process.argv))
 		description: 'Build a vscode workspace file that lists each repository as a folder instead of rooting in the workspace.',
 		type: 'boolean'
 	})
+	.option('workspace.nested', {
+		group: 'Workspace:',
+		description: 'Build a vscode workspace file with the workspace root as the main entry exposing the directory structure.',
+		type: 'boolean'
+	})
 	.option('git', {
 		group: 'Workspace:',
-		describe: 'Initialize a git repository and add cloned projects as children',
+		describe: 'Experimental: Initialize a git repository and add all projects as submodules.',
 		type: 'boolean'
 	})
 	.wrap(process.stdout.columns)
