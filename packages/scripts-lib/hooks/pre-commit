@@ -3,12 +3,16 @@
 
 x=`pwd`
 while [ "$x" != "/" ] ; do
-    x=`dirname "$x"`;
 	if [ -f $x/node_modules/.bin/pre-commit ]; then
 		PATH=$x/node_modules/.bin:$PATH;
 		break;
 	fi
+	x=`dirname "$x"`;
 done
 
 # installed by @nti/lib-scripts (-> @nti/pre-commit)
+if ! type pre-commit > /dev/null; then
+	echo "Fatal! Failed to find pre-commit bin from @nti/pre-commit! (hook disabled)"
+	exit 0;
+fi
 pre-commit
