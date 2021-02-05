@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
-const {exec} = require('./utils/call-cmd');
+const {exec, npx} = require('./utils/call-cmd');
 const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
@@ -58,7 +58,7 @@ else {
 		tasks.push(
 			subTask('./check', 'Linting...'),
 			subTask('./test', 'Tests...'),
-			task(exec.npx('@nti/gen-docs'), 'Generating docs...')
+			task(npx('@nti/gen-docs'), 'Generating docs...')
 		);
 	}
 
