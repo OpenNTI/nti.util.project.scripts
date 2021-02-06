@@ -1,0 +1,14 @@
+{
+  "name": "@nti/workspace-refresh",
+  "version": "2.32.2",
+  "description": "",
+  "bin": {
+    "workspace-refresh": "index.js"
+  },
+  "main": "index.js",
+  "type": "module",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "ora": "^5.3.0"
+  }
+}
