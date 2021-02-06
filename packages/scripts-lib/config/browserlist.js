@@ -16,7 +16,7 @@ const { NTI_DEV_BROWSER } = process.env;
 const query = module.exports = !isCI && hasValue(NTI_DEV_BROWSER) ? NTI_DEV_BROWSER.split(',') : [
 	// This is the primary set:
 	'> 1% and last 2 versions',
-	// The last non-chromium Edge
+	// The last non-chromium Edge (https://www.engadget.com/microsoft-edge-legacy-phase-out-232116614.html)
 	// 'Edge 17',
 	// We should keep these for good measure.
 	'not dead',
