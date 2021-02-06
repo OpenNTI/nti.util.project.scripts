@@ -13,9 +13,7 @@ async function clean () {
 	const moduleDirs = candidates.filter((x, i, a) => !a.slice(0,i).find(y => x.startsWith(y)));
 	return Promise.all(moduleDirs.map(x =>
 		// remove the node_modules
-		fs.rm(x, {force: true, recursive:true})
-			// ignore errors
-			.catch(e => console.warn(e.message))));
+		fs.rm(x, {force: true, recursive:true})))
 }
 
 
