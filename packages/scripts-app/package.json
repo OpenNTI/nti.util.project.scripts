@@ -1,6 +1,6 @@
 {
   "name": "@nti/app-scripts",
-  "version": "2.33.1",
+  "version": "2.33.2",
   "description": "app-specific scripts & dependencies",
   "bin": {
     "app-scripts": "./bin/cli.js"
@@ -30,7 +30,7 @@
     "@nti/dev-ssl-config": "^2.31.33",
     "@nti/eslint-config-app-scripts": "^2.31.51",
     "@nti/git-state": "^5.0.0",
-    "@nti/lib-scripts": "^2.33.1",
+    "@nti/lib-scripts": "^2.33.2",
     "@nti/style-common": "NextThought/nti.style.common",
     "@nti/stylelint-config-standard": "^2.31.34",
     "@nti/web-service": "^1.42.0",
@@ -78,7 +78,7 @@
     "thread-loader": "^3.0.0",
     "tmp": "0.x.x",
     "url-loader": "^4.0.0",
-    "webpack": "^4.41.5",
+    "webpack": "^5.21.1",
     "webpack-dev-server": "^3.10.2",
     "webpack-format-messages": "^2.0.6",
     "whatwg-fetch": "^3.0.0",
