@@ -82,6 +82,7 @@ const loaders = (paths, options = {}) => {
 	return [
 		{
 			test: /\.s(a|c)ss$/,
+			sideEffects: true,
 			use: [
 				style(options.server),
 				css(),
@@ -94,6 +95,7 @@ const loaders = (paths, options = {}) => {
 		{
 			test: /\.css$/,
 			include: ntiStyleDirs,
+			sideEffects: true,
 			use: [
 				style(options.server),
 				css({
@@ -110,6 +112,7 @@ const loaders = (paths, options = {}) => {
 
 		{
 			test: /\.css$/,
+			sideEffects: true,
 			exclude: ntiStyleDirs,
 			use: [
 				style(options.server),

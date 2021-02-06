@@ -1,15 +1,24 @@
 'use strict';
+const {totalmem} = require('os');
 const {spawnSync} = require('child_process');
 const {resolveAppDir} = require('./resolve-app-dir');
 
 const inspect = process.argv.slice(3).some(x => x.startsWith('--inspect'));// --inspect-brk
+
+const megabytes = bytes => Math.round(bytes / Math.pow(1024, 2));
+const MIN_RAM = 8192;
+const MAX_RAM = megabytes(totalmem() * 0.75);
+
+if (MAX_RAM < MIN_RAM) {
+	console.warn('\n\n\n!!! Low total system memory detected. This build may fail.\n\n\n');
+}
 
 module.exports = function run (scriptFile, name, args) {
 
 	const result = spawnSync('node',
 		[
 			inspect && '--inspect-brk',
-			'--max-old-space-size=8192',
+			'--max-old-space-size=' + Math.max(MIN_RAM, MAX_RAM),
 			scriptFile
 		].filter(Boolean).concat(args),
 		{

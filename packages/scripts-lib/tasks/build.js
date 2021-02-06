@@ -9,7 +9,7 @@ const {exec, npx} = require('./utils/call-cmd');
 const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
-const WORKER = process.env.__NTI_RELEASING || false;
+const WORKER = process.env.__NTI_RELEASING || false || SKIP;
 const DEBUG = process.argv.includes('--debug');
 
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
