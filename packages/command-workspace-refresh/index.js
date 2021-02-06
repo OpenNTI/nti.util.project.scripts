@@ -19,8 +19,13 @@ async function clean () {
 
 (async function main () {
 	const spinner = ora('Cleaning...').start();
-	await clean();
-	spinner.stop();
+	try {
+		await clean();
+		spinner.stop();
+	} catch (e) {
+		console.error('Could not fully clean node_modules: ', e.message);
+		process.exit(1);
+	}
 
 	execSync('npm install', {
 		cwd: resolve('.'),
