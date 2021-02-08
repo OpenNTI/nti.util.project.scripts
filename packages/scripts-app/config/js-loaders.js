@@ -39,7 +39,7 @@ const loaders = () => {
 				{
 					loader: 'astroturf/loader',
 					options: {
-						extension: '.module.css',
+						allowGlobal: true,
 					},
 				},
 			].filter(Boolean),
@@ -48,6 +48,12 @@ const loaders = () => {
 };
 
 const plugins = () => [
+	new webpack.ProvidePlugin({
+		css: ['astroturf/react', 'css'],
+		styled: ['astroturf/react', 'default'],
+		stylesheet: ['astroturf/react', 'stylesheet'],
+	}),
+
 	!PROD &&
 		new ESLintPlugin({
 			// Do NOT define a baseConfig, let eslint find the config in scope
@@ -78,10 +84,6 @@ const plugins = () => [
 	new webpack.DefinePlugin({
 		'process.browser': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify(ENV),
-	}),
-	new webpack.ProvidePlugin({
-		css: ['astroturf', 'css'],
-		styled: ['astroturf', 'styled'],
 	}),
 ];
 

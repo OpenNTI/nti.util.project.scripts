@@ -52,6 +52,7 @@ function computeConfig() {
 			//Global Template Literal Tags:
 			css: 'readonly',
 			styled: 'readonly',
+			stylesheet: 'readonly',
 		},
 
 		rules: {
