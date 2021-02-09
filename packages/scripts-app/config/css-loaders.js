@@ -7,6 +7,14 @@ const {PROD} = require('./env');
 const workspaceLinks = require('./workspace-links');
 const NotInNodeModules = /^((?!\/node_modules\/).)+$/i;
 
+const requireMaybe = id => {
+	try {
+		return require('fibers');
+	} catch {
+		return false;
+	}
+};
+
 const style = (server) => ({
 	loader: (!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader,
 	options: {
@@ -63,7 +71,7 @@ const sass = (options = {}) => ({
 		implementation: require('sass'),
 		sourceMap: true, // resolve loader requires sourceMaps on for loaders that come before it
 		sassOptions: {
-			fiber: require('fibers'),
+			fiber: requireMaybe('fibers'),
 			...options.sassOptions,
 		},
 	}
