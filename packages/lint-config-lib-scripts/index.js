@@ -82,7 +82,6 @@ module.exports = {
 		ecmaVersion: new Date().getFullYear(),
 		sourceType: 'module',
 		ecmaFeatures: {
-			legacyDecorators: true,
 			impliedStrict: true,
 			globalReturn: false
 		}
