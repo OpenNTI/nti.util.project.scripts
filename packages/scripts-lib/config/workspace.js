@@ -41,60 +41,56 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 	const {debug, verbose, whitelist = false, blacklist = false} = workspaceOptions;
 	const LOG = verbose || debug || DEBUG;
 
-	const packages = {};
+	const projects = [];
 	const aliases = {};
 	console.log('[workspace] Generating workspace bindings...');
 
-	listWorkspacePackages(entryPackage, workspaceOptions)
-		.filter(x => {
-			const dir = path.dirname(x);
-			const pkg = fs.readJsonSync(x, { throws: false });
-			if (!pkg) {
-				console.warn(`[workspace] Ignoring "${dir}". Invalid JSON: ${x}`);
-				return false;
+	for(const x of listWorkspacePackages(entryPackage, workspaceOptions)) {
+		const dir = path.dirname(x);
+		const pkg = fs.readJsonSync(x, { throws: false });
+		if (!pkg) {
+			console.warn(`[workspace] Ignoring "${dir}". Invalid JSON: ${x}`);
+			continue;
+		}
+		projects.push(dir);
+		if (isLinked(x, pkg.name)) {
+			if (LOG) {
+				console.log('[workspace] excluding "%s", because its natively linked by npm.', dir);
 			}
-			if (isLinked(x, pkg.name)) {
-				if (LOG) {
-					console.log('[workspace] excluding "%s", because its natively linked by npm.', dir);
-				}
-				return false;
+			continue;
+		}
+		if (!((pkg.module || pkg.main) && pkg.name)) {
+			continue;
+		}
+
+		if (!include(x, whitelist, blacklist)) {
+			if (LOG) {
+				console.log('[workspace] excluding "%s"', dir);
 			}
-			const has = Boolean((pkg.module || pkg.main) && pkg.name);
+			continue;
+		}
 
-			if (has) {
-				if (!include(x, whitelist, blacklist)) {
-					if (LOG) {
-						console.log('[workspace] excluding "%s"', dir);
-					}
-					return false;
-				}
-
-				const entry = path.join(dir, pkg.module || pkg.main);
-				if (!fs.existsSync(entry)) {
-					if (LOG) {
-						console.warn('[workspace] Ignoring "%s" because it is missing an entry, or the entry specified does not exist.', dir);
-					}
-					return false;
-				}
-
-				if (!isPackageInstalled(dir, workspaceOptions)) {
-					if (LOG || isListed(x, whitelist)) {
-						console.warn('[workspace] Ignoring "%s" because it is not installed.', dir);
-					}
-					return false;
-				}
-
-				if (regexp) {
-					aliases['^' + pkg.name.replace(/([.-/])/g, '\\$1')] = dir;
-				} else {
-					aliases[pkg.name] = dir;
-				}
-
-				packages[pkg.name] = pkg;
+		const entry = path.join(dir, pkg.module || pkg.main);
+		if (!fs.existsSync(entry)) {
+			if (LOG) {
+				console.warn('[workspace] Ignoring "%s" because it is missing an entry, or the entry specified does not exist.', dir);
 			}
+			continue;
+		}
 
-			return has;
-		});
+		if (!isPackageInstalled(dir, workspaceOptions)) {
+			if (LOG || isListed(x, whitelist)) {
+				console.warn('[workspace] Ignoring "%s" because it is not installed.', dir);
+			}
+			continue;
+		}
+
+		if (regexp) {
+			aliases['^' + pkg.name.replace(/([.-/])/g, '\\$1')] = dir;
+		} else {
+			aliases[pkg.name] = dir;
+		}
+	}
 
 	if (LOG) {
 		for (let key of Object.keys(aliases)) {
@@ -108,8 +104,14 @@ module.exports = function getWorkspace (entryPackage, {regexp = false} = {}) {
 		}
 	}
 
-	process.env[ENV_KEY] = JSON.stringify(aliases);
-	return aliases;
+	const results = {
+		aliases,
+		projects,
+		root: workspaceOptions.workspaceDir,
+	};
+
+	process.env[ENV_KEY] = JSON.stringify(results);
+	return results;
 };
 
 

@@ -28,7 +28,7 @@ const thread = require('./thread');
 const {PROD, ENV} = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
-const workspaceLinks = require('./workspace-links');
+const getWorkspace = require('./workspace');
 
 const Configs = exports = module.exports = [];
 const ContentGlobalDefinitions = new webpack.DefinePlugin({
@@ -172,7 +172,7 @@ const ClientConfig = {
 		],
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
-			...workspaceLinks(),
+			...getWorkspace().aliases,
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,

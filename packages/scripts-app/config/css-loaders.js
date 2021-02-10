@@ -4,7 +4,7 @@ const browsers = require('@nti/lib-scripts/config/browserlist');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const {PROD} = require('./env');
-const workspaceLinks = require('./workspace-links');
+const getWorkspace = require('./workspace');
 const NotInNodeModules = /^((?!\/node_modules\/).)+$/i;
 
 const requireMaybe = id => {
@@ -83,8 +83,8 @@ const loaders = (paths, options = {}) => {
 		paths.testApp,
 		paths.ntiModules,
 		NotInNodeModules,
-		//Only process source files in workspaceLinks
-		...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
+		//Only process source files in workspace
+		...(getWorkspace().projects || []).map(x => path.join(x, 'src')),
 	].filter(Boolean);
 
 	return [

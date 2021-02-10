@@ -5,8 +5,8 @@ const webpack = require('webpack');
 
 const {ENV, PROD} = require('./env');
 const paths = require('./paths');
-const workspaceLinks = require('./workspace-links');
-const workspaceContext = path.dirname(paths.path);
+const getWorkspace = require('./workspace');
+const workspaceContext = getWorkspace().root || paths.path;
 
 const jsTestExp = /\.m?jsx?$/;
 
@@ -59,7 +59,7 @@ const plugins = () => [
 		context: workspaceContext,
 		files: [
 			paths.src,
-			...(Object.values(workspaceLinks()).map(x => path.join(x, 'src'))),
+			...(getWorkspace().projects || []).map(x => path.join(x, 'src')),
 		].filter(Boolean)
 			.map(x => path.relative(workspaceContext, x) + '/'),
 

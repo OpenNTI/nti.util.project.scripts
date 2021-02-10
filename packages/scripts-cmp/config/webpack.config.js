@@ -18,7 +18,7 @@ const PROD = false;
 
 const {loaders: jsLoaders, plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
 const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
-const workspaceLinks = require('@nti/app-scripts/config/workspace-links');
+const getWorkspace = require('@nti/app-scripts/config/workspace');
 
 const {name} = require(paths.packageJson);
 
@@ -54,7 +54,7 @@ exports = module.exports = {
 	resolve: {
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
-			...workspaceLinks(),
+			...getWorkspace().aliases,
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,
