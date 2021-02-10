@@ -36,7 +36,7 @@ async function update () {
 
 	await Promise.all(repos.map(repo =>
 		exec(repo, 'git pull --rebase --autostash')
-			.catch(er => console.warn('[warn] %s: %s', repo, er))
+			.catch(er => console.warn('[warn] %s:\n%s', repo, er))
 	));
 }
 
@@ -66,8 +66,8 @@ export async function exec (cwd, command) {
 	return new Promise((fulfill, reject) => {
 		childProcess.exec(command, {cwd}, (err, stdout, stderr) => {
 			if (err) {
-				console.error(stderr.toString('utf8'));
-				return reject(err);
+				return reject(stderr.toString('utf8'));
+				// return reject(err);
 			}
 
 			fulfill(stdout.toString('utf8').trim());
