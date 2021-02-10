@@ -15,7 +15,8 @@
 		"build": "concurrently \"npm:build-*\"",
 		"build-login": "cd app/login; npm run build -- --skip-checks",
 		"build-mobile": "cd app/mobile; npm run build -- --skip-checks",
-		"build-webapp": "cd app/webapp; npm run build -- --skip-checks"
+		"build-webapp": "cd app/webapp; npm run build -- --skip-checks",
+		"refresh": "npx -y @nti/workspace-refresh"
 	},
 	"engines": {
 		"npm": ">=7.5.2",
