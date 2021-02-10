@@ -17,6 +17,7 @@ const merge = require('./utils/merge-config');
 
 const CONSUMED_FLAGS = new Set([
 	'--inspect-service',
+	__filename
 ]);
 
 const write = (...args) => console.log(...args);
