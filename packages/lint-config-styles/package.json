@@ -16,6 +16,7 @@
     "@nti/eslint-config-lib-scripts": "2.33.5",
     "stylelint": "^13.0.0",
     "stylelint-config-css-modules": "^2.2.0",
+    "stylelint-config-prettier":"^8.0.2",
     "stylelint-config-standard": "^20.0.0"
   }
 }

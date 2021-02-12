@@ -2,6 +2,7 @@
 
 module.exports = {
 	'extends': [
+		'stylelint-config-prettier',
 		'stylelint-config-standard',
 		'stylelint-config-css-modules',
 	],
