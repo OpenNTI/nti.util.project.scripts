@@ -9,6 +9,6 @@
   "type": "module",
   "license": "UNLICENSED",
   "dependencies": {
-    "@nti/github-api": "^2.31.10"
+    "@nti/github-api": "2.31.10"
   }
 }

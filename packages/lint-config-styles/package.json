@@ -13,6 +13,7 @@
     "registry": "https://npm.nextthought.com"
   },
   "dependencies": {
+    "@nti/eslint-config-lib-scripts": "2.33.5",
     "stylelint": "^13.0.0",
     "stylelint-config-css-modules": "^2.2.0",
     "stylelint-config-standard": "^20.0.0"

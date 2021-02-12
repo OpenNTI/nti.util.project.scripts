@@ -18,7 +18,7 @@
     "registry": "https://npm.nextthought.com"
   },
   "dependencies": {
-    "@nti/eslint-config-lib-scripts": "^2.33.5",
+    "@nti/eslint-config-lib-scripts": "2.33.5",
     "eslint-plugin-react": "^7.20.5"
   }
 }
