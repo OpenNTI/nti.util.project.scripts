@@ -1,15 +1,15 @@
 /* eslint-disable camelcase */
 'use strict';
-const {promises: fs} = require('fs');
+const { promises: fs } = require('fs');
 const core = require('@actions/core');
 
-const {list} = require('./list');
-const {clone} = require('./clone');
-const {sync, hasChanges} = require('./sync');
+const { list } = require('./list');
+const { clone } = require('./clone');
+const { sync, hasChanges } = require('./sync');
 
-async function main () {
+async function main() {
 	try {
-		if (!await hasChanges()) {
+		if (!(await hasChanges())) {
 			console.log('No changes to sync.');
 			return;
 		}
@@ -19,15 +19,12 @@ async function main () {
 		for (const repo of await list()) {
 			await step(repo);
 		}
-
-
 	} catch (error) {
 		core.setFailed(error.stack || error.message || error);
 	}
 }
 
-
-async function step (repo) {
+async function step(repo) {
 	const dir = await clone(repo);
 	await sync(dir);
 }

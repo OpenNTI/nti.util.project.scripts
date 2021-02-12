@@ -18,10 +18,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          fetch-depth: 0
+          fetch-depth: 10
 
       - name: Setup
-        run: (cd actions/sync; npm i &> ./npm.log)
+        run: (cd actions/sync; npm install)
 
       - name: Sync
         uses: ./actions/sync
