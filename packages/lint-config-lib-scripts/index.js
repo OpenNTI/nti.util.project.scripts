@@ -9,7 +9,7 @@ const configFile = join(
 );
 
 try {
-	module.exports = require(configFile);
+	module.exports = DEV ? require(configFile) : computeConfig();
 } catch {
 	const config = computeConfig();
 	fs.writeFileSync(configFile, JSON.stringify(config, null, 2), {

@@ -5,7 +5,7 @@ const { DEV } = require('@nti/eslint-config-lib-scripts/vars');
 const configFile = join(__dirname, `config.${DEV ? 'dev' : 'prod'}.json`);
 
 try {
-	module.exports = require(configFile);
+	module.exports = DEV ? require(configFile) : computeConfig();
 } catch {
 	const config = computeConfig();
 	fs.writeFileSync(configFile, JSON.stringify(config, null, 2), {
