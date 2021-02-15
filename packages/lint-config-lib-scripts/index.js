@@ -168,7 +168,14 @@ function computeConfig() {
 			'no-use-before-define': ['error', 'nofunc'],
 			'no-var': 'error',
 			'prefer-object-spread': 'warn',
-			quotes: ['warn', 'single'],
+			quotes: [
+				'warn',
+				'single',
+				{
+					avoidEscape: true,
+					allowTemplateLiterals: true,
+				},
+			],
 			radix: 'error',
 			'require-atomic-updates': DEV ? 'warn' : 'off',
 			semi: 'error',
