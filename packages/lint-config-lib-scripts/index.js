@@ -125,7 +125,14 @@ function computeConfig() {
 		reportUnusedDisableDirectives: !DEV,
 		rules: {
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
-			camelcase: ['error', { properties: 'always' }],
+			camelcase: [
+				'warn',
+				{
+					properties: 'never',
+					ignoreDestructuring: true,
+					ignoreImports: true,
+				},
+			],
 			curly: ['error', 'all'],
 			eqeqeq: ['error', 'allow-null'],
 			'guard-for-in': 'error',
