@@ -1,22 +1,22 @@
 {
-  "name": "@nti/stylelint-config-standard",
-  "version": "2.34.3",
-  "description": "NextThought css style standard",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "dependencies": {
-    "@nti/eslint-config-lib-scripts": "^2.34.3",
-    "stylelint": "^13.0.0",
-    "stylelint-config-css-modules": "^2.2.0",
-    "stylelint-config-prettier": "^8.0.2",
-    "stylelint-config-standard": "^20.0.0"
-  }
+	"name": "@nti/stylelint-config-standard",
+	"version": "2.34.3",
+	"description": "NextThought css style standard",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"dependencies": {
+		"@nti/eslint-config-lib-scripts": "^2.34.3",
+		"stylelint": "^13.0.0",
+		"stylelint-config-css-modules": "^2.2.0",
+		"stylelint-config-prettier": "^8.0.2",
+		"stylelint-config-standard": "^20.0.0"
+	}
 }

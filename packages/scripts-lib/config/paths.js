@@ -7,12 +7,11 @@ const r = require('escape-string-regexp');
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
 const appDirectory = fs.realpathSync(process.cwd());
-function resolveApp (relativePath) {
+function resolveApp(relativePath) {
 	return path.resolve(appDirectory, relativePath);
 }
 
-
-function find (file, limit = 10) {
+function find(file, limit = 10) {
 	const abs = path.resolve(file);
 	const atRoot = path.resolve(path.join('..', file)) === abs;
 
@@ -20,9 +19,8 @@ function find (file, limit = 10) {
 		return abs;
 	}
 
-	return (limit <= 0 || atRoot) ? null : find(path.join('..', file), limit - 1);
+	return limit <= 0 || atRoot ? null : find(path.join('..', file), limit - 1);
 }
-
 
 // We support resolving modules according to `NODE_PATH`.
 // This lets you use absolute paths in imports inside large monorepos:
@@ -63,11 +61,11 @@ const _ownPackage = fs.readJsonSync(ownPackageJson);
 const [scope] = _ownPackage.name.split('/');
 const ntiModules = new RegExp(`^(${r(nodeModules)}).*${r(scope)}`);
 
-function resolveOwn (relativePath) {
+function resolveOwn(relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
-function exists (testPath, fallback) {
+function exists(testPath, fallback) {
 	return fs.existsSync(testPath) ? testPath : fallback;
 }
 
@@ -77,7 +75,9 @@ module.exports = {
 	resolveApp,
 	resolveOwn,
 
-	userProfile: path.resolve(process.env[(process.platform === 'win32') ? 'USERPROFILE' : 'HOME']),
+	userProfile: path.resolve(
+		process.env[process.platform === 'win32' ? 'USERPROFILE' : 'HOME']
+	),
 
 	path: resolveApp('.'),
 	package: _package,

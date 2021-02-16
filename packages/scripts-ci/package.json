@@ -1,22 +1,22 @@
 {
-  "name": "@nti/ci-scripts",
-  "version": "2.31.0",
-  "description": "",
-  "main": "index.js",
-  "bin": {
-    "ci-scripts": "index.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "dependencies": {
-    "ci-info": "^2.0.0",
-    "fs-extra": "^9.0.0",
-    "semver": "^7.3.2"
-  }
+	"name": "@nti/ci-scripts",
+	"version": "2.31.0",
+	"description": "",
+	"main": "index.js",
+	"bin": {
+		"ci-scripts": "index.js"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"dependencies": {
+		"ci-info": "^2.0.0",
+		"fs-extra": "^9.0.0",
+		"semver": "^7.3.2"
+	}
 }

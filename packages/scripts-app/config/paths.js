@@ -9,10 +9,10 @@ const paths = require('@nti/lib-scripts/config/paths');
 // const ownPackagePath = resolveApp(`node_modules/${ownPackageJson.name}`);
 // const ownPackageLinked = fs.existsSync(ownPackagePath) && fs.lstatSync(ownPackagePath).isSymbolicLink();
 
-const {exists, resolveApp} = paths;
+const { exists, resolveApp } = paths;
 
 //eslint-disable-next-line no-shadow
-function ensureSlash (path, needsSlash) {
+function ensureSlash(path, needsSlash) {
 	const hasSlash = path.endsWith('/');
 	if (hasSlash && !needsSlash) {
 		return path.substr(path, path.length - 1);
@@ -23,15 +23,15 @@ function ensureSlash (path, needsSlash) {
 	}
 }
 
-
-function getServedPath (packageJson) {
+function getServedPath(packageJson) {
 	const homepage = require(packageJson).homepage;
-	const servedUrl = process.env.PUBLIC_URL ||
-	(homepage ? url.parse(homepage).pathname : '/');
+	const servedUrl =
+		process.env.PUBLIC_URL ||
+		(homepage ? url.parse(homepage).pathname : '/');
 	return ensureSlash(servedUrl, true);
 }
 
-function resolveOwn (relativePath) {
+function resolveOwn(relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
@@ -67,8 +67,11 @@ module.exports = {
 	cssCustomProperties: require.resolve('@nti/style-common/variables.css'),
 
 	serverComponent,
-	pageContentComponent: paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
-	pageContentComponentDest: resolveApp(path.join(serverComponent, 'ssr-entry/index.js')),
+	pageContentComponent:
+		paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
+	pageContentComponentDest: resolveApp(
+		path.join(serverComponent, 'ssr-entry/index.js')
+	),
 	baseConfig: resolveOwn('server/config/env.json'),
 	localConfig: exists(resolveApp('config/service.json')),
 

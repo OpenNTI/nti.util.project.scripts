@@ -4,7 +4,10 @@
 	"includes": ["\\.m?jsx?$"],
 	"excludes": ["__test__"],
 	"plugins": [
-		{"name": "esdoc-ecmascript-proposal-plugin", "option": {"all": true}},
+		{
+			"name": "esdoc-ecmascript-proposal-plugin",
+			"option": { "all": true }
+		},
 		{
 			"name": "esdoc-standard-plugin",
 			"option": {

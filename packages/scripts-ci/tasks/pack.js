@@ -5,7 +5,7 @@ const { call } = require('./util');
 call('npm run build --if-present');
 call('npm pack');
 
-for( let f of fs.readdirSync(process.cwd())) {
+for (let f of fs.readdirSync(process.cwd())) {
 	if (/\.tgz$/.test(f)) {
 		// rm *.tgz #cleanup the tarball artifact
 		fs.removeSync(f);

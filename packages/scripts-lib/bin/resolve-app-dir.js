@@ -6,13 +6,11 @@ const escapePattern = /[|\\{}()[\]^$+*?.]/g;
 const isModule = RegExp.prototype.test.bind(/\/node_modules\//);
 
 Object.assign(exports, {
-	resolveAppDir
+	resolveAppDir,
 });
 
-
-function resolveAppDir (start, dep) {
-
-	function resolve (dir) {
+function resolveAppDir(start, dep) {
+	function resolve(dir) {
 		const parent = path.dirname(dir);
 		const pkg = path.join(dir, 'package.json');
 
@@ -34,15 +32,14 @@ function resolveAppDir (start, dep) {
 	return resolve(start) || start;
 }
 
-
-function testPackage (pkg, dep) {
+function testPackage(pkg, dep) {
 	try {
 		if (isModule(pkg)) {
 			return false;
 		}
 
-		const {devDependencies, dependencies} = fs.readJsonSync(pkg);
-		const o = Object.keys({...devDependencies, ...dependencies});
+		const { devDependencies, dependencies } = fs.readJsonSync(pkg);
+		const o = Object.keys({ ...devDependencies, ...dependencies });
 
 		return !dep || ~o.findIndex(x => dep.test(x));
 	} catch (e) {

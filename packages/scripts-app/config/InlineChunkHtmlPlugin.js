@@ -1,13 +1,16 @@
 'use strict';
 
 class InlineChunkHtmlPlugin {
-	constructor (htmlWebpackPlugin, tests) {
+	constructor(htmlWebpackPlugin, tests) {
 		this.htmlWebpackPlugin = htmlWebpackPlugin;
 		this.tests = tests;
 	}
 
-	getInlinedTag (publicPath, assets, tag) {
-		if (tag.tagName !== 'script' || !(tag.attributes && tag.attributes.src)) {
+	getInlinedTag(publicPath, assets, tag) {
+		if (
+			tag.tagName !== 'script' ||
+			!(tag.attributes && tag.attributes.src)
+		) {
 			return tag;
 		}
 		const scriptName = publicPath
@@ -23,7 +26,7 @@ class InlineChunkHtmlPlugin {
 		return { tagName: 'script', innerHTML: asset.source(), closeTag: true };
 	}
 
-	apply (compiler) {
+	apply(compiler) {
 		let publicPath = compiler.options.output.publicPath || '';
 		if (publicPath && !publicPath.endsWith('/')) {
 			publicPath += '/';

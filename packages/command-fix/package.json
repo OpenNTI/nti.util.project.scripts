@@ -1,17 +1,17 @@
 {
-  "name": "@nti/fix",
-  "version": "2.31.50",
-  "description": "",
-  "bin": {
-    "fix": "index.js"
-  },
-  "main": "index.js",
-  "type": "module",
-  "license": "UNLICENSED",
-  "dependencies": {
-    "@nti/git-state": "^5.0.0",
-    "chalk": "^4.1.0",
-    "inquirer": "^7.3.2",
-    "semver": "^7.3.2"
-  }
+	"name": "@nti/fix",
+	"version": "2.31.50",
+	"description": "",
+	"bin": {
+		"fix": "index.js"
+	},
+	"main": "index.js",
+	"type": "module",
+	"license": "UNLICENSED",
+	"dependencies": {
+		"@nti/git-state": "^5.0.0",
+		"chalk": "^4.1.0",
+		"inquirer": "^7.3.2",
+		"semver": "^7.3.2"
+	}
 }

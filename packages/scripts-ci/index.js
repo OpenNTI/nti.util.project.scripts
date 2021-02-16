@@ -20,5 +20,4 @@ try {
 	process.exit(1);
 }
 
-
 run(scriptFile, args);

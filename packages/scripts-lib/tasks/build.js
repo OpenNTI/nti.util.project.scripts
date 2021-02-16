@@ -5,7 +5,7 @@ const chalk = require('chalk');
 const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
-const {exec, npx} = require('./utils/call-cmd');
+const { exec, npx } = require('./utils/call-cmd');
 const paths = require('./utils/current-script-paths');
 
 const SKIP = process.argv.includes('--skip-checks');
@@ -32,27 +32,32 @@ const activeScripts = path.dirname(process.argv[1]);
 if (WORKER) {
 	(async () => {
 		if (global.runBuild) {
-			await exec(paths.path, 'node ' + path.resolve(activeScripts, './clean'));
+			await exec(
+				paths.path,
+				'node ' + path.resolve(activeScripts, './clean')
+			);
 			global.runBuild();
 		} else {
 			console.log('This project is not built nor packaged individually.');
 		}
 	})();
-}
-else {
+} else {
 	const spinner = ora('Building...').start();
 	const tasks = [];
 	const signal = new Cancelable();
 	const task = (p, label) => {
 		if (typeof p === 'string') {
-			p = exec(paths.path, p, signal)
-				.catch(x => x !== 'canceled' && (console.error(x), signal.cancel(), Promise.reject(x)));
+			p = exec(paths.path, p, signal).catch(
+				x =>
+					x !== 'canceled' &&
+					(console.error(x), signal.cancel(), Promise.reject(x))
+			);
 		}
 		ora.promise(p, label);
 		return p;
 	};
-	const subTask = (t, label) => task(`node ${path.resolve(activeScripts,t)}`, label);
-
+	const subTask = (t, label) =>
+		task(`node ${path.resolve(activeScripts, t)}`, label);
 
 	if (!SKIP) {
 		tasks.push(
@@ -68,7 +73,9 @@ else {
 		.then(() => {
 			try {
 				spinner.succeed('Done.');
-			} catch (e) {/* ignore */}
+			} catch (e) {
+				/* ignore */
+			}
 		})
 		.catch(er => {
 			spinner.fail('Failed');

@@ -1,30 +1,30 @@
 {
-  "name": "@nti/project-scripts",
-  "private": true,
-  "version": "1.0.0",
-  "description": "Common tasks and project management",
-  "scripts": {
-    "test": "lerna exec \"eslint ./ --fix\"",
-    "release": "./release",
-    "standalone-bootstrap": "lerna bootstrap --hoist",
-    "clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\"",
-    "sync": "gh api repos/:owner/:repo/dispatches -X POST --field event_type=sync"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "keywords": [
-    "release"
-  ],
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
-  },
-  "releaseMode": "interactive",
-  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
-  "devDependencies": {
-    "lerna": "^3.4.3"
-  }
+	"name": "@nti/project-scripts",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Common tasks and project management",
+	"scripts": {
+		"test": "lerna exec \"eslint ./ --fix\"",
+		"release": "./release",
+		"standalone-bootstrap": "lerna bootstrap --hoist",
+		"clean": "lerna clean -y; node -e \"fs.promises.rmdir('./node_modules', {recursive:true})\"",
+		"sync": "gh api repos/:owner/:repo/dispatches -X POST --field event_type=sync"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"keywords": [
+		"release"
+	],
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"bugs": {
+		"url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+	},
+	"releaseMode": "interactive",
+	"homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+	"devDependencies": {
+		"lerna": "^3.4.3"
+	}
 }

@@ -15,17 +15,17 @@ const paths = require('../config/paths');
 
 const merge = require('./utils/merge-config');
 
-const CONSUMED_FLAGS = new Set([
-	'--inspect-service',
-	__filename
-]);
+const CONSUMED_FLAGS = new Set(['--inspect-service', __filename]);
 
 const write = (...args) => console.log(...args);
 const writeHeading = x => write(`\n${chalk.underline.magenta(x)}`);
 
-
 if (paths.appBuildHook) {
-	if (DEBUG) write('Calling local app build hook: %s', chalk.magenta(paths.appBuildHook));
+	if (DEBUG)
+		write(
+			'Calling local app build hook: %s',
+			chalk.magenta(paths.appBuildHook)
+		);
 
 	call(process.argv[0], [paths.appBuildHook]);
 }
@@ -35,7 +35,14 @@ const servicePath = path.dirname(service);
 
 const tempConfig = tmp.fileSync();
 
-if (DEBUG) write(`Attempting to load local config override: ${paths.localConfig ? chalk.magenta(paths.localConfig) : chalk.red('Not Found')}`);
+if (DEBUG)
+	write(
+		`Attempting to load local config override: ${
+			paths.localConfig
+				? chalk.magenta(paths.localConfig)
+				: chalk.red('Not Found')
+		}`
+	);
 
 const localConfig = paths.localConfig && fs.readJsonSync(paths.localConfig);
 
@@ -48,13 +55,13 @@ if (DEBUG && localConfig) write('Merged baseConfig with local override...');
 
 if (DEBUG) write('Appending app to config...');
 Object.assign(config.development, {
-	apps:[
+	apps: [
 		...config.development.apps,
 		{
 			package: path.relative(servicePath, paths.serverComponent),
-			basepath: paths.servedPath
-		}
-	]
+			basepath: paths.servedPath,
+		},
+	],
 });
 
 if (DEBUG) write('Saving config: %s\n', chalk.magenta(tempConfig.name));
@@ -68,24 +75,32 @@ if (DEBUG) {
 writeHeading('Starting web-service.');
 
 const args = [
-	'--env', 'development',
-	'--config', tempConfig.name,
-	...process.argv.slice(1).filter(x => !CONSUMED_FLAGS.has(x))
+	'--env',
+	'development',
+	'--config',
+	tempConfig.name,
+	...process.argv.slice(1).filter(x => !CONSUMED_FLAGS.has(x)),
 ];
 
 if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
 
-call(process.argv[0], [
-	INSPECT && '--inspect-brk',
-	'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
-	service,
-	...args
-].filter(Boolean), {
-	env: {
-		...process.env,
-		...(DEBUG ? {} : {
-			DEBUG: '*:error,-NodeService'
-		})
-	},
-	stdio: 'inherit'
-});
+call(
+	process.argv[0],
+	[
+		INSPECT && '--inspect-brk',
+		'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
+		service,
+		...args,
+	].filter(Boolean),
+	{
+		env: {
+			...process.env,
+			...(DEBUG
+				? {}
+				: {
+						DEBUG: '*:error,-NodeService',
+				  }),
+		},
+		stdio: 'inherit',
+	}
+);

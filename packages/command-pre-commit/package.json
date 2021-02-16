@@ -1,16 +1,16 @@
 {
-  "name": "@nti/pre-commit",
-  "version": "2.34.3",
-  "description": "Pre-commit hook",
-  "main": "index.js",
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "bin": {
-    "pre-commit": "index.js"
-  },
-  "dependencies": {
-    "@nti/stylelint-config-standard": "^2.34.3",
-    "eslint": "^7.6.0",
-    "stylelint": "^13.7.2"
-  }
+	"name": "@nti/pre-commit",
+	"version": "2.34.3",
+	"description": "Pre-commit hook",
+	"main": "index.js",
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"bin": {
+		"pre-commit": "index.js"
+	},
+	"dependencies": {
+		"@nti/stylelint-config-standard": "^2.34.3",
+		"eslint": "^7.6.0",
+		"stylelint": "^13.7.2"
+	}
 }

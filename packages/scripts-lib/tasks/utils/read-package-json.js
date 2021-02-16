@@ -5,18 +5,21 @@ const detectIndent = require('detect-indent');
 
 const paths = require('../../config/paths');
 
-module.exports = function readPackageJson (packageJson = paths.packageJson) {
+module.exports = function readPackageJson(packageJson = paths.packageJson) {
 	try {
-		const pkgSource = fs.readFileSync(packageJson, {encoding: 'UTF-8', flag: 'r'});
+		const pkgSource = fs.readFileSync(packageJson, {
+			encoding: 'UTF-8',
+			flag: 'r',
+		});
 
-		const {indent} = detectIndent(pkgSource);
+		const { indent } = detectIndent(pkgSource);
 		const tail = pkgSource.charAt(pkgSource.length - 1) === '\n';
 		const json = JSON.parse(pkgSource);
 
 		return {
 			tail,
 			indent,
-			json
+			json,
 		};
 	} catch {
 		console.error(packageJson, 'does not exist.');

@@ -5,9 +5,15 @@
 const fs = require('fs-extra');
 const semver = require('semver');
 
-const {lockfile, packageFile, printLine, print, getPackageNameAndVersion} = require('./util');
+const {
+	lockfile,
+	packageFile,
+	printLine,
+	print,
+	getPackageNameAndVersion,
+} = require('./util');
 
-const {name, version, pkg, isSnapshot} = getPackageNameAndVersion();
+const { name, version, pkg, isSnapshot } = getPackageNameAndVersion();
 const [stamp] = new Date().toISOString().replace(/[-T:]/g, '').split('.');
 
 // Apps should not have any dependencies ... they are fully baked...
@@ -27,17 +33,22 @@ if (isSnapshot) {
 
 	fs.removeSync(lockfile);
 
-	[pkg.dependencies, pkg.devDependencies].forEach(deps =>
-		deps && Object.keys(deps)
-			.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
-			.forEach(x => (o => {
-				const [src, ver] = o[x].split('#');
-				if (semver.validRange(ver)) {
-					o[x] = src; // strip anchors
-				}
-			})(deps)));
+	[pkg.dependencies, pkg.devDependencies].forEach(
+		deps =>
+			deps &&
+			Object.keys(deps)
+				.filter(x => x.startsWith('nti-') || x.startsWith('@nti/'))
+				.forEach(x =>
+					(o => {
+						const [src, ver] = o[x].split('#');
+						if (semver.validRange(ver)) {
+							o[x] = src; // strip anchors
+						}
+					})(deps)
+				)
+	);
 }
 
-fs.writeJsonSync(packageFile, pkg, {spaces: 2});
+fs.writeJsonSync(packageFile, pkg, { spaces: 2 });
 
 printLine('done.');

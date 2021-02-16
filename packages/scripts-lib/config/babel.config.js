@@ -9,20 +9,25 @@ module.exports = function (api, opts) {
 		sourceType: 'unambiguous',
 		compact: false,
 		presets: [
-			['@babel/preset-env', {
-				shippedProposals: true,
-				corejs: env.useBuiltIns ? { version: 3, proposals: true } : void 0,
-				targets: {
-					node: 'current'
+			[
+				'@babel/preset-env',
+				{
+					shippedProposals: true,
+					corejs: env.useBuiltIns
+						? { version: 3, proposals: true }
+						: void 0,
+					targets: {
+						node: 'current',
+					},
+					...env,
 				},
-				...env
-			}],
+			],
 			['@babel/preset-flow'],
 		],
 		plugins: [
 			// These are added because its not included when the target is node=current?
 			'@babel/plugin-proposal-class-properties',
 			'@babel/plugin-proposal-private-methods',
-		]
+		],
 	};
 };

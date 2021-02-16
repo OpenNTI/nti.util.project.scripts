@@ -1,5 +1,5 @@
 {
-  "name": "nti-web-app-server",
-  "version": "DEV",
-  "private": true
+	"name": "nti-web-app-server",
+	"version": "DEV",
+	"private": true
 }

@@ -3,7 +3,8 @@
 process.env.NODE_ENV = 'development';
 const path = require('path');
 
-const DEBUG = process.argv.includes('--debug') || process.argv.includes('--profile');
+const DEBUG =
+	process.argv.includes('--debug') || process.argv.includes('--profile');
 
 //Webpack plugins:
 // const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
@@ -16,12 +17,17 @@ const paths = require('./paths');
 const ENV = 'development';
 const PROD = false;
 
-const {loaders: jsLoaders, plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
-const {loaders: cssLoaders, plugins: cssPlugins} = require('@nti/app-scripts/config/css-loaders');
+const {
+	loaders: jsLoaders,
+	plugins: jsPlugins,
+} = require('@nti/app-scripts/config/js-loaders');
+const {
+	loaders: cssLoaders,
+	plugins: cssPlugins,
+} = require('@nti/app-scripts/config/css-loaders');
 const getWorkspace = require('@nti/app-scripts/config/workspace');
 
-const {name} = require(paths.packageJson);
-
+const { name } = require(paths.packageJson);
 
 // Once all test harness instances have been replaced with storybook stories, we can delete this and migrate the important parts to the storybook config file.
 
@@ -31,13 +37,13 @@ exports = module.exports = {
 	entry: {
 		index: [
 			require.resolve('./polyfills'),
-			paths.resolveApp('./test/app/index.js')
-		]
+			paths.resolveApp('./test/app/index.js'),
+		],
 	},
 	output: {
 		path: '/',
 		filename: '[name].js',
-		publicPath: '/'
+		publicPath: '/',
 	},
 
 	devtool: 'cheap-module-source-map',
@@ -63,28 +69,23 @@ exports = module.exports = {
 				require.resolve('@babel/runtime/package.json')
 			),
 
-			'core-js': path.dirname(
-				require.resolve('core-js/package.json')
-			),
+			'core-js': path.dirname(require.resolve('core-js/package.json')),
 
 			// Support React Native Web
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
 
-			...(
-				// just in case these modules aren't used in the host project, don't blow up if they aren't present.
-				['react', 'react-dom']
-					.reduce(
-						(o, mod) => {
-							try {
-								o[mod] = path.dirname(require.resolve(path.join(mod, 'package.json')));
-							}
-							catch {/*not found*/}
-							return o;
-						},
-						{}
-					)
-			),
+			...// just in case these modules aren't used in the host project, don't blow up if they aren't present.
+			['react', 'react-dom'].reduce((o, mod) => {
+				try {
+					o[mod] = path.dirname(
+						require.resolve(path.join(mod, 'package.json'))
+					);
+				} catch {
+					/*not found*/
+				}
+				return o;
+			}, {}),
 		},
 	},
 
@@ -94,7 +95,6 @@ exports = module.exports = {
 			// Disable require.ensure as it's not a standard language feature.
 			{ parser: { requireEnsure: false } },
 
-
 			{
 				oneOf: [
 					...jsLoaders(),
@@ -103,13 +103,13 @@ exports = module.exports = {
 						test: /-avatar.png$/,
 						loader: require.resolve('url-loader'),
 						options: {
-							mimeType: 'image/[ext]'
-						}
+							mimeType: 'image/[ext]',
+						},
 					},
 
 					{
 						test: /\.template\.svg$/,
-						loader: require.resolve('raw-loader')
+						loader: require.resolve('raw-loader'),
 					},
 
 					{
@@ -119,35 +119,34 @@ exports = module.exports = {
 						options: {
 							limit: 50,
 							name: 'assets/[name]-[hash].[ext]',
-							mimeType: 'image/[ext]'
-						}
+							mimeType: 'image/[ext]',
+						},
 					},
 
 					{
 						test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
 						loader: require.resolve('file-loader'),
 						options: {
-							name: 'assets/fonts/[hash].[ext]'
-						}
+							name: 'assets/fonts/[hash].[ext]',
+						},
 					},
 
 					{
 						test: /\.(eot|ttf|woff)$/,
 						loader: require.resolve('file-loader'),
 						query: {
-							name: 'assets/fonts/[name]-[hash].[ext]'
-						}
+							name: 'assets/fonts/[name]-[hash].[ext]',
+						},
 					},
 
-					...cssLoaders(paths)
-
-				].filter(Boolean)
-			}
-		].filter(Boolean)
+					...cssLoaders(paths),
+				].filter(Boolean),
+			},
+		].filter(Boolean),
 	},
 
 	optimization: {
-		minimize: false
+		minimize: false,
 	},
 
 	performance: false,
@@ -159,46 +158,52 @@ exports = module.exports = {
 		watchContentBase: true,
 		overlay: {
 			warnings: false,
-			errors: true
+			errors: true,
 		},
-		proxy: [{
-			context: ['/content', '/dataserver2'],
-			target: 'https://app.localhost',
-		}],
+		proxy: [
+			{
+				context: ['/content', '/dataserver2'],
+				target: 'https://app.localhost',
+			},
+		],
 		stats: 'errors-only',
 	},
 
 	plugins: [
 		// !PROD && new BitBarWebpackProgressPlugin(),
-		DEBUG && new CircularDependencyPlugin({
-			// exclude detection of files based on a RegExp
-			exclude: /node_modules/,
+		DEBUG &&
+			new CircularDependencyPlugin({
+				// exclude detection of files based on a RegExp
+				exclude: /node_modules/,
 
-			// add errors to webpack instead of warnings
-			// failOnError: true,
+				// add errors to webpack instead of warnings
+				// failOnError: true,
 
-			onDetected ({ /*module,*/ paths: cycle, compilation }) {
-				// `paths` will be an Array of the relative module paths that make up the cycle
-				// `module` will be the module record generated by webpack that caused the cycle
-				compilation.warnings.push(new Error(cycle.join('\n\t-> ')));
-			}
-		}),
+				onDetected({ /*module,*/ paths: cycle, compilation }) {
+					// `paths` will be an Array of the relative module paths that make up the cycle
+					// `module` will be the module record generated by webpack that caused the cycle
+					compilation.warnings.push(new Error(cycle.join('\n\t-> ')));
+				},
+			}),
 
 		...jsPlugins(),
 		...cssPlugins({
 			miniCssExtract: {
-				filename: 'index.generated.css'
-			}
+				filename: 'index.generated.css',
+			},
 		}),
 
 		new HtmlWebpackPlugin({
 			title: `${name}: Test Harness`,
-			template: paths.exists(paths.testAppHtml, paths.testAppHtmlTemplate)
+			template: paths.exists(
+				paths.testAppHtml,
+				paths.testAppHtmlTemplate
+			),
 		}),
 
 		// Watcher doesn't work well if you mistype casing in a path so we use
 		// a plugin that prints an error when you attempt to do this.
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
-	].filter(Boolean)
+	].filter(Boolean),
 };

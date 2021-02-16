@@ -18,9 +18,8 @@ try {
 }
 
 exports = module.exports = {
-
-	async register (expressApp, config) {
-		const devmode = (dev) ? await dev.setupDeveloperMode(config) : null;
+	async register(expressApp, config) {
+		const devmode = dev ? await dev.setupDeveloperMode(config) : null;
 
 		if (devmode) {
 			expressApp.use(devmode.middleware); //serve in-memory compiled sources/assets
@@ -28,8 +27,7 @@ exports = module.exports = {
 
 		return {
 			devmode,
-			assets
+			assets,
 		};
-	}
-
+	},
 };

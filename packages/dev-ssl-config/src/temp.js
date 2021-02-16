@@ -9,15 +9,15 @@ const files = new Set();
 
 onExit((exitCode, signal) => {
 	if (files.size > 0) {
-		cleanup()
-			.then(() => signal
-				// calling process.exit() won't inform parent process of signal
-				? process.kill(process.pid, signal)
-				: process.exit(exitCode));
+		cleanup().then(() =>
+			signal
+				? // calling process.exit() won't inform parent process of signal
+				  process.kill(process.pid, signal)
+				: process.exit(exitCode)
+		);
 		return false;
 	}
 });
-
 
 const getString = (len = 6) => {
 	const hash = crypto
@@ -31,8 +31,10 @@ const getString = (len = 6) => {
 	return hash.substr(start, len);
 };
 
-export async function getTempFile (context = '') {
-	const t = await fs.mkdtemp(path.join(os.tmpdir(), `${context}${getString()}`));
+export async function getTempFile(context = '') {
+	const t = await fs.mkdtemp(
+		path.join(os.tmpdir(), `${context}${getString()}`)
+	);
 	if (files.has(t)) {
 		throw new Error('Could not generate a unique temp file name.');
 	}
@@ -41,8 +43,7 @@ export async function getTempFile (context = '') {
 	return t;
 }
 
-
-async function cleanup () {
+async function cleanup() {
 	const work = Array.from(files);
 	files.clear();
 	for (let file of work) {
@@ -52,7 +53,7 @@ async function cleanup () {
 	}
 }
 
-export default async function fileFrom (str) {
+export default async function fileFrom(str) {
 	const file = await getTempFile();
 	await fs.writeFile(file, str);
 	return file;

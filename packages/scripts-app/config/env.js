@@ -8,5 +8,5 @@ process.env.__IN_WEBPACK = true;
 
 module.exports = {
 	ENV,
-	PROD
+	PROD,
 };

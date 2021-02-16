@@ -1,26 +1,26 @@
 {
-  "name": "@nti/dev-ssl-config",
-  "version": "2.31.33",
-  "main": "src/index.js",
-  "scripts": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "keywords": [],
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "bugs": {
-    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
-  },
-  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
-  "dependencies": {
-    "chalk": "^4.1.0",
-    "esm": "^3.2.25",
-    "is-port-reachable": "^3.0.0",
-    "node-cleanup": "^2.1.2"
-  }
+	"name": "@nti/dev-ssl-config",
+	"version": "2.31.33",
+	"main": "src/index.js",
+	"scripts": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"keywords": [],
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"bugs": {
+		"url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+	},
+	"homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+	"dependencies": {
+		"chalk": "^4.1.0",
+		"esm": "^3.2.25",
+		"is-port-reachable": "^3.0.0",
+		"node-cleanup": "^2.1.2"
+	}
 }

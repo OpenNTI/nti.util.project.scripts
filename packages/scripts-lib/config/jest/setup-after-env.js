@@ -1,4 +1,2 @@
 'use strict';
-global.beforeEach(() => {
-
-});
+global.beforeEach(() => {});

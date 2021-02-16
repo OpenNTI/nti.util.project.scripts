@@ -1,11 +1,11 @@
 'use strict';
 const loader = require.resolve('thread-loader');
-const {PROD} = require('./env');
+const { PROD } = require('./env');
 
 let threadLoader;
 
-module.exports = function thread () {
-	if(!process.env.NTI_THREADED_BUILD) {
+module.exports = function thread() {
+	if (!process.env.NTI_THREADED_BUILD) {
 		return;
 	}
 
@@ -30,7 +30,7 @@ module.exports = function thread () {
 		// defaults to 500 (ms)
 		// can be set to Infinity for watching builds to keep workers alive
 		// poolTimeout: 2000,
-		...(PROD ? {} : {poolTimeout: Infinity}),
+		...(PROD ? {} : { poolTimeout: Infinity }),
 
 		// number of jobs the poll distributes to the workers
 		// defaults to 200
@@ -46,10 +46,9 @@ module.exports = function thread () {
 		threadLoader = require(loader);
 		threadLoader.warmup(options, [
 			'babel-loader',
-			require.resolve('./babel.config.js')
+			require.resolve('./babel.config.js'),
 		]);
 	}
-
 
 	return {
 		loader,

@@ -10,13 +10,16 @@ const readPackageJson = require('./utils/read-package-json');
 const writePackageJson = require('./utils/write-package-json');
 const { listFiles } = require('./utils/read-dir.js');
 
-
-const {json: pkg, indent} = readPackageJson();
-const {json: libPkg} = readPackageJson(paths.ownPackageJson);
-const {json: ownPkg} = readPackageJson(currentScriptsPaths.ownPackageJson);
+const { json: pkg, indent } = readPackageJson();
+const { json: libPkg } = readPackageJson(paths.ownPackageJson);
+const { json: ownPkg } = readPackageJson(currentScriptsPaths.ownPackageJson);
 const scriptPackageName = ownPkg.name;
 const scriptBinName = scriptPackageName.replace(/^@nti\//, '');
-const combindedDeps = { ...libPkg.dependencies, ...ownPkg.dependencies, ...global.NTI_INIT_DROP_DEPENDENCIES || {}};
+const combindedDeps = {
+	...libPkg.dependencies,
+	...ownPkg.dependencies,
+	...(global.NTI_INIT_DROP_DEPENDENCIES || {}),
+};
 const dropDeps = [
 	'babel-register',
 	'Jenkinsfile',
@@ -24,17 +27,18 @@ const dropDeps = [
 	'nti-unittesting-clientside',
 	'rollup-plugin-image',
 	'rollup-plugin-node-resolve',
-	...Object.keys(combindedDeps)
+	...Object.keys(combindedDeps),
 ];
 
 const DOTFILE = '.dotfile';
-const getFinalFilename = (file) =>
-	(file.endsWith(DOTFILE))
-		? `.${file.slice(0, -DOTFILE.length)}`
-		: file;
+const getFinalFilename = file =>
+	file.endsWith(DOTFILE) ? `.${file.slice(0, -DOTFILE.length)}` : file;
 
-
-const unTab = (strings, ...keys) => strings.map((x, i) => x + (keys[i] || '')).join('').replace(/\t+/g, '\t');
+const unTab = (strings, ...keys) =>
+	strings
+		.map((x, i) => x + (keys[i] || ''))
+		.join('')
+		.replace(/\t+/g, '\t');
 const write = x => console.log(chalk.cyan('\n' + x));
 
 write(`Updating: ${chalk.magenta.underline('pacakge.json')}`);
@@ -76,53 +80,67 @@ delete pkg.scripts['postversion'];
 delete pkg.scripts['prepack'];
 delete pkg.scripts['prepublish'];
 delete pkg.scripts['install-snapshots'];
-Object.assign(pkg.scripts, {
-	// 	b) set "test": "${scriptBinName} test"
-	test:		`${scriptBinName} test`,
-	// 	c) set "start": "${scriptBinName} test --watch"
-	start:		`${scriptBinName} test --watch`,
-	// 	d) set "prepublish": "${scriptBinName} build"
-	build:		`${scriptBinName} build`,
-	clean:		`${scriptBinName} clean`,
-	check:		`${scriptBinName} check`,
-	release:	`${scriptBinName} release`,
-	fix:		`${scriptBinName} fix`,
-}, global.NTI_INIT_SCRIPTS || {});
+Object.assign(
+	pkg.scripts,
+	{
+		// 	b) set "test": "${scriptBinName} test"
+		test: `${scriptBinName} test`,
+		// 	c) set "start": "${scriptBinName} test --watch"
+		start: `${scriptBinName} test --watch`,
+		// 	d) set "prepublish": "${scriptBinName} build"
+		build: `${scriptBinName} build`,
+		clean: `${scriptBinName} clean`,
+		check: `${scriptBinName} check`,
+		release: `${scriptBinName} release`,
+		fix: `${scriptBinName} fix`,
+	},
+	global.NTI_INIT_SCRIPTS || {}
+);
 
 if (global.NTI_INIT_PACKAGE_HOOK) {
 	global.NTI_INIT_PACKAGE_HOOK(pkg);
 }
 
 // save:
-writePackageJson(pkg, {spaces: indent});
-
+writePackageJson(pkg, { spaces: indent });
 
 //Replace .babelrc, .editorconfig, .eslintignore, .eslintrc, .npmignore
 const initFilePrefix = path.resolve(__dirname, '..', 'config', 'init-files');
-const initFilePrefix2 = path.resolve(currentScriptsPaths.ownPath, 'config', 'init-files');
+const initFilePrefix2 = path.resolve(
+	currentScriptsPaths.ownPath,
+	'config',
+	'init-files'
+);
 const templatePrefix = path.resolve(currentScriptsPaths.ownPath, 'template');
 const getInitFileSrc = (file, a, b) => (
-	a = path.resolve(initFilePrefix, file),
-	b = path.resolve(initFilePrefix2, file),
-	fs.existsSync(a) ? a : fs.existsSync(b) ? b : null);
-const getTemplateSrc = (file) => (
-	file = path.resolve(templatePrefix, file),
-	fs.existsSync(file) ? file : null);
+	(a = path.resolve(initFilePrefix, file)),
+	(b = path.resolve(initFilePrefix2, file)),
+	fs.existsSync(a) ? a : fs.existsSync(b) ? b : null
+);
+const getTemplateSrc = file => (
+	(file = path.resolve(templatePrefix, file)),
+	fs.existsSync(file) ? file : null
+);
 
 const ToCopy = [
-	...(new Set([
+	...new Set([
 		//de-duplicate and merge the lib-scripts and the currently running script's init files
-		...listFiles(initFilePrefix), ...listFiles(initFilePrefix2),
+		...listFiles(initFilePrefix),
+		...listFiles(initFilePrefix2),
 		...listFiles(templatePrefix),
-	]))
+	]),
 ].sort();
-write(`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`);
+write(
+	`Updating/Adding: ${chalk.magenta(ToCopy.map(getFinalFilename).join(', '))}`
+);
 for (let file of ToCopy) {
 	const src = getInitFileSrc(file) || getTemplateSrc(file);
 
 	if (!src) {
 		console.log(unTab`
-			${chalk.yellow.bold('WARNING:')} Bad init file reference: ${chalk.underline(file)}
+			${chalk.yellow.bold('WARNING:')} Bad init file reference: ${chalk.underline(
+			file
+		)}
 			Could not find in template nor config/init-files
 		`);
 		continue;
@@ -131,16 +149,17 @@ for (let file of ToCopy) {
 	//to make dotfiles easier to bundle and not auto-ignored, lets call them '.dotfile's...and rename them on copy.
 	const outFile = getFinalFilename(file);
 
-	fs.copySync(
-		src,
-		path.resolve(paths.path, outFile)
-	);
+	fs.copySync(src, path.resolve(paths.path, outFile));
 }
 
 //Remove rollup.config.js, karma.config.js, Makefile
 //Remove './test' dir
-const AdditionalToRemove = (global.NTI_INIT_TO_REMOVE || []).filter(x => x[0] !== '-');
-const NotToRemove = (global.NTI_INIT_TO_REMOVE || []).filter(x => x[0] === '-').map(x => x.substr(1));
+const AdditionalToRemove = (global.NTI_INIT_TO_REMOVE || []).filter(
+	x => x[0] !== '-'
+);
+const NotToRemove = (global.NTI_INIT_TO_REMOVE || [])
+	.filter(x => x[0] === '-')
+	.map(x => x.substr(1));
 const ToRemove = [
 	'rollup.config.js',
 	'karma.config.js',
@@ -152,11 +171,15 @@ const ToRemove = [
 	'pre-commit.sample',
 	'webpack.config.js',
 	'webpack.config.test.js',
-	...AdditionalToRemove
+	...AdditionalToRemove,
 ].filter(x => fs.existsSync(x) && !NotToRemove.includes(x));
 
 if (ToRemove.length > 0) {
-	write(`Removing file/dirs that are now managed: ${chalk.magenta(ToRemove.join(', '))}`);
+	write(
+		`Removing file/dirs that are now managed: ${chalk.magenta(
+			ToRemove.join(', ')
+		)}`
+	);
 	for (let file of ToRemove) {
 		fs.removeSync(path.resolve(paths.path, file));
 	}
@@ -166,7 +189,7 @@ if (!SKIP_REGEN) {
 	write(`Regenerate: ${chalk.magenta('node_modules')}...`);
 	fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
 	fs.removeSync(path.resolve(paths.path, 'node_modules'));
-	call('npm', ['install'], {stdio: 'inherit'}, true);
+	call('npm', ['install'], { stdio: 'inherit' }, true);
 }
 
 write('Done.');
@@ -189,6 +212,6 @@ if (fs.existsSync(paths.resolveApp('.git'))) {
 
 	Staging changes to git.
 `);
-	call('git', ['add',  '.', '-f'], {stdio: 'pipe'}, true);
-	call('git', ['reset', 'node_modules'], {stdio: 'pipe'}, true);
+	call('git', ['add', '.', '-f'], { stdio: 'pipe' }, true);
+	call('git', ['reset', 'node_modules'], { stdio: 'pipe' }, true);
 }

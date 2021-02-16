@@ -1,7 +1,5 @@
 {
-	"plugins": [
-		"plugins/markdown"
-	],
+	"plugins": ["plugins/markdown"],
 	"opts": {
 		"destination": "./docs",
 		"encoding": "utf8",
@@ -17,7 +15,7 @@
 	"sourceType": "module",
 	"tags": {
 		"allowUnknownTags": true,
-		"dictionaries": ["jsdoc","closure"]
+		"dictionaries": ["jsdoc", "closure"]
 	},
 	"templates": {
 		"cleverLinks": false,

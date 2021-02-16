@@ -1,11 +1,11 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
-const {globalAgent} = require('https');
+const { globalAgent } = require('https');
 const { worker } = require('cluster');
 const readline = require('readline');
 const { getHTTPS } = require('@nti/dev-ssl-config');
 
-function clearLine (n) {
+function clearLine(n) {
 	const fn = console[n] || console.debug;
 	console[n] = (...args) => {
 		const [first] = args;
@@ -17,16 +17,20 @@ function clearLine (n) {
 	};
 }
 
-const ensureArray = x => Array.isArray(x) ? x : [x];
+const ensureArray = x => (Array.isArray(x) ? x : [x]);
 
-exports.setupDeveloperMode = async function setupDeveloperMode (config) {
-	for (let n of ['info', 'log', 'debug']) { clearLine(n); }
+exports.setupDeveloperMode = async function setupDeveloperMode(config) {
+	for (let n of ['info', 'log', 'debug']) {
+		clearLine(n);
+	}
 	const getPort = require('get-port');
 	const webpack = require('webpack');
 	const WebpackServer = require('webpack-dev-server');
 
 	const paths = require('../../config/paths');
-	const [clientConfig, serverConfig] = ensureArray(require('../../config/webpack.config'));
+	const [clientConfig, serverConfig] = ensureArray(
+		require('../../config/webpack.config')
+	);
 
 	const {
 		debug = false,
@@ -35,8 +39,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 
 	// const domain = 'app.localhost';
 
-
-	const devPort = config['webpack-dev-server'] || await getPort();
+	const devPort = config['webpack-dev-server'] || (await getPort());
 
 	clientConfig.output.path = '/';
 	clientConfig.output.publicPath = config.basepath;
@@ -51,12 +54,19 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 		}
 	}
 
-	const serverBundleCompiler = serverConfig && webpack({
-		...serverConfig,
-	});
-	const serverBundleWatcher = serverBundleCompiler && serverBundleCompiler.watch({
-		// watch options
-	}, (err, stats) => { });
+	const serverBundleCompiler =
+		serverConfig &&
+		webpack({
+			...serverConfig,
+		});
+	const serverBundleWatcher =
+		serverBundleCompiler &&
+		serverBundleCompiler.watch(
+			{
+				// watch options
+			},
+			(err, stats) => {}
+		);
 
 	const webpackServer = new WebpackServer(webpack(clientConfig), {
 		allowedHosts: ['.dev', '.local', '.localhost'],
@@ -97,8 +107,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 			reasons: debug,
 			timings: true,
 			version: true,
-
-		}
+		},
 	});
 
 	return {
@@ -119,6 +128,6 @@ exports.setupDeveloperMode = async function setupDeveloperMode (config) {
 					serverBundleWatcher.close();
 				}
 			});
-		}
+		},
 	};
 };

@@ -19,9 +19,6 @@
 		"import/no-extraneous-dependencies": 0,
 		"import/order": 0,
 		"no-console": 0,
-		"strict": [
-			"error",
-			"global"
-		]
+		"strict": ["error", "global"]
 	}
 }

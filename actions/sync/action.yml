@@ -1,20 +1,20 @@
 name: 'Sync Project Files'
 description: 'Keep template files updated in various repositories'
 branding:
-  color: green
-  icon: copy
+    color: green
+    icon: copy
 inputs:
-  targets:
-    description: 'repo prefixes to sync: nti.<prefix>.*'
-    required: true
-    default: lib,util,web
-  ignored:
-    description: 'repos with these words should be skipped'
-    required: true
-    default: oubound,ouregents,widget,util\.dashboard,project\.scripts,web\.service
-  token:
-    description: 'Github access token with repos scope'
-    required: true
+    targets:
+        description: 'repo prefixes to sync: nti.<prefix>.*'
+        required: true
+        default: lib,util,web
+    ignored:
+        description: 'repos with these words should be skipped'
+        required: true
+        default: oubound,ouregents,widget,util\.dashboard,project\.scripts,web\.service
+    token:
+        description: 'Github access token with repos scope'
+        required: true
 runs:
-  using: 'node12'
-  main: 'src/index.js'
+    using: 'node12'
+    main: 'src/index.js'

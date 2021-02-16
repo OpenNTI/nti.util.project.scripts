@@ -3,7 +3,7 @@ const path = require('path');
 const browsers = require('@nti/lib-scripts/config/browserlist');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const {PROD} = require('./env');
+const { PROD } = require('./env');
 const getWorkspace = require('./workspace');
 const NotInNodeModules = /^((?!\/node_modules\/).)+$/i;
 
@@ -15,18 +15,18 @@ const requireMaybe = id => {
 	}
 };
 
-const style = (server) => ({
-	loader: (!PROD && !server) ? 'style-loader' : MiniCssExtractPlugin.loader,
+const style = server => ({
+	loader: !PROD && !server ? 'style-loader' : MiniCssExtractPlugin.loader,
 	options: {
-		esModule: false
-	}
+		esModule: false,
+	},
 });
 
 const css = (options = {}) => ({
 	loader: require.resolve('css-loader'),
 	options: {
-		...options
-	}
+		...options,
+	},
 });
 
 const postCss = (paths, options = {}) => ({
@@ -43,25 +43,23 @@ const postCss = (paths, options = {}) => ({
 						flexbox: 'no-2009',
 						grid: true,
 					},
-					importFrom: [
-						paths.cssCustomProperties,
-					],
+					importFrom: [paths.cssCustomProperties],
 					stage: 3,
 					features: {
 						'custom-media-queries': true,
 						'custom-selectors': true,
-						'nesting-rules': true
-					}
+						'nesting-rules': true,
+					},
 				}),
 			],
-			...options
-		}
-	}
+			...options,
+		},
+	},
 });
 
 const resolveUrl = (options = {}) => ({
 	loader: require.resolve('resolve-url-loader'),
-	...options
+	...options,
 });
 
 const sass = (options = {}) => ({
@@ -74,7 +72,7 @@ const sass = (options = {}) => ({
 			fiber: requireMaybe('fibers'),
 			...options.sassOptions,
 		},
-	}
+	},
 });
 
 const loaders = (paths, options = {}) => {
@@ -96,8 +94,8 @@ const loaders = (paths, options = {}) => {
 				css(),
 				postCss(paths),
 				resolveUrl(),
-				sass(options.sass)
-			]
+				sass(options.sass),
+			],
 		},
 
 		{
@@ -110,11 +108,11 @@ const loaders = (paths, options = {}) => {
 					modules: {
 						exportGlobals: true,
 						exportLocalsConvention: 'camelCase',
-						localIdentName: '[local]--[hash:base64:8]'
-					}
+						localIdentName: '[local]--[hash:base64:8]',
+					},
 				}),
 				postCss(paths),
-			]
+			],
 		},
 
 		{
@@ -123,22 +121,24 @@ const loaders = (paths, options = {}) => {
 			exclude: ntiStyleDirs,
 			use: [
 				style(options.server),
-				css({importLoaders: 1}),
+				css({ importLoaders: 1 }),
 				postCss(paths),
-			]
-		}
+			],
+		},
 	];
 };
 
-const plugins = (options = {}, server = false) => [
-	(PROD || server) && new MiniCssExtractPlugin({
-		ignoreOrder: true,
-		filename: 'resources/[name]-[contenthash].css',
-		...(options.miniCssExtract || {})
-	})
-].filter(Boolean);
+const plugins = (options = {}, server = false) =>
+	[
+		(PROD || server) &&
+			new MiniCssExtractPlugin({
+				ignoreOrder: true,
+				filename: 'resources/[name]-[contenthash].css',
+				...(options.miniCssExtract || {}),
+			}),
+	].filter(Boolean);
 
 module.exports = {
 	loaders,
-	plugins
+	plugins,
 };

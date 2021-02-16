@@ -2,16 +2,16 @@
 'use strict';
 const { execSync } = require('child_process');
 
-const run = x => execSync(x, {stdio: 'pipe'}).toString('utf8');
+const run = x => execSync(x, { stdio: 'pipe' }).toString('utf8');
 const isJS = RegExp.prototype.test.bind(/\.(t|m?j)sx?$/i);
 const isSs = RegExp.prototype.test.bind(/\.s?css$/);
-const load = x => ({file: x, content: run(`git show ":${x}"`)});
+const load = x => ({ file: x, content: run(`git show ":${x}"`) });
 
 process.env.NODE_ENV = 'production';
 delete process.env.VSCODE_PID;
 delete process.env.ATOM_HOME;
 
-function getESLint () {
+function getESLint() {
 	if (!getESLint.instance) {
 		const { ESLint } = require('eslint');
 		getESLint.instance = new ESLint({ fix: true });
@@ -19,25 +19,27 @@ function getESLint () {
 	return getESLint.instance;
 }
 
-function getStyleLint () {
+function getStyleLint() {
 	if (!getStyleLint.instance) {
 		getStyleLint.instance = require('stylelint');
 	}
 	return getStyleLint.instance;
 }
 
-async function main () {
-	const files = (run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? []);
+async function main() {
+	const files =
+		run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? [];
 
 	let errors = 0;
 	for (const change of files) {
-		const {file, content} = (isJS(change) || isSs(change)) ? load(change) : {};
+		const { file, content } =
+			isJS(change) || isSs(change) ? load(change) : {};
 
 		if (isJS(change)) {
 			const eslint = getESLint();
-			const results = await eslint.lintText(content, {filePath: file});
+			const results = await eslint.lintText(content, { filePath: file });
 
-			errors = results.reduce((a,r) => a + r.errorCount, errors);
+			errors = results.reduce((a, r) => a + r.errorCount, errors);
 
 			const formatter = await eslint.loadFormatter('stylish');
 			const resultText = formatter.format(results);
@@ -65,11 +67,9 @@ async function main () {
 	}
 
 	process.exitCode = errors > 0 ? 1 : 0;
-
 }
 
-
-main().catch((error) => {
+main().catch(error => {
 	process.exitCode = 1;
 	console.error(error);
 });

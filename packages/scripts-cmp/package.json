@@ -1,41 +1,41 @@
 {
-  "name": "@nti/cmp-scripts",
-  "version": "2.35.0",
-  "description": "component-specific scripts & dependencies",
-  "bin": {
-    "cmp-scripts": "./bin/cli.js"
-  },
-  "scripts": {
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "keywords": [
-    "release"
-  ],
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "bugs": {
-    "url": "https://github.com/NextThought/nti.util.project.scripts/issues"
-  },
-  "homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
-  "dependencies": {
-    "@nti/app-scripts": "^2.35.0",
-    "@nti/lib-scripts": "^2.34.3",
-    "@nti/style-common": "NextThought/nti.style.common",
-    "@storybook/addon-a11y": "^6.1.1",
-    "@storybook/addon-actions": "^6.0.0",
-    "@storybook/addon-controls": "^6.0.0",
-    "@storybook/addon-docs": "^6.0.0",
-    "@storybook/addon-essentials": "^6.0.0",
-    "@storybook/addon-links": "^6.0.0",
-    "@storybook/react": "^6.0.0",
-    "core-js": "^3.6.5",
-    "webpack-cli": "^4.2.0"
-  }
+	"name": "@nti/cmp-scripts",
+	"version": "2.35.0",
+	"description": "component-specific scripts & dependencies",
+	"bin": {
+		"cmp-scripts": "./bin/cli.js"
+	},
+	"scripts": {
+		"test": "jest"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"keywords": [
+		"release"
+	],
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"bugs": {
+		"url": "https://github.com/NextThought/nti.util.project.scripts/issues"
+	},
+	"homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
+	"dependencies": {
+		"@nti/app-scripts": "^2.35.0",
+		"@nti/lib-scripts": "^2.34.3",
+		"@nti/style-common": "NextThought/nti.style.common",
+		"@storybook/addon-a11y": "^6.1.1",
+		"@storybook/addon-actions": "^6.0.0",
+		"@storybook/addon-controls": "^6.0.0",
+		"@storybook/addon-docs": "^6.0.0",
+		"@storybook/addon-essentials": "^6.0.0",
+		"@storybook/addon-links": "^6.0.0",
+		"@storybook/react": "^6.0.0",
+		"core-js": "^3.6.5",
+		"webpack-cli": "^4.2.0"
+	}
 }

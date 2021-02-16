@@ -10,6 +10,7 @@ Repo of project scripts. These scripts manage releasing as well as dev dependenc
 [![Health Check](https://github.com/NextThought/nti.web.mobile/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.mobile/actions) nti.web.mobile<br/>
 
 ---
+
 [![Health Check](https://github.com/NextThought/nti.lib.analytics/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.analytics/actions) nti.lib.analytics<br/>
 [![Health Check](https://github.com/NextThought/nti.lib.anchors/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.anchors/actions) nti.lib.anchors<br/>
 [![Health Check](https://github.com/NextThought/nti.lib.commons/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.lib.commons/actions) nti.lib.commons<br/>

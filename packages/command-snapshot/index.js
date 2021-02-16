@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {dispatchEvent} from '@nti/github-api';
+import { dispatchEvent } from '@nti/github-api';
 
 process.exitCode = 1;
 

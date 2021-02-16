@@ -8,7 +8,7 @@ import octokit from '@octokit/rest';
 let github;
 const write = (...args) => console.log(...args);
 
-async function getToken () {
+async function getToken() {
 	const rc = netrc();
 	try {
 		const token = rc['github.com']?.password;
@@ -22,37 +22,37 @@ async function getToken () {
 	}
 }
 
-
-async function promptForToken (rc, attempts = 0) {
-
+async function promptForToken(rc, attempts = 0) {
 	if (attempts >= 3) {
 		// ✗, ✗, ✖, ✕ ?
 		write(chalk.reset.bold.red('✕'), chalk.bold.gray('Too many attempts'));
 		process.exit(1);
 	}
 
-	const {name, token} = await inquirer.prompt([
+	const { name, token } = await inquirer.prompt([
 		{
 			type: 'input',
 			message: 'Please enter your github username:',
-			name: 'name'
+			name: 'name',
 		},
 		{
 			type: 'password',
 			message: 'Please enter your github personal access token:',
-			name: 'token'
-		}
+			name: 'token',
+		},
 	]);
 
 	if (await checkCredentials(token)) {
-		const {save} = await inquirer.prompt([{
-			default:false,
-			message: 'Save token to config?',
-			name: 'save',
-			type: 'confirm'
-		}]);
+		const { save } = await inquirer.prompt([
+			{
+				default: false,
+				message: 'Save token to config?',
+				name: 'save',
+				type: 'confirm',
+			},
+		]);
 		if (save) {
-			netrc.save({...rc, 'github.com': {name, password: token}});
+			netrc.save({ ...rc, 'github.com': { name, password: token } });
 		}
 
 		return token;
@@ -61,9 +61,9 @@ async function promptForToken (rc, attempts = 0) {
 	return promptForToken(rc, attempts + 1);
 }
 
-async function checkCredentials (token) {
+async function checkCredentials(token) {
 	try {
-		const api = new octokit.Octokit({auth: `token ${token}`});
+		const api = new octokit.Octokit({ auth: `token ${token}` });
 		await api.users.getAuthenticated();
 		return true;
 	} catch (e) {
@@ -72,11 +72,13 @@ async function checkCredentials (token) {
 	}
 }
 
-
-export default async function getGithubAPI () {
-	return github || (github = Promise.resolve()
-		.then(getToken)
-		.then(token => new octokit.Octokit({auth: `token ${token}`})));
+export default async function getGithubAPI() {
+	return (
+		github ||
+		(github = Promise.resolve()
+			.then(getToken)
+			.then(token => new octokit.Octokit({ auth: `token ${token}` })))
+	);
 }
 
 /**
@@ -91,8 +93,9 @@ export default async function getGithubAPI () {
  * @param {string} eventType -
  * @returns {void}
  */
-export async function dispatchEvent (to, eventType) {
-	const {owner, repo, repoId = [owner,repo].join('/')} = typeof to === 'string' ? resolveGithubProject(to) : to;
+export async function dispatchEvent(to, eventType) {
+	const { owner, repo, repoId = [owner, repo].join('/') } =
+		typeof to === 'string' ? resolveGithubProject(to) : to;
 	const api = await getGithubAPI();
 	await api.repos.createDispatchEvent({
 		owner,
@@ -102,16 +105,19 @@ export async function dispatchEvent (to, eventType) {
 	});
 
 	return {
-		message: `(${repoId}) ${eventType} event dispatched.`
+		message: `(${repoId}) ${eventType} event dispatched.`,
 	};
 }
 
-export function resolveGithubProject (dir = process.cwd()) {
-	const run = x => exec(x, {cwd: dir, stdio: 'pipe'}).toString('utf8').trim() || '';
+export function resolveGithubProject(dir = process.cwd()) {
+	const run = x =>
+		exec(x, { cwd: dir, stdio: 'pipe' }).toString('utf8').trim() || '';
 	try {
 		const currentBranch = run('git rev-parse --abbrev-ref HEAD');
 		// const currentBranch = run('git branch --show-current');
-		const remoteBranch = run(`git rev-parse --abbrev-ref ${currentBranch}@{upstream}`);
+		const remoteBranch = run(
+			`git rev-parse --abbrev-ref ${currentBranch}@{upstream}`
+		);
 		const [origin] = remoteBranch.split('/');
 		const url = run(`git remote get-url ${origin}`);
 		const [, repoId] = url.match(/github.com[:/](.+?)(?:\.git)?$/i) ?? [];
@@ -123,7 +129,7 @@ export function resolveGithubProject (dir = process.cwd()) {
 		return {
 			owner,
 			repo,
-			repoId
+			repoId,
 		};
 	} catch {
 		throw new Error('Not in a git repository?');

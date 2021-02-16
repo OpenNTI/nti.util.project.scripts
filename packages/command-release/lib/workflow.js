@@ -1,4 +1,3 @@
-
 import inquirer from 'inquirer';
 
 import { preflightChecks, performRelease } from './project.js';
@@ -8,13 +7,18 @@ import { npx } from './exec.js';
 
 const FORCE_MAJOR = arg('--major', 'repo:Force a major version bump');
 
-export async function releaseWorkspace (repositories) {
-	const responses = await inquirer.prompt(await Promise.all([
-		WhatKindOfRelease(repositories),
-		WhatRepositories(repositories),
-	]));
+export async function releaseWorkspace(repositories) {
+	const responses = await inquirer.prompt(
+		await Promise.all([
+			WhatKindOfRelease(repositories),
+			WhatRepositories(repositories),
+		])
+	);
 
-	const [apps, libs] = responses.queue.reduce((a, x) => (a[x.command === 'app-scripts' ? 0 : 1].push(x), a), [[], []]);
+	const [apps, libs] = responses.queue.reduce(
+		(a, x) => (a[x.command === 'app-scripts' ? 0 : 1].push(x), a),
+		[[], []]
+	);
 
 	for (const repository of libs) {
 		await releaseProject(repository);
@@ -25,8 +29,7 @@ export async function releaseWorkspace (repositories) {
 	}
 }
 
-
-export async function releaseProject (repository) {
+export async function releaseProject(repository) {
 	const tasks = await preflightChecks(repository, FORCE_MAJOR);
 
 	if (tasks !== false) {
@@ -36,15 +39,14 @@ export async function releaseProject (repository) {
 	}
 }
 
-
-export async function maybeClone () {
-	const {clone} = await inquirer.prompt([
+export async function maybeClone() {
+	const { clone } = await inquirer.prompt([
 		{
 			type: 'confirm',
 			message: 'Would you like to clone repositories to release?',
 			name: 'clone',
 			default: false,
-		}
+		},
 	]);
 
 	if (!clone) {

@@ -18,8 +18,7 @@ module.exports = function (request, context) {
 
 		if (fs.existsSync(pkgPath)) {
 			const pkg =
-					CACHE[pkgPath] ||
-					(CACHE[pkgPath] = fs.readJsonSync(pkgPath));
+				CACHE[pkgPath] || (CACHE[pkgPath] = fs.readJsonSync(pkgPath));
 			const file = path.join(request, pkg.module || pkg.main);
 			if (fs.existsSync(file)) {
 				return file;
@@ -34,12 +33,12 @@ module.exports = function (request, context) {
 			if (pkg.module && fs.existsSync(path.join(dir, pkg.module))) {
 				return {
 					...pkg,
-					main: pkg.module
+					main: pkg.module,
 				};
 			}
 
 			return pkg;
-		}
+		},
 	};
 
 	const key = request + '|' + JSON.stringify(context);
@@ -49,12 +48,12 @@ module.exports = function (request, context) {
 			return CACHE[key];
 		}
 
-		return CACHE[key] = resolve.sync(request, resolveOpts);
+		return (CACHE[key] = resolve.sync(request, resolveOpts));
 	} catch (e) {
-		return CACHE[key] = resolve.sync(request, {
+		return (CACHE[key] = resolve.sync(request, {
 			...resolveOpts,
-			basedir: rootDir || basedir
-		});
+			basedir: rootDir || basedir,
+		}));
 	}
 	// } catch (e) {
 	// 	console.error(`\n\n%s\n${request}\n%o`, e, context);

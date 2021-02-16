@@ -4,7 +4,7 @@ import Placeholder from '../Placeholder';
 
 export default {
 	title: 'Placeholder',
-	component: Placeholder
+	component: Placeholder,
 };
 
-export const Primary = () => (<Placeholder />);
+export const Primary = () => <Placeholder />;

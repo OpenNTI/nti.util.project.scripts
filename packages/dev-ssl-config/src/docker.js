@@ -4,7 +4,7 @@ import request from './request';
 
 const CONFIG_HOST = 'nti.ssl.dev.config.share.localhost';
 
-async function checkFile (ext = 'crt') {
+async function checkFile(ext = 'crt') {
 	const res = await getFile(ext).catch(() => false);
 
 	if (!res) {
@@ -14,21 +14,18 @@ async function checkFile (ext = 'crt') {
 	const {
 		data,
 		statusCode: status,
-		headers: {
-			'content-type': type
-		} = {},
+		headers: { 'content-type': type } = {},
 	} = res;
 
 	return {
 		data,
 		status,
-		type
+		type,
 	};
 }
 
-
-export default async function getDockerCert () {
-	if (!await isPortReachable(80)) {
+export default async function getDockerCert() {
+	if (!(await isPortReachable(80))) {
 		return false;
 	}
 
@@ -39,10 +36,12 @@ export default async function getDockerCert () {
 		return false;
 	}
 
-	const check = crt.status === 200 && key.status === 200
-		&& crt.type === 'application/x-x509-ca-cert'
-		&& /-BEGIN CERTIFICATE-/.test(crt.data[0])
-		&& /-BEGIN PRIVATE KEY-/.test(key.data[0]);
+	const check =
+		crt.status === 200 &&
+		key.status === 200 &&
+		crt.type === 'application/x-x509-ca-cert' &&
+		/-BEGIN CERTIFICATE-/.test(crt.data[0]) &&
+		/-BEGIN PRIVATE KEY-/.test(key.data[0]);
 
 	if (!check) {
 		return null;
@@ -56,14 +55,13 @@ export default async function getDockerCert () {
 	};
 }
 
-
-async function getFile (ext) {
+async function getFile(ext) {
 	return request({
 		method: 'GET',
 		setHost: false,
 		host: 'localhost',
 		headers: {
-			host: CONFIG_HOST
+			host: CONFIG_HOST,
 		},
 		port: 80,
 		path: `/localhost.${ext}`,

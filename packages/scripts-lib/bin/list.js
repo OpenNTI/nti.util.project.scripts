@@ -3,17 +3,17 @@ const { promises: fs } = require('fs');
 const { join } = require('path');
 
 Object.assign(exports, {
-	listProjects
+	listProjects,
 });
 
 const isProject = dir => async file => {
 	const target = join(dir, file);
 	const stat = await fs.stat(target);
-	const list = stat.isDirectory() && await fs.readdir(target);
-	return (list && list.includes('.git')) && target;
+	const list = stat.isDirectory() && (await fs.readdir(target));
+	return list && list.includes('.git') && target;
 };
 
-async function listProjects (dir) {
+async function listProjects(dir) {
 	const check = isProject(dir);
 	let out = [];
 	for (const file of await fs.readdir(dir)) {

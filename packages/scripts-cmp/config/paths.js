@@ -5,7 +5,7 @@ const path = require('path');
 
 const paths = require('@nti/app-scripts/config/paths');
 
-function resolveOwn (relativePath) {
+function resolveOwn(relativePath) {
 	return path.resolve(__dirname, '..', relativePath);
 }
 
@@ -18,5 +18,5 @@ module.exports = {
 	ownPath: resolveOwn('.'),
 	ownPackageJson: resolveOwn('package.json'),
 	webpackDevConfig: resolveOwn('./config/webpack.config.js'),
-	testsSetup: paths.resolveApp('src/__test__/setup.js')
+	testsSetup: paths.resolveApp('src/__test__/setup.js'),
 };

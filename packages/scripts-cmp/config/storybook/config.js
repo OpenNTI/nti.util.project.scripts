@@ -1,9 +1,9 @@
 'use strict';
 const CommonWebpackConfig = require('../webpack.config.js');
-const {plugins: jsPlugins} = require('@nti/app-scripts/config/js-loaders');
+const { plugins: jsPlugins } = require('@nti/app-scripts/config/js-loaders');
 // const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
 
-function getEntry (currentEntry, newEntry) {
+function getEntry(currentEntry, newEntry) {
 	if (typeof currentEntry === 'string') {
 		currentEntry = [currentEntry];
 	}
@@ -17,44 +17,41 @@ function getEntry (currentEntry, newEntry) {
 }
 
 module.exports = {
-	'stories': [
-		'../src/**/*.stories.mdx',
-		'../src/**/*.stories.js'
-	],
-	'addons': [
+	stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.js'],
+	addons: [
 		'@storybook/addon-docs',
 		'@storybook/addon-actions',
 		'@storybook/addon-controls',
 		'@storybook/addon-essentials',
 		'@storybook/addon-links',
-		'@storybook/addon-a11y'
+		'@storybook/addon-a11y',
 	],
 
-	webpackFinal: (storybookConfig) => ({
+	webpackFinal: storybookConfig => ({
 		...storybookConfig,
 		entry: getEntry(storybookConfig.entry, require.resolve('./globals')),
 		resolve: {
 			...storybookConfig.resolve,
 			alias: {
 				...storybookConfig.resolve.alias,
-				...CommonWebpackConfig.resolve.alias
-			}
+				...CommonWebpackConfig.resolve.alias,
+			},
 		},
 		module: {
 			...storybookConfig.module,
-			rules: CommonWebpackConfig.module.rules
+			rules: CommonWebpackConfig.module.rules,
 		},
 		devServer: {
 			...storybookConfig.devServer,
 			proxy: [
 				...(storybookConfig.devServer?.proxy ?? []),
 				...CommonWebpackConfig.devServer.proxy,
-			]
+			],
 		},
 		plugins: [
 			// new BitBarWebpackProgressPlugin(),
 			...jsPlugins(),
 			...storybookConfig.plugins,
-		]
-	})
+		],
+	}),
 };

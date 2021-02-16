@@ -4,7 +4,7 @@ const semver = require('semver');
 
 const getVersion = require('./get-version');
 
-const note = (ver, n) => ({version: ver, toString: () => ver, note: n});
+const note = (ver, n) => ({ version: ver, toString: () => ver, note: n });
 
 const npm6Note = chalk`
 Please upgrade to {bold npm 7}. ({grey npm i -g npm})
@@ -26,24 +26,31 @@ dependencies.
 `;
 
 const minVersions = {
-	npm: [
-		note('^6.0.0', npm6Note),
-		'^7.5.2',
-	],
+	npm: [note('^6.0.0', npm6Note), '^7.5.2'],
 	node: ['>=14.5.0'],
 };
 
 for (let cmd of Object.keys(minVersions)) {
 	const version = getVersion(cmd);
 	if (!version) {
-		console.log(chalk.red(`We require ${cmd} v${minVersions[cmd]} or newer. You have do not have this command.`));
+		console.log(
+			chalk.red(
+				`We require ${cmd} v${minVersions[cmd]} or newer. You have do not have this command.`
+			)
+		);
 		process.exit(1);
 	}
 
 	{
 		const target = minVersions[cmd].join(' || ');
 		if (!semver.satisfies(version, target)) {
-			console.log(chalk.red(`We require a minimum version of ${cmd}: ${chalk.underline(target)}. You have: ${chalk.underline(version)}`));
+			console.log(
+				chalk.red(
+					`We require a minimum version of ${cmd}: ${chalk.underline(
+						target
+					)}. You have: ${chalk.underline(version)}`
+				)
+			);
 			process.exit(1);
 		}
 	}

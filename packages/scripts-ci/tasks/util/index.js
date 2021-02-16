@@ -2,16 +2,19 @@
 const fs = require('fs-extra');
 const path = require('path');
 const util = require('util');
-const {spawnSync} = require('child_process');
+const { spawnSync } = require('child_process');
 
-const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
+const call = (x, { env = {}, fd = 'inherit', forgive = false } = {}) => {
 	const [cmd, ...args] = x.split(' ');
-	const {signal, status, stdout, stderr} = spawnSync(cmd, args, {
-		env: {...process.env, ...env},
+	const { signal, status, stdout, stderr } = spawnSync(cmd, args, {
+		env: { ...process.env, ...env },
 		maxBuffer: 2 * 1024 * 1024,
-		stdio: typeof fd === 'string'
-			? (fd === 'ignore' ? 'pipe' : fd)
-			: ['ignore', fd, fd]
+		stdio:
+			typeof fd === 'string'
+				? fd === 'ignore'
+					? 'pipe'
+					: fd
+				: ['ignore', fd, fd],
 	});
 
 	if (typeof fd !== 'string') {
@@ -22,14 +25,13 @@ const call = (x, {env = {}, fd = 'inherit', forgive = false} = {}) => {
 		printLine('Command killed: ', x);
 		process.kill(process.pid, signal);
 		process.exit(status);
-	}
-	else if (status !== 0 && !forgive) {
+	} else if (status !== 0 && !forgive) {
 		printLine('Command failed: ', x);
 		printLine(`${stderr}\n${stdout}`);
 		process.exit(status);
 	}
 
-	return {status, stdout, stderr};
+	return { status, stdout, stderr };
 };
 
 const cwd = process.cwd();
@@ -37,13 +39,13 @@ const packageFile = path.join(cwd, 'package.json');
 const lockfile = path.join(cwd, 'package-lock.json');
 const modulesDir = path.join(cwd, 'node_modules');
 
-Object.assign(exports,{
+Object.assign(exports, {
 	print,
 	printLine,
 	printHeader,
 	getPackageNameAndVersion,
 	call,
-	nofail: {fd: 'ignore', forgive: true},
+	nofail: { fd: 'ignore', forgive: true },
 
 	lockfile,
 	lockfileExists: () => fs.existsSync(lockfile),
@@ -51,13 +53,12 @@ Object.assign(exports,{
 	packageFile,
 });
 
-
-function printLine (...args) {
+function printLine(...args) {
 	return print(...args, '\n');
 }
 
-function print (...args) {
-	const {stdout} = process;
+function print(...args) {
+	const { stdout } = process;
 	return stdout.write(
 		util.formatWithOptions
 			? util.formatWithOptions({ colors: true }, ...args)
@@ -65,8 +66,7 @@ function print (...args) {
 	);
 }
 
-
-function printHeader (...args) {
+function printHeader(...args) {
 	const line = new Array(80).join('–');
 	printLine('\n\n%s', line);
 
@@ -78,15 +78,16 @@ function printHeader (...args) {
 	printLine('\n\n%s\n\n', line);
 }
 
-
-function getPackageNameAndVersion () {
+function getPackageNameAndVersion() {
 	const pkg = fs.readJsonSync(packageFile);
-	const {name, version, publishConfig} = pkg;
+	const { name, version, publishConfig } = pkg;
 	return {
 		// semver: MAJOR.MINOR.PATCH-PRERELEASETAG.PRERELEASEITERATION
 		// If the version has a hyphen, then its a snapshot.
 		isSnapshot: /-/.test(version),
-		name, version, pkg,
-		publishConfig
+		name,
+		version,
+		pkg,
+		publishConfig,
 	};
 }

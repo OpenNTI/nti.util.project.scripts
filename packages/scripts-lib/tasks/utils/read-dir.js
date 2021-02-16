@@ -4,15 +4,15 @@ const { join } = require('path');
 
 Object.assign(module.exports, {
 	listFiles,
-	readdir
+	readdir,
 });
 
-function readdir (dir) {
+function readdir(dir) {
 	const out = [];
 
 	if (fs.existsSync(dir)) {
 		for (let file of fs.readdirSync(dir)) {
-			file = join(dir,file);
+			file = join(dir, file);
 			const stat = fs.statSync(file);
 			out.push(...(stat.isDirectory() ? readdir(file) : [file]));
 		}
@@ -21,7 +21,7 @@ function readdir (dir) {
 	return out;
 }
 
-function listFiles (prefix) {
+function listFiles(prefix) {
 	if (!/\/$/.test(prefix)) {
 		prefix += '/';
 	}

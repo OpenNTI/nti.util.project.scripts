@@ -21,7 +21,10 @@ if (isSnapshot) {
 		process.exit(1);
 	}
 
-	const {stdout} = call(`npm view ${name} .versions --json`, {...nofail, fd: 'pipe'});
+	const { stdout } = call(`npm view ${name} .versions --json`, {
+		...nofail,
+		fd: 'pipe',
+	});
 	const prevVersions = parsePrevVersions(stdout);
 
 	//publish the snapshot (will build)
@@ -30,23 +33,20 @@ if (isSnapshot) {
 	// move the snapshot tag to the current commit
 	// call('git tag snapshot -f', nofail);
 	call(`git tag snapshot -f -m "Cut on ${new Date()}"`, nofail);
-	call('git push origin tag snapshot -f', {...nofail, fd: 'pipe'});
+	call('git push origin tag snapshot -f', { ...nofail, fd: 'pipe' });
 
 	printLine('Removing previous snapshots:');
 	for (let prevVersion of prevVersions) {
-		call(`npm unpublish ${name}@${prevVersion}`, {forgive: true});
+		call(`npm unpublish ${name}@${prevVersion}`, { forgive: true });
 	}
-}
-else {
+} else {
 	call('npm publish');
 }
 
-
-
-function parsePrevVersions (buffer) {
+function parsePrevVersions(buffer) {
 	try {
 		return JSON.parse(buffer.toString())
-			.filter(x => x !== version && (/\d+\.\d+\.\d+-alpha/i).test(x))
+			.filter(x => x !== version && /\d+\.\d+\.\d+-alpha/i.test(x))
 			.sort(semver.compare)
 			.slice(0, -1);
 	} catch (e) {

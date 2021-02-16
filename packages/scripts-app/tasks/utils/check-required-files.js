@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
 
-module.exports = function checkRequiredFiles (files) {
+module.exports = function checkRequiredFiles(files) {
 	let currentFilePath;
 	try {
 		files.forEach(filePath => {

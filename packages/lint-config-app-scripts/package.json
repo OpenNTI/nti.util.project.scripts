@@ -1,24 +1,24 @@
 {
-  "name": "@nti/eslint-config-app-scripts",
-  "version": "2.34.3",
-  "description": "NextThought code style standard",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "keywords": [
-    "eslint",
-    "eslintconfig",
-    "codestyle"
-  ],
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "dependencies": {
-    "@nti/eslint-config-lib-scripts": "^2.34.3",
-    "eslint-plugin-react": "^7.20.5"
-  }
+	"name": "@nti/eslint-config-app-scripts",
+	"version": "2.34.3",
+	"description": "NextThought code style standard",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"keywords": [
+		"eslint",
+		"eslintconfig",
+		"codestyle"
+	],
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"dependencies": {
+		"@nti/eslint-config-lib-scripts": "^2.34.3",
+		"eslint-plugin-react": "^7.20.5"
+	}
 }

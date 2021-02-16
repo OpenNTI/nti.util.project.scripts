@@ -1,6 +1,6 @@
 'use strict';
 
-const {resolve, interfaceVersion} = require('eslint-import-resolver-node');
+const { resolve, interfaceVersion } = require('eslint-import-resolver-node');
 
 module.exports.interfaceVersion = interfaceVersion;
 

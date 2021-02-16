@@ -1,30 +1,30 @@
 name: Project Sync
 
 on:
-  push:
-    # only sync files in the init-files directories
-    paths:
-      - 'packages/*/config/init-files/**'
-  repository_dispatch:
-    types: [sync]
+    push:
+        # only sync files in the init-files directories
+        paths:
+            - 'packages/*/config/init-files/**'
+    repository_dispatch:
+        types: [sync]
 
 jobs:
-  Sync:
-    runs-on: ubuntu-latest
-    name: Sync
-    # if: "!contains(github.event.head_commit.message, 'ci skip') && github.ref == 'refs/heads/master'"
-    if: github.ref == 'refs/heads/master'
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-        with:
-          fetch-depth: 10
+    Sync:
+        runs-on: ubuntu-latest
+        name: Sync
+        # if: "!contains(github.event.head_commit.message, 'ci skip') && github.ref == 'refs/heads/master'"
+        if: github.ref == 'refs/heads/master'
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+              with:
+                  fetch-depth: 10
 
-      - name: Setup
-        run: (cd actions/sync; npm install)
+            - name: Setup
+              run: (cd actions/sync; npm install)
 
-      - name: Sync
-        uses: ./actions/sync
-        with:
-          token: ${{ secrets.MY_GITHUB_TOKEN }}
-          # targets:
+            - name: Sync
+              uses: ./actions/sync
+              with:
+                  token: ${{ secrets.MY_GITHUB_TOKEN }}
+                  # targets:

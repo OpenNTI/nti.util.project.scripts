@@ -1,30 +1,30 @@
 {
-  "name": "@nti/eslint-config-lib-scripts",
-  "version": "2.34.3",
-  "description": "NextThought code style standard",
-  "main": "index.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
-  },
-  "keywords": [
-    "eslint",
-    "eslintconfig",
-    "codestyle"
-  ],
-  "author": "nextthought",
-  "license": "UNLICENSED",
-  "publishConfig": {
-    "registry": "https://npm.nextthought.com"
-  },
-  "dependencies": {
-    "@babel/core": "^7.11.1",
-    "@babel/eslint-parser": "^7.11.0",
-    "@babel/eslint-plugin": "^7.11.0",
-    "eslint": "^7.6.0",
-    "eslint-config-prettier": "^7.2.0",
-    "eslint-plugin-import": "^2.22.0",
-    "eslint-plugin-prettier": "^3.3.1",
-    "prettier": "^2.2.1"
-  }
+	"name": "@nti/eslint-config-lib-scripts",
+	"version": "2.34.3",
+	"description": "NextThought code style standard",
+	"main": "index.js",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/NextThought/nti.util.project.scripts.git"
+	},
+	"keywords": [
+		"eslint",
+		"eslintconfig",
+		"codestyle"
+	],
+	"author": "nextthought",
+	"license": "UNLICENSED",
+	"publishConfig": {
+		"registry": "https://npm.nextthought.com"
+	},
+	"dependencies": {
+		"@babel/core": "^7.11.1",
+		"@babel/eslint-parser": "^7.11.0",
+		"@babel/eslint-plugin": "^7.11.0",
+		"eslint": "^7.6.0",
+		"eslint-config-prettier": "^7.2.0",
+		"eslint-plugin-import": "^2.22.0",
+		"eslint-plugin-prettier": "^3.3.1",
+		"prettier": "^2.2.1"
+	}
 }
