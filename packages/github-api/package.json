@@ -1,6 +1,6 @@
 {
 	"name": "@nti/github-api",
-	"version": "2.31.10",
+	"version": "2.35.1",
 	"description": "",
 	"main": "index.js",
 	"type": "module",

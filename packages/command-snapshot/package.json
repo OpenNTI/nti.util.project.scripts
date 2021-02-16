@@ -1,6 +1,6 @@
 {
 	"name": "@nti/snapshot",
-	"version": "2.34.0",
+	"version": "2.35.1",
 	"description": "",
 	"bin": {
 		"snapshot": "index.js"
@@ -9,6 +9,6 @@
 	"type": "module",
 	"license": "UNLICENSED",
 	"dependencies": {
-		"@nti/github-api": "2.31.10"
+		"@nti/github-api": "^2.35.1"
 	}
 }
