@@ -54,7 +54,7 @@
 		"file-loader": "^6.0.0",
 		"fs-extra": "^9.0.0",
 		"get-port": "^5.1.1",
-		"html-webpack-harddisk-plugin": "^1.0.1",
+		"html-webpack-harddisk-plugin": "^2.0.0",
 		"html-webpack-plugin": "^4.5.0",
 		"ignore-emit-webpack-plugin": "^2.0.2",
 		"json-colorz": "0.x.x",
