@@ -39,6 +39,8 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	BUILD_SOURCE: gitRevision(paths.path),
 	BUILD_PACKAGE_NAME: JSON.stringify(pkg.name),
 	BUILD_PACKAGE_VERSION: JSON.stringify(pkg.version),
+	SENTRY_PROJECT: projectName,
+	SENTRY_RELEASE: `${projectName}@${pkg.version}`,
 });
 
 function isNTIPackage(x) {
