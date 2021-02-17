@@ -15,7 +15,7 @@
 		"registry": "https://npm.nextthought.com"
 	},
 	"dependencies": {
-		"ci-info": "^2.0.0",
+		"ci-info": "^3.0.0",
 		"fs-extra": "^9.0.0",
 		"semver": "^7.3.2"
 	}
