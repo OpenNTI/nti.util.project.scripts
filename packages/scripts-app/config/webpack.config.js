@@ -40,7 +40,9 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	BUILD_PACKAGE_NAME: JSON.stringify(pkg.name),
 	BUILD_PACKAGE_VERSION: JSON.stringify(pkg.version),
 	SENTRY_PROJECT: JSON.stringify(projectName),
-	SENTRY_RELEASE: JSON.stringify(`${projectName}@${pkg.version}`),
+	SENTRY_RELEASE: JSON.stringify(
+		`${projectName}@${pkg.version.replace(/-alpha.*$/, '-alpha')}`
+	),
 });
 
 function isNTIPackage(x) {
