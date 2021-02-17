@@ -31,6 +31,7 @@ const thread = require('./thread');
 const { PROD, ENV } = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
+const projectName = pkg.name.replace(/^@nti\//, '');
 const getWorkspace = require('./workspace');
 
 const Configs = (exports = module.exports = []);
@@ -179,7 +180,7 @@ const ClientConfig = {
 			// This needs to point to the `./node_modules` dir... not the resolved one... once everyone is on the npm7 workspace structure we can delete this.
 			paths.resolveApp('node_modules'),
 			'node_modules', //needed for conflicted versions of modules that get nested, but attempt last.
-		],
+		],pkg.name
 		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
 			...getWorkspace().aliases,
@@ -375,8 +376,8 @@ const ClientConfig = {
 				// sentry-cli configuration
 				authToken: process.env.SENTRY_AUTH_TOKEN,
 				org: 'nextthought',
-				project: pkg.name.replace(/^@nti\//, ''),
-				release: pkg.version,
+				project: projectName,
+				release: `${projectName}@${pkg.version}`,
 
 				include: '.',
 			}),
