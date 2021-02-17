@@ -145,11 +145,11 @@ const ClientConfig = {
 		filename: 'js/[name]-[hash:8].js',
 		chunkFilename: 'js/[name]-[hash:8].js',
 		publicPath: paths.servedPath || '/',
-		devtoolModuleFilenameTemplate: info =>
-			path.relative(
-				path.resolve(paths.path),
-				path.resolve(info.absoluteResourcePath)
-			),
+		// devtoolModuleFilenameTemplate: info =>
+		// 	path.relative(
+		// 		path.resolve(paths.path),
+		// 		path.resolve(info.absoluteResourcePath)
+		// 	),
 	},
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
@@ -374,8 +374,9 @@ const ClientConfig = {
 			new SentryWebpackPlugin({
 				// sentry-cli configuration
 				authToken: process.env.SENTRY_AUTH_TOKEN,
-				org: 'nti',
-				project: pkg.name,
+				org: 'nextthought',
+				project: pkg.name.replace(/^@nti\//, ''),
+				release: pkg.version,
 
 				include: '.',
 			}),
