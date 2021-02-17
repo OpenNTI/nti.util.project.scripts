@@ -18,6 +18,7 @@ const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin'); // let webpack manage this dep
 const { branchSync, commitSync } = require('@nti/git-state');
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 //
 const gitRevision = p =>
 	JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
@@ -368,6 +369,16 @@ const ClientConfig = {
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+		process.env.SENTRY_AUTH_TOKEN &&
+			new SentryWebpackPlugin({
+				// sentry-cli configuration
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+				org: 'nti',
+				project: pkg.name,
+
+				include: '.',
+			}),
 	].filter(Boolean),
 };
 
