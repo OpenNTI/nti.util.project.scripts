@@ -36,6 +36,8 @@ jobs:
                   npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
 
             - name: Generate release build
+              env:
+                  SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
               run: npx @nti/ci-scripts release
 
             - name: notify of failure
