@@ -113,3 +113,10 @@ Object.defineProperty(global, 'matchMedia', {
 		dispatchEvent: jest.fn(),
 	})),
 });
+
+if (!global.IntersectionObserver) {
+	global.IntersectionObserver = jest.fn(f => ({
+		observe: jest.fn(target => f([{ isIntersecting: true, target }])),
+		unobserve: jest.fn(),
+	}));
+}
