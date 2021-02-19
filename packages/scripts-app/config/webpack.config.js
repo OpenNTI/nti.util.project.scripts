@@ -18,7 +18,7 @@ const IgnoreEmitPlugin = require('ignore-emit-webpack-plugin');
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin'); // let webpack manage this dep
 const { branchSync, commitSync } = require('@nti/git-state');
-// const SentryWebpackPlugin = require('@sentry/webpack-plugin');
+const SentryWebpackPlugin = require('@sentry/webpack-plugin');
 //
 const gitRevision = p =>
 	JSON.stringify(`branch: ${branchSync(p)} [${commitSync(p)}]`);
@@ -32,6 +32,10 @@ const { PROD, ENV } = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
 const projectName = pkg.name.replace(/^@nti\//, '');
+const projectRelease = `${projectName}@${pkg.version.replace(
+	/-alpha.*$/,
+	'-alpha'
+)}`;
 const getWorkspace = require('./workspace');
 
 const Configs = (exports = module.exports = []);
@@ -40,9 +44,7 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	BUILD_PACKAGE_NAME: JSON.stringify(pkg.name),
 	BUILD_PACKAGE_VERSION: JSON.stringify(pkg.version),
 	SENTRY_PROJECT: JSON.stringify(projectName),
-	SENTRY_RELEASE: JSON.stringify(
-		`${projectName}@${pkg.version.replace(/-alpha.*$/, '-alpha')}`
-	),
+	SENTRY_RELEASE: JSON.stringify(projectRelease),
 });
 
 function isNTIPackage(x) {
@@ -159,7 +161,7 @@ const ClientConfig = {
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
 	devtool: !sourceMap
-		? false
+		? 'hidden-source-map'
 		: PROD
 		? 'source-map'
 		: 'cheap-module-source-map',
@@ -375,18 +377,19 @@ const ClientConfig = {
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
-		// process.env.SENTRY_AUTH_TOKEN &&
-		// 	new SentryWebpackPlugin({
-		// 		// sentry-cli configuration
-		// 		authToken: process.env.SENTRY_AUTH_TOKEN,
-		// 		org: 'nextthought',
-		// 		project: projectName,
-		// 		release: `${projectName}@${pkg.version}`,
+		process.env.SENTRY_AUTH_TOKEN &&
+			!sourceMap &&
+			new SentryWebpackPlugin({
+				// sentry-cli configuration
+				authToken: process.env.SENTRY_AUTH_TOKEN,
+				org: 'nextthought',
+				project: projectName,
+				release: `${projectName}@${pkg.version}`,
 
-		// 		// webpack specific configuration
-		// 		include: '.',
-		// 		ignore: ['node_modules', 'webpack.config.js'],
-		// 	}),
+				// webpack specific configuration
+				include: './dist',
+				// ignore: ['node_modules', 'webpack.config.js'],
+			}),
 	].filter(Boolean),
 };
 
