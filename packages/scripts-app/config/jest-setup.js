@@ -7,7 +7,7 @@ const cx = require('classnames');
 const esc = s =>
 	s.replace(esc.re || (esc.re = /[-[\]{}()*+?.,\\^$|#\s]/g), '\\$&');
 
-Object.defineProperty(global, 'css', {
+Object.defineProperty(global, 'stylesheet', {
 	value: () =>
 		new Proxy(
 			{},
