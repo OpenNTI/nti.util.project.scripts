@@ -1,6 +1,6 @@
 {
 	"name": "@nti/app-scripts",
-	"version": "2.35.12",
+	"version": "2.35.13",
 	"description": "app-specific scripts & dependencies",
 	"bin": {
 		"app-scripts": "./bin/cli.js"
@@ -41,6 +41,7 @@
 		"abortcontroller-polyfill": "^1.4.0",
 		"astroturf": "^0.10.5",
 		"babel-loader": "^8.0.6",
+		"browserslist-useragent-regexp": "^3.0.0",
 		"cache-loader": "^4.1.0",
 		"case-sensitive-paths-webpack-plugin": "^2.3.0",
 		"chalk": "^4.1.0",
@@ -50,7 +51,6 @@
 		"compression-webpack-plugin": "^6.0.2",
 		"core-js": "^3.6.5",
 		"css-loader": "^5.0.0",
-		"browserslist-useragent-regexp": "^3.0.0",
 		"eslint-webpack-plugin": "2.4.3",
 		"fibers": "^5.0.0",
 		"file-loader": "^6.0.0",
