@@ -9,7 +9,10 @@ const configFile = join(
 );
 
 try {
-	module.exports = DEV ? require(configFile) : computeConfig();
+	module.exports = require(configFile);
+	if (!DEV || fs.statSync(__filename).mtime > fs.statSync(configFile).mtime) {
+		throw new Error('Recompute');
+	}
 } catch {
 	const config = computeConfig();
 	fs.writeFileSync(configFile, JSON.stringify(config, null, 2), {
