@@ -14,6 +14,7 @@ let g =
 		: window.global || window;
 g.process = g.process || {};
 g.process.env = g.process.env || {};
+g.process.cwd = () => '/';
 
 g['revision'] = typeof BUILD_SOURCE !== 'undefined' && BUILD_SOURCE;
 g['BUILD_PACKAGE_NAME'] =
