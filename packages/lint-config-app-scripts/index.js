@@ -32,7 +32,7 @@ function computeConfig() {
 		extends: [
 			'@nti/eslint-config-lib-scripts',
 			'plugin:react/recommended',
-			'prettier/react',
+			'prettier',
 		],
 
 		settings: {
