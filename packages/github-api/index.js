@@ -100,7 +100,6 @@ export async function dispatchEvent(to, eventType) {
 	await api.repos.createDispatchEvent({
 		owner,
 		repo,
-		// eslint-disable-next-line camelcase
 		event_type: eventType,
 	});
 
