@@ -44,11 +44,16 @@ async function update() {
 		.map(x => resolve(dirname(x)));
 
 	await Promise.all(
-		repos.map(repo =>
-			exec(repo, 'git pull --rebase --autostash').catch(er =>
-				console.warn('[warn] %s:\n%s', repo, er)
-			)
-		)
+		repos.map(async repo => {
+			try {
+				// unset hooks just incase something interrupts re-installing them
+				exec('git config --unset core.hooksPath').catch(() => {});
+
+				await exec(repo, 'git pull --rebase --autostash');
+			} catch (er) {
+				console.warn('[warn] %s:\n%s', repo, er);
+			}
+		})
 	);
 }
 
