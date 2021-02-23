@@ -5,6 +5,8 @@ import { dirname, resolve } from 'path';
 import glob from 'glob';
 import ora from 'ora';
 
+const { NTI_BUILDOUT_PATH = null } = process.env;
+
 async function run(cwd, command) {
 	return new Promise((fulfill, reject) => {
 		exec(command, { cwd }, (err, stdout, stderr) => {
@@ -62,6 +64,10 @@ function cleanDupes() {
 		cwd: resolve('.'),
 		stdio: 'inherit',
 	});
+
+	if (NTI_BUILDOUT_PATH != null) {
+		return;
+	}
 
 	// Server requires its dependencies (content packages/client settings) be locally present (under its own node_modules)
 	execSync('npm install --silent', {
