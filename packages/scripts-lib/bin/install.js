@@ -40,18 +40,18 @@ function usesScripts(dir) {
 async function install(root = cwd(), leaf = false) {
 	if (isCI || /\/\.npm|tmp\//.test(hooksDir)) {
 		log(
-			`Ignored install:\n\t${
+			`Ignored install:\n\tINIT_CWD: ${
 				process.env.INIT_CWD
-			}\n\t${process.cwd()}\n\t${hooksDir}`
+			}\n\tCWD:      ${process.cwd()}\n\tHOOK_DIR: ${hooksDir}`
 		);
 		return;
 	}
 
 	if (!leaf) {
 		log(
-			`New install:\n\t${
+			`New install:\n\tINIT_CWD: ${
 				process.env.INIT_CWD
-			}\n\t${process.cwd()}\n\t${hooksDir}`
+			}\n\tCWD:      ${process.cwd()}\n\tHOOK_DIR: ${hooksDir}`
 		);
 	}
 
@@ -82,9 +82,13 @@ async function install(root = cwd(), leaf = false) {
 		}
 
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
-		log(execInRoot('husky install ' + hooksRelativeToRoot));
+		const result = execInRoot('husky install ' + hooksRelativeToRoot);
+		if (/not a Git repository/.test(result)) {
+			throw new Error('install workspace');
+		}
+		log(result);
 	} catch (e) {
-		if (/(.git can't be found)|(not allowed)/.test(e)) {
+		if (/(.git can't be found)|(not allowed)|(install workspace)/.test(e)) {
 			if (root === cwd() && !leaf) {
 				log(`Workspace detected (${root})`);
 				return Promise.all(
