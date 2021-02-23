@@ -1,7 +1,10 @@
 /*eslint-disable curly*/
 'use strict';
-const DEBUG = process.argv.includes('--debug');
-const INSPECT = process.argv.includes('--inspect-service');
+const [PROGRAM, ...ARGS] = process.argv;
+const { NTI_BUILDOUT_PATH = null } = process.env;
+const DEBUG = ARGS.includes('--debug');
+const INSPECT = ARGS.includes('--inspect-service');
+
 const os = require('os');
 const path = require('path');
 
@@ -27,7 +30,7 @@ if (paths.appBuildHook) {
 			chalk.magenta(paths.appBuildHook)
 		);
 
-	call(process.argv[0], [paths.appBuildHook]);
+	call(PROGRAM, [paths.appBuildHook]);
 }
 
 const service = require.resolve('@nti/web-service/src/index.js');
@@ -74,18 +77,37 @@ if (DEBUG) {
 
 writeHeading('Starting web-service.');
 
+if (NTI_BUILDOUT_PATH != null) {
+	if (!ARGS.find(x => /^--protocol/.test(x))) {
+		write(
+			chalk`
+				{bold.blue NOTICE}: {bold NTI_BUILDOUT_PATH} is set, assuming {bold --protocol=proxy }
+			`.replace(/\t+/g, '')
+		);
+		ARGS.push('--protocol', 'proxy');
+	} else {
+		write(
+			chalk`
+				{bold.yellow WARNING}: {bold NTI_BUILDOUT_PATH} is set and {bold --protocol} has been passed. 
+				  If the wrong protocol is used, the service will fail to 
+				  communicate upstream and likely crash.
+			`.replace(/\t+/g, '')
+		);
+	}
+}
+
 const args = [
 	'--env',
 	'development',
 	'--config',
 	tempConfig.name,
-	...process.argv.slice(1).filter(x => !CONSUMED_FLAGS.has(x)),
+	...ARGS.filter(x => !CONSUMED_FLAGS.has(x)),
 ];
 
 if (DEBUG) write('with args: %s\n', chalk.magenta(args.join(' ')));
 
 call(
-	process.argv[0],
+	PROGRAM,
 	[
 		INSPECT && '--inspect-brk',
 		'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
