@@ -209,6 +209,10 @@ const ClientConfig = {
 				}
 				return o;
 			}, {}),
+
+			// since we 'util' directories at src/ root and we allow "appModules" (we should remove them),
+			// we need to enforce bare 'util' gets this package:
+			util: require.resolve('util'),
 		},
 	},
 
