@@ -274,14 +274,12 @@ const ClientConfig = {
 			chunks: 'all',
 			cacheGroups: {
 				shared: {
-					reuseExistingChunk: true,
 					test: module =>
 						module.context &&
 						/node_modules/.test(module.context) &&
 						isNTIPackage(module.context),
 				},
 				vendor: {
-					reuseExistingChunk: true,
 					test: module =>
 						module.context &&
 						/node_modules/.test(module.context) &&
@@ -289,7 +287,7 @@ const ClientConfig = {
 				},
 			},
 		},
-		// Keep the runtime chunk seperated to enable long term caching
+		// Keep the runtime chunk separated to enable long term caching
 		// https://twitter.com/wSokra/status/969679223278505985
 		// https://github.com/facebook/create-react-app/issues/5358
 		runtimeChunk: {
