@@ -7,7 +7,9 @@ const { listProjects } = require('./list');
 require('./validate-env.js');
 const cwd = () => process.env.INIT_CWD ?? process.cwd();
 const exec = (x, work = cwd()) =>
-	execSync(x, { cwd: work, env: process.env }).toString('utf8').trim();
+	execSync(x, { cwd: work, env: process.env, stdio: 'pipe' })
+		.toString('utf8')
+		.trim();
 
 const hooksDir = join(process.cwd(), 'hooks');
 
@@ -18,7 +20,7 @@ const log = existsSync(logFile)
 
 function usesScripts(dir) {
 	try {
-		const { name, dependencies, devDependencies } = JSON.parse(
+		const { name, dependencies = {}, devDependencies = {} } = JSON.parse(
 			readFileSync(join(dir, 'package.json'))
 		);
 		const scripts = [
@@ -77,13 +79,13 @@ async function install(root = cwd(), leaf = false) {
 		}
 
 		if (leaf && !usesScripts(root)) {
-			log('Ignored, path does not use nti.scripts: ' + root);
+			log('Ignored, path does not use nti scripts: ' + root);
 			return;
 		}
 
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
 		const result = execInRoot('husky install ' + hooksRelativeToRoot);
-		if (/not a Git repository/.test(result)) {
+		if (/(not a Git repository)|(not allowed)/.test(result)) {
 			throw new Error('install workspace');
 		}
 		log(result);
