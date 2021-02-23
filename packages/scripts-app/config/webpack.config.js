@@ -266,7 +266,6 @@ const ClientConfig = {
 					},
 				},
 				parallel: true,
-				sourceMap,
 			}),
 		].filter(Boolean),
 		sideEffects: true,
