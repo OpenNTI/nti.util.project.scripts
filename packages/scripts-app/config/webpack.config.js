@@ -272,16 +272,17 @@ const ClientConfig = {
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
+			defaultSizeTypes: ['javascript', 'unknown'],
+			minSize: 20000,
+			maxSize: 1000000,
 			cacheGroups: {
 				shared: {
 					test: module =>
-						module.context &&
 						/node_modules/.test(module.context) &&
 						isNTIPackage(module.context),
 				},
 				vendor: {
 					test: module =>
-						module.context &&
 						/node_modules/.test(module.context) &&
 						!isNTIPackage(module.context),
 				},
