@@ -198,8 +198,8 @@ const ClientConfig = {
 			// https://www.smashingmagazine.com/2016/08/a-glimpse-into-the-future-with-react-native-for-web/
 			'react-native': 'react-native-web',
 
-			...// just in case these modules aren't used in the host project, don't blow up if they aren't present.
-			['react', 'react-dom'].reduce((o, mod) => {
+			// just in case these modules aren't used in the host project, don't blow up if they aren't present.
+			...['react', 'react-dom'].reduce((o, mod) => {
 				try {
 					o[mod] = path.dirname(
 						require.resolve(path.join(mod, 'package.json'))
@@ -212,7 +212,7 @@ const ClientConfig = {
 
 			// since we 'util' directories at src/ root and we allow "appModules" (we should remove them),
 			// we need to enforce bare 'util' gets this package:
-			util: require.resolve('util'),
+			util: path.dirname(require.resolve('util/package.json')),
 		},
 	},
 
