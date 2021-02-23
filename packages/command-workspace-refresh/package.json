@@ -1,6 +1,6 @@
 {
 	"name": "@nti/workspace-refresh",
-	"version": "2.35.1",
+	"version": "2.37.4",
 	"description": "",
 	"bin": {
 		"workspace-refresh": "index.js"
