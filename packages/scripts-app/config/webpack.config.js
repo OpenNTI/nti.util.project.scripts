@@ -119,16 +119,7 @@ function getLoaderRules(server) {
 						? rule
 						: {
 								...rule,
-								use: [
-									// {
-									// 	loader: 'cache-loader',
-									// 	options: {
-									// 		cacheDirectory: cacheDir('nti-build')
-									// 	}
-									// },
-									thread(),
-									...rule.use,
-								].filter(Boolean),
+								use: [thread(), ...rule.use].filter(Boolean),
 						  }
 				),
 		},

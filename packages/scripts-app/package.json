@@ -43,7 +43,6 @@
 		"babel-loader": "^8.0.6",
 		"browserslist-useragent-regexp": "^3.0.0",
 		"buffer": "^6.0.3",
-		"cache-loader": "^4.1.0",
 		"case-sensitive-paths-webpack-plugin": "^2.3.0",
 		"chalk": "^4.1.0",
 		"ci-info": "^3.0.0",
@@ -91,5 +90,6 @@
 		"webpack-format-messages": "^2.0.6",
 		"whatwg-fetch": "^3.0.0",
 		"worker-loader": "^3.0.0"
-	}
+	},
+	"gitHead": "4b7987e296828865a7b72d9c6985ab9d40ab94d2"
 }
