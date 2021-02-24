@@ -72,6 +72,15 @@ function tempPage() {
 function getLoaderRules(server) {
 	return [
 		{
+			parser: {
+				// Disable non-standard language features
+				requireInclude: !PROD, // disable require.include in production (the dev server uses this tho)
+				requireEnsure: !PROD, // disable require.ensure in production (the dev server uses this tho)
+				requireContext: !PROD, // disable require.context in production (the dev server uses this tho)
+			},
+		},
+
+		{
 			oneOf: [
 				{
 					test: /.*/,
@@ -155,17 +164,21 @@ const ClientConfig = {
 		? 'source-map'
 		: 'cheap-module-source-map',
 
+	// Some libraries import Node modules but don't use them in the browser.
+	// Tell Webpack to provide empty mocks for them so importing them works.
+	node: {
+		dgram: 'empty',
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+		child_process: 'empty',
+		crypto: 'empty',
+	},
+
 	stats: 'errors-only',
 	target: 'web',
 
 	resolve: {
-		fallback: {
-			buffer: require.resolve('buffer'),
-			os: require.resolve('os-browserify/browser'),
-			path: require.resolve('path-browserify'),
-			stream: require.resolve('stream-browserify'),
-			util: require.resolve('util'),
-		},
 		modules: [
 			paths.appModules,
 			// This needs to point to the `./node_modules` dir... not the resolved one... once everyone is on the npm7 workspace structure we can delete this.
@@ -200,10 +213,6 @@ const ClientConfig = {
 				}
 				return o;
 			}, {}),
-
-			// since we 'util' directories at src/ root and we allow "appModules" (we should remove them),
-			// we need to enforce bare 'util' gets this package:
-			util: path.dirname(require.resolve('util/package.json')),
 		},
 	},
 
@@ -266,7 +275,6 @@ const ClientConfig = {
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
-			defaultSizeTypes: ['javascript', 'unknown'],
 			minSize: 20000,
 			maxSize: 1000000,
 			cacheGroups: {
@@ -357,7 +365,7 @@ const ClientConfig = {
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
 
-		PROD && new CompressionPlugin(),
+		PROD && new CompressionPlugin({ cache: false }),
 
 		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),

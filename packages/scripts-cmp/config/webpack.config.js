@@ -48,6 +48,13 @@ exports = module.exports = {
 
 	devtool: 'cheap-module-source-map',
 
+	node: {
+		dgram: 'empty',
+		fs: 'empty',
+		net: 'empty',
+		tls: 'empty',
+	},
+
 	target: 'web',
 
 	resolve: {
@@ -85,6 +92,9 @@ exports = module.exports = {
 	module: {
 		strictExportPresence: true,
 		rules: [
+			// Disable require.ensure as it's not a standard language feature.
+			{ parser: { requireEnsure: false } },
+
 			{
 				oneOf: [
 					...jsLoaders(),
