@@ -368,13 +368,13 @@ const ClientConfig = {
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
 		process.env.SENTRY_AUTH_TOKEN &&
-			!sourceMap &&
+			PROD &&
 			new SentryWebpackPlugin({
 				// sentry-cli configuration
 				authToken: process.env.SENTRY_AUTH_TOKEN,
 				org: 'nextthought',
 				project: projectName,
-				release: `${projectName}@${pkg.version}`,
+				release: projectRelease,
 
 				// webpack specific configuration
 				include: './dist',
