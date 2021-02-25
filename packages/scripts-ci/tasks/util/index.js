@@ -45,7 +45,7 @@ Object.assign(exports, {
 	printHeader,
 	getPackageNameAndVersion,
 	call,
-	nofail: { fd: 'ignore', forgive: true },
+	ignoreErrors: { fd: 'ignore', forgive: true },
 
 	lockfile,
 	lockfileExists: () => fs.existsSync(lockfile),

@@ -1,6 +1,11 @@
 'use strict';
 const semver = require('semver');
-const { call, getPackageNameAndVersion, nofail, printLine } = require('./util');
+const {
+	call,
+	getPackageNameAndVersion,
+	ignoreErrors,
+	printLine,
+} = require('./util');
 
 const { isSnapshot, name, version, publishConfig } = getPackageNameAndVersion();
 
@@ -22,7 +27,7 @@ if (isSnapshot) {
 	}
 
 	const { stdout } = call(`npm view ${name} .versions --json`, {
-		...nofail,
+		...ignoreErrors,
 		fd: 'pipe',
 	});
 	const prevVersions = parsePrevVersions(stdout);
@@ -31,9 +36,9 @@ if (isSnapshot) {
 	call('npm publish --tag alpha');
 
 	// move the snapshot tag to the current commit
-	// call('git tag snapshot -f', nofail);
-	call(`git tag snapshot -f -m "Cut on ${new Date()}"`, nofail);
-	call('git push origin tag snapshot -f', { ...nofail, fd: 'pipe' });
+	// call('git tag snapshot -f', ignoreErrors);
+	call(`git tag snapshot -f -m "Cut on ${new Date()}"`, ignoreErrors);
+	call('git push origin tag snapshot -f', { ...ignoreErrors, fd: 'pipe' });
 
 	printLine('Removing previous snapshots:');
 	for (let prevVersion of prevVersions) {
