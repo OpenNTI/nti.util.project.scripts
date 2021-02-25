@@ -158,11 +158,7 @@ const ClientConfig = {
 	},
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
-	devtool: !sourceMap
-		? 'hidden-source-map'
-		: PROD
-		? 'source-map'
-		: 'cheap-module-source-map',
+	devtool: !sourceMap ? 'hidden-source-map' : 'cheap-module-source-map',
 
 	// Some libraries import Node modules but don't use them in the browser.
 	// Tell Webpack to provide empty mocks for them so importing them works.
@@ -270,6 +266,7 @@ const ClientConfig = {
 					},
 				},
 				parallel: true,
+				sourceMap,
 			}),
 		].filter(Boolean),
 		sideEffects: true,
