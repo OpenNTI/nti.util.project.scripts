@@ -14,6 +14,8 @@ if (!publishConfig || !publishConfig.registry) {
 	process.exit(1);
 }
 
+process.env.DISABLE_SOURCE_MAPS = null;
+
 if (!isSnapshot) {
 	process.env.DISABLE_SOURCE_MAPS = 'yes';
 }
