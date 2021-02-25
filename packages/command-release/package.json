@@ -12,7 +12,7 @@
 		"@nti/git-state": "^5.0.0",
 		"@nti/github-api": "^2.37.3",
 		"chalk": "^4.1.0",
-		"inquirer": "^7.3.2",
+		"inquirer": "^8.0.0",
 		"lock-verify": "^2.2.0",
 		"semver": "^7.3.2",
 		"word-wrap": "^1.2.3"
