@@ -135,7 +135,8 @@ function getLoaderRules(server) {
 	].filter(Boolean);
 }
 
-const sourceMap = !process.env.DISABLE_SOURCE_MAPS;
+const sourceMap = process.env.DISABLE_SOURCE_MAPS !== 'yes';
+console.log('Source Maps are %o', sourceMap ? 'ENABLED' : 'DISABLED');
 
 const ClientConfig = {
 	mode: ENV,
@@ -158,7 +159,11 @@ const ClientConfig = {
 	},
 
 	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
-	devtool: !sourceMap ? 'hidden-source-map' : 'cheap-module-source-map',
+	devtool: !sourceMap
+		? 'hidden-source-map'
+		: PROD
+		? 'source-map'
+		: 'cheap-module-source-map',
 
 	// Some libraries import Node modules but don't use them in the browser.
 	// Tell Webpack to provide empty mocks for them so importing them works.
@@ -368,7 +373,7 @@ const ClientConfig = {
 		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
 
 		process.env.SENTRY_AUTH_TOKEN &&
-			PROD &&
+			!sourceMap &&
 			new SentryWebpackPlugin({
 				// sentry-cli configuration
 				authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -377,7 +382,7 @@ const ClientConfig = {
 				release: projectRelease,
 
 				// webpack specific configuration
-				include: './dist',
+				include: './dist/client',
 				// ignore: ['node_modules', 'webpack.config.js'],
 			}),
 	].filter(Boolean),
