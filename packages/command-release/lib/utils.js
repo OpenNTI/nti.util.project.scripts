@@ -25,41 +25,16 @@ export const readJSON = async file => JSON.parse(await fs.readFile(file));
 export const readJSONSync = file =>
 	JSON.parse(readFileSync(file, { encoding: 'utf8' }));
 
-export async function getTermSize() {
-	try {
-		return getTermSizeSync(await exec('.', 'resize'));
-	} catch {
-		return {};
-	}
-}
-
-export function getTermSizeSync(output) {
-	try {
-		if (!output) {
-			output = execSync('.', 'resize');
-		}
-		const { COLUMNS, LINES } = output
-			.split('\n')
-			.reduce(
-				(o, line, key, value) => (
-					([key, value] = line.split('=')),
-					(o[key] = parseInt(value, 10)),
-					o
-				),
-				{}
-			);
-
-		return {
-			columns: COLUMNS,
-			lines: LINES,
-		};
-	} catch {
-		return {};
-	}
+export function getTermSize() {
+	const { rows, columns } = process.stdout;
+	return {
+		rows,
+		columns,
+	};
 }
 
 function printHelp(flags) {
-	const { columns = 80 } = getTermSizeSync();
+	const { columns = 80 } = getTermSize();
 	let maxColumn = 0;
 
 	const groups = {};

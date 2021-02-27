@@ -43,12 +43,11 @@ export function WhatKindOfRelease(repositories) {
 }
 
 export async function WhatRepositories(repositories) {
-	const { lines } = await getTermSize();
-
+	const { rows } = getTermSize();
 	return {
 		message: 'Which projects do you want to release?',
 		type: 'checkbox',
-		pageSize: lines - 2,
+		pageSize: rows - 2,
 		loop: false,
 		choices({ type = 'release' }) {
 			let choices = repositories;
