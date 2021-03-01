@@ -24,6 +24,7 @@ module.exports = {
 				],
 			},
 		],
+		'custom-property-empty-line-before': null,
 		'declaration-block-single-line-max-declarations': 3,
 		'max-empty-lines': null,
 		'no-descending-specificity': null,
