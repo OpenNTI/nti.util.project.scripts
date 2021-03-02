@@ -5,6 +5,17 @@ import { dirname, resolve } from 'path';
 import glob from 'glob';
 import ora from 'ora';
 
+if (!fs.rm) {
+	console.warn(
+		`
+
+	Your version of nodejs is too old. Please use 14.14.0 or newer.
+
+	`.replace(/\t/g, '')
+	);
+	process.exit(1);
+}
+
 const { NTI_BUILDOUT_PATH = null } = process.env;
 
 async function run(cwd, command) {
@@ -33,6 +44,7 @@ function cleanDupes() {
 	const duplicates = candidates.filter(
 		(x, i, a) => !a.slice(0, i).find(y => x.startsWith(y))
 	);
+
 	for (const x of duplicates) {
 		// remove the duplicate
 		fs.rm(x, { force: true, recursive: true })
