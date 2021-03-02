@@ -21,9 +21,9 @@ const query = (module.exports =
 		? NTI_DEV_BROWSER.split(',')
 		: [
 				// This is the primary set:
-				'> 1% and last 2 versions',
-				// The last non-chromium Edge (https://www.engadget.com/microsoft-edge-legacy-phase-out-232116614.html)
-				// 'Edge 17',
+				'> 1% in US and last 2 versions',
+				// We have a large portion of safari users...
+				'safari >= 12',
 				// We should keep these for good measure.
 				'not dead',
 				// No IEs, dead or not
