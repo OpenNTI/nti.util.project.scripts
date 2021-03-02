@@ -1,6 +1,6 @@
 {
 	"name": "@nti/stylelint-config-standard",
-	"version": "2.37.2",
+	"version": "2.39.0",
 	"description": "NextThought css style standard",
 	"main": "index.js",
 	"repository": {
