@@ -9,7 +9,6 @@ const { isCI } = require('ci-info');
 const tmp = require('tmp');
 const chalk = require('chalk');
 const { branchSync, commitSync } = require('@nti/git-state');
-const { getUserAgentRegExp } = require('browserslist-useragent-regexp');
 //Webpack plugins:
 const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
 const CircularDependencyPlugin = require('circular-dependency-plugin');
@@ -39,10 +38,6 @@ const projectRelease = `${projectName}@${pkg.version.replace(
 	'-alpha'
 )}`;
 const getWorkspace = require('./workspace');
-const supportedBrowsers = getUserAgentRegExp({
-	browsers: require('@nti/lib-scripts/config/browserlist'),
-	allowHigherVersions: true,
-});
 
 const Configs = (exports = module.exports = []);
 const ContentGlobalDefinitions = new webpack.DefinePlugin({
@@ -51,7 +46,6 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	BUILD_PACKAGE_VERSION: JSON.stringify(pkg.version),
 	SENTRY_PROJECT: JSON.stringify(projectName),
 	SENTRY_RELEASE: JSON.stringify(projectRelease),
-	SUPPORTED_AGENTS: JSON.stringify(supportedBrowsers.toString()),
 });
 
 function isNTIPackage(x) {
