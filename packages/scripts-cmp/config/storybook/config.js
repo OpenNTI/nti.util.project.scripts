@@ -1,7 +1,7 @@
 'use strict';
 const CommonWebpackConfig = require('../webpack.config.js');
 const { plugins: jsPlugins } = require('@nti/app-scripts/config/js-loaders');
-// const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
+const { plugins: cssPlugins } = require('@nti/app-scripts/config/css-loaders');
 
 function getEntry(currentEntry, newEntry) {
 	if (typeof currentEntry === 'string') {
@@ -17,6 +17,9 @@ function getEntry(currentEntry, newEntry) {
 }
 
 module.exports = {
+	core: {
+		builder: 'webpack5',
+	},
 	stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.js'],
 	addons: [
 		'@storybook/addon-docs',
@@ -32,6 +35,9 @@ module.exports = {
 		entry: getEntry(storybookConfig.entry, require.resolve('./globals')),
 		resolve: {
 			...storybookConfig.resolve,
+			...CommonWebpackConfig.resolve,
+			// extensions: storybookConfig.resolve.extensions,
+			mainFields: ['module', 'browser', 'main'], // default this value from storybook.
 			alias: {
 				...storybookConfig.resolve.alias,
 				...CommonWebpackConfig.resolve.alias,
@@ -48,10 +54,6 @@ module.exports = {
 				...CommonWebpackConfig.devServer.proxy,
 			],
 		},
-		plugins: [
-			// new BitBarWebpackProgressPlugin(),
-			...jsPlugins(),
-			...storybookConfig.plugins,
-		],
+		plugins: [...jsPlugins(), ...cssPlugins(), ...storybookConfig.plugins],
 	}),
 };
