@@ -1,6 +1,6 @@
 {
 	"name": "@nti/workspace-post-install",
-	"version": "2.37.9",
+	"version": "2.39.1",
 	"description": "",
 	"bin": {
 		"workspace-post-install": "index.js"
