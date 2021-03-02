@@ -16,7 +16,7 @@ if (!fs.rm) {
 	process.exit(1);
 }
 
-const { NTI_BUILDOUT_PATH = null } = process.env;
+const { NTI_BUILDOUT_PATH = null, NTI_SKIP_DOCKER = null } = process.env;
 
 async function run(cwd, command) {
 	return new Promise((fulfill, reject) => {
@@ -77,7 +77,7 @@ function cleanDupes() {
 		stdio: 'inherit',
 	});
 
-	if (NTI_BUILDOUT_PATH != null) {
+	if (NTI_BUILDOUT_PATH != null || NTI_SKIP_DOCKER != null) {
 		return;
 	}
 
