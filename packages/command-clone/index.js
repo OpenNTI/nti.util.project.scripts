@@ -26,12 +26,15 @@ const WEBAPP_REPOSITORY_NAMESPACES = new RegExp(
 	'i'
 );
 
+const NT = {
+	all: true,
+	user: null,
+	org: 'NextThought',
+	team: 'WebApp-Platform',
+};
 const PRESETS = {
 	webapp: {
-		all: true,
-		user: null,
-		org: 'NextThought',
-		team: 'WebApp-Platform',
+		...NT,
 		filter(repo) {
 			if (repo.full_name in PRESETS.webapp.aliases) {
 				return true;
@@ -53,6 +56,13 @@ const PRESETS = {
 			'NextThought/foundation-sites-fork': 'forks/foundation-sites',
 			'NextThought/react-sticky': 'forks/react-sticky',
 			'NextThought/git-state': 'forks/git-state',
+		},
+	},
+	'client-assets': {
+		...NT,
+		team: 'Developers',
+		filter(repo) {
+			return /^nti\.client\.sites/.test(repo.name);
 		},
 	},
 };
@@ -97,7 +107,7 @@ const options = yargs(hideBin(process.argv))
 		group: 'Selection:',
 		conflicts: ['all', 'org', 'team', 'user'],
 		describe: '---',
-		choices: ['webapp'],
+		choices: Object.keys(PRESETS),
 	})
 	.option('workspace', {
 		group: 'Workspace:',
