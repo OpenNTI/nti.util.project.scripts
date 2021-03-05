@@ -3,40 +3,7 @@ require('regenerator-runtime/runtime');
 const chalk = require('chalk');
 const paths = require('../../config/paths');
 
-const Mock = () =>
-	new Proxy(
-		function () {
-			return Mock();
-		}, //the Target (the thing we are proxying)... a callable/newable function
-		{
-			getOwnPropertyDescriptor: (_, p) =>
-				Object.getOwnPropertyDescriptor(_, p) || {
-					configurable: true,
-					writable: true,
-					enumerable: false,
-					value: Mock(),
-				},
-
-			has: (_, p) =>
-				typeof p !== 'symbol' ||
-				p === Symbol.iterator ||
-				p === Symbol.toPrimitive,
-
-			//the get() hook...
-			get: (_, p) => {
-				const getters = {
-					[Symbol.iterator]: () => ({
-						next: () => ({ done: true }),
-					}),
-
-					//If caller wants to unbox the primitive... return a function that generates a string
-					[Symbol.toPrimitive]: () => String(Date.now()),
-				};
-
-				return getters[p] || (typeof p === 'symbol' ? void 0 : Mock());
-			},
-		}
-	);
+const Mock = require('./mock');
 
 //[Symbol.iterator]() { return { next() { return {done: true}}};}
 
