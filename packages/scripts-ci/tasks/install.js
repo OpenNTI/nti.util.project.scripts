@@ -14,11 +14,8 @@ const options = {
 };
 
 printLine('::group::Installing dependencies ... ');
-call('npm set optional false', options);
-
-printLine(`npm ${!lockfileExists() ? 'i' : 'ci'} --no-optional`);
 const { status: result } = call(
-	`npm ${!lockfileExists() ? 'i' : 'ci'} --no-optional`,
+	`npm ${!lockfileExists() ? 'i' : 'ci'}`,
 	options
 );
 if (result === SUCCESS) {
