@@ -1,6 +1,6 @@
 {
 	"name": "@nti/app-scripts",
-	"version": "2.40.0",
+	"version": "2.40.1",
 	"description": "app-specific scripts & dependencies",
 	"bin": {
 		"app-scripts": "./bin/cli.js"
@@ -88,9 +88,9 @@
 		"whatwg-fetch": "^3.0.0",
 		"worker-loader": "^3.0.0"
 	},
-  "optionalDependencies": {
-    "@nti/dev-ssl-config": "^2.35.1",
+	"optionalDependencies": {
+		"@nti/dev-ssl-config": "^2.35.1",
 		"@nti/web-service": "^1.42.0"
-  },
+	},
 	"gitHead": "4b7987e296828865a7b72d9c6985ab9d40ab94d2"
 }
