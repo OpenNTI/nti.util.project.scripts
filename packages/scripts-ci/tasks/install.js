@@ -15,7 +15,7 @@ const options = {
 
 printLine('::group::Installing dependencies ... ');
 const { status: result } = call(
-	`npm ${!lockfileExists() ? 'i' : 'ci'} --no-progress`,
+	`npm ${!lockfileExists() ? 'i' : 'ci'} --no-progress --no-optional`,
 	options
 );
 if (result === SUCCESS) {
