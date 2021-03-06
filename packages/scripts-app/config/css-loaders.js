@@ -15,8 +15,8 @@ const requireMaybe = id => {
 	}
 };
 
-const style = server => ({
-	loader: !PROD && !server ? 'style-loader' : MiniCssExtractPlugin.loader,
+const style = inline => ({
+	loader: !PROD && inline ? 'style-loader' : MiniCssExtractPlugin.loader,
 	options: {
 		esModule: false,
 	},
@@ -90,7 +90,7 @@ const loaders = (paths, options = {}) => {
 			test: /\.s(a|c)ss$/,
 			sideEffects: true,
 			use: [
-				style(options.server),
+				style(options.inline),
 				css(),
 				postCss(paths),
 				resolveUrl(),
@@ -103,7 +103,7 @@ const loaders = (paths, options = {}) => {
 			include: ntiStyleDirs,
 			sideEffects: true,
 			use: [
-				style(options.server),
+				style(options.inline),
 				css({
 					modules: {
 						exportGlobals: true,
@@ -120,7 +120,7 @@ const loaders = (paths, options = {}) => {
 			sideEffects: true,
 			exclude: ntiStyleDirs,
 			use: [
-				style(options.server),
+				style(options.inline),
 				css({ importLoaders: 1 }),
 				postCss(paths),
 			],
@@ -128,9 +128,9 @@ const loaders = (paths, options = {}) => {
 	];
 };
 
-const plugins = (options = {}, server = false) =>
+const plugins = (options = {}, inline = false) =>
 	[
-		(PROD || server) &&
+		(PROD || !inline) &&
 			new MiniCssExtractPlugin({
 				ignoreOrder: true,
 				filename: 'resources/[name]-[contenthash].css',
