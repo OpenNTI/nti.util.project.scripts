@@ -49,6 +49,8 @@ if (isSnapshot) {
 	);
 }
 
+printLine(JSON.stringify(pkg, null, 2));
+
 fs.writeJsonSync(packageFile, pkg, { spaces: 2 });
 
 printLine('done.');
