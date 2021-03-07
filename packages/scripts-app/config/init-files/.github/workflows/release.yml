@@ -23,7 +23,7 @@ jobs:
             - name: setup nodejs
               uses: actions/setup-node@v1
               with:
-                  node-version: '14.x'
+                  node-version: '15.x'
 
             - name: configure npm
               env:
@@ -38,7 +38,7 @@ jobs:
             - name: Generate release build
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-              run: npx @nti/ci-scripts release
+              run: npx -y @nti/ci-scripts -- release
 
             - name: notify of failure
               if: failure()

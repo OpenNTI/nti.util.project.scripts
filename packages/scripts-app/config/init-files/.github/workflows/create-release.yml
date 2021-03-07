@@ -24,7 +24,7 @@ jobs:
             - name: setup nodejs
               uses: actions/setup-node@v1
               with:
-                  node-version: '14.x'
+                  node-version: '15.x'
 
             - name: configure env
               env:
@@ -39,7 +39,7 @@ jobs:
                   git config user.name nti-jarvis
 
             - name: Generate release build
-              run: npx @nti/release
+              run: npx -y @nti/release
 
             - name: notify of failure
               if: failure()
