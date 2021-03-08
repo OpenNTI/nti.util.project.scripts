@@ -1,6 +1,6 @@
 {
 	"name": "@nti/eslint-config-lib-scripts",
-	"version": "2.37.2",
+	"version": "2.40.5",
 	"description": "NextThought code style standard",
 	"main": "index.js",
 	"repository": {
