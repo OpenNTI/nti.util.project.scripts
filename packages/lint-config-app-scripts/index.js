@@ -37,10 +37,11 @@ function computeConfig() {
 
 		settings: {
 			'import/extensions': ['.js', '.mjs', '.jsx'],
+			'import/internal-regex': '^(@nti|internal)\\/',
 			'import/resolver': {
 				[require.resolve('./node-query-resolver')]: {
 					extensions: ['.js', '.mjs', '.jsx'],
-					moduleDirectory: ['node_modules', 'src/main/js'],
+					moduleDirectory: ['node_modules'],
 				},
 			},
 			react: {

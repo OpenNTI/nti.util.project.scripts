@@ -109,6 +109,7 @@ function computeConfig() {
 
 		settings: {
 			'import/extensions': ['.js', '.mjs'],
+			'import/internal-regex': '^(@nti|internal)\\/',
 			'import/resolver': {
 				node: {
 					extensions: ['.js', '.mjs'],
