@@ -1,4 +1,5 @@
 'use strict';
+const rimraf = require('rimraf');
 const semver = require('semver');
 const {
 	call,
@@ -12,12 +13,6 @@ const { isSnapshot, name, version, publishConfig } = getPackageNameAndVersion();
 if (!publishConfig || !publishConfig.registry) {
 	printLine('Refusing to publish without a publishConfig.registry set');
 	process.exit(1);
-}
-
-process.env.DISABLE_SOURCE_MAPS = null;
-
-if (!isSnapshot) {
-	process.env.DISABLE_SOURCE_MAPS = 'yes';
 }
 
 call('npm run build --if-present -- --skip-checks');
@@ -47,6 +42,8 @@ if (isSnapshot) {
 		call(`npm unpublish ${name}@${prevVersion}`, { forgive: true });
 	}
 } else {
+	// Remove sourcemaps before they're published
+	rimraf.sync('dist/client/js/*.map*(.gz)');
 	call('npm publish');
 }
 

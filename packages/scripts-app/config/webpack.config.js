@@ -121,9 +121,6 @@ function getLoaderRules(server) {
 	].filter(Boolean);
 }
 
-const sourceMap = process.env.DISABLE_SOURCE_MAPS !== 'yes';
-console.log('Source Maps are %o', sourceMap ? 'ENABLED' : 'DISABLED');
-
 const ClientConfig = {
 	mode: ENV,
 	bail: true,
@@ -144,12 +141,7 @@ const ClientConfig = {
 		// 	),
 	},
 
-	// Turning source maps off will give a very significant speed boost. (My tests of the mobile app go from 4min -> 1min)
-	devtool: !sourceMap
-		? 'hidden-source-map'
-		: PROD
-		? 'source-map'
-		: 'cheap-module-source-map',
+	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
 
 	stats: 'errors-only',
 	target: 'web',
@@ -334,13 +326,6 @@ const ClientConfig = {
 			},
 		}),
 		new HtmlWebpackHarddiskPlugin(),
-		// new PreloadWebpackPlugin({
-		// 	fileBlacklist: [
-		// 		/admin/,
-		// 		/\.map/,
-		// 		/\/no-preload\//
-		// 	]
-		// }),
 
 		// Inlines the webpack runtime script. This script is too small to warrant
 		// a network request.
@@ -356,11 +341,7 @@ const ClientConfig = {
 
 		PROD && new CompressionPlugin(),
 
-		// https://github.com/jmblog/how-to-optimize-momentjs-with-webpack
-		new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
-
 		process.env.SENTRY_AUTH_TOKEN &&
-			!sourceMap &&
 			new SentryWebpackPlugin({
 				// sentry-cli configuration
 				authToken: process.env.SENTRY_AUTH_TOKEN,
@@ -370,7 +351,6 @@ const ClientConfig = {
 
 				// webpack specific configuration
 				include: './dist/client',
-				// ignore: ['node_modules', 'webpack.config.js'],
 			}),
 	].filter(Boolean),
 };
