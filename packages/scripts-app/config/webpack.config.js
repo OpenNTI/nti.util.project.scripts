@@ -351,6 +351,7 @@ const ClientConfig = {
 
 				// webpack specific configuration
 				include: './dist/client',
+				ignore: ['node_modules', './dist/client/resources'],
 			}),
 	].filter(Boolean),
 };
