@@ -36,10 +36,14 @@ const mock = require('@nti/lib-scripts/tasks/utils/mock');
 		}
 	}
 
-	await fs.writeFile(
-		'./strings.known.json',
-		JSON.stringify(__getLocalData().translations, null, 2)
-	);
+	if (typeof __getLocalData !== 'undefined') {
+		await fs.writeFile(
+			'./strings.known.json',
+			JSON.stringify(__getLocalData().translations, null, 2)
+		);
+	} else {
+		console.error('There was an error processing strings');
+	}
 
 	// Cut off pending promises and tasks that might
 	// have been started by including app code.
