@@ -3,6 +3,7 @@
 const DEBUG =
 	process.argv.includes('--debug') || process.argv.includes('--profile');
 const NO_MINIFY =
+	global.NTI_DevServer ||
 	process.argv.includes('--skip-checks') ||
 	process.argv.includes('--dev-build');
 
@@ -101,7 +102,7 @@ function getLoaderRules(server) {
 
 				...cssLoaders(paths, {
 					server,
-					inline: !PROD && !DEBUG,
+					inline: global.NTI_DevServer,
 					sass: {
 						sassOptions: {
 							includePaths: [
@@ -287,7 +288,7 @@ const ClientConfig = {
 
 	plugins: [
 		...jsPlugins(),
-		...cssPlugins(!PROD && !DEBUG),
+		...cssPlugins(global.NTI_DevServer),
 		DEBUG &&
 			new CircularDependencyPlugin({
 				// exclude detection of files based on a RegExp

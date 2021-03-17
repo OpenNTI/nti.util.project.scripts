@@ -20,6 +20,7 @@ function clearLine(n) {
 const ensureArray = x => (Array.isArray(x) ? x : [x]);
 
 exports.setupDeveloperMode = async function setupDeveloperMode(config) {
+	global.NTI_DevServer = true;
 	for (let n of ['info', 'log', 'debug']) {
 		clearLine(n);
 	}
