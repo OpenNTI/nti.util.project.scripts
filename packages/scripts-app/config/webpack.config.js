@@ -132,7 +132,9 @@ const ClientConfig = {
 		index: [require.resolve('./polyfills'), paths.appIndexJs],
 	},
 	//Hide this key from webpack, but allow our devmode module to access this value...
-	[Symbol.for('template temp file')]: PROD ? void 0 : tempPage(),
+	[Symbol.for('template temp file')]: global.NTI_DevServer
+		? tempPage()
+		: void 0,
 	output: {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[contenthash:8].js',
@@ -281,9 +283,11 @@ const ClientConfig = {
 		// Keep the runtime chunk separated to enable long term caching
 		// https://twitter.com/wSokra/status/969679223278505985
 		// https://github.com/facebook/create-react-app/issues/5358
-		runtimeChunk: {
-			name: entrypoint => `runtime-${entrypoint.name}`,
-		},
+		runtimeChunk: global.NTI_DevServer
+			? void 0
+			: {
+					name: entrypoint => `runtime-${entrypoint.name}`,
+			  },
 	},
 
 	performance: false,
@@ -315,27 +319,29 @@ const ClientConfig = {
 			}),
 
 		new HtmlWebpackPlugin({
-			inject: true,
+			inject: 'body',
 			alwaysWriteToDisk: true,
-			filename: PROD ? 'page.html' : tempPage(),
+			filename: global.NTI_DevServer ? tempPage() : 'page.html',
 			template: paths.appHtml,
-			minify: {
-				removeComments: false,
-				collapseWhitespace: true,
-				removeRedundantAttributes: true,
-				useShortDoctype: true,
-				removeEmptyAttributes: true,
-				removeStyleLinkTypeAttributes: true,
-				keepClosingSlash: true,
-				minifyJS: true,
-				minifyCSS: true,
-				minifyURLs: true,
-			},
+			minify:
+				PROD && !NO_MINIFY
+					? {
+							removeComments: false,
+							collapseWhitespace: true,
+							removeRedundantAttributes: true,
+							useShortDoctype: true,
+							removeEmptyAttributes: true,
+							removeStyleLinkTypeAttributes: true,
+							keepClosingSlash: true,
+							minifyJS: true,
+							minifyCSS: true,
+							minifyURLs: true,
+					  }
+					: false,
 		}),
 		new HtmlWebpackHarddiskPlugin(),
 
-		// Inlines the webpack runtime script. This script is too small to warrant
-		// a network request.
+		// In-lines the webpack runtime script. This script is too small to warrant a network request.
 		// https://github.com/facebook/create-react-app/issues/5358
 		new InlineChunkHtmlPlugin(HtmlWebpackPlugin, [/runtime-.+[.]js/]),
 
@@ -346,7 +352,7 @@ const ClientConfig = {
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
 
-		PROD && new CompressionPlugin(),
+		PROD && !NO_MINIFY && new CompressionPlugin(),
 
 		process.env.SENTRY_AUTH_TOKEN &&
 			new SentryWebpackPlugin({
