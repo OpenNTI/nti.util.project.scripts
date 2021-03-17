@@ -57,9 +57,12 @@ const postCss = (paths, options = {}) => ({
 	},
 });
 
-const resolveUrl = (options = {}) => ({
+const resolveUrl = options => ({
 	loader: require.resolve('resolve-url-loader'),
-	...options,
+	options: {
+		sourceMap: true,
+		...options,
+	},
 });
 
 const sass = (options = {}) => ({
