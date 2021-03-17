@@ -1,8 +1,11 @@
 'use strict';
 const { join } = require('path');
 const fs = require('fs');
-const { DEV } = require('@nti/eslint-config-lib-scripts/vars');
-const configFile = join(__dirname, `config.${DEV ? 'dev' : 'prod'}.json`);
+const { DEV, IN_IDE } = require('@nti/eslint-config-lib-scripts/vars');
+const configFile = join(
+	__dirname,
+	`config.${DEV ? 'dev' : 'prod'}${IN_IDE ? '.ide' : ''}.json`
+);
 
 try {
 	module.exports = require(configFile);
@@ -60,7 +63,7 @@ function computeConfig() {
 		},
 
 		rules: {
-			'import/no-extraneous-dependencies': DEV
+			'import/no-extraneous-dependencies': !IN_IDE
 				? 'off'
 				: [
 						'error',

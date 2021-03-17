@@ -230,7 +230,7 @@ function computeConfig() {
 			'wrap-iife': ['error', 'any'],
 
 			'import/no-duplicates': 'warn',
-			'import/no-extraneous-dependencies': DEV
+			'import/no-extraneous-dependencies': !IN_IDE
 				? 'off'
 				: [
 						'error',
@@ -248,26 +248,28 @@ function computeConfig() {
 						},
 				  ],
 			// 'import/no-unresolved': ['error', {'commonjs': true}],
-			'import/order': [
-				'warn',
-				{
-					'newlines-between': 'always',
-					groups: [
-						'builtin',
-						'external',
-						'internal',
-						'parent',
-						'sibling',
-						'index',
-						'unknown',
-						'object',
-					],
-					// 'alphabetize': {
-					// 	'order': 'asc',
-					// 	'caseInsensitive': true
-					// }
-				},
-			],
+			'import/order': !IN_IDE
+				? 'off'
+				: [
+						'warn',
+						{
+							'newlines-between': 'always',
+							groups: [
+								'builtin',
+								'external',
+								'internal',
+								'parent',
+								'sibling',
+								'index',
+								'unknown',
+								'object',
+							],
+							// 'alphabetize': {
+							// 	'order': 'asc',
+							// 	'caseInsensitive': true
+							// }
+						},
+				  ],
 			'import/no-amd': 'error',
 			'import/no-commonjs': 'error',
 			'import/no-webpack-loader-syntax': 'error',
