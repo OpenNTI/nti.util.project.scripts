@@ -138,11 +138,13 @@ const ClientConfig = {
 		filename: 'js/[name]-[contenthash:8].js',
 		chunkFilename: 'js/[name]-[contenthash:8].js',
 		publicPath: paths.servedPath || '/',
-		// devtoolModuleFilenameTemplate: info =>
-		// 	path.relative(
-		// 		path.resolve(paths.path),
-		// 		path.resolve(info.absoluteResourcePath)
-		// 	),
+		devtoolModuleFilenameTemplate: PROD
+			? void 0
+			: info =>
+					path.relative(
+						path.resolve(paths.path),
+						path.resolve(info.absoluteResourcePath)
+					),
 	},
 
 	devtool: PROD ? 'source-map' : 'cheap-module-source-map',
