@@ -8,7 +8,9 @@ const Cancelable = require('./utils/cancelable');
 const { exec, npx } = require('./utils/call-cmd');
 const paths = require('./utils/current-script-paths');
 
-const SKIP = process.argv.includes('--skip-checks');
+const SKIP =
+	process.argv.includes('--skip-checks') ||
+	process.argv.includes('--dev-build');
 const WORKER = process.env.__NTI_RELEASING || false || SKIP;
 const DEBUG = process.argv.includes('--debug');
 

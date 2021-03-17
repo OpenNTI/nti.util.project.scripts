@@ -13,9 +13,9 @@
 	"scripts": {
 		"install": "npx -y @nti/workspace-post-install",
 		"build": "concurrently \"npm:build-*\"",
-		"build-login": "cd app/login; npm run build -- --skip-checks",
-		"build-mobile": "cd app/mobile; npm run build -- --skip-checks",
-		"build-webapp": "cd app/webapp; npm run build -- --skip-checks",
+		"build-login": "cd app/login; npm run build -- --dev-build",
+		"build-mobile": "cd app/mobile; npm run build -- --dev-build",
+		"build-webapp": "cd app/webapp; npm run build -- --dev-build",
 		"refresh": "npx -y @nti/workspace-refresh"
 	},
 	"engines": {

@@ -1,7 +1,9 @@
 'use strict';
 
-const DEVENV = 'development';
-const ENV = process.env.NODE_ENV || DEVENV;
+const DEV_ENV = 'development';
+const ENV = process.argv.includes('--dev-build')
+	? DEV_ENV
+	: process.env.NODE_ENV || DEV_ENV;
 const PROD = ENV === 'production';
 
 process.env.__IN_WEBPACK = true;
