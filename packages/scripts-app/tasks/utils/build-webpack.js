@@ -12,7 +12,7 @@ const pkg = require(paths.packageJson);
 module.exports = main;
 
 async function build(config = require('../../config/webpack.config')) {
-	console.log('Creating a production build...');
+	console.log('Creating a static build...');
 
 	const compiler = webpack(config);
 

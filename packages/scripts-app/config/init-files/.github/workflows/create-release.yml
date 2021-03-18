@@ -22,9 +22,9 @@ jobs:
                   ssh-key: ${{ secrets.ACTIONS_REPO_ACCESS }}
 
             - name: setup nodejs
-              uses: actions/setup-node@v1
+              uses: actions/setup-node@v2
               with:
-                  node-version: '15.x'
+                  node-version: '15'
 
             - name: configure env
               env:
