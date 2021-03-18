@@ -2,10 +2,7 @@
 'use strict';
 const DEBUG =
 	process.argv.includes('--debug') || process.argv.includes('--profile');
-const NO_MINIFY =
-	global.NTI_DevServer ||
-	process.argv.includes('--skip-checks') ||
-	process.argv.includes('--dev-build');
+const NO_MINIFY = global.NTI_DevServer || process.argv.includes('--dev-build');
 
 const path = require('path');
 const webpack = require('webpack');
