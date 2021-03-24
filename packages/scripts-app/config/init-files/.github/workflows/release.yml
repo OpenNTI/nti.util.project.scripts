@@ -39,7 +39,7 @@ jobs:
             - name: Generate release build
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-              run: npx -y @nti/ci-scripts -- release
+              run: npx -y @nti/ci-scripts release
 
             - name: notify of failure
               if: failure()

@@ -11,7 +11,7 @@ Please upgrade to {bold npm 7}. ({grey npm i -g npm})
 With npm 7, we can utilize a new feature and improve our workflow. To get
 started, after upgrading, run this command in a new empty directory:
 
-	{grey npx -y @nti/clone -- --preset=webapp --workspace}
+	{grey npx -y @nti/clone --preset=webapp --workspace}
 
 This will clone all the webapp projects into the current directory, creating
 a categorized structure to group them. It will also clone the docker project

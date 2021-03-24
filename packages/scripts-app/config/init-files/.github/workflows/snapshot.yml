@@ -49,7 +49,7 @@ jobs:
               id: build
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-              run: npx -y @nti/ci-scripts -- snapshot
+              run: npx -y @nti/ci-scripts snapshot
 
             - name: notify of failure
               if: failure()
