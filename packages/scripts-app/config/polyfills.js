@@ -3,6 +3,7 @@
 require('core-js/stable');
 require('regenerator-runtime/runtime');
 require('whatwg-fetch');
+require('allsettled-polyfill');
 require('abortcontroller-polyfill/dist/polyfill-patch-fetch');
 
 // webpack@5 doesn't inject node polyfill automatically
