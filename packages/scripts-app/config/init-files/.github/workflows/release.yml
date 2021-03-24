@@ -23,7 +23,7 @@ jobs:
             - name: setup nodejs
               uses: actions/setup-node@v2
               with:
-                  node-version: '15.11'
+                  node-version: '15'
 
             - name: configure npm
               env:
@@ -34,6 +34,7 @@ jobs:
                   npm config set progress false
                   npm config set '@nti:registry' "$NPM_REGISTRY"
                   npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
+                  npm install --global npm
 
             - name: Generate release build
               env:
