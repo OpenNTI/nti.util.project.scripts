@@ -21,9 +21,6 @@ const mock = require('@nti/lib-scripts/tasks/utils/mock');
 	self.screen = mock();
 	self.requestAnimationFrame = setImmediate;
 	self.cancelAnimationFrame = clearImmediate;
-	self.btoa = x => Buffer.from('' + x, 'binary').toString('base64');
-	self.atob = x => Buffer.from(x, 'base64').toString('ascii');
-
 	const pwd = process.cwd();
 	console.log('Extracting Strings...');
 
