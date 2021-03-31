@@ -1,7 +1,6 @@
 'use strict';
 const { join } = require('path');
 const fs = require('fs');
-const { resolve, find } = require('./resolve');
 const { DEV, IN_IDE } = require('./vars');
 const configFile = join(
 	__dirname,
@@ -22,6 +21,8 @@ try {
 }
 
 function computeConfig() {
+	const { resolve, find } = require('./resolve');
+
 	// The ESLint browser environment defines all browser globals as valid,
 	// even though most people don't know some of them exist (e.g. `name` or `status`).
 	// This is dangerous as it hides accidentally undefined variables.
@@ -96,7 +97,12 @@ function computeConfig() {
 	];
 
 	return {
-		extends: ['eslint:recommended', 'prettier'],
+		extends: [
+			'eslint:recommended',
+			// 'plugin:import/errors',
+			// 'plugin:import/warnings',
+			'prettier',
+		],
 		parser: '@babel/eslint-parser',
 		parserOptions: {
 			ecmaVersion: new Date().getFullYear(),
@@ -108,12 +114,21 @@ function computeConfig() {
 		},
 
 		settings: {
+			'import/cache': {
+				lifetime: IN_IDE ? 60 : Infinity,
+			},
 			'import/extensions': ['.js', '.mjs'],
+			'import/ignore': [
+				'node_modules',
+				'\\.(gif|jpe?g|svg|png|ttf|woff)$',
+				'\\.(scss|css)$',
+			],
 			'import/internal-regex': '^(@nti|internal)\\/',
 			'import/resolver': {
 				node: {
 					extensions: ['.js', '.mjs'],
 					moduleDirectory: ['node_modules'],
+					paths: [find(join('node_modules', '@nti'))],
 				},
 			},
 		},
@@ -229,6 +244,11 @@ function computeConfig() {
 			],
 			'wrap-iife': ['error', 'any'],
 
+			// 'import/extensions': [
+			// 	IN_IDE && DEV ? 'error' : 'off',
+			// 	'always',
+			// 	{ ignorePackages: true },
+			// ],
 			'import/no-duplicates': 'warn',
 			'import/no-extraneous-dependencies': !IN_IDE
 				? 'off'

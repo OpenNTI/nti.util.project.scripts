@@ -1,10 +1,16 @@
 'use strict';
 const { join } = require('path');
 const fs = require('fs');
-const { DEV, IN_IDE } = require('@nti/eslint-config-lib-scripts/vars');
+const {
+	DEV,
+	IN_IDE,
+	IN_WEBPACK,
+} = require('@nti/eslint-config-lib-scripts/vars');
 const configFile = join(
 	__dirname,
-	`config.${DEV ? 'dev' : 'prod'}${IN_IDE ? '.ide' : ''}.json`
+	`config.${DEV ? 'dev' : 'prod'}${IN_IDE ? '.ide' : ''}${
+		IN_WEBPACK ? '.webpack' : ''
+	}.json`
 );
 
 try {
@@ -45,6 +51,7 @@ function computeConfig() {
 				[require.resolve('./node-query-resolver')]: {
 					extensions: ['.js', '.mjs', '.jsx'],
 					moduleDirectory: ['node_modules'],
+					paths: [find(join('node_modules', '@nti'))],
 				},
 			},
 			react: {
@@ -63,6 +70,7 @@ function computeConfig() {
 		},
 
 		rules: {
+			'import/named': 'off',
 			'import/no-extraneous-dependencies': !IN_IDE
 				? 'off'
 				: [
