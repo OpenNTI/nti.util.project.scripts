@@ -1,6 +1,6 @@
 'use strict';
 const { basename, dirname, join } = require('path');
-const { promises: fs } = require('fs');
+const { promises: fs, existsSync } = require('fs');
 
 const { context } = require('@actions/github');
 
@@ -130,9 +130,13 @@ async function sync(dir) {
 	);
 
 	await Promise.all(
-		targets.map(([t, src]) =>
-			exec(dir, ['cp', src, join(dir, t)].join(' '))
-		)
+		targets.map(([t, src]) => {
+			const dest = join(dir, t);
+			return exec(
+				dir,
+				existsSync(src) ? `cp ${src} ${dest}` : `rm ${dest}`
+			);
+		})
 	);
 
 	for (let [f] of targets) {
