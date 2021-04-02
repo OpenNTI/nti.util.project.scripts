@@ -262,7 +262,7 @@ function computeConfig() {
 								'**/*.stories.js',
 							],
 							packageDir: [
-								find('package.json'),
+								'.',
 								resolve('@nti/lib-scripts'),
 							].filter(Boolean),
 						},

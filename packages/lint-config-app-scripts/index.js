@@ -80,7 +80,6 @@ function computeConfig() {
 							devDependencies: true,
 							packageDir: [
 								'.',
-								find('package.json'),
 								resolve('@nti/app-scripts'),
 								resolve('@nti/cmp-scripts'),
 								resolve('@nti/lib-scripts'),
