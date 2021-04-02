@@ -11,7 +11,7 @@ inputs:
     ignored:
         description: 'repos with these words should be skipped'
         required: true
-        default: oubound,ouregents,widget,util\.dashboard,project\.scripts,web\.service
+        default: oubound,ouregents,widget,util\.dashboard,project\.scripts
     token:
         description: 'Github access token with repos scope'
         required: true

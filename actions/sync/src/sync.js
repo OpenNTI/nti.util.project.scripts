@@ -123,18 +123,18 @@ async function sync(dir) {
 	}
 
 	// ensure target directories exist
-	await Promise.all(
+	await Promise.allSettled(
 		targets.map(([t]) =>
 			exec(dir, ['mkdir', '-p', dirname(join(dir, t))].join(' '))
 		)
 	);
 
-	await Promise.all(
+	await Promise.allSettled(
 		targets.map(([t, src]) => {
 			const dest = join(dir, t);
 			return exec(
 				dir,
-				existsSync(src) ? `cp ${src} ${dest}` : `rm ${dest}`
+				existsSync(src) ? `cp ${src} ${dest}` : `rm -f ${dest}`
 			);
 		})
 	);

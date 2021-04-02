@@ -7,6 +7,7 @@ Object.assign(exports, {
 
 async function exec(cwd, command) {
 	return new Promise((fulfill, reject) => {
+		console.log(`exec: <%s> %s`, cwd, command);
 		childProcess.exec(command, { cwd }, (err, stdout, stderr) => {
 			if (err) {
 				console.error(stderr.toString('utf8'));
