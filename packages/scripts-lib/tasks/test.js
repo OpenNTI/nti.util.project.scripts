@@ -11,11 +11,14 @@ const isDebugFlag = RegExp.prototype.test.bind(/inspect/i);
 const isDebug = Boolean(process.argv.find(isDebugFlag));
 
 const config = [
-	paths.resolveApp('jest.config.js'),
 	paths.resolveApp('jest.config.cjs'),
+	paths.resolveApp('jest.config.js'),
 ];
 if (!config.some(x => fs.existsSync(x))) {
-	fs.copySync(paths.resolveOwn('config/init-files/jest.config.js'), config);
+	fs.copySync(
+		paths.resolveOwn('config/init-files/jest.config.cjs'),
+		config[0]
+	);
 }
 
 process.env.BABEL_ENV = 'test';
