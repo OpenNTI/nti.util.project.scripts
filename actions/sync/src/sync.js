@@ -54,7 +54,7 @@ async function computeDiff() {
 
 	console.log(
 		changes
-			? `Changed files to sync: ${changes}`
+			? `Changed files to sync:\t\n${changes.join('\t\n')}`
 			: 'All files will be synchronized.'
 	);
 	const pattern = new RegExp(get('(lib|app|cmp)'));
