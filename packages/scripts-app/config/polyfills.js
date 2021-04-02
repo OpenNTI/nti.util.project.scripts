@@ -17,6 +17,10 @@ g.process = g.process || {};
 g.process.env = g.process.env || {};
 g.process.cwd = () => '/';
 
+if (!globalThis.global) {
+	globalThis.global = g;
+}
+
 g['revision'] = typeof BUILD_SOURCE !== 'undefined' && BUILD_SOURCE;
 g['BUILD_PACKAGE_NAME'] =
 	typeof BUILD_PACKAGE_NAME !== 'undefined' && BUILD_PACKAGE_NAME;

@@ -1,6 +1,6 @@
 import isPortReachable from 'is-port-reachable';
 
-import request from './request';
+import request from './request.js';
 
 const CONFIG_HOST = 'nti.ssl.dev.config.share.localhost';
 

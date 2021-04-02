@@ -1,6 +1,6 @@
 import { promises as fs } from 'fs';
 
-import { getFile } from './request';
+import { getFile } from './request.js';
 
 export default async function readFrom(uri) {
 	try {

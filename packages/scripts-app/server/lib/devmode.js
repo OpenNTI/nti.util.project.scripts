@@ -3,7 +3,6 @@
 const { globalAgent } = require('https');
 const { worker } = require('cluster');
 const readline = require('readline');
-const { getHTTPS } = require('@nti/dev-ssl-config');
 
 function clearLine(n) {
 	const fn = console[n] || console.debug;
@@ -21,6 +20,7 @@ const ensureArray = x => (Array.isArray(x) ? x : [x]);
 
 exports.setupDeveloperMode = async function setupDeveloperMode(config) {
 	global.NTI_DevServer = true;
+	const { getHTTPS } = await import('@nti/dev-ssl-config');
 	for (let n of ['info', 'log', 'debug']) {
 		clearLine(n);
 	}
