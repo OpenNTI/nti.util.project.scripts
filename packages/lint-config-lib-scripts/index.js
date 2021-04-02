@@ -203,7 +203,7 @@ function computeConfig() {
 				},
 			],
 			radix: 'error',
-			'require-atomic-updates': DEV ? 'warn' : 'off',
+			'require-atomic-updates': 'warn',
 			semi: 'error',
 			// 'sort-imports': ['warn', {
 			// 	'ignoreCase': false,
