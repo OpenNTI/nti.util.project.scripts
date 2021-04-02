@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -e
+if [ $# -eq 0 ]; then
+echo "Give a version"
+exit 1;
+fi
+if [ $# -eq 1 ]; then
+	SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
+	lerna exec "npm unpublish \$LERNA_PACKAGE_NAME@$1" --parallel --loglevel error
+	exit $?;
+fi
