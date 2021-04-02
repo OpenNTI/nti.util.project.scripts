@@ -4,6 +4,11 @@ on:
     push:
         branches:
             - master
+        paths:
+            - 'src/**.jsx?'
+            - 'src/**.mjs'
+            - 'src/**.cjs'
+
     repository_dispatch:
         types: [snapshot]
 
