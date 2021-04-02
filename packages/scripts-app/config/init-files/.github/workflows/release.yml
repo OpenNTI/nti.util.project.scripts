@@ -12,6 +12,12 @@ jobs:
     Build:
         runs-on: ubuntu-latest
         steps:
+            - name: Get Date
+              id: get-date
+              shell: bash
+              run: |
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+
             - name: install SSH key
               uses: webfactory/ssh-agent@v0.4.1
               with:
@@ -24,6 +30,13 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: '15'
+
+            - uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ hashFiles('**/package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: configure npm
               env:

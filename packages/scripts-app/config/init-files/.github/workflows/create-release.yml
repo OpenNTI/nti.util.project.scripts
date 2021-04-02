@@ -16,6 +16,12 @@ jobs:
               with:
                   ssh-private-key: ${{ secrets.ACTIONS_REPO_ACCESS }}
 
+            - name: Get Date
+              id: get-date
+              shell: bash
+              run: |
+                  echo "::set-output name=date::$(/bin/date -u "+%Y%m%d")"
+
             - name: clone
               uses: actions/checkout@v2
               with:
@@ -25,6 +31,13 @@ jobs:
               uses: actions/setup-node@v2
               with:
                   node-version: '15'
+
+            - uses: actions/cache@v2
+              with:
+                  path: ~/.npm
+                  key: ${{ runner.os }}-node-${{ steps.get-date.outputs.date }}-${{ hashFiles('**/package.json') }}
+                  restore-keys: |
+                      ${{ runner.os }}-node-
 
             - name: configure env
               env:
