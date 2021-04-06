@@ -32,7 +32,7 @@ async function run(cwd, command) {
 }
 
 async function install(dir) {
-	await run(dir, 'npm install --silent').catch(e => {
+	await run(dir, 'npm install --no-progress --no-audit --silent').catch(e => {
 		process.exitCode = 1;
 		console.error(e);
 	});

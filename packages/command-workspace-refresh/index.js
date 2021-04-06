@@ -67,7 +67,7 @@ async function update() {
 		process.exit(1);
 	}
 
-	childProcess.execSync('npm install', {
+	childProcess.execSync('npm install --no-audit', {
 		cwd: resolve('.'),
 		stdio: 'inherit',
 	});
