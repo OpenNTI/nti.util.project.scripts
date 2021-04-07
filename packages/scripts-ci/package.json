@@ -1,6 +1,6 @@
 {
 	"name": "@nti/ci-scripts",
-	"version": "2.40.7",
+	"version": "2.42.4",
 	"description": "",
 	"main": "index.js",
 	"bin": {
