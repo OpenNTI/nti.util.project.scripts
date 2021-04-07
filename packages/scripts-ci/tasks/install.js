@@ -15,7 +15,7 @@ const options = {
 
 printLine('::group::Installing dependencies ... ');
 const { status: result } = call(
-	`npm ${!lockfileExists() ? 'i' : 'ci'}`,
+	`npm ${!lockfileExists() ? 'i' : 'ci'} --package-lock`,
 	options
 );
 if (result === SUCCESS) {

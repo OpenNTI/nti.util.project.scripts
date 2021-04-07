@@ -41,12 +41,12 @@ jobs:
                   npm config set progress false
                   npm config set '@nti:registry' "$NPM_REGISTRY"
                   npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
-                  npm install --global npm@6
+                  npm install --global npm
 
             - name: Generate release build
               env:
                   SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-              run: npx @nti/ci-scripts release
+              run: npx -y @nti/ci-scripts release
 
             - name: notify of failure
               if: failure()
