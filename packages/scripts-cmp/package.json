@@ -1,6 +1,6 @@
 {
 	"name": "@nti/cmp-scripts",
-	"version": "2.42.6",
+	"version": "2.42.7",
 	"description": "component-specific scripts & dependencies",
 	"bin": {
 		"cmp-scripts": "./bin/cli.js"
