@@ -2,11 +2,10 @@
 'use strict';
 process.env.NODE_ENV = 'development';
 
-//Webpack plugins:
-// const BitBarWebpackProgressPlugin = require('BitBarWebpackProgressPlugin');
-const CaseSensitivePathsPlugin = require('case-sensitive-paths-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const {
+	CaseSensitivePathsPlugin,
+	HtmlWebpackPlugin,
+} = require('./webpack.plugins');
 const paths = require('./paths');
 
 const { plugins: jsPlugins } = require('@nti/app-scripts/config/js-loaders');
