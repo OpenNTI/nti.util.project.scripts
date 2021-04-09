@@ -1,8 +1,8 @@
 'use strict';
 const path = require('path');
 const browsers = require('@nti/lib-scripts/config/browserlist');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
+const { MiniCssExtractPlugin } = require('./webpack.plugins');
 const { PROD } = require('./env');
 const getWorkspace = require('./workspace');
 const NotInNodeModules = /^((?!\/node_modules\/).)+$/i;

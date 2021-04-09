@@ -1,8 +1,8 @@
 'use strict';
 const path = require('path');
-const ESLintPlugin = require('eslint-webpack-plugin');
 const webpack = require('webpack');
 
+const { ESLintPlugin } = require('./webpack.plugins');
 const { ENV, PROD } = require('./env');
 const paths = require('./paths');
 const getWorkspace = require('./workspace');
