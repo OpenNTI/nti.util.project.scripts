@@ -30,6 +30,7 @@ module.exports = function (api, opts) {
 					development: dev,
 					// useBuiltIns: true,
 					useSpread: true,
+					runtime: 'automatic',
 				},
 			],
 		],
