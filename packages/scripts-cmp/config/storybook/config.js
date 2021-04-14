@@ -54,6 +54,14 @@ module.exports = {
 				...CommonWebpackConfig.devServer.proxy,
 			],
 		},
-		plugins: [...jsPlugins(), ...cssPlugins(), ...storybookConfig.plugins],
+		plugins: [
+			...jsPlugins(),
+			...cssPlugins({
+				miniCssExtract: {
+					filename: '[name]-[contenthash].css',
+				},
+			}),
+			...storybookConfig.plugins,
+		],
 	}),
 };
