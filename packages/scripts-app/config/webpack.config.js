@@ -292,7 +292,7 @@ const ClientConfig = {
 
 	plugins: [
 		...jsPlugins(),
-		...cssPlugins(global.NTI_DevServer),
+		...cssPlugins({}, global.NTI_DevServer),
 		DEBUG &&
 			new CircularDependencyPlugin({
 				// exclude detection of files based on a RegExp
