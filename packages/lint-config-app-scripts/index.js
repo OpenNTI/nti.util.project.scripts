@@ -91,7 +91,7 @@ function computeConfig() {
 			//See: http://eslint.org/docs/rules/jsx-quotes
 			'jsx-quotes': ['warn', 'prefer-double'],
 
-			'react/jsx-uses-react': ['off'],
+			// 'react/jsx-uses-react': ['off'],
 			'react/react-in-jsx-scope': ['off'],
 			'react/no-children-prop': ['off'],
 			'react/no-deprecated': ['warn'],
