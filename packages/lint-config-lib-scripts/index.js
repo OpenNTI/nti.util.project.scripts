@@ -220,28 +220,7 @@ function computeConfig() {
 			'space-infix-ops': ['error', { int32Hint: true }],
 			'space-unary-ops': ['warn', { words: true, nonwords: false }],
 			strict: ['error', 'never'],
-			'valid-jsdoc': [
-				'error',
-				{
-					// Please follow https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
-					// https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html
-					prefer: {
-						arg: 'param',
-						argument: 'param',
-						constructor: 'class',
-						return: 'returns',
-						virtual: 'abstract',
-					},
-					preferType: {
-						Boolean: 'boolean',
-						Number: 'number',
-						object: 'Object',
-						String: 'string',
-					},
-					requireParamDescription: false,
-					requireReturnDescription: false,
-				},
-			],
+
 			'wrap-iife': ['error', 'any'],
 
 			// 'import/extensions': [
