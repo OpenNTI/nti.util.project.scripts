@@ -99,6 +99,7 @@ function computeConfig() {
 	return {
 		extends: [
 			'eslint:recommended',
+			'plugin:jsdoc/recommended',
 			// 'plugin:import/errors',
 			// 'plugin:import/warnings',
 			'prettier',
@@ -114,6 +115,13 @@ function computeConfig() {
 		},
 
 		settings: {
+			jsdoc: {
+				// Please follow https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
+				// https://www.typescriptlang.org/docs/handbook/intro-to-js-ts.html
+				mode: 'typescript',
+				// preferredTypes: {},
+				// tagNamePreference: {}
+			},
 			'import/cache': {
 				lifetime: IN_IDE ? 60 : Infinity,
 			},
@@ -139,11 +147,14 @@ function computeConfig() {
 			browser: true,
 		},
 
-		plugins: ['@babel', 'import', 'prettier'],
+		plugins: ['@babel', 'jsdoc', 'import', 'prettier'],
 
 		reportUnusedDisableDirectives: !DEV,
 		rules: {
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
+			'jsdoc/require-jsdoc': 'off',
+			'jsdoc/require-param-description': 'off',
+			'jsdoc/require-returns-description': 'off',
 			camelcase: [
 				'warn',
 				{
