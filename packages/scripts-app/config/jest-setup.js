@@ -42,7 +42,7 @@ Object.defineProperty(global, 'styled', {
 				// within the style block. This replicates it and leaves the
 				// classNames plain
 
-				return ({ className, children, ...props }) => {
+				function computeClassName({ className, ...props }) {
 					const el =
 						typeof tag === 'string'
 							? document.createElement(tag)
@@ -76,12 +76,24 @@ Object.defineProperty(global, 'styled', {
 						className = undefined;
 					}
 
+					return className;
+				}
+
+				const Cmp = ({ children, ...props }) => {
 					return React.createElement(tag, {
 						...props,
 						children,
-						className,
+						className: computeClassName(props),
 					});
 				};
+
+				Cmp.withComponent = Other => props =>
+					React.createElement(Other, {
+						...props,
+						className: computeClassName(props),
+					});
+
+				return Cmp;
 			};
 
 			TagTemplate.attrs = p => {
