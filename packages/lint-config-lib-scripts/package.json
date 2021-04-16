@@ -1,6 +1,6 @@
 {
 	"name": "@nti/eslint-config-lib-scripts",
-	"version": "2.42.2",
+	"version": "2.44.0",
 	"description": "NextThought code style standard",
 	"main": "index.js",
 	"repository": {
@@ -23,8 +23,8 @@
 		"@babel/eslint-plugin": "^7.11.0",
 		"eslint": "^7.6.0",
 		"eslint-config-prettier": "^8.0.0",
-		"eslint-plugin-jsdoc": "^32.3.0",
 		"eslint-plugin-import": "^2.22.0",
+		"eslint-plugin-jsdoc": "^32.3.0",
 		"eslint-plugin-prettier": "^3.3.1",
 		"prettier": "^2.2.1"
 	}
