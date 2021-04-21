@@ -24,7 +24,8 @@ delete pkg.peerDependenciesMeta;
 if (isSnapshot) {
 	const v = semver.parse(version);
 
-	v.prerelease.push(stamp);
+	const [tag] = v.prerelease;
+	v.prerelease = [tag, stamp];
 
 	pkg.version = v.format();
 	printLine('::set-output name=SNAPSHOT_ID::' + name + '@' + pkg.version);
