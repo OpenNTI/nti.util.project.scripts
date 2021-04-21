@@ -125,7 +125,6 @@ function getLoaderRules(server) {
 
 const ClientConfig = {
 	mode: ENV,
-	bail: true,
 	entry: {
 		index: [require.resolve('./polyfills'), paths.appIndexJs],
 	},
@@ -151,6 +150,17 @@ const ClientConfig = {
 
 	stats: 'errors-only',
 	target: 'web',
+	cache: {
+		type: 'filesystem',
+		name: pkg.name.replace(/[@/.]/g, '-').replace(/^-/, ''),
+		cacheDirectory: path.resolve(
+			getWorkspace().root || paths.path,
+			path.join('node_modules', '.cache')
+		),
+		buildDependencies: {
+			config: [__filename],
+		},
+	},
 
 	resolve: {
 		fallback: {
