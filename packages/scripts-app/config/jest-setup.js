@@ -79,26 +79,29 @@ Object.defineProperty(global, 'styled', {
 					return className;
 				}
 
-				const Cmp = ({ children, ...props }) => {
+				const Cmp = React.forwardRef(({ children, ...props }, ref) => {
 					return React.createElement(tag, {
 						...props,
 						children,
+						ref,
 						className: computeClassName(props),
 					});
-				};
+				});
 
-				Cmp.withComponent = Other => props =>
-					React.createElement(Other, {
-						...props,
-						className: computeClassName(props),
-					});
+				Cmp.withComponent = Other =>
+					React.forwardRef((props, ref) =>
+						React.createElement(Other, {
+							...props,
+							ref,
+							className: computeClassName(props),
+						})
+					);
 
 				return Cmp;
 			};
 
 			TagTemplate.attrs = p => {
 				const fill = x => ({
-					...x,
 					...(typeof p === 'function' ? p(x) : p),
 				});
 				return () => props => React.createElement(tag, fill(props));
