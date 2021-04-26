@@ -1,6 +1,6 @@
 {
 	"name": "@nti/lib-scripts",
-	"version": "2.45.0",
+	"version": "2.45.2",
 	"description": "library scripts & dependencies",
 	"bin": {
 		"lib-scripts": "./bin/cli.js"
@@ -35,7 +35,7 @@
 		"@babel/preset-flow": "^7.10.4",
 		"@babel/runtime": "^7.11.2",
 		"@nti/eslint-config-lib-scripts": "^2.44.0",
-		"@nti/pre-commit": "^2.44.0",
+		"@nti/pre-commit": "^2.45.2",
 		"babel-jest": "^26.0.1",
 		"chalk": "^4.1.0",
 		"ci-info": "^3.0.0",
