@@ -2,7 +2,9 @@
 
 const path = require('path');
 const fs = require('fs-extra');
-const r = require('escape-string-regexp');
+
+const r = str =>
+	str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&').replace(/-/g, '\\x2d');
 
 // Make sure any symlinks in the project folder are resolved:
 // https://github.com/facebookincubator/create-react-app/issues/637
