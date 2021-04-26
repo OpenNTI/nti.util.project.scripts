@@ -76,15 +76,17 @@ Object.defineProperty(global, 'styled', {
 						className = undefined;
 					}
 
-					return className;
+					return {
+						className,
+						...props,
+					};
 				}
 
 				const Cmp = React.forwardRef(({ children, ...props }, ref) => {
 					return React.createElement(tag, {
-						...props,
+						...computeClassName(props),
 						children,
 						ref,
-						className: computeClassName(props),
 					});
 				});
 
