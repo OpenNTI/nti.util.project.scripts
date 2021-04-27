@@ -50,6 +50,8 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	SENTRY_RELEASE: JSON.stringify(projectRelease),
 });
 
+const USE_DEV_STYLE_LOADER = global.NTI_DevServer;
+
 function isNTIPackage(x) {
 	const prefix = `${paths.nodeModules}/@nti/`;
 	const descendent = /node_modules/;
@@ -100,7 +102,7 @@ function getLoaderRules(server) {
 
 				...cssLoaders(paths, {
 					server,
-					inline: false,
+					inline: USE_DEV_STYLE_LOADER,
 					sass: {
 						sassOptions: {
 							includePaths: [
@@ -300,7 +302,7 @@ const ClientConfig = {
 
 	plugins: [
 		...jsPlugins(),
-		...cssPlugins({}),
+		...cssPlugins({}, USE_DEV_STYLE_LOADER),
 		DEBUG &&
 			new CircularDependencyPlugin({
 				// exclude detection of files based on a RegExp

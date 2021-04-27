@@ -20,14 +20,6 @@ const loaders = () => {
 				/[/\\\\]react(-dom)?[/\\\\]/,
 			],
 			use: [
-				// {
-				// 	loader: 'thread-loader',
-				// 	// loaders with equal options will share worker pools
-				// 	options: {
-				// 		poolTimeout: PROD ? 500 : 2000,
-				// 		poolParallelJobs: 50,
-				// 	},
-				// },
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
@@ -48,7 +40,7 @@ const loaders = () => {
 					loader: 'astroturf/loader',
 					options: {
 						allowGlobal: true,
-						useAltLoader: true,
+						useAltLoader: !!global.NTI_DevServer,
 					},
 				},
 			].filter(Boolean),
