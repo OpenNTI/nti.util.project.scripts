@@ -18,13 +18,14 @@ const requireMaybe = id => {
 const style = inline => ({
 	loader: !PROD && inline ? 'style-loader' : MiniCssExtractPlugin.loader,
 	options: {
-		esModule: false,
+		// esModule: false,
 	},
 });
 
 const css = (options = {}) => ({
 	loader: require.resolve('css-loader'),
 	options: {
+		sourceMap: true,
 		...options,
 	},
 });
@@ -32,6 +33,7 @@ const css = (options = {}) => ({
 const postCss = (paths, options = {}) => ({
 	loader: require.resolve('postcss-loader'),
 	options: {
+		sourceMap: true,
 		postcssOptions: {
 			plugins: [
 				require('postcss-flexbugs-fixes'),
@@ -108,6 +110,7 @@ const loaders = (paths, options = {}) => {
 			use: [
 				style(options.inline),
 				css({
+					importLoaders: 1,
 					modules: {
 						exportGlobals: true,
 						exportLocalsConvention: 'camelCase',
