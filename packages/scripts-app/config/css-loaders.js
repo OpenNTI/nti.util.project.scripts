@@ -18,7 +18,7 @@ const requireMaybe = id => {
 const style = inline => ({
 	loader: !PROD && inline ? 'style-loader' : MiniCssExtractPlugin.loader,
 	options: {
-		// esModule: false,
+		esModule: false,
 	},
 });
 
