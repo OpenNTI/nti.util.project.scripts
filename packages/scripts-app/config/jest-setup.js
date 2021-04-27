@@ -30,61 +30,61 @@ Object.defineProperty(global, 'styled', {
 					.join('');
 			}
 
-			const TagTemplate = (strings, ...values) => {
-				const styles = zip(strings, values);
-				const hasClass = cls => {
+			// styled components have a special api that allows short hand
+			// boolean/string props to be inferred based on the selectors
+			// within the style block. This replicates it and leaves the
+			// classNames plain
+			function computeClassName({ className, ...props }, styles) {
+				function hasClass(cls) {
 					const re = new RegExp(esc('.' + cls) + '[\\w.]*', 'i');
 					return re.test(styles) ? cls.toLowerCase() : undefined;
-				};
-
-				// styled components have a special api that allows short hand
-				// boolean/string props to be inferred based on the selectors
-				// within the style block. This replicates it and leaves the
-				// classNames plain
-
-				function computeClassName({ className, ...props }) {
-					const el =
-						typeof tag === 'string'
-							? document.createElement(tag)
-							: null;
-					for (let [prop, value] of Object.entries({ ...props })) {
-						if (
-							el &&
-							!(prop.toLowerCase() in el) &&
-							!/^data-/.test(prop)
-						) {
-							delete props[prop];
-						}
-
-						if (typeof value === 'string') {
-							const newClassName = cx(
-								className,
-								hasClass(prop + '-' + value)
-							);
-							if (newClassName !== className) {
-								className = newClassName;
-								continue;
-							}
-						}
-
-						if (value) {
-							className = cx(className, hasClass(prop));
-						}
-					}
-
-					if (className === '') {
-						className = undefined;
-					}
-
-					return {
-						className,
-						...props,
-					};
 				}
+
+				const el =
+					typeof tag === 'string'
+						? document.createElement(tag)
+						: null;
+				for (let [prop, value] of Object.entries({ ...props })) {
+					if (
+						el &&
+						!(prop.toLowerCase() in el) &&
+						!/^data-/.test(prop)
+					) {
+						delete props[prop];
+					}
+
+					if (typeof value === 'string') {
+						const newClassName = cx(
+							className,
+							hasClass(prop + '-' + value)
+						);
+						if (newClassName !== className) {
+							className = newClassName;
+							continue;
+						}
+					}
+
+					if (value) {
+						className = cx(className, hasClass(prop));
+					}
+				}
+
+				if (className === '') {
+					className = undefined;
+				}
+
+				return {
+					className,
+					...props,
+				};
+			}
+
+			const TagTemplate = (strings, ...values) => {
+				const styles = zip(strings, values);
 
 				const Cmp = React.forwardRef(({ children, ...props }, ref) => {
 					return React.createElement(tag, {
-						...computeClassName(props),
+						...computeClassName(props, styles),
 						children,
 						ref,
 					});
@@ -93,9 +93,8 @@ Object.defineProperty(global, 'styled', {
 				Cmp.withComponent = Other =>
 					React.forwardRef((props, ref) =>
 						React.createElement(Other, {
-							...props,
+							...computeClassName(props, styles),
 							ref,
-							className: computeClassName(props),
 						})
 					);
 
@@ -104,9 +103,16 @@ Object.defineProperty(global, 'styled', {
 
 			TagTemplate.attrs = p => {
 				const fill = x => ({
-					...(typeof p === 'function' ? p(x) : p),
+					...(typeof p === 'function' ? p(x) : {...x,...p}),
 				});
-				return () => props => React.createElement(tag, fill(props));
+				return (strings, ...values) => {
+					const styles = zip(strings, values);
+					return React.forwardRef((props, ref) => 
+						React.createElement(
+							tag,
+							{...fill(computeClassName(props, styles)), ref}
+						));
+				};
 			};
 
 			return TagTemplate;
