@@ -10,7 +10,7 @@ const workspaceContext = getWorkspace().root || paths.path;
 
 const jsTestExp = /\.m?jsx?$/;
 
-const loaders = () => {
+const loaders = (buildCache = false) => {
 	return [
 		{
 			test: jsTestExp,
@@ -40,7 +40,7 @@ const loaders = () => {
 					loader: 'astroturf/loader',
 					options: {
 						allowGlobal: true,
-						useAltLoader: !!global.NTI_DevServer,
+						useAltLoader: buildCache,
 					},
 				},
 			].filter(Boolean),

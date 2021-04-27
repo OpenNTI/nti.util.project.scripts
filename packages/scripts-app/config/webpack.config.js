@@ -51,6 +51,7 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 });
 
 const USE_DEV_STYLE_LOADER = global.NTI_DevServer;
+const USE_DEV_BUILD_CACHE = false; //global.NTI_DevServer;
 
 function isNTIPackage(x) {
 	const prefix = `${paths.nodeModules}/@nti/`;
@@ -80,7 +81,7 @@ function getLoaderRules(server) {
 					},
 				},
 
-				...jsLoaders(),
+				...jsLoaders(USE_DEV_BUILD_CACHE),
 
 				{
 					test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
@@ -152,17 +153,19 @@ const ClientConfig = {
 
 	stats: 'errors-only',
 	target: 'web',
-	cache: {
-		type: 'filesystem',
-		name: pkg.name.replace(/[@/.]/g, '-').replace(/^-/, ''),
-		cacheDirectory: path.resolve(
-			getWorkspace().root || paths.path,
-			path.join('node_modules', '.cache')
-		),
-		buildDependencies: {
-			config: [__filename],
-		},
-	},
+	cache: USE_DEV_BUILD_CACHE
+		? {
+				type: 'filesystem',
+				name: pkg.name.replace(/[@/.]/g, '-').replace(/^-/, ''),
+				cacheDirectory: path.resolve(
+					getWorkspace().root || paths.path,
+					path.join('node_modules', '.cache')
+				),
+				buildDependencies: {
+					config: [__filename],
+				},
+		  }
+		: undefined,
 
 	resolve: {
 		fallback: {
