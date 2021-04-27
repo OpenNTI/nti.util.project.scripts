@@ -100,7 +100,7 @@ function getLoaderRules(server) {
 
 				...cssLoaders(paths, {
 					server,
-					inline: global.NTI_DevServer,
+					inline: false,
 					sass: {
 						sassOptions: {
 							includePaths: [
@@ -291,18 +291,16 @@ const ClientConfig = {
 		// Keep the runtime chunk separated to enable long term caching
 		// https://twitter.com/wSokra/status/969679223278505985
 		// https://github.com/facebook/create-react-app/issues/5358
-		runtimeChunk: global.NTI_DevServer
-			? void 0
-			: {
-					name: entrypoint => `runtime-${entrypoint.name}`,
-			  },
+		runtimeChunk: {
+			name: entrypoint => `runtime-${entrypoint.name}`,
+		},
 	},
 
 	performance: false,
 
 	plugins: [
 		...jsPlugins(),
-		...cssPlugins({}, global.NTI_DevServer),
+		...cssPlugins({}),
 		DEBUG &&
 			new CircularDependencyPlugin({
 				// exclude detection of files based on a RegExp
