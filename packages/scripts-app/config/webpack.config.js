@@ -51,7 +51,7 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 });
 
 const USE_DEV_STYLE_LOADER = global.NTI_DevServer;
-const USE_DEV_BUILD_CACHE = false; //global.NTI_DevServer;
+const USE_DEV_BUILD_CACHE = global.NTI_DevServer;
 
 function isNTIPackage(x) {
 	const prefix = `${paths.nodeModules}/@nti/`;
