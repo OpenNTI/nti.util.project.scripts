@@ -114,7 +114,9 @@ const loaders = (paths, options = {}) => {
 					modules: {
 						exportGlobals: true,
 						exportLocalsConvention: 'camelCase',
-						localIdentName: '[local]--[hash:base64:8]',
+						localIdentName: PROD
+							? '[local]--[hash:base64]' //'[hash:base64]'
+							: '[name]__[local]--[hash:base64]',
 					},
 				}),
 				postCss(paths),
