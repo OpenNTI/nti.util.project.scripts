@@ -69,6 +69,10 @@ async function update() {
 
 	childProcess.execSync('npm install --no-audit', {
 		cwd: resolve('.'),
+		env: {
+			...process.env,
+			NTI_WORKSPACE_REFRESH: true,
+		},
 		stdio: 'inherit',
 	});
 })();
