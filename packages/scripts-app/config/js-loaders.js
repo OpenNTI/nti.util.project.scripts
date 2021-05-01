@@ -29,10 +29,10 @@ const loaders = (buildCache = false) => {
 						highlightCode: true,
 						sourceType: 'unambiguous',
 						presets: [require.resolve('./babel.config.js')],
-						// Webpack 4 will blow up if these are not enabled...
 						plugins: [
-							'@babel/plugin-proposal-nullish-coalescing-operator',
-							'@babel/plugin-proposal-optional-chaining',
+							// WebKit started treating object-shorthand properties as implicit strict-mode-ish scope.
+							// This avoids it by transforming all object shorthand to long-hand.
+							'@babel/plugin-transform-shorthand-properties',
 						],
 					},
 				},
