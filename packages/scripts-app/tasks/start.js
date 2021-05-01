@@ -88,8 +88,8 @@ if (NTI_BUILDOUT_PATH != null) {
 	} else {
 		write(
 			chalk`
-				{bold.yellow WARNING}: {bold NTI_BUILDOUT_PATH} is set and {bold --protocol} has been passed. 
-				  If the wrong protocol is used, the service will fail to 
+				{bold.yellow WARNING}: {bold NTI_BUILDOUT_PATH} is set and {bold --protocol} has been passed.
+				  If the wrong protocol is used, the service will fail to
 				  communicate upstream and likely crash.
 			`.replace(/\t+/g, '')
 		);
@@ -110,6 +110,7 @@ call(
 	PROGRAM,
 	[
 		INSPECT && '--inspect-brk',
+		'--trace-warnings',
 		'--max-old-space-size=' + Math.floor(os.totalmem() / 1014 / 1024),
 		service,
 		...args,
