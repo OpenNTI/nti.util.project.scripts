@@ -3,5 +3,13 @@
 	"tabWidth": 4,
 	"useTabs": true,
 	"singleQuote": true,
-	"arrowParens": "avoid"
+	"arrowParens": "avoid",
+	"overrides": [
+		{
+			"files": "*.yml",
+			"options": {
+				"tabWidth": 2
+			}
+		}
+	]
 }
