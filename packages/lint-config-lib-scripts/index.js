@@ -97,6 +97,7 @@ function computeConfig() {
 	];
 
 	return {
+		root: true,
 		extends: [
 			'eslint:recommended',
 			'plugin:jsdoc/recommended',

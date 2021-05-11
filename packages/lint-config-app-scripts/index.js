@@ -38,6 +38,7 @@ function computeConfig() {
 	}
 
 	return {
+		root: true,
 		extends: [
 			'@nti/eslint-config-lib-scripts',
 			'plugin:react/recommended',
