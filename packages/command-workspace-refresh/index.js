@@ -58,8 +58,11 @@ async function update() {
 }
 
 (async function main() {
-	const spinner = ora('Pulling & Cleaning...').start();
+	const spinner = ora('Locating workspace root...').start();
 	try {
+		await findRoot();
+
+		spinner.info('Pulling & Cleaning...');
 		await Promise.all([update(), clean()]);
 		spinner.stop();
 	} catch (e) {
@@ -88,4 +91,24 @@ export async function exec(cwd, command) {
 			fulfill(stdout.toString('utf8').trim());
 		});
 	});
+}
+
+async function findRoot() {
+	try {
+		const content = await fs.readFile('./package.json');
+		const pkg = JSON.parse(content);
+		if (Array.isArray(pkg.workspaces)) {
+			return;
+		}
+	} catch {
+		/* move on */
+	}
+
+	const parent = resolve('..');
+	if (parent === process.cwd()) {
+		throw new Error('Could not find workspace root.');
+	}
+
+	process.chdir(parent);
+	await findRoot();
 }
