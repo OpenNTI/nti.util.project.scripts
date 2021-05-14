@@ -13,6 +13,7 @@ const jsTestExp = /\.m?jsx?$/;
 const loaders = (buildCache = false) => {
 	return [
 		{
+			[Symbol.for('JS Rule')]: true,
 			test: jsTestExp,
 			exclude: [
 				/[/\\\\]core-js[/\\\\]/,
@@ -23,6 +24,7 @@ const loaders = (buildCache = false) => {
 				{
 					loader: require.resolve('babel-loader'),
 					options: {
+						babelrc: false, // FIXME: I don't think this is used with `configFile: false`
 						cacheDirectory: false,
 						cacheCompression: false,
 						configFile: false,
