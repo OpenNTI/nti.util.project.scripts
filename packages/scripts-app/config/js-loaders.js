@@ -10,10 +10,9 @@ const workspaceContext = getWorkspace().root || paths.path;
 
 const jsTestExp = /\.m?jsx?$/;
 
-const loaders = (buildCache = false) => {
-	return [
+const loaders = (buildCache = false, storybook = false) => {
+	let rules = [
 		{
-			[Symbol.for('JS Rule')]: true,
 			test: jsTestExp,
 			exclude: [
 				/[/\\\\]core-js[/\\\\]/,
@@ -35,7 +34,27 @@ const loaders = (buildCache = false) => {
 							// WebKit started treating object-shorthand properties as implicit strict-mode-ish scope.
 							// This avoids it by transforming all object shorthand to long-hand.
 							'@babel/plugin-transform-shorthand-properties',
-						],
+							storybook &&
+								'@storybook/core-common/node_modules/babel-plugin-macros',
+						].filter(Boolean),
+						overrides: !storybook
+							? null
+							: [
+									{
+										test: /\.(mjs|jsx?)$/,
+										plugins: [
+											[
+												'babel-plugin-react-docgen',
+												{
+													DOC_GEN_COLLECTION_NAME:
+														'STORYBOOK_REACT_CLASSES',
+													babelrc: false,
+													configFile: false,
+												},
+											],
+										],
+									},
+							  ],
 					},
 				},
 				{
@@ -48,6 +67,34 @@ const loaders = (buildCache = false) => {
 			].filter(Boolean),
 		},
 	];
+
+	if (storybook) {
+		rules.push(
+			{
+				...rules[0],
+				test: /(stories|story)?\.mdx$/,
+				use: [
+					...rules[0].use,
+					{
+						loader: '@mdx-js/loader',
+						options: findLoader(storybook, '.mdx', '@mdx-js/loader')
+							.options,
+					},
+				],
+			},
+			{
+				test: /\.(stories|story)\.[tj]sx?$/,
+				loader: '@storybook/source-loader',
+				options: {
+					injectStoryParameters: true,
+					inspectLocalDependencies: true,
+				},
+				enforce: 'pre',
+			}
+		);
+	}
+
+	return rules;
 };
 
 const plugins = () => [
@@ -95,3 +142,16 @@ module.exports = {
 	pattern: jsTestExp,
 	plugins,
 };
+
+function findLoader(config, testString, loaderName) {
+	const { rules } = config.module;
+	return rules.reduce((found, rule) => {
+		if (found) {
+			return found;
+		}
+
+		if (testString.match(rule.test)) {
+			return rule.use.find(x => x.loader.includes(loaderName));
+		}
+	}, null);
+}
