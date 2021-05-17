@@ -1,7 +1,13 @@
 'use strict';
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
-const { existsSync, unlink, appendFileSync, readFileSync } = require('fs');
+const {
+	existsSync,
+	unlink,
+	appendFileSync,
+	readFileSync,
+	writeFileSync,
+} = require('fs');
 const { join, relative } = require('path');
 const { listProjects } = require('./list');
 require('./validate-env.js');
@@ -20,9 +26,11 @@ const log = existsSync(logFile)
 
 function usesScripts(dir) {
 	try {
-		const { name, dependencies = {}, devDependencies = {} } = JSON.parse(
-			readFileSync(join(dir, 'package.json'))
-		);
+		const {
+			name,
+			dependencies = {},
+			devDependencies = {},
+		} = JSON.parse(readFileSync(join(dir, 'package.json')));
 		const scripts = [
 			'@nti/app-scripts',
 			'@nti/cmp-scripts',
@@ -37,6 +45,17 @@ function usesScripts(dir) {
 		// if package.json doesn't exist the answer is false.
 	}
 	return false;
+}
+
+function remove(file) {
+	if (existsSync(file)) {
+		unlink(file);
+		log(`Removed: ${file}`);
+	}
+}
+
+function save(file, content) {
+	writeFileSync(file, content);
 }
 
 async function install(root = cwd(), leaf = false) {
@@ -57,30 +76,29 @@ async function install(root = cwd(), leaf = false) {
 		);
 	}
 
+	if (leaf && !usesScripts(root)) {
+		log('Ignored, path does not use nti scripts: ' + root);
+		return;
+	}
+
 	const execInRoot = cmd => exec(cmd, root);
+	const resolveGitHooksPrefix = () =>
+		join(execInRoot('git rev-parse --show-toplevel'), '.git', 'hooks');
 	const hooksRelativeToRoot = relative(root, hooksDir);
+
 	try {
 		try {
-			const gitRoot = execInRoot('git rev-parse --show-toplevel');
-			const gitHooksPrefix = join(gitRoot, '.git', 'hooks');
+			const gitHooksPrefix = resolveGitHooksPrefix();
 			const oldHooks = [
 				join(gitHooksPrefix, 'pre-commit'),
 				join(gitHooksPrefix, 'prepare-commit-msg'),
 			];
 
 			for (const file of oldHooks) {
-				if (existsSync(file)) {
-					unlink(file);
-					log(`Removed: ${file}`);
-				}
+				remove(file);
 			}
 		} catch {
 			/**/
-		}
-
-		if (leaf && !usesScripts(root)) {
-			log('Ignored, path does not use nti scripts: ' + root);
-			return;
 		}
 
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
@@ -100,6 +118,13 @@ async function install(root = cwd(), leaf = false) {
 
 			if (leaf) {
 				log(`Setting hooks dir for ${root} to ${hooksRelativeToRoot}`);
+				save(
+					join(resolveGitHooksPrefix(), 'pre-commit'),
+					`#!/usr/bin/sh
+					echo "Unsupported GIT client. The git client must support core.hooksPath."
+					exit 1
+					`.replace(/^\s+/gim, '')
+				);
 				return execInRoot(
 					`git config core.hooksPath ${hooksRelativeToRoot}`
 				);
@@ -117,6 +142,7 @@ async function install(root = cwd(), leaf = false) {
 				// If we didn't throw, then the file is tracked and we are
 				// in the project-scripts project, remove the hook.
 				execInRoot('git config --unset core.hooksPath');
+				remove(join(resolveGitHooksPrefix(), 'pre-commit'));
 			}
 		} catch {
 			// If it throws, we are good... if it doesn't then we cleaned up.
