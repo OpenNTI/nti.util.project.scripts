@@ -153,6 +153,10 @@ function computeConfig() {
 		reportUnusedDisableDirectives: !DEV,
 		rules: {
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
+			'jsdoc/no-undefined-types': [
+				'warn',
+				{ definedTypes: ['Class', 'Record', 'ReturnType'] },
+			],
 			'jsdoc/require-jsdoc': 'off',
 			'jsdoc/require-param-description': 'off',
 			'jsdoc/require-returns-description': 'off',
