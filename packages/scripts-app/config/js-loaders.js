@@ -44,7 +44,9 @@ const loaders = (buildCache = false, storybook = false) => {
 										test: /\.(mjs|jsx?)$/,
 										plugins: [
 											[
-												'babel-plugin-react-docgen',
+												require.resolve(
+													'babel-plugin-react-docgen'
+												),
 												{
 													DOC_GEN_COLLECTION_NAME:
 														'STORYBOOK_REACT_CLASSES',

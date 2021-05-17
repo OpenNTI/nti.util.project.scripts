@@ -37,7 +37,15 @@ module.exports = {
 		'@storybook/addon-a11y',
 	],
 
-	webpackFinal: storybookConfig => {
+	async babel(options) {
+		Object.assign(options, {
+			babelrc: false,
+			configFile: false,
+		});
+		return options;
+	},
+
+	webpackFinal(storybookConfig) {
 		storybookConfig.entry = getEntry(
 			storybookConfig.entry,
 			require.resolve('./globals')
