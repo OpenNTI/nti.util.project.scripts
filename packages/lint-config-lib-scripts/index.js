@@ -1,10 +1,16 @@
 'use strict';
 const { join } = require('path');
 const fs = require('fs');
-const { DEV, IN_IDE } = require('./vars');
+const {
+	DEV,
+	IN_IDE,
+	IN_WEBPACK,
+} = require('@nti/eslint-config-lib-scripts/vars');
 const configFile = join(
 	__dirname,
-	`config.${DEV ? 'dev' : 'prod'}${IN_IDE ? '.ide' : ''}.json`
+	`config.${DEV ? 'dev' : 'prod'}${IN_IDE ? '.ide' : ''}${
+		IN_WEBPACK ? '.webpack' : ''
+	}.json`
 );
 
 try {
@@ -204,7 +210,7 @@ function computeConfig() {
 			],
 			'no-throw-literal': 'error',
 			'no-unused-vars': [
-				'error',
+				IN_WEBPACK ? 'warn' : 'error',
 				{ ignoreRestSiblings: true, args: 'none' },
 			],
 			'no-use-before-define': ['error', 'nofunc'],
