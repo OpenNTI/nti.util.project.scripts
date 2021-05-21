@@ -165,6 +165,7 @@ function computeConfig() {
 			],
 			'jsdoc/require-jsdoc': 'off',
 			'jsdoc/require-param-description': 'off',
+			'jsdoc/require-property-description': 'off',
 			'jsdoc/require-returns-description': 'off',
 			'jsdoc/require-returns': ['warn', { exemptedBy: ['mixin'] }],
 			camelcase: [
