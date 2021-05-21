@@ -85,7 +85,7 @@ module.exports = {
 	package: _package,
 	packageJson,
 	packageLock: resolveApp('package-lock.json'),
-	packageMain: resolveApp(_package.main),
+	packageMain: resolveApp(_package.main || 'src/index.js'),
 	nodeModules,
 	ntiModules,
 	src: resolveApp('src'),
