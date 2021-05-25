@@ -11,12 +11,7 @@ const {
 	setupFilesAfterEnv: extSetupFilesAfterEnv,
 } = setupEnv();
 const paths = require(path.resolve(configDir, './paths'));
-const getWorkspace = require('../workspace');
 const { testEnvironment } = require(paths.packageJson);
-
-const { aliases: workspaceLinks } = getWorkspace(paths.packageJson, {
-	regexp: true,
-});
 
 module.exports = (resolve, rootDir) => {
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
@@ -92,9 +87,9 @@ module.exports = (resolve, rootDir) => {
 			),
 		},
 		transformIgnorePatterns: [],
-		moduleNameMapper: {
-			...(isCI ? null : workspaceLinks),
-		},
+		// moduleNameMapper: {
+		// 	...(isCI ? null : workspaceLinks),
+		// },
 		resolver: resolve('config/jest/resolver.js'),
 	};
 
