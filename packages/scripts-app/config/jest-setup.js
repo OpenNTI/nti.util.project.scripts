@@ -17,6 +17,16 @@ Object.defineProperty(global, 'stylesheet', {
 		),
 });
 
+Object.defineProperty(global, 'css', {
+	value: () =>
+		new Proxy(
+			{},
+			{
+				get: (_, property) => property,
+			}
+		),
+});
+
 Object.defineProperty(global, 'styled', {
 	value: new Proxy(
 		tag => {
@@ -103,15 +113,16 @@ Object.defineProperty(global, 'styled', {
 
 			TagTemplate.attrs = p => {
 				const fill = x => ({
-					...(typeof p === 'function' ? p(x) : {...x,...p}),
+					...(typeof p === 'function' ? p(x) : { ...x, ...p }),
 				});
 				return (strings, ...values) => {
 					const styles = zip(strings, values);
-					return React.forwardRef((props, ref) => 
-						React.createElement(
-							tag,
-							{...fill(computeClassName(props, styles)), ref}
-						));
+					return React.forwardRef((props, ref) =>
+						React.createElement(tag, {
+							...fill(computeClassName(props, styles)),
+							ref,
+						})
+					);
 				};
 			};
 
