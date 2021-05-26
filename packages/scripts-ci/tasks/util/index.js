@@ -6,6 +6,7 @@ const { spawnSync } = require('child_process');
 
 const call = (x, { env = {}, fd = 'inherit', forgive = false } = {}) => {
 	const [cmd, ...args] = x.split(' ');
+	printLine(`Calling: ${x}`);
 	const { signal, status, stdout, stderr } = spawnSync(cmd, args, {
 		env: { ...process.env, ...env },
 		maxBuffer: 2 * 1024 * 1024,
