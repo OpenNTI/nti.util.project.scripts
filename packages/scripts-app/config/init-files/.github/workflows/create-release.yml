@@ -26,6 +26,7 @@ jobs:
         with:
           node-version: '16'
 
+      # This only serves to use the cache from snapshot/test runs.
       - uses: actions/cache@v2
         with:
           path: ~/.npm

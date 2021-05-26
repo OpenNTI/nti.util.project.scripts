@@ -36,6 +36,8 @@ jobs:
           npm config set "${NPM_REGISTRY/https:/}/:_authToken" "$NPM_TOKEN"
           npm install --global npm
 
+      # Release builds do not use actions/cache because the build process cleans node_modules as its first step.
+
       - name: Generate release build
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
