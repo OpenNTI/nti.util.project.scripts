@@ -9,12 +9,6 @@ const megabytes = bytes => Math.round(bytes / Math.pow(1024, 2));
 const MIN_RAM = 8192;
 const MAX_RAM = megabytes(totalmem() * 0.75);
 
-if (MAX_RAM < MIN_RAM) {
-	console.warn(
-		'\n\n\n!!! Low total system memory detected. This build may fail.\n\n\n'
-	);
-}
-
 module.exports = function run(scriptFile, name, args) {
 	const result = spawnSync(
 		'node',
