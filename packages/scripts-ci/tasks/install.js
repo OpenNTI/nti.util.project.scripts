@@ -27,35 +27,13 @@ if (result === SUCCESS) {
 }
 
 function reportInstalled() {
-	const { stdout } = call('npm list --long --parseable', {
+	const { stdout } = call('npm list', {
 		...options,
 		fd: 'pipe',
 	});
-	const data = stdout.toString('utf8');
-	const cwd = process.cwd();
-	const parsed = data
-		.split(/[\r\n]+/)
-		.map(x => {
-			const [path, name] = x.split(':');
-			return !x || path === cwd
-				? null
-				: {
-						name,
-						path: path.replace(cwd, '.'),
-				  };
-		})
-		.filter(Boolean)
-		.sort((a, b) => a.name.localeCompare(b.name));
-
-	const nameColWidth =
-		parsed.reduce((max, { name }) => Math.max(max, name.length), 0) + 2;
-
 	printLine('Packages Installed:');
 
-	for (let { name, path } of parsed) {
-		const spaces = new Array(nameColWidth - name.length).join(' ');
-		printLine(`${name}${spaces}${path}`);
-	}
+	printLine(stdout.toString('utf8'));
 
 	printLine('-- End of Installed Packages --');
 	printLine('::endgroup::');
