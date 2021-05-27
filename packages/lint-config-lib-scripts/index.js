@@ -161,7 +161,15 @@ function computeConfig() {
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
 			'jsdoc/no-undefined-types': [
 				'warn',
-				{ definedTypes: ['Class', 'Record', 'ReturnType', 'unknown'] },
+				{
+					definedTypes: [
+						'Class',
+						'Record',
+						'ReturnType',
+						'unknown',
+						'JSX',
+					],
+				},
 			],
 			'jsdoc/require-jsdoc': 'off',
 			'jsdoc/require-param-description': 'off',
