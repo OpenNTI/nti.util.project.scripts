@@ -75,7 +75,7 @@
 		"react-test-renderer": "^16.14.0",
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.32.4",
-		"sass-loader": "^11.0.0",
+		"sass-loader": "^12.0.0",
 		"stream-browserify": "^3.0.0",
 		"style-loader": "^2.0.0",
 		"thread-loader": "^3.0.0",
