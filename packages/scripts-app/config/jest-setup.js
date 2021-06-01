@@ -18,13 +18,7 @@ Object.defineProperty(global, 'stylesheet', {
 });
 
 Object.defineProperty(global, 'css', {
-	value: () =>
-		new Proxy(
-			{},
-			{
-				get: (_, property) => property,
-			}
-		),
+	value: () => '__inline_css_extracted_to_hashed_class_name',
 });
 
 Object.defineProperty(global, 'styled', {
