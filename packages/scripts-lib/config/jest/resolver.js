@@ -6,7 +6,7 @@ const fs = require('fs-extra');
 
 const CACHE = {};
 
-const NTI_MAPPED = /^@nti\/[^/]+\/src$/;
+// const NTI_MAPPED = /^@nti\/[^/]+\/src$/;
 
 module.exports = function (request, context) {
 	// try {

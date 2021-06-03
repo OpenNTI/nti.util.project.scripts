@@ -2,7 +2,7 @@ import { promises as fs, readFileSync } from 'fs';
 
 import wrap from 'word-wrap';
 
-import { exec, execSync } from './exec.js';
+// import { exec, execSync } from './exec.js';
 
 export const arg = (flag, description) => {
 	const known = (arg.known = arg.known || {

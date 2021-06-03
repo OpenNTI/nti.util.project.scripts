@@ -20,5 +20,19 @@
 		"import/order": 0,
 		"no-console": 0,
 		"strict": ["error", "global"]
-	}
+	},
+	"overrides": [
+		{
+			"files": ["packages/scripts-cmp/template/**"],
+			"parserOptions": {
+				"sourceType": "module",
+				"ecmaFeatures": {
+					"jsx": true
+				}
+			},
+			"rules": {
+				"no-unused-vars": "off"
+			}
+		}
+	]
 }
