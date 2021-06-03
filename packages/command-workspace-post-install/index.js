@@ -62,8 +62,10 @@ function cleanDupes() {
 	await Promise.all([
 		// Lerna isn't compatible with this workspace layout, so we just install it by itself",
 		install(resolve('./scripts')),
+
+		// Fixed as of npm v7.15.1
 		//  There appears to be a bug with workspace installs not installing bundledDependencies... so we will install the service independently
-		install(resolve('./app/service')),
+		// install(resolve('./app/service')),
 	]);
 
 	spinner.stop();
