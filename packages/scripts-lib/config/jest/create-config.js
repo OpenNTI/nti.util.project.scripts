@@ -39,8 +39,8 @@ module.exports = (resolve, rootDir) => {
 	}
 
 	const config = {
-		// clearMocks: true,
-		// resetMocks: true,
+		clearMocks: true,
+		resetMocks: true,
 		// resetModules: true, //Can't enable this, ExtJS code breaks
 		collectCoverageFrom: [
 			'src/**/*.{js,jsx,mjs}',

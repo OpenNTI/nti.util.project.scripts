@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const babelJest = require('babel-jest');
+const { default: babelJest } = require('babel-jest');
 const resolveScriptDir = require('../resolve-script-dir');
 
 module.exports = babelJest.createTransformer({
