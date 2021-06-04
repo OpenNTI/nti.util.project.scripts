@@ -122,7 +122,7 @@ async function install(root = cwd(), leaf = false) {
 				const target = join(resolveGitHooksPrefix(), 'pre-commit');
 				save(
 					target,
-					`#!/usr/bin/sh
+					`#!/usr/bin/env bash
 					echo "Unsupported GIT client. The git client must support core.hooksPath."
 					exit 1
 					`.replace(/^\s+/gim, '')
