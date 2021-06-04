@@ -7,6 +7,7 @@ const {
 	appendFileSync,
 	readFileSync,
 	writeFileSync,
+	chmodSync,
 } = require('fs');
 const { join, relative } = require('path');
 const { listProjects } = require('./list');
@@ -118,13 +119,15 @@ async function install(root = cwd(), leaf = false) {
 
 			if (leaf) {
 				log(`Setting hooks dir for ${root} to ${hooksRelativeToRoot}`);
+				const target = join(resolveGitHooksPrefix(), 'pre-commit');
 				save(
-					join(resolveGitHooksPrefix(), 'pre-commit'),
+					target,
 					`#!/usr/bin/sh
 					echo "Unsupported GIT client. The git client must support core.hooksPath."
 					exit 1
 					`.replace(/^\s+/gim, '')
 				);
+				chmodSync(target, '755');
 				return execInRoot(
 					`git config core.hooksPath ${hooksRelativeToRoot}`
 				);
