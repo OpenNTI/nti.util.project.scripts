@@ -133,6 +133,7 @@ module.exports = function getWorkspace(entryPackage, { regexp = false } = {}) {
 	return results;
 };
 
+module.exports.find = find;
 function find(file, limit = 4) {
 	const abs = path.resolve(file);
 	const atRoot = path.resolve(path.join('..', file)) === abs;

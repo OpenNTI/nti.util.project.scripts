@@ -1,4 +1,4 @@
-/*globals window, globalThis*/
+/*globals window, globalThis, DEV_DATA_SERVER_AUTH*/
 'use strict';
 require('regenerator-runtime');
 let g =
@@ -10,4 +10,10 @@ let g =
 if (!globalThis.global) {
 	globalThis.global = g;
 }
-global.$AppConfig = global.$AppConfig || { server: 'dataserver2' };
+
+global.$AppConfig = {
+	server: '/dataserver2/',
+	extraHeaders: {
+		authorization: DEV_DATA_SERVER_AUTH,
+	},
+};

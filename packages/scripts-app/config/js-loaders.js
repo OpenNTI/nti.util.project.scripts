@@ -99,7 +99,7 @@ const loaders = (buildCache = false, storybook = false) => {
 	return rules;
 };
 
-const plugins = () => [
+const plugins = ({ define } = {}) => [
 	new webpack.ProvidePlugin({
 		css: ['astroturf/react', 'css'],
 		styled: ['astroturf/react', 'default'],
@@ -136,6 +136,7 @@ const plugins = () => [
 	new webpack.DefinePlugin({
 		'process.browser': JSON.stringify(true),
 		'process.env.NODE_ENV': JSON.stringify(ENV),
+		...define,
 	}),
 ];
 

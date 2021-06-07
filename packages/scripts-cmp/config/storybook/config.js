@@ -1,4 +1,7 @@
 'use strict';
+const fs = require('fs');
+const { find } = require('@nti/lib-scripts/config/workspace');
+
 const paths = require('../paths');
 const CommonWebpackConfig = require('../webpack.config.js');
 const {
@@ -21,6 +24,22 @@ function getEntry(currentEntry, newEntry) {
 		currentEntry[key] = getEntry(val, newEntry);
 	}
 	return currentEntry;
+}
+
+function loadAuthorization() {
+	let auth = null;
+	try {
+		const authLocation = find('.storybook.auth');
+		if (!authLocation) {
+			return;
+		}
+		auth = fs.readFileSync(authLocation).toString('base64');
+		auth = `Basic ${auth}`;
+	} catch {
+		//
+	}
+
+	return { DEV_DATA_SERVER_AUTH: JSON.stringify(auth) };
 }
 
 module.exports = {
@@ -103,7 +122,11 @@ module.exports = {
 
 		// Add our plugins...
 		storybookConfig.plugins.unshift(
-			...jsPlugins(),
+			...jsPlugins({
+				define: {
+					...loadAuthorization(),
+				},
+			}),
 			...cssPlugins({
 				miniCssExtract: {
 					filename: '[name]-[contenthash].css',
