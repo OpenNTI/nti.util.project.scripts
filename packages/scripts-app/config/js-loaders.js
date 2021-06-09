@@ -114,7 +114,7 @@ const plugins = ({ define } = {}) => [
 			// centralize the config so its located only in one place (ie:
 			// npm 7 workspaces) Or let it find the local config. (which is
 			// what this is now doing at the moment)
-
+			cache: true,
 			context: workspaceContext,
 			files: [
 				paths.src,
