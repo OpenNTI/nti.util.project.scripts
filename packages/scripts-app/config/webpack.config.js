@@ -8,7 +8,7 @@ const path = require('path');
 const webpack = require('webpack');
 const { isCI } = require('ci-info');
 const tmp = require('tmp');
-const chalk = require('chalk');
+
 const { branchSync, commitSync } = require('@nti/git-state');
 //Webpack plugins:
 const {
@@ -17,7 +17,6 @@ const {
 	CompressionPlugin,
 	HtmlWebpackPlugin,
 	HtmlWebpackHarddiskPlugin,
-	IgnoreEmitPlugin,
 	TerserPlugin,
 	SentryWebpackPlugin,
 } = require('./webpack.plugins');
@@ -374,37 +373,3 @@ const ClientConfig = {
 };
 
 Configs.push(ClientConfig);
-
-if (paths.pageContentComponent) {
-	Configs.push({
-		...ClientConfig,
-
-		module: {
-			strictExportPresence: true,
-			rules: getLoaderRules(true),
-		},
-
-		optimization: {},
-		node: false,
-		target: 'node',
-		devtool: false,
-
-		output: {
-			path: path.dirname(paths.pageContentComponentDest),
-			filename: path.basename(paths.pageContentComponentDest),
-			libraryTarget: 'commonjs2',
-		},
-
-		entry: paths.pageContentComponent,
-
-		plugins: [
-			...cssPlugins({}, true),
-
-			ContentGlobalDefinitions,
-
-			!isCI && new webpack.ProgressPlugin({}),
-
-			new IgnoreEmitPlugin(/resources/),
-		],
-	});
-}

@@ -67,11 +67,7 @@ module.exports = {
 	cssCustomProperties: require.resolve('@nti/style-common/variables.css'),
 
 	serverComponent,
-	pageContentComponent:
-		paths.package.ssrEntry && exists(resolveApp(paths.package.ssrEntry)),
-	pageContentComponentDest: resolveApp(
-		path.join(serverComponent, 'ssr-entry/index.js')
-	),
+
 	baseConfig: resolveOwn('server/config/env.json'),
 	localConfig: exists(resolveApp('config/service.json')),
 
