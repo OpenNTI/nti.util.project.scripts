@@ -76,6 +76,12 @@ module.exports = {
 			CommonWebpackConfig.resolve.alias
 		);
 
+		Object.assign(
+			storybookConfig.resolve.fallback ||
+				(storybookConfig.resolve.fallback = {}),
+			CommonWebpackConfig.resolve.fallback
+		);
+
 		// Add dataserver proxy settings?
 		Object.assign(
 			storybookConfig.devServer?.proxy ?? {},
