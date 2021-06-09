@@ -67,7 +67,6 @@
 		"postcss-flexbugs-fixes": "^5.0.1",
 		"postcss-loader": "^5.0.0",
 		"postcss-preset-env": "^6.7.0",
-		"progress-bar-webpack-plugin": "^2.1.0",
 		"prop-types": "^15.7.2",
 		"raw-loader": "^4.0.0",
 		"react": "^16.14.0",

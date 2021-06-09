@@ -18,7 +18,6 @@ const {
 	HtmlWebpackPlugin,
 	HtmlWebpackHarddiskPlugin,
 	IgnoreEmitPlugin,
-	ProgressBarPlugin,
 	TerserPlugin,
 	SentryWebpackPlugin,
 } = require('./webpack.plugins');
@@ -321,13 +320,7 @@ const ClientConfig = {
 				},
 			}),
 
-		!isCI &&
-			new ProgressBarPlugin({
-				format:
-					'  build [:bar] ' +
-					chalk.green.bold(':percent') +
-					' (:elapsed seconds)',
-			}),
+		!isCI && new webpack.ProgressPlugin({}),
 
 		new HtmlWebpackPlugin({
 			inject: 'body',
@@ -409,13 +402,7 @@ if (paths.pageContentComponent) {
 
 			ContentGlobalDefinitions,
 
-			!isCI &&
-				new ProgressBarPlugin({
-					format:
-						'  server build [:bar] ' +
-						chalk.green.bold(':percent') +
-						' (:elapsed seconds)',
-				}),
+			!isCI && new webpack.ProgressPlugin({}),
 
 			new IgnoreEmitPlugin(/resources/),
 		],
