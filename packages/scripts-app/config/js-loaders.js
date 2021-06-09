@@ -115,6 +115,10 @@ const plugins = ({ define } = {}) => [
 			// npm 7 workspaces) Or let it find the local config. (which is
 			// what this is now doing at the moment)
 			cache: true,
+			cacheLocation: path.resolve(
+				paths.nodeModules,
+				'.cache/.eslintcache'
+			),
 			context: workspaceContext,
 			files: [
 				paths.src,
