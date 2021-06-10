@@ -319,8 +319,7 @@ const ClientConfig = {
 				},
 			}),
 
-		// !isCI && new webpack.ProgressPlugin({}),
-		!isCI && new (require('webpackbar'))(),
+		!isCI && progressBar(),
 
 		new HtmlWebpackPlugin({
 			inject: 'body',
@@ -374,3 +373,11 @@ const ClientConfig = {
 };
 
 Configs.push(ClientConfig);
+
+function progressBar() {
+	try {
+		return new (require('webpackbar'))();
+	} catch {
+		return new webpack.ProgressPlugin({});
+	}
+}
