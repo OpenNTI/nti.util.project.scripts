@@ -11,9 +11,12 @@ if (!globalThis.global) {
 	globalThis.global = g;
 }
 
-global.$AppConfig = {
-	server: '/dataserver2/',
-	extraHeaders: {
-		authorization: DEV_DATA_SERVER_AUTH,
-	},
-};
+global.$AppConfig =
+	typeof DEV_DATA_SERVER_AUTH !== 'undefined'
+		? {
+				server: '/dataserver2/',
+				extraHeaders: {
+					authorization: DEV_DATA_SERVER_AUTH,
+				},
+		  }
+		: { server: 'mock:/dataserver2/' };
