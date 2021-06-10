@@ -1,5 +1,4 @@
 'use strict';
-const SKIP_REGEN = process.argv.includes('--skip-regen');
 const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs-extra');
@@ -185,12 +184,12 @@ if (ToRemove.length > 0) {
 	}
 }
 
-if (!SKIP_REGEN) {
-	write(`Regenerate: ${chalk.magenta('node_modules')}...`);
-	fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
-	fs.removeSync(path.resolve(paths.path, 'node_modules'));
-	call('npm', ['install'], { stdio: 'inherit' }, true);
-}
+// if () {
+// 	write(`Regenerate: ${chalk.magenta('node_modules')}...`);
+// 	fs.removeSync(path.resolve(paths.path, 'package-lock.json'));
+// 	fs.removeSync(path.resolve(paths.path, 'node_modules'));
+// 	call('npm', ['install'], { stdio: 'inherit' }, true);
+// }
 
 write('Done.');
 
