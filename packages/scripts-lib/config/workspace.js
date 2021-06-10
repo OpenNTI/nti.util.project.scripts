@@ -48,7 +48,9 @@ module.exports = function getWorkspace(entryPackage, { regexp = false } = {}) {
 
 	const projects = [];
 	const aliases = {};
-	console.log('[workspace] Generating workspace bindings...');
+	if (LOG) {
+		console.log('[workspace] Generating workspace bindings...');
+	}
 
 	for (const x of listWorkspacePackages(entryPackage, workspaceOptions)) {
 		const dir = path.dirname(x);

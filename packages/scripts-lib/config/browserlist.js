@@ -31,7 +31,7 @@ const query = (module.exports =
 		  ]);
 
 //#region debug logging
-if (!isWorker && (process.stdout.isTTY || isCI)) {
+if (!isWorker && isCI) {
 	const chalk = require('chalk');
 	process.env.NTI_BROWSER_LIST_PRINTED = true;
 	const byLocale = (a, b) => a.localeCompare(b);
