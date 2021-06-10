@@ -319,7 +319,8 @@ const ClientConfig = {
 				},
 			}),
 
-		!isCI && new webpack.ProgressPlugin({}),
+		// !isCI && new webpack.ProgressPlugin({}),
+		!isCI && new (require('webpackbar'))(),
 
 		new HtmlWebpackPlugin({
 			inject: 'body',
