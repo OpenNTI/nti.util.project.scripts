@@ -215,7 +215,7 @@ function computeConfig() {
 				},
 			],
 			'no-shadow': [
-				'warn',
+				'off',
 				{ builtinGlobals: false, hoist: 'never', allow: ['done'] },
 			],
 			'no-throw-literal': 'error',
