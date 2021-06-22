@@ -26,7 +26,7 @@ dependencies.
 `;
 
 const minVersions = {
-	npm: [note('^6.0.0', npm6Note), '^7.5.2'],
+	npm: [note('^6.0.0', npm6Note), '^7.18.1'],
 	node: ['>=14.5.0'],
 };
 
