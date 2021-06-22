@@ -5,11 +5,21 @@
 
 module.exports = {
 	process() {
-		return 'module.exports = {};';
+		return `
+		module.exports.__esModule = true;
+		module.exports.default = new Proxy(
+			{},
+			{
+				get (_, property) {
+					return property;
+				},
+			}
+		);
+		`;
 	},
 
 	getCacheKey() {
 		// The output is always the same.
-		return 'cssTransform';
+		return 'cssTransform-proxy-pass';
 	},
 };
