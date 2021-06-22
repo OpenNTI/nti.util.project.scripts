@@ -1,6 +1,6 @@
 {
 	"name": "@nti/rollup",
-	"version": "2.47.9",
+	"version": "2.47.10",
 	"description": "",
 	"bin": {
 		"nti-rollup": "index.js"
