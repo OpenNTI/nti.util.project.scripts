@@ -1,6 +1,6 @@
 {
 	"name": "@nti/cmp-scripts",
-	"version": "2.47.10",
+	"version": "2.47.11",
 	"description": "component-specific scripts & dependencies",
 	"bin": {
 		"cmp-scripts": "./bin/cli.js"
@@ -25,8 +25,8 @@
 	},
 	"homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
 	"dependencies": {
-		"@nti/app-scripts": "^2.47.10",
-		"@nti/lib-scripts": "^2.47.10",
+		"@nti/app-scripts": "^2.47.11",
+		"@nti/lib-scripts": "^2.47.11",
 		"@nti/style-common": "NextThought/nti.style.common",
 		"@storybook/addon-a11y": "^6.1.1",
 		"@storybook/addon-actions": "^6.2.0-beta.5",

@@ -1,6 +1,6 @@
 {
 	"name": "@nti/app-scripts",
-	"version": "2.47.10",
+	"version": "2.47.11",
 	"description": "app-specific scripts & dependencies",
 	"bin": {
 		"app-scripts": "./bin/cli.js"
@@ -29,7 +29,7 @@
 		"@babel/preset-react": "^7.10.4",
 		"@nti/eslint-config-app-scripts": "^2.47.7",
 		"@nti/git-state": "^5.0.0",
-		"@nti/lib-scripts": "^2.47.10",
+		"@nti/lib-scripts": "^2.47.11",
 		"@nti/style-common": "NextThought/nti.style.common",
 		"@nti/stylelint-config-standard": "^2.47.7",
 		"@sentry/webpack-plugin": "^1.14.1",
