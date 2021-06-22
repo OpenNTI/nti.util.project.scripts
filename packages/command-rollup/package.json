@@ -1,0 +1,15 @@
+{
+	"name": "@nti/rollup",
+	"version": "2.46.11",
+	"description": "",
+	"bin": {
+		"nti-rollup": "index.js"
+	},
+	"main": "index.js",
+	"type": "module",
+	"license": "UNLICENSED",
+	"dependencies": {
+    "@rollup/plugin-node-resolve": "*",
+		"rollup": "*"
+	}
+}
