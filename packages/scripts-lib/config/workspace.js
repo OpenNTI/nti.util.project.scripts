@@ -185,14 +185,14 @@ function readWorkspaceOptions() {
 		const opts = pkg?.[KEY];
 
 		if (!wkp && !opts) {
-			if (pkg) {
-				console.warn(
-					'[workspace] Missing "%s" in ',
-					KEY,
-					workspacePackage
-				);
-				process.exit();
-			}
+			// if (pkg) {
+			// 	console.warn(
+			// 		'[workspace] Missing "%s" in ',
+			// 		KEY,
+			// 		workspacePackage
+			// 	);
+			// 	process.exit();
+			// }
 			return null;
 		}
 
