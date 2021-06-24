@@ -38,7 +38,7 @@ export async function getTempFile(context = '') {
 	if (files.has(t)) {
 		throw new Error('Could not generate a unique temp file name.');
 	}
-	await fs.rmdir(t);
+	await fs.rm(t, { recursive: true, force: true });
 	files.add(t);
 	return t;
 }

@@ -24,8 +24,13 @@ export async function updateLock(dir, dryRun) {
 			);
 		} else {
 			write('Updating lock file...');
-			await fs.rmdir(join(dir, 'node_modules'), { recursive: true });
-			await fs.unlink(join(dir, 'package-lock.json')).catch(Boolean);
+			await fs.rm(join(dir, 'node_modules'), {
+				recursive: true,
+				force: true,
+			});
+			await fs
+				.rm(join(dir, 'package-lock.json'), { force: true })
+				.catch(Boolean);
 			await exec(dir, 'npm install --no-progress --package-lock=true');
 		}
 	}
