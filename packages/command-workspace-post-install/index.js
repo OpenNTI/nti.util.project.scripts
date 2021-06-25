@@ -49,7 +49,7 @@ function cleanDupes() {
 		// remove the duplicate
 		fs.rm(x, { force: true, recursive: true })
 			// Remove parent directory (node_modules) if its empty
-			.then(() => fs.rm(dirname(x), { recursive: true, force: true }))
+			.then(() => fs.rm(dirname(x), { force: true }))
 			// ignore errors
 			.catch(Boolean);
 	}
