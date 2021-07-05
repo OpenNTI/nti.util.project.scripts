@@ -1,2 +1,2 @@
 'use strict';
-require('@nti/app-scripts/config/jest-setup');
+module.exports = require('@nti/app-scripts/config/jest-setup');

@@ -14,7 +14,7 @@ module.exports = function setupEnv() {
 			: path.join(resolveScriptDir(), 'config');
 
 		try {
-			const init = path.join(config, 'jest.js');
+			const init = path.join(config, 'jest-env.js');
 			if (fs.existsSync(init)) {
 				const { setupFiles: a, setupFilesAfterEnv: b } =
 					require(init) || {};
