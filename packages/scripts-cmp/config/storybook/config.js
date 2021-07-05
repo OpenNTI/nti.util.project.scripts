@@ -46,7 +46,7 @@ module.exports = {
 	core: {
 		builder: 'webpack5',
 	},
-	stories: ['../src/**/*.stories.mdx', '../src/**/*.stories.js'],
+	stories: ['../src/**/*.stories.@(js|mdx)'],
 	addons: [
 		'@storybook/addon-docs',
 		'@storybook/addon-actions',
@@ -94,23 +94,8 @@ module.exports = {
 		// remove storybook's css loaders
 		rules = rules.filter(x => !x.test.test('.css'));
 
-		// remove storybook's js loaders
-		rules = rules.filter(
-			x =>
-				!((x = x.test),
-				x.test('.js') ||
-					x.test('.jsx') ||
-					x.test('.mdx') ||
-					x.test('story.js') ||
-					x.test('story.jsx') ||
-					x.test('story.mdx') ||
-					x.test('stories.js') ||
-					x.test('stories.jsx') ||
-					x.test('stories.mdx'))
-		);
-
 		// add our js/css loaders
-		rules.push(
+		rules.unshift(
 			...jsLoaders(true, storybookConfig),
 			...cssLoaders(paths, {
 				inline: true,

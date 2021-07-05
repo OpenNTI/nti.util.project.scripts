@@ -69,33 +69,6 @@ const loaders = (buildCache = false, storybook = false) => {
 			].filter(Boolean),
 		},
 	];
-
-	if (storybook) {
-		rules.push(
-			{
-				...rules[0],
-				test: /(stories|story)?\.mdx$/,
-				use: [
-					...rules[0].use,
-					{
-						loader: '@mdx-js/loader',
-						options: findLoader(storybook, '.mdx', '@mdx-js/loader')
-							.options,
-					},
-				],
-			},
-			{
-				test: /\.(stories|story)\.[tj]sx?$/,
-				loader: '@storybook/source-loader',
-				options: {
-					injectStoryParameters: true,
-					inspectLocalDependencies: true,
-				},
-				enforce: 'pre',
-			}
-		);
-	}
-
 	return rules;
 };
 
