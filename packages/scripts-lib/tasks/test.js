@@ -1,9 +1,10 @@
 'use strict';
 //Inspired by "react-scripts"
 const { spawnSync } = require('child_process');
+const { cpus } = require('os');
 const path = require('path');
+
 const fs = require('fs-extra');
-const jest = require('jest');
 const { isCI } = require('ci-info');
 const paths = require('../config/paths');
 
@@ -60,11 +61,11 @@ if (isCI && !argv.includes('--coverage')) {
 }
 
 if (!isDebug) {
-	argv.push('--maxWorkers=4');
+	argv.push('--maxWorkers=' + cpus().length);
 }
 
 if (isDebug) {
 	argv.push('--runInBand');
 }
 
-jest.run(argv.filter(x => !isDebugFlag(x)));
+require('jest').run(argv.filter(x => !isDebugFlag(x)));

@@ -13,6 +13,7 @@ module.exports = function run(scriptFile, name, args) {
 	const result = spawnSync(
 		'node',
 		[
+			'--trace-warnings',
 			inspect && '--inspect-brk',
 			'--max-old-space-size=' + Math.max(MIN_RAM, MAX_RAM),
 			scriptFile,
