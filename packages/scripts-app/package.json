@@ -57,7 +57,7 @@
 		"html-webpack-plugin": "^5.1.0",
 		"ignore-emit-webpack-plugin": "^2.0.2",
 		"json-colorz": "0.x.x",
-		"mini-css-extract-plugin": "^1.0.0",
+		"mini-css-extract-plugin": "^2.0.0",
 		"normalize.css": "^8.0.1",
 		"null-loader": "^4.0.0",
 		"os-browserify": "^0.3.0",
