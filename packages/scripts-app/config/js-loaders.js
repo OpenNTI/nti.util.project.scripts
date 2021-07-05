@@ -10,7 +10,7 @@ const workspaceContext = getWorkspace().root || paths.path;
 
 const jsTestExp = /\.m?jsx?$/;
 
-const loaders = (buildCache = false, storybook = false) => {
+const loaders = (buildCache = false) => {
 	let rules = [
 		{
 			test: jsTestExp,
@@ -34,29 +34,7 @@ const loaders = (buildCache = false, storybook = false) => {
 							// WebKit started treating object-shorthand properties as implicit strict-mode-ish scope.
 							// This avoids it by transforming all object shorthand to long-hand.
 							'@babel/plugin-transform-shorthand-properties',
-							storybook &&
-								'@storybook/core-common/node_modules/babel-plugin-macros',
 						].filter(Boolean),
-						overrides: !storybook
-							? null
-							: [
-									{
-										test: /\.(mjs|jsx?)$/,
-										plugins: [
-											[
-												require.resolve(
-													'babel-plugin-react-docgen'
-												),
-												{
-													DOC_GEN_COLLECTION_NAME:
-														'STORYBOOK_REACT_CLASSES',
-													babelrc: false,
-													configFile: false,
-												},
-											],
-										],
-									},
-							  ],
 					},
 				},
 				{
@@ -122,16 +100,3 @@ module.exports = {
 	pattern: jsTestExp,
 	plugins,
 };
-
-function findLoader(config, testString, loaderName) {
-	const { rules } = config.module;
-	return rules.reduce((found, rule) => {
-		if (found) {
-			return found;
-		}
-
-		if (testString.match(rule.test)) {
-			return rule.use.find(x => x.loader.includes(loaderName));
-		}
-	}, null);
-}

@@ -95,8 +95,8 @@ module.exports = {
 		rules = rules.filter(x => !x.test.test('.css'));
 
 		// add our js/css loaders
-		rules.unshift(
-			...jsLoaders(true, storybookConfig),
+		rules.push(
+			...jsLoaders(true),
 			...cssLoaders(paths, {
 				inline: true,
 				sass: {
