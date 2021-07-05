@@ -73,30 +73,24 @@ function getLoaderRules(server) {
 				{
 					test: /.*/,
 					resourceQuery: /for-download/,
-					loader: 'file-loader',
-					options: {
-						name: 'resources/files/[contenthash]/[name].[ext]',
-					},
+					type: 'asset/resource',
 				},
 
 				...jsLoaders(USE_DEV_BUILD_CACHE),
 
 				{
 					test: /\.(ico|gif|png|jpg|svg)(\?.*)?$/,
-					loader: require.resolve('url-loader'),
-					options: {
-						limit: 50,
-						name: 'resources/images/[contenthash].[ext]',
-						mimeType: 'image/[ext]',
-					},
+					type: 'asset',
+					// parser: {
+					// 	dataUrlCondition: {
+					// 	  maxSize: 4 * 1024 // 4kb
+					// 	}
+					// }
 				},
 
 				{
 					test: /\.(woff|ttf|eot|otf)(\?.*)?$/,
-					loader: require.resolve('file-loader'),
-					options: {
-						name: 'resources/fonts/[contenthash].[ext]',
-					},
+					type: 'asset/resource',
 				},
 
 				...cssLoaders(paths, {
@@ -117,7 +111,13 @@ function getLoaderRules(server) {
 						? rule
 						: {
 								...rule,
-								use: [thread(), ...rule.use].filter(Boolean),
+								...(rule.use
+									? {
+											use: [thread(), ...rule.use].filter(
+												Boolean
+											),
+									  }
+									: null),
 						  }
 				),
 		},
@@ -137,6 +137,7 @@ const ClientConfig = {
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[contenthash:8].js',
 		chunkFilename: 'js/[name]-[contenthash:8].js',
+		assetModuleFilename: 'resources/[hash][ext][query]',
 		publicPath: paths.servedPath || '/',
 		devtoolModuleFilenameTemplate: PROD
 			? void 0
