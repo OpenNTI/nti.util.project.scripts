@@ -30,7 +30,6 @@
 		"@nti/eslint-config-app-scripts": "^2.47.7",
 		"@nti/git-state": "^5.0.0",
 		"@nti/lib-scripts": "^2.47.15",
-		"@nti/style-common": "NextThought/nti.style.common",
 		"@nti/stylelint-config-standard": "^2.47.7",
 		"@sentry/webpack-plugin": "^1.14.1",
 		"@testing-library/jest-dom": "^5.11.5",
@@ -88,10 +87,14 @@
 	},
 	"peerDependencies": {
 		"@nti/dev-ssl-config": "^2.35.1",
+		"@nti/style-common": "NextThought/nti.style.common",
 		"@nti/web-service": "^1.42.0"
 	},
 	"peerDependenciesMeta": {
 		"@nti/dev-ssl-config": {
+			"optional": true
+		},
+		"@nti/style-common": {
 			"optional": true
 		},
 		"@nti/web-service": {
