@@ -85,6 +85,9 @@
 		"whatwg-fetch": "^3.0.0",
 		"worker-loader": "^3.0.0"
 	},
+	"optionalDependencies": {
+		"@nti/style-common": "NextThought/nti.style.common"
+	},
 	"peerDependencies": {
 		"@nti/dev-ssl-config": "^2.35.1",
 		"@nti/style-common": "NextThought/nti.style.common",
