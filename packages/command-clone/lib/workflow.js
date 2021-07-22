@@ -1,5 +1,5 @@
 import { promises as fs, readFileSync } from 'fs';
-import { join, dirname } from 'path';
+import { join, dirname, basename } from 'path';
 
 import fuzzy from 'fuzzy';
 import inquirer from 'inquirer';
@@ -86,7 +86,7 @@ export async function clone(options) {
 		cliProgress.Presets.rect
 	);
 	cloneProgress.start(repos.length, 0);
-
+	writeFile;
 	let folders = options.existing
 		.map(x => x.dir.replace(process.cwd() + '/', ''))
 		.filter(x => x && x !== '/');
@@ -153,7 +153,8 @@ export async function clone(options) {
 			folders.sort((a, b) =>
 				(a.name || a.path).localeCompare(b.name || b.path)
 			);
-			fs.writeFile(
+
+			writeFile(
 				join(process.cwd(), 'nextthought.code-workspace'),
 				JSON.stringify({ folders, ...vscodeSettings }, null, '  ')
 			);
@@ -166,9 +167,9 @@ export async function clone(options) {
 			// 	blacklist: [],
 			// };
 
-			// fs.writeFile(join(process.cwd(), '.workspace.json'), JSON.stringify(npmWorkspacePackage[NTI_WORKSPACE_OPTIONS], null, '  '));
+			// writeFile(join(process.cwd(), '.workspace.json'), JSON.stringify(npmWorkspacePackage[NTI_WORKSPACE_OPTIONS], null, '  '));
 
-			fs.writeFile(
+			writeFile(
 				join(process.cwd(), 'package.json'),
 				JSON.stringify(npmWorkspacePackage, null, '  ')
 			);
@@ -186,6 +187,7 @@ export async function clone(options) {
 						continue;
 					}
 
+					await backup(dest);
 					await fs.copyFile(src, dest);
 					await fs.chmod(dest, stat.mode);
 				} catch (e) {
@@ -194,11 +196,31 @@ export async function clone(options) {
 				}
 			}
 
-			fs.writeFile(join(process.cwd(), '.npmrc'), npmrc);
+			writeFile(join(process.cwd(), '.npmrc'), npmrc);
 		}
 	} finally {
 		cloneProgress.stop();
 	}
+}
+
+async function writeFile(file, data) {
+	await backup(file);
+	return fs.writeFile(file, data);
+}
+
+async function backup(file) {
+	const ignoreNonExistence = p =>
+		p.catch(e => {
+			// non-existing files throw ENOENT
+			if (e.code !== 'ENOENT') {
+				throw e;
+			}
+			// otherwise swallow and treat as success
+		});
+
+	const dest = join(dirname(file), `~${basename(file)}`);
+	await ignoreNonExistence(fs.unlink(dest));
+	await ignoreNonExistence(fs.rename(file, dest));
 }
 
 async function getScope(options) {

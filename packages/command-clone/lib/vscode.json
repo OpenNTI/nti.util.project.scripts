@@ -20,82 +20,65 @@
 			"jpoissonnier.vscode-styled-components",
 			"mhutchie.git-graph",
 			"mikestead.dotenv",
-			"mrmlnc.vscode-scss",
 			"ms-vscode-remote.vscode-remote-extensionpack",
 			"ms-vsliveshare.vsliveshare-pack",
-			"ms-vsonline.vsonline",
 			"sleistner.vscode-fileutils",
 			"streetsidesoftware.code-spell-checker",
 			"stylelint.vscode-stylelint",
-			"tht13.html-preview-vscode",
 			"usernamehw.errorlens",
 			"visualstudioexptteam.vscodeintellicode",
 			"wmaurer.change-case"
 		]
 	},
 	"launch": {
-		"compounds": [],
 		"configurations": [
 			{
+				"type": "node",
+				"request": "launch",
+				"name": "Debug Jest on Current File",
+				"cwd": "${fileWorkspaceFolder}",
+				"program": "${fileWorkspaceFolder}../../../node_modules/.bin/jest",
+				"autoAttachChildProcesses": true,
+				"sourceMaps": true,
 				"args": [
 					"--runInBand",
 					"--no-cache",
 					"${fileBasenameNoExtension}"
-				],
-				"autoAttachChildProcesses": true,
-				"name": "Current File",
-				"program": "${workspaceFolder}/node_modules/.bin/jest",
-				"request": "launch",
-				"sourceMaps": true,
-				"type": "node"
+				]
 			}
-		]
+		],
+		"compounds": []
 	},
 	"settings": {
-		"[css]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[html]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[javascript]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[javascriptreact]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[json]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[jsonc]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[scss]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[typescript]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[typescriptreact]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
-		"[yaml]": {
-			"editor.defaultFormatter": "esbenp.prettier-vscode"
-		},
+		"cSpell.words": ["Savepoints", "Transcripted", "icomoon"],
 		"css.validate": false,
 		"editor.codeActionsOnSave": {
-			"source.fixAll": true
+			"source.fixAll": true,
+			"source.fixAll.stylelint": false
 		},
+		"editor.defaultFormatter": "esbenp.prettier-vscode",
+		"editor.formatOnSave": true,
+		"editor.linkedEditing": true,
+		"editor.renderControlCharacters": true,
+		"editor.suggest.showStatusBar": true,
 		"errorLens.enabledDiagnosticLevels": ["error", "warning"],
 		"eslint.codeActionsOnSave.mode": "problems",
 		"eslint.lintTask.enable": true,
+		"files.exclude": {
+			"**/node_modules/**": true
+		},
+		"git.autofetch": true,
 		"git.autoStash": true,
 		"git.pruneOnFetch": true,
 		"git.pullTags": false,
 		"git.rebaseWhenSync": true,
+		"javascript.updateImportsOnFileMove.enabled": "always",
 		"less.validate": false,
+		"scm.alwaysShowRepositories": false,
+		"scm.repositories.visible": 0,
 		"scss.validate": false,
 		"stylelint.reportInvalidScopeDisables": true,
-		"stylelint.reportNeedlessDisables": true
+		"stylelint.reportNeedlessDisables": true,
+		"prettier.requireConfig": true
 	}
 }
