@@ -1,6 +1,6 @@
 {
 	"name": "@nti/workspace",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"workspaces": [
 		"./app/*",
 		"./lib/*",
@@ -26,6 +26,8 @@
 		"@nti/eslint-config-app-scripts": "*",
 		"@nti/eslint-config-lib-scripts": "*",
 		"@nti/stylelint-config-standard": "*",
-		"concurrently": "^5.3.0"
+		"concurrently": "^5.3.0",
+		"typescript-styled-plugin": "*",
+		"typescript": "*"
 	}
 }
