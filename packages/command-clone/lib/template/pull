@@ -1,0 +1,28 @@
+#!/bin/env bash
+PWD="`dirname \"$0\"`"
+PRJS1=$PWD/*/.git
+PRJS2=$PWD/**/*/.git
+
+set -e;
+
+function pull {
+    for f in $@;
+    do
+        (
+            cd $(dirname $f);
+            OUT=$(git pull -r 2>&1)
+            if [ $? -ne 0 ]; then
+                echo $OUT;
+            fi
+        ) &
+    done
+}
+
+pull $PRJS1
+pull $PRJS2
+
+
+for job in `jobs -p`
+do
+    wait $job || exit 1
+done

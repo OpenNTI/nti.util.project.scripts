@@ -1,0 +1,10 @@
+{
+	"exclude": [".git", ".npm", "node_modules", "dist"],
+	"compilerOptions": {
+		"plugins": [
+			{
+				"name": "typescript-styled-plugin"
+			}
+		]
+	}
+}

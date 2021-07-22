@@ -81,8 +81,7 @@ export async function clone(options) {
 	const cloneProgress = new cliProgress.SingleBar(
 		{
 			clearOnComplete: true,
-			format:
-				'cloning [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
+			format: 'cloning [{bar}] {percentage}% | ETA: {eta}s | {value}/{total}',
 		},
 		cliProgress.Presets.rect
 	);
@@ -174,6 +173,27 @@ export async function clone(options) {
 				JSON.stringify(npmWorkspacePackage, null, '  ')
 			);
 
+			const templates = join(dirname(pathname), 'template');
+			const files = await fs.readdir(templates);
+
+			for (const file of files) {
+				try {
+					const src = join(templates, file);
+					const dest = join(process.cwd(), file);
+					const stat = await fs.stat(src);
+
+					if (stat.isDirectory()) {
+						continue;
+					}
+
+					await fs.copyFile(src, dest);
+					await fs.chmod(dest, stat.mode);
+				} catch (e) {
+					cloneProgress.stop();
+					console.error(e.stack);
+				}
+			}
+
 			fs.writeFile(join(process.cwd(), '.npmrc'), npmrc);
 		}
 	} finally {
@@ -235,8 +255,7 @@ async function getOrgScope({ octokit, spinner, org, ...options }) {
 				name: 'scope',
 				choices: [
 					{
-						name:
-							'none (will clone every repository under the organization)',
+						name: 'none (will clone every repository under the organization)',
 						short: 'none',
 						value: '*',
 					},
