@@ -110,13 +110,15 @@ Object.defineProperty(global, 'styled', {
 					...(typeof p === 'function' ? p(x) : { ...x, ...p }),
 				});
 				return (strings, ...values) => {
-					const styles = zip(strings, values);
-					return React.forwardRef((props, ref) =>
-						React.createElement(tag, {
-							...fill(computeClassName(props, styles)),
+					const cmp = TagTemplate(strings, values);
+					const X = React.forwardRef((props, ref) =>
+						React.createElement(cmp, {
+							...fill(props),
 							ref,
 						})
 					);
+					X.withComponent = (...x) => cmp.withComponent(...x);
+					return X;
 				};
 			};
 
