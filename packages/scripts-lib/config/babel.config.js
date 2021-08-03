@@ -22,7 +22,7 @@ module.exports = function (api, opts) {
 					...env,
 				},
 			],
-			['@babel/preset-flow'],
+			['@babel/preset-typescript'],
 		],
 		plugins: [
 			// These are added because its not included when the target is node=current?
