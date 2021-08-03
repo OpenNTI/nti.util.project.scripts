@@ -79,6 +79,8 @@
 		"scss.validate": false,
 		"stylelint.reportInvalidScopeDisables": true,
 		"stylelint.reportNeedlessDisables": true,
+		"typescript.enablePromptUseWorkspaceTsdk": true,
+		"typescript.tsdk": "node_modules/typescript/lib/",
 		"prettier.requireConfig": true
 	}
 }
