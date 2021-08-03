@@ -64,6 +64,12 @@
 		"errorLens.enabledDiagnosticLevels": ["error", "warning"],
 		"eslint.codeActionsOnSave.mode": "problems",
 		"eslint.lintTask.enable": true,
+		"eslint.validate": [
+			"javascript",
+			"javascriptreact",
+			"typescript",
+			"typescriptreact"
+		],
 		"files.exclude": {
 			"**/node_modules/**": true
 		},
@@ -80,7 +86,7 @@
 		"stylelint.reportInvalidScopeDisables": true,
 		"stylelint.reportNeedlessDisables": true,
 		"typescript.enablePromptUseWorkspaceTsdk": true,
-		"typescript.tsdk": "node_modules/typescript/lib/",
+		"typescript.tsdk": "../node_modules/typescript/lib/",
 		"prettier.requireConfig": true
 	}
 }

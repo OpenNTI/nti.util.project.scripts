@@ -121,6 +121,18 @@ function computeConfig() {
 			},
 		},
 
+		overrides: [
+			{
+				files: ['*.ts', '*.tsx'],
+				parser: '@typescript-eslint/parser',
+				plugins: ['@typescript-eslint'],
+				rules: {
+					'jsdoc/require-param-type': ['off'],
+					'jsdoc/require-returns': ['off'],
+				},
+			},
+		],
+
 		settings: {
 			jsdoc: {
 				// Please follow https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html

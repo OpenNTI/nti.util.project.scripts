@@ -80,7 +80,7 @@ const plugins = ({ define } = {}) => [
 				.filter(Boolean)
 				.map(x => path.relative(workspaceContext, x) + '/'),
 
-			extensions: ['js', 'jsx', 'mjs', 'cjs'],
+			extensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs'],
 
 			eslintPath: require.resolve('eslint'),
 			threads: true,
