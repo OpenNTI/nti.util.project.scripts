@@ -179,7 +179,7 @@ const ClientConfig = {
 			paths.resolveApp('node_modules'),
 			'node_modules', //needed for conflicted versions of modules that get nested, but attempt last.
 		],
-		extensions: ['.js', '.jsx', '.mjs', '.mjsx'],
+		extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
 			...getWorkspace().aliases,
 			// Resolve Babel runtime relative to app-scripts.

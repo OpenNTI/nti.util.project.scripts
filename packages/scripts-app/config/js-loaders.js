@@ -8,7 +8,7 @@ const paths = require('./paths');
 const getWorkspace = require('./workspace');
 const workspaceContext = getWorkspace().root || paths.path;
 
-const jsTestExp = /\.m?jsx?$/;
+const jsTestExp = /\.(t|m?j)sx?$/;
 
 const loaders = (buildCache = false) => {
 	let rules = [
