@@ -176,6 +176,7 @@ function computeConfig() {
 				{
 					definedTypes: [
 						'Class',
+						'Omit',
 						'Record',
 						'ReturnType',
 						'unknown',
