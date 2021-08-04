@@ -80,7 +80,9 @@ module.exports = (resolve, rootDir) => {
 		testEnvironment: testEnvironment || process.env.JEST_ENV || 'node',
 		testURL: 'http://localhost',
 		transform: {
-			'^.+\\.(js|jsx|mjs|cjs)$': resolve('config/jest/babelTransform.js'),
+			'^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': resolve(
+				'config/jest/babelTransform.js'
+			),
 			'^.+\\.(css|sass|scss)$': resolve('config/jest/cssTransform.js'),
 			'^(?!.*\\.(js|jsx|json|mjs|cjs|css|scss|sass)$)': resolve(
 				'config/jest/fileTransform.js'
