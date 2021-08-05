@@ -1,0 +1,21 @@
+{
+	"exclude": [".git", ".npm", "node_modules", "dist"],
+	"compilerOptions": {
+		"esModuleInterop": true,
+		"allowJs": true,
+		"noEmit": true,
+		"plugins": [
+			{
+				"name": "typescript-styled-plugin"
+			},
+			{
+				"name": "typescript-plugin-css-modules",
+				"options": {
+					"classnameTransform": "camelCase",
+					"customMatcher": "\\.css$",
+					"namedExports": false
+				}
+			}
+		]
+	}
+}
