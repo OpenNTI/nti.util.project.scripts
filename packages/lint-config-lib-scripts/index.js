@@ -113,6 +113,7 @@ function computeConfig() {
 		],
 		parser: '@babel/eslint-parser',
 		parserOptions: {
+			requireConfigFile: false,
 			ecmaVersion: new Date().getFullYear(),
 			sourceType: 'module',
 			ecmaFeatures: {

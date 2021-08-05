@@ -28,9 +28,6 @@
 		"@nti/eslint-config-app-scripts": "*",
 		"@nti/eslint-config-lib-scripts": "*",
 		"@nti/stylelint-config-standard": "*",
-		"concurrently": "*",
-		"typescript": "*",
-		"typescript-plugin-css-modules": "*",
-		"typescript-styled-plugin": "*"
+		"concurrently": "*"
 	}
 }
