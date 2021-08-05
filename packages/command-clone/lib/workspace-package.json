@@ -16,7 +16,9 @@
 		"build-login": "cd app/login; npm run build -- --dev-build",
 		"build-mobile": "cd app/mobile; npm run build -- --dev-build",
 		"build-webapp": "cd app/webapp; npm run build -- --dev-build",
-		"refresh": "npx -y @nti/workspace-refresh"
+		"refresh": "npx -y @nti/workspace-refresh",
+		"start": "cd server; npm start; cd ../app/webapp; npm start",
+		"stop": "cd server; npm stop"
 	},
 	"engines": {
 		"npm": ">=7.5.2",
