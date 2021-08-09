@@ -97,7 +97,10 @@ module.exports = resolve => {
 				'config/jest/fileTransform.js'
 			),
 		},
-		moduleNameMapper: {},
+		moduleNameMapper: {
+			// workaround for now
+			'js-base64/base64.mjs': 'js-base64/base64.js',
+		},
 		// verbose: true,
 		bail: true,
 	};
