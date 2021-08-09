@@ -40,7 +40,7 @@
 		"chalk": "^4.1.0",
 		"ci-info": "^3.0.0",
 		"core-js": "^3.6.5",
-		"detect-indent": "^6.0.0",
+		"detect-indent": "^7.0.0",
 		"fs-extra": "^10.0.0",
 		"glob": "^7.1.6",
 		"husky": "^7.0.0",
