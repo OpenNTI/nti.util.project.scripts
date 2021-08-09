@@ -54,6 +54,7 @@
 		"css.validate": false,
 		"editor.codeActionsOnSave": {
 			"source.fixAll": true,
+			"source.fixAll.ts": false,
 			"source.fixAll.stylelint": false
 		},
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
