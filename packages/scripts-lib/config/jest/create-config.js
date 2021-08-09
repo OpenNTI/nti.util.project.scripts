@@ -2,6 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { isCI } = require('ci-info');
+const { defaults } = require('jest-config');
 
 //get the 'active' paths
 const setupEnv = require('./setup-env');
@@ -13,7 +14,7 @@ const {
 const paths = require(path.resolve(configDir, './paths'));
 const { testEnvironment } = require(paths.packageJson);
 
-module.exports = (resolve, rootDir) => {
+module.exports = resolve => {
 	const setupTestsFile = fs.existsSync(paths.testsSetup)
 		? paths.testsSetup
 		: undefined;
@@ -39,6 +40,7 @@ module.exports = (resolve, rootDir) => {
 	}
 
 	const config = {
+		...defaults,
 		clearMocks: true,
 		resetMocks: true,
 		// resetModules: true, //Can't enable this, ExtJS code breaks
@@ -66,6 +68,7 @@ module.exports = (resolve, rootDir) => {
 						},
 					],
 			  ],
+		rootDir: paths.path,
 		roots: [
 			paths.appModules
 				? paths.appModules.replace(paths.path, '<rootDir>')
@@ -79,25 +82,25 @@ module.exports = (resolve, rootDir) => {
 		],
 		testEnvironment: testEnvironment || process.env.JEST_ENV || 'node',
 		testURL: 'http://localhost',
+		moduleFileExtensions: [
+			...defaults.moduleFileExtensions,
+			'js',
+			'mjs',
+			'ts',
+			'tsx',
+		],
+		transformIgnorePatterns: [],
 		transform: {
-			'^.+\\.(js|jsx|mjs|cjs|ts|tsx)$': resolve(
-				'config/jest/babelTransform.js'
-			),
-			'^.+\\.(css|sass|scss)$': resolve('config/jest/cssTransform.js'),
-			'^(?!.*\\.(js|jsx|json|mjs|cjs|css|scss|sass)$)': resolve(
+			'\\.[jt]sx?$': resolve('config/jest/babelTransform.js'),
+			'\\.s?[ac]ss$': resolve('config/jest/cssTransform.js'),
+			'\\.(ico|gif|png|jpg|svg|woff|ttf|eot|otf)$': resolve(
 				'config/jest/fileTransform.js'
 			),
 		},
-		transformIgnorePatterns: [],
-		// moduleNameMapper: {
-		// 	...(isCI ? null : workspaceLinks),
-		// },
-		resolver: resolve('config/jest/resolver.js'),
+		moduleNameMapper: {},
+		// verbose: true,
+		bail: true,
 	};
-
-	if (rootDir) {
-		config.rootDir = rootDir;
-	}
 
 	return config;
 };
