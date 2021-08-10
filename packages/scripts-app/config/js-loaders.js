@@ -3,7 +3,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const { ESLintPlugin } = require('./webpack.plugins');
-const { ENV, PROD } = require('./env');
+const { ENV, LINT } = require('./env');
 const paths = require('./paths');
 
 const jsTestExp = /\.(t|m?j)sx?$/;
@@ -55,7 +55,7 @@ const plugins = ({ define } = {}) => [
 		stylesheet: ['astroturf/react', 'stylesheet'],
 	}),
 
-	!PROD &&
+	LINT &&
 		new ESLintPlugin({
 			// Do NOT define a baseConfig, let eslint find the config in scope
 			// otherwise we can end up redefining plugins and eslint will now

@@ -1,9 +1,5 @@
 /*eslint camelcase:0*/
 'use strict';
-const DEBUG =
-	process.argv.includes('--debug') || process.argv.includes('--profile');
-const NO_MINIFY = global.NTI_DevServer || process.argv.includes('--dev-build');
-
 const path = require('path');
 const webpack = require('webpack');
 const { isCI } = require('ci-info');
@@ -29,7 +25,6 @@ const InlineChunkHtmlPlugin = require('./InlineChunkHtmlPlugin');
 const { loaders: cssLoaders, plugins: cssPlugins } = require('./css-loaders');
 const { loaders: jsLoaders, plugins: jsPlugins } = require('./js-loaders');
 const thread = require('./thread');
-const { PROD, ENV } = require('./env');
 const paths = require('./paths');
 const pkg = paths.package;
 const projectName = pkg.name.replace(/^@nti\//, '');
@@ -37,6 +32,8 @@ const projectRelease = `${projectName}@${pkg.version.replace(
 	/-alpha.*$/,
 	'-alpha'
 )}`;
+
+const { DEBUG, PROD, MINIFY, ENV } = require('./env');
 
 const Configs = (exports = module.exports = []);
 const ContentGlobalDefinitions = new webpack.DefinePlugin({
@@ -218,53 +215,52 @@ const ClientConfig = {
 	},
 
 	optimization: {
-		minimize: !NO_MINIFY && PROD && !DEBUG,
-		minimizer:
-			DEBUG || NO_MINIFY
-				? []
-				: [
-						// This is only used in production mode
-						new TerserPlugin({
-							terserOptions: {
-								parse: {
-									// We want terser to parse ecma 8 code. However, we don't want it
-									// to apply any minification steps that turns valid ecma 5 code
-									// into invalid ecma 5 code. This is why the 'compress' and 'output'
-									// sections only apply transformations that are ecma 5 safe
-									// https://github.com/facebook/create-react-app/pull/4234
-									ecma: 8,
-								},
-								compress: {
-									ecma: 5,
-									warnings: false,
-									// Disabled because of an issue with Uglify breaking seemingly valid code:
-									// https://github.com/facebook/create-react-app/issues/2376
-									// Pending further investigation:
-									// https://github.com/mishoo/UglifyJS2/issues/2011
-									comparisons: false,
-									// Disabled because of an issue with Terser breaking valid code:
-									// https://github.com/facebook/create-react-app/issues/5250
-									// Pending further investigation:
-									// https://github.com/terser-js/terser/issues/120
-									inline: 2,
-								},
-								mangle: {
-									safari10: true,
-								},
-								// Added for profiling in devtools
-								keep_classnames: true,
-								keep_fnames: true,
-								output: {
-									ecma: 5,
-									comments: false,
-									// Turned on because emoji and regex is not minified properly using default
-									// https://github.com/facebook/create-react-app/issues/2488
-									ascii_only: true,
-								},
+		minimize: MINIFY,
+		minimizer: !MINIFY
+			? []
+			: [
+					// This is only used in production mode
+					new TerserPlugin({
+						terserOptions: {
+							parse: {
+								// We want terser to parse ecma 8 code. However, we don't want it
+								// to apply any minification steps that turns valid ecma 5 code
+								// into invalid ecma 5 code. This is why the 'compress' and 'output'
+								// sections only apply transformations that are ecma 5 safe
+								// https://github.com/facebook/create-react-app/pull/4234
+								ecma: 8,
 							},
-							parallel: true,
-						}),
-				  ].filter(Boolean),
+							compress: {
+								ecma: 5,
+								warnings: false,
+								// Disabled because of an issue with Uglify breaking seemingly valid code:
+								// https://github.com/facebook/create-react-app/issues/2376
+								// Pending further investigation:
+								// https://github.com/mishoo/UglifyJS2/issues/2011
+								comparisons: false,
+								// Disabled because of an issue with Terser breaking valid code:
+								// https://github.com/facebook/create-react-app/issues/5250
+								// Pending further investigation:
+								// https://github.com/terser-js/terser/issues/120
+								inline: 2,
+							},
+							mangle: {
+								safari10: true,
+							},
+							// Added for profiling in devtools
+							keep_classnames: true,
+							keep_fnames: true,
+							output: {
+								ecma: 5,
+								comments: false,
+								// Turned on because emoji and regex is not minified properly using default
+								// https://github.com/facebook/create-react-app/issues/2488
+								ascii_only: true,
+							},
+						},
+						parallel: true,
+					}),
+			  ].filter(Boolean),
 		sideEffects: true,
 		splitChunks: {
 			chunks: 'all',
@@ -319,21 +315,20 @@ const ClientConfig = {
 			alwaysWriteToDisk: true,
 			filename: global.NTI_DevServer ? tempPage() : 'page.html',
 			template: paths.appHtml,
-			minify:
-				PROD && !NO_MINIFY
-					? {
-							removeComments: false,
-							collapseWhitespace: true,
-							removeRedundantAttributes: true,
-							useShortDoctype: true,
-							removeEmptyAttributes: true,
-							removeStyleLinkTypeAttributes: true,
-							keepClosingSlash: true,
-							minifyJS: true,
-							minifyCSS: true,
-							minifyURLs: true,
-					  }
-					: false,
+			minify: MINIFY
+				? {
+						removeComments: false,
+						collapseWhitespace: true,
+						removeRedundantAttributes: true,
+						useShortDoctype: true,
+						removeEmptyAttributes: true,
+						removeStyleLinkTypeAttributes: true,
+						keepClosingSlash: true,
+						minifyJS: true,
+						minifyCSS: true,
+						minifyURLs: true,
+				  }
+				: false,
 		}),
 		new HtmlWebpackHarddiskPlugin(),
 
@@ -348,7 +343,7 @@ const ClientConfig = {
 		// See https://github.com/facebookincubator/create-react-app/issues/240
 		new CaseSensitivePathsPlugin(),
 
-		PROD && !NO_MINIFY && new CompressionPlugin(),
+		MINIFY && new CompressionPlugin(),
 
 		process.env.SENTRY_AUTH_TOKEN &&
 			new SentryWebpackPlugin({
