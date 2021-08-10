@@ -3,8 +3,11 @@ import * as childProcess from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, join, resolve } from 'path';
 import { promisify } from 'util';
+import gitState from '@nti/git-state';
 import glob from 'glob';
 import ora from 'ora';
+
+const gitStatus = promisify(gitState.check);
 
 const find = promisify(glob);
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
@@ -46,12 +49,39 @@ async function update() {
 	await Promise.all(
 		repos.map(async repo => {
 			try {
+				// don't wait on this...
 				// unset hooks just incase something interrupts re-installing them
-				exec('git config --unset core.hooksPath').catch(() => {});
+				exec(repo, 'git config --unset core.hooksPath').catch(() => {});
 
-				await exec(repo, 'git pull --rebase --autostash');
+				// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
+				const status = await gitStatus(repo);
+				let commits = '';
+				if (status.remoteBranch) {
+					commits = (
+						await exec(
+							repo,
+							// https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
+							`git log --oneline --cherry ${status.remoteBranch}...${status.branch}`
+						).catch(() => '')
+					).split(/[\r\n]+/);
+				}
+
+				// See https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
+				// Equivalent but distinct commits will be marked with '= ' prefix. (meaning
+				// the remote does not have the commit but is equivalent to another commit)
+				const hasDuplicates = commits.some(line =>
+					line.startsWith('= ')
+				);
+
+				// if a branch is in a rebased state, and has not force-pushed...it will
+				// have duplicated commits. If we're in this state, do not pull.
+				if (!hasDuplicates) {
+					await exec(repo, 'git pull --rebase --autostash');
+				}
 			} catch (er) {
 				console.warn('[warn] %s:\n%s', repo, er);
+				// if we threw an error, abort any rebase in progress.
+				await exec(repo, 'git rebase --abort').catch(() => null);
 			}
 		})
 	);
