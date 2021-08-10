@@ -75,7 +75,7 @@ async function update() {
 
 				// if a branch is in a rebased state, and has not force-pushed...it will
 				// have duplicated commits. If we're in this state, do not pull.
-				if (!hasDuplicates) {
+				if (status.remoteBranch && !hasDuplicates) {
 					await exec(repo, 'git pull --rebase --autostash');
 				}
 			} catch (er) {
