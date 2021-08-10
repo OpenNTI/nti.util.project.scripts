@@ -1,6 +1,6 @@
 {
 	"name": "@nti/app-scripts",
-	"version": "2.48.7",
+	"version": "2.48.8",
 	"description": "app-specific scripts & dependencies",
 	"bin": {
 		"app-scripts": "./bin/cli.js"
@@ -29,7 +29,7 @@
 		"@babel/preset-react": "^7.10.4",
 		"@nti/eslint-config-app-scripts": "^2.48.5",
 		"@nti/git-state": "^5.0.0",
-		"@nti/lib-scripts": "^2.48.7",
+		"@nti/lib-scripts": "^2.48.8",
 		"@nti/stylelint-config-standard": "^2.48.5",
 		"@sentry/webpack-plugin": "^1.14.1",
 		"@testing-library/jest-dom": "^5.11.5",

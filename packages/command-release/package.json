@@ -1,6 +1,6 @@
 {
 	"name": "@nti/release",
-	"version": "2.47.13",
+	"version": "2.48.8",
 	"description": "",
 	"bin": {
 		"release": "index.js"
