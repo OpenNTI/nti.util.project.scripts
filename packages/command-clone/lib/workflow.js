@@ -18,8 +18,6 @@ const npmWorkspacePackage = JSON.parse(
 );
 const npmrc = readFileSync(join(dirname(pathname), 'npmrc.ini'), 'utf-8');
 
-// const NTI_WORKSPACE_OPTIONS = 'nextthought-workspace-options';
-
 inquirer.registerPrompt('checkbox-plus', inquirerCheckboxPlusPrompt);
 
 function computeName(x, all) {
@@ -158,16 +156,6 @@ export async function clone(options) {
 				join(process.cwd(), 'nextthought.code-workspace'),
 				JSON.stringify({ folders, ...vscodeSettings }, null, '  ')
 			);
-
-			// npmWorkspacePackage[NTI_WORKSPACE_OPTIONS] = {
-			// 	useVSCodeWorkspace: false,
-			// 	ignoreInstallState: false,
-			// 	verbose: false,
-			// 	whitelist: [],
-			// 	blacklist: [],
-			// };
-
-			// writeFile(join(process.cwd(), '.workspace.json'), JSON.stringify(npmWorkspacePackage[NTI_WORKSPACE_OPTIONS], null, '  '));
 
 			writeFile(
 				join(process.cwd(), 'package.json'),

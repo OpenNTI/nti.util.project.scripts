@@ -95,4 +95,24 @@ module.exports = {
 
 	ownPath,
 	ownPackageJson,
+
+	workspaceRoot: findRoot() || resolveApp('.'),
 };
+
+function findRoot(cwd = process.cwd()) {
+	try {
+		const content = fs.readFileSync(path.join(cwd, 'package.json'));
+		const pkg = JSON.parse(content);
+		if (Array.isArray(pkg.workspaces)) {
+			return cwd;
+		}
+	} catch {
+		/* move on */
+	}
+
+	const parent = path.resolve(cwd, '..');
+	if (parent === process.cwd()) {
+		return null;
+	}
+	return findRoot(parent);
+}

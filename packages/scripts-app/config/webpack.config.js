@@ -37,7 +37,6 @@ const projectRelease = `${projectName}@${pkg.version.replace(
 	/-alpha.*$/,
 	'-alpha'
 )}`;
-const getWorkspace = require('./workspace');
 
 const Configs = (exports = module.exports = []);
 const ContentGlobalDefinitions = new webpack.DefinePlugin({
@@ -157,7 +156,7 @@ const ClientConfig = {
 				type: 'filesystem',
 				name: pkg.name.replace(/[@/.]/g, '-').replace(/^-/, ''),
 				cacheDirectory: path.resolve(
-					getWorkspace().root || paths.path,
+					paths.workspaceRoot,
 					path.join('node_modules', '.cache')
 				),
 				buildDependencies: {
@@ -174,14 +173,8 @@ const ClientConfig = {
 			stream: require.resolve('stream-browserify'),
 			util: require.resolve('util'),
 		},
-		modules: [
-			// This needs to point to the `./node_modules` dir... not the resolved one... once everyone is on the npm7 workspace structure we can delete this.
-			paths.resolveApp('node_modules'),
-			'node_modules', //needed for conflicted versions of modules that get nested, but attempt last.
-		],
 		extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.mjsx'],
 		alias: {
-			...getWorkspace().aliases,
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
 			// unfortunate to rely on, as app-scripts could be symlinked,
@@ -208,8 +201,7 @@ const ClientConfig = {
 				return o;
 			}, {}),
 
-			// since we 'util' directories at src/ root and we allow "appModules" (we should remove them),
-			// we need to enforce bare 'util' gets this package:
+			// since we 'util' directories at src/ root we need to enforce bare 'util' gets this package:
 			util: path.dirname(require.resolve('util/package.json')),
 		},
 	},

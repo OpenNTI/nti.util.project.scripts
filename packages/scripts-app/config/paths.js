@@ -1,7 +1,5 @@
 'use strict';
-
 const path = require('path');
-const url = require('url');
 
 const paths = require('@nti/lib-scripts/config/paths');
 
@@ -27,7 +25,7 @@ function getServedPath(packageJson) {
 	const homepage = require(packageJson).homepage;
 	const servedUrl =
 		process.env.PUBLIC_URL ||
-		(homepage ? url.parse(homepage).pathname : '/');
+		(homepage ? new URL(homepage, 'file://').pathname : '/');
 	return ensureSlash(servedUrl, true);
 }
 

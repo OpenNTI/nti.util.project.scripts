@@ -17,7 +17,6 @@ const DEBUG = process.argv.includes('--debug');
 process.env.BABEL_ENV = DEBUG ? 'development' : 'production';
 process.env.NODE_ENV = DEBUG ? 'development' : 'production';
 process.env.NTI_DEV_BROWSER = null; // Prevent dev env from producing a chrome-only build
-process.env.__NTI_WORKSPACE = JSON.stringify({}); // Prevent dev workspace links in build
 
 //Expose unhandled rejected promises.
 process.on('unhandledRejection', err => {

@@ -14,10 +14,7 @@ import { arg, write, readJSON } from './utils.js';
 import { updateLock, usesLock } from './update-lock.js';
 
 const CI = !!process.env.CI;
-process.env.__NTI_RELEASING = !arg(
-	'--allow-workspace',
-	'repo:Allow workspace links in builds that support them'
-);
+process.env.__NTI_RELEASING = true;
 // const SKIP_CHECKS = arg('--skip-checks', 'repo:Skip tests and linting');
 const SKIP_LOCK_REFRESH = arg(
 	'--skip-lock-refresh',
@@ -207,9 +204,11 @@ export async function checkLockfile(dir) {
 		return;
 	}
 
-	const { warnings = [], errors = [], status } = await lockVerify(
-		dir
-	).catch(() => ({}));
+	const {
+		warnings = [],
+		errors = [],
+		status,
+	} = await lockVerify(dir).catch(() => ({}));
 
 	warnings.forEach(e =>
 		write(chalk.yellow('%s %s'), chalk.underline('Warning:'), e)

@@ -5,8 +5,6 @@ const webpack = require('webpack');
 const { ESLintPlugin } = require('./webpack.plugins');
 const { ENV, PROD } = require('./env');
 const paths = require('./paths');
-const getWorkspace = require('./workspace');
-const workspaceContext = getWorkspace().root || paths.path;
 
 const jsTestExp = /\.(t|m?j)sx?$/;
 
@@ -70,15 +68,7 @@ const plugins = ({ define } = {}) => [
 				paths.nodeModules,
 				'.cache/.eslintcache'
 			),
-			context: workspaceContext,
-			files: [
-				paths.src,
-				...(getWorkspace().projects || []).map(x =>
-					path.join(x, 'src')
-				),
-			]
-				.filter(Boolean)
-				.map(x => path.relative(workspaceContext, x) + '/'),
+			context: paths.workspaceRoot,
 
 			extensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs'],
 

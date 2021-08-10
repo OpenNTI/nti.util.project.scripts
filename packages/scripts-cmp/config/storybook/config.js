@@ -1,6 +1,7 @@
 'use strict';
 const fs = require('fs');
-const { find } = require('@nti/lib-scripts/config/workspace');
+const path = require('path');
+const { sync: glob } = require('glob');
 
 const paths = require('../paths');
 const CommonWebpackConfig = require('../webpack.config.js');
@@ -12,6 +13,19 @@ const {
 	plugins: cssPlugins,
 	loaders: cssLoaders,
 } = require('@nti/app-scripts/config/css-loaders');
+
+function find(file, limit = 4) {
+	const abs = path.resolve(file);
+	const atRoot = path.resolve(path.join('..', file)) === abs;
+
+	const result = glob(abs);
+
+	if (result.length > 0) {
+		return result.length > 1 ? result : result[0];
+	}
+
+	return limit <= 0 || atRoot ? null : find(path.join('..', file), limit - 1);
+}
 
 function getEntry(currentEntry, newEntry) {
 	if (typeof currentEntry === 'string') {
