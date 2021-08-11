@@ -111,7 +111,7 @@ function findRoot(cwd = process.cwd()) {
 	}
 
 	const parent = path.resolve(cwd, '..');
-	if (parent === process.cwd()) {
+	if (parent === cwd) {
 		return null;
 	}
 	return findRoot(parent);
