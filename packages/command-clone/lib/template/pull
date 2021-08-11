@@ -1,4 +1,4 @@
-#!/bin/env bash
+#!/usr/bin/env bash
 PWD="`dirname \"$0\"`"
 PRJS1=$PWD/*/.git
 PRJS2=$PWD/**/*/.git
