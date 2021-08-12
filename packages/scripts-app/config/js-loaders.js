@@ -1,6 +1,7 @@
 'use strict';
 const path = require('path');
 const webpack = require('webpack');
+const glob = require('glob');
 
 const { ESLintPlugin } = require('./webpack.plugins');
 const { ENV, LINT } = require('./env');
@@ -69,6 +70,18 @@ const plugins = ({ define } = {}) => [
 				'.cache/.eslintcache'
 			),
 			context: paths.workspaceRoot,
+			files: [
+				paths.src,
+				...glob
+					.sync('./*{,/*}/.git', {
+						cwd: paths.workspaceRoot,
+						absolute: true,
+					})
+					.map(x => path.resolve(x, '../src'))
+					.filter(x => x !== paths.src),
+			]
+				.filter(Boolean)
+				.map(x => path.relative(paths.workspaceRoot, x) + '/'),
 
 			extensions: ['ts', 'tsx', 'js', 'jsx', 'mjs', 'cjs'],
 
