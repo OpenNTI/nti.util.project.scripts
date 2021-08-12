@@ -74,6 +74,7 @@
 		"resolve-url-loader": "^4.0.0",
 		"sass": "^1.32.4",
 		"sass-loader": "^12.0.0",
+		"snapshot-diff": "^0.9.0",
 		"stream-browserify": "^3.0.0",
 		"style-loader": "^3.0.0",
 		"thread-loader": "^3.0.0",

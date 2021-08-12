@@ -3,6 +3,11 @@
 'use strict';
 const React = require('react');
 const cx = require('classnames');
+const { toMatchDiffSnapshot } = require('snapshot-diff');
+
+global.Promise = jest.requireActual('promise');
+
+expect.extend({ toMatchDiffSnapshot });
 
 const esc = s =>
 	s.replace(esc.re || (esc.re = /[-[\]{}()*+?.,\\^$|#\s]/g), '\\$&');
