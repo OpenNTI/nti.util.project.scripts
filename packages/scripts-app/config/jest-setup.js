@@ -5,7 +5,7 @@ const React = require('react');
 const cx = require('classnames');
 const { toMatchDiffSnapshot } = require('snapshot-diff');
 
-global.Promise = jest.requireActual('promise');
+// global.Promise = jest.requireActual('promise');
 
 expect.extend({ toMatchDiffSnapshot });
 
