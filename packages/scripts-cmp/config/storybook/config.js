@@ -90,6 +90,13 @@ module.exports = {
 			CommonWebpackConfig.resolve.alias
 		);
 
+		storybookConfig.resolve.extensions = [
+			...new Set([
+				...CommonWebpackConfig.resolve.extensions,
+				...storybookConfig.resolve.extensions,
+			]),
+		];
+
 		Object.assign(
 			storybookConfig.resolve.fallback ||
 				(storybookConfig.resolve.fallback = {}),
