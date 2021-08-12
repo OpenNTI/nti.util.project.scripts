@@ -170,7 +170,7 @@ const ClientConfig = {
 			stream: require.resolve('stream-browserify'),
 			util: require.resolve('util'),
 		},
-		extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.mjsx'],
+		extensions: ['.ts', '.tsx', '.js', '.jsx', '.mjs', '.mjsx', '.d.ts'],
 		alias: {
 			// Resolve Babel runtime relative to app-scripts.
 			// It usually still works on npm 3 without this but it would be
