@@ -49,9 +49,13 @@ async function update() {
 	await Promise.all(
 		repos.map(async repo => {
 			try {
-				// don't wait on this...
 				// unset hooks just incase something interrupts re-installing them
-				exec(repo, 'git config --unset core.hooksPath').catch(() => {});
+				const hookFile = join(repo, '.git/hooks/pre-commit');
+				const hookConfig = 'git config --unset core.hooksPath';
+				await Promise.all([
+					exec(repo, hookConfig).catch(() => {}),
+					fs.unlink(hookFile).catch(() => {}),
+				]);
 
 				// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
 				const status = await gitStatus(repo);
