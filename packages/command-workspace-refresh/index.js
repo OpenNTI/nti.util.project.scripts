@@ -59,7 +59,7 @@ async function update() {
 
 				// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
 				const status = await gitStatus(repo);
-				let commits = '';
+				let commits = [];
 				if (status.remoteBranch) {
 					commits = (
 						await exec(
