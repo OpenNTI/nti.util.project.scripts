@@ -35,9 +35,9 @@ Repo of project scripts. These scripts manage releasing as well as dev dependenc
 [![Health Check](https://github.com/NextThought/nti.web.charts/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.charts/actions) nti.web.charts<br/>
 [![Health Check](https://github.com/NextThought/nti.web.client/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.client/actions) nti.web.client<br/>
 [![Health Check](https://github.com/NextThought/nti.web.commons/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.commons/actions) nti.web.commons<br/>
-[![Health Check](https://github.com/NextThought/nti.web.core/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.core/actions) nti.web.core<br/>
 [![Health Check](https://github.com/NextThought/nti.web.contacts/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.contacts/actions) nti.web.contacts<br/>
 [![Health Check](https://github.com/NextThought/nti.web.content/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.content/actions) nti.web.content<br/>
+[![Health Check](https://github.com/NextThought/nti.web.core/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.core/actions) nti.web.core<br/>
 [![Health Check](https://github.com/NextThought/nti.web.course/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.course/actions) nti.web.course<br/>
 [![Health Check](https://github.com/NextThought/nti.web.discussions/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.discussions/actions) nti.web.discussions<br/>
 [![Health Check](https://github.com/NextThought/nti.web.editor/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.editor/actions) nti.web.editor<br/>
