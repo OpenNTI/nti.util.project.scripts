@@ -104,7 +104,7 @@ async function update() {
 		process.exit(1);
 	}
 
-	childProcess.execSync('npm install --no-audit', {
+	childProcess.execSync('npm install --no-audit --no-fund', {
 		cwd: resolve('.'),
 		env: {
 			...process.env,
