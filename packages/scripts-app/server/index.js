@@ -19,11 +19,9 @@ try {
 
 exports = module.exports = {
 	async register(expressApp, config) {
-		const devmode = dev ? await dev.setupDeveloperMode(config) : null;
-
-		if (devmode) {
-			expressApp.use(devmode.middleware); //serve in-memory compiled sources/assets
-		}
+		const devmode = dev
+			? await dev.setupDeveloperMode(config, expressApp)
+			: null;
 
 		return {
 			devmode,
