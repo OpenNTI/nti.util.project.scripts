@@ -71,11 +71,11 @@ module.exports = {
 	],
 
 	async babel(options) {
-		Object.assign(options, {
+		return {
 			babelrc: false,
 			configFile: false,
-		});
-		return options;
+			presets: [paths.resolveApp('babel.config.cjs')],
+		};
 	},
 
 	webpackFinal(storybookConfig) {
