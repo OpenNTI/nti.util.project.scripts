@@ -84,6 +84,11 @@ export async function checkStatus(dir) {
 
 	const pkg = await readJSON(join(dir, 'package.json'));
 	const [command] = pkg.scripts?.test?.split?.(' ') ?? [];
+	if (!/-alpha$/.test(pkg.version)) {
+		throw new Error(
+			`Invalid Package Version ("${pkg.version}", should be formatted: "X.Y.Z-alpha") in workspace: ${dir}`
+		);
+	}
 
 	return {
 		dir,
