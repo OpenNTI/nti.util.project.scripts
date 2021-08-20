@@ -43,7 +43,7 @@ export async function getRepositories(dir = process.cwd()) {
 		const { willLock: a1 } = a;
 		const { willLock: b1 } = b;
 
-		const c = a.repo.localeCompare(b.repo);
+		const c = a.dir.localeCompare(b.dir);
 
 		if (a1 !== b1) {
 			return a1 ? -1 : b1 ? 1 : c;
@@ -52,26 +52,30 @@ export async function getRepositories(dir = process.cwd()) {
 		return c;
 	});
 
-	return repos;
+	return Promise.all(repos.map(resolveChanges));
 }
 
-export async function checkStatus(dir) {
+function parseGitHubURL(url) {
+	const [, repo] = url.match(/github.com[:/](.+?)(?:\.git)?$/i) ?? [];
+	return {
+		url,
+		repo,
+		shortName: repo.split('/')[1],
+	};
+}
+
+async function resolveRemote(dir, branch) {
+	if (!branch) {
+		return;
+	}
+	const [origin] = branch.split('/');
+	const url = await exec(dir, `git remote get-url ${origin}`);
+	return parseGitHubURL(url);
+}
+
+export async function checkStatus(dir, _, repos) {
 	// get the latest git state from remote
 	await exec(dir, 'git fetch');
-
-	async function resolveRemote(branch) {
-		if (!branch) {
-			return;
-		}
-		const [origin] = branch.split('/');
-		const url = await exec(dir, `git remote get-url ${origin}`);
-		const [, repo] = url.match(/github.com[:/](.+?)(?:\.git)?$/i) ?? [];
-		return {
-			url,
-			repo,
-			shortName: repo.split('/')[1],
-		};
-	}
 
 	// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
 	const [{ remoteBranch: remote = null, ...status }, willLock] =
@@ -84,24 +88,31 @@ export async function checkStatus(dir) {
 
 	const pkg = await readJSON(join(dir, 'package.json'));
 	const [command] = pkg.scripts?.test?.split?.(' ') ?? [];
-	if (!/-alpha$/.test(pkg.version)) {
-		throw new Error(
-			`Invalid Package Version ("${pkg.version}", should be formatted: "X.Y.Z-alpha") in workspace: ${dir}`
-		);
-	}
+	// if (!/-alpha$/.test(pkg.version)) {
+	// 	throw new Error(
+	// 		`Invalid Package Version ("${pkg.version}", should be formatted: "X.Y.Z-alpha") in workspace: ${dir}`
+	// 	);
+	// }
 
 	return {
 		dir,
+		relativeDir: dir.replace(process.cwd(), '.'),
 		willLock,
 		command: /^(.+)-scripts$/.test(command) ? command : void 0,
 		pkg,
 		...status,
-		...(await resolveRemote(remote)),
-		...(await hasChanges(dir)),
+		...(await resolveRemote(dir, remote)),
 	};
 }
 
-async function hasChanges(dir) {
+async function resolveChanges(repo, _, repos) {
+	return {
+		...repo,
+		...(await hasChanges(repo.dir, repos)),
+	};
+}
+
+async function hasChanges(dir, knownRepos) {
 	const description = await exec(
 		dir,
 		'git describe --always --long --first-parent --abbrev=40'
@@ -114,14 +125,11 @@ async function hasChanges(dir) {
 	}
 
 	const commitsSinceTag = commits; //number since tag.
-	const fileChanges = tag && (await whatChanged(dir, tag));
-	const metadataOnlyChanges =
-		!fileChanges?.length ||
-		fileChanges?.every(x => !/^(src|lib)/.test(x) || /__test__/.test(x));
+	const { fileChanges, metadataOnlyChanges } = await whatChanged(dir, tag);
 
 	const needsResolving = (await usesLock(dir)) && tag && metadataOnlyChanges;
 	const dependencyUpdates = needsResolving
-		? await resolveDependencyUpdates(dir, tag)
+		? await resolveDependencyUpdates(dir, tag, knownRepos)
 		: false;
 
 	return {
@@ -135,18 +143,82 @@ async function hasChanges(dir) {
 }
 
 async function whatChanged(dir, from, to = 'HEAD') {
-	return (await exec(dir, `git diff --name-only ${from}..${to}`)).split('\n');
+	const fileChanges =
+		dir &&
+		from &&
+		(await exec(dir, `git diff --name-only ${from}..${to}`)).split('\n');
+	const metadataOnlyChanges =
+		!fileChanges?.length ||
+		fileChanges?.every(x => !/^(src|lib)/.test(x) || /__test__/.test(x));
+	return {
+		fileChanges,
+		metadataOnlyChanges,
+	};
 }
 
-async function resolveDependencyUpdates(dir, from) {
+async function resolveDependencyUpdates(dir, from, knownRepos) {
 	let lock;
 	try {
 		lock = JSON.parse(
 			await exec(dir, `git show "${from}":package-lock.json`, true)
 		);
-	} catch {
-		return true;
+	} catch (e) {
+		// console.error(e);
+		return false;
 	}
+
+	async function getDefaultBranch(dir, retry = true) {
+		try {
+			return !dir
+				? null // unknown
+				: await exec(dir, 'git rev-parse --abbrev-ref origin/HEAD');
+		} catch (e) {
+			if (retry) {
+				await exec(dir, 'git remote set-head origin --auto');
+				return getDefaultBranch(dir, false);
+			}
+			throw e;
+		}
+	}
+
+	const gitDeps = Object.values(lock.dependencies)
+		.map(value => (value.version?.startsWith('git') ? value.version : null))
+		.filter(Boolean);
+
+	const data = await Promise.all(
+		gitDeps.map(async entry => {
+			const [url, hash] = entry.split('#');
+			const { repo } = parseGitHubURL(url);
+
+			const { dir, pkg } = knownRepos.find(x => x.repo === repo) || {};
+			const defaultBranch = await getDefaultBranch(dir);
+
+			const currentCommit = !dir
+				? hash // default to known
+				: await exec(dir, `git rev-parse ${defaultBranch}`);
+
+			if (!dir) {
+				console.warn(`Could not resolve ${repo} to a directory`);
+			}
+
+			return {
+				dir,
+				repo,
+				packageName: pkg?.name,
+				changed:
+					hash !== currentCommit
+						? await whatChanged(dir, hash, currentCommit)
+						: false,
+				hash,
+				currentCommit,
+				defaultBranch,
+			};
+		})
+	);
+
+	return data
+		.filter(x => x.changed?.metadataOnlyChanges === false)
+		.reduce((out, i) => (i ? [...(out || []), i] : out), false);
 }
 
 export async function preflightChecks({ dir, branch, dirty, pkg }, major) {

@@ -7,16 +7,20 @@ const STDIO = { stdio: 'inherit' };
 
 export async function exec(cwd, command, quiet = false) {
 	return new Promise((fulfill, reject) => {
-		child_process.exec(command, { cwd }, (err, stdout, stderr) => {
-			if (err) {
-				if (!quiet) {
-					console.error(stderr.toString('utf8'));
+		child_process.exec(
+			command,
+			{ cwd, maxBuffer: Number.MAX_SAFE_INTEGER },
+			(err, stdout, stderr) => {
+				if (err) {
+					if (!quiet) {
+						console.error(stderr.toString('utf8') + '\ncwd:' + cwd);
+					}
+					return reject(err);
 				}
-				return reject(err);
-			}
 
-			fulfill(stdout.toString('utf8').trim());
-		});
+				fulfill(stdout.toString('utf8').trim());
+			}
+		);
 	});
 }
 

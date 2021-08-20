@@ -14,7 +14,7 @@ const all = arg(
 
 function label(x, maxNameLength, maxTagLength) {
 	const dirty = x.dirty ? '!' : '';
-	const name = x.shortName?.padEnd(maxNameLength);
+	const name = x.relativeDir?.padEnd(maxNameLength);
 	const ahead = x.ahead ? `↑${x.ahead}` : '';
 	const behind = x.behind ? `↓${x.behind}` : '';
 	const queue = [ahead, behind, dirty].filter(Boolean).join(' ');
@@ -22,13 +22,22 @@ function label(x, maxNameLength, maxTagLength) {
 	const relevant = !x.metadataOnlyChanges || showMetaChanges;
 	const showInfo = x.commitsSinceTag && relevant;
 
-	const info = showInfo
-		? `${(x.commitsSinceTag + ' commits since ').padStart(
-				19
-		  )}${x.lastTag.padEnd(maxTagLength)}`
-		: '';
+	const since = n =>
+		`${(n + ' commits since ').padStart(20)}${x.lastTag.padEnd(
+			maxTagLength
+		)}`;
 
-	return `${name} ${info}\t${chalk.bold(queue)}`;
+	const info = showInfo
+		? [since(x.commitsSinceTag)]
+		: [x.dependencyUpdates ? since(0) : ''];
+
+	if (x.dependencyUpdates) {
+		info.push(
+			`\t📦 ${x.dependencyUpdates.map(x => x.packageName).join(', ')}`
+		);
+	}
+
+	return `${name} ${info.join(' ')}\t${chalk.bold(queue)}`;
 }
 //#endregion
 
@@ -52,7 +61,7 @@ export async function WhatRepositories(repositories) {
 		choices({ type = 'release' }) {
 			let choices = repositories;
 			const maxNameLength = choices.reduce(
-				(n, p) => Math.max(n, p.shortName?.length || 0),
+				(n, p) => Math.max(n, p.relativeDir?.length || 0),
 				0
 			);
 			const maxTagLength = choices.reduce(
@@ -60,7 +69,7 @@ export async function WhatRepositories(repositories) {
 				0
 			);
 			const changed = x => x.commitsSinceTag > 0;
-			const metaOnly = x => x.metadataOnlyChanges;
+			const metaOnly = x => x.metadataOnlyChanges && !x.dependencyUpdates;
 			const valid =
 				type === 'release'
 					? x => x.branch !== 'master' && 'Not on master branch'

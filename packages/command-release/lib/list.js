@@ -10,15 +10,17 @@ export const isProject = dir => async file => {
 	if (list && list.includes('.git') && list.includes('package.json')) {
 		try {
 			const {
+				name,
 				workspaces,
-				scripts,
+				// scripts,
 				releaseMode = 'auto',
 			} = await readJSON(join(target, 'package.json'));
 			return (
+				!/[/-]client-sites-/.test(name) &&
 				workspaces == null &&
 				releaseMode !== 'interactive' &&
-				scripts &&
-				'release' in scripts &&
+				// scripts &&
+				// 'release' in scripts &&
 				target
 			);
 		} catch (err) {
