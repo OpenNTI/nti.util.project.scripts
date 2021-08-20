@@ -40,19 +40,13 @@ export async function getRepositories(dir = process.cwd()) {
 	const repos = await Promise.all(projects.map(checkStatus));
 
 	repos.sort((a, b) => {
-		const { command: a1 } = a;
-		const { command: b1 } = b;
+		const { willLock: a1 } = a;
+		const { willLock: b1 } = b;
 
 		const c = a.repo.localeCompare(b.repo);
 
 		if (a1 !== b1) {
-			if (a1 === 'app-scripts') {
-				return -1;
-			}
-
-			if (b1 === 'app-scripts') {
-				return 1;
-			}
+			return a1 ? -1 : b1 ? 1 : c;
 		}
 
 		return c;
@@ -80,7 +74,8 @@ export async function checkStatus(dir) {
 	}
 
 	// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
-	const { remoteBranch: remote = null, ...status } = await gitStatus(dir);
+	const [{ remoteBranch: remote = null, ...status }, willLock] =
+		await Promise.all([gitStatus(dir), usesLock(dir)]);
 
 	if (!status.dirty && status.behind) {
 		await exec(dir, 'git pull -r');
@@ -92,6 +87,7 @@ export async function checkStatus(dir) {
 
 	return {
 		dir,
+		willLock,
 		command: /^(.+)-scripts$/.test(command) ? command : void 0,
 		pkg,
 		...status,
