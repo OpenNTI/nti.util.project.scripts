@@ -7,10 +7,15 @@ import { exec } from './exec.js';
 const isTrue = RegExp.prototype.test.bind(/true/i);
 
 export async function usesLock(dir) {
-	return (
+	const cache = usesLock.cache || (usesLock.cache = {});
+
+	if (dir in cache) {
+		return cache[dir];
+	}
+
+	return (cache[dir] =
 		isTrue(await exec(dir, 'npm config get package-lock')) ||
-		isTrue(await exec(dir, 'npm config get package-lock-releases'))
-	);
+		isTrue(await exec(dir, 'npm config get package-lock-releases')));
 }
 
 export async function updateLock(dir, dryRun) {

@@ -113,23 +113,40 @@ async function hasChanges(dir) {
 		commits = void 0;
 	}
 
+	const commitsSinceTag = commits; //number since tag.
 	const fileChanges = tag && (await whatChanged(dir, tag));
+	const metadataOnlyChanges =
+		!fileChanges?.length ||
+		fileChanges?.every(x => !/^(src|lib)/.test(x) || /__test__/.test(x));
+
+	const needsResolving = (await usesLock(dir)) && tag && metadataOnlyChanges;
+	const dependencyUpdates = needsResolving
+		? await resolveDependencyUpdates(dir, tag)
+		: false;
 
 	return {
 		lastTag: tag,
 		sha,
-		commitsSinceTag: commits, //number since tag.
+		commitsSinceTag,
 		fileChanges,
-		metadataOnlyChanges:
-			!fileChanges?.length ||
-			fileChanges?.every(
-				x => !/^(src|lib)/.test(x) || /__test__/.test(x)
-			),
+		metadataOnlyChanges,
+		dependencyUpdates,
 	};
 }
 
 async function whatChanged(dir, from, to = 'HEAD') {
 	return (await exec(dir, `git diff --name-only ${from}..${to}`)).split('\n');
+}
+
+async function resolveDependencyUpdates(dir, from) {
+	let lock;
+	try {
+		lock = JSON.parse(
+			await exec(dir, `git show "${from}":package-lock.json`, true)
+		);
+	} catch {
+		return true;
+	}
 }
 
 export async function preflightChecks({ dir, branch, dirty, pkg }, major) {

@@ -5,11 +5,13 @@ import semver from 'semver';
 
 const STDIO = { stdio: 'inherit' };
 
-export async function exec(cwd, command) {
+export async function exec(cwd, command, quiet = false) {
 	return new Promise((fulfill, reject) => {
 		child_process.exec(command, { cwd }, (err, stdout, stderr) => {
 			if (err) {
-				console.error(stderr.toString('utf8'));
+				if (!quiet) {
+					console.error(stderr.toString('utf8'));
+				}
 				return reject(err);
 			}
 
