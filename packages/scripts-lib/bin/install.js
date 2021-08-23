@@ -1,5 +1,5 @@
 'use strict';
-const { homdir, homedir } = require('os');
+const { homedir } = require('os');
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
 const {
@@ -24,7 +24,7 @@ const log = existsSync(logFile)
 	: x => console.log(x);
 
 const exec = (x, work = cwd()) => (
-	log(`exec <${work.replace(homdir(), '~')}> ${x}`),
+	log(`exec <${work.replace(homedir(), '~')}> ${x}`),
 	execSync(x, {
 		cwd: work,
 		env: process.env,
