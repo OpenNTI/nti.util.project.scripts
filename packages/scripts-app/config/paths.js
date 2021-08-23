@@ -38,7 +38,6 @@ const serverComponent = exists(resolveApp('src/server'), resolveOwn('server'));
 module.exports = {
 	...paths,
 	assetsRoot: resolveApp('src/main'),
-	appModules: resolveApp('src/main/js'),
 	appHtml: resolveApp('src/main/page.html'),
 	appIndexJs: resolveApp('src/main/js/index.js'),
 	appBuildHook: exists(resolveApp('config/build-hook.js')),

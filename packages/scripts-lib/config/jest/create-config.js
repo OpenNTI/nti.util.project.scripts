@@ -51,11 +51,7 @@ module.exports = resolve => {
 		],
 		coverageDirectory: 'reports/coverage',
 		coverageReporters: ['text-summary', 'lcov', 'cobertura'],
-		moduleDirectories: [
-			paths.appModules &&
-				paths.appModules.replace(paths.path, '<rootDir>'),
-			'node_modules',
-		].filter(Boolean),
+		moduleDirectories: ['node_modules'],
 		reporters: !isCI
 			? void 0
 			: [

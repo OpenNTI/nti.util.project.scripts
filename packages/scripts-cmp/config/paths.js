@@ -11,7 +11,6 @@ function resolveOwn(relativePath) {
 
 module.exports = {
 	...paths,
-	appModules: null,
 	testApp: paths.resolveApp('test'),
 	testAppHtml: paths.resolveApp('test/app/index.html'),
 	testAppHtmlTemplate: resolveOwn('config/template.html'),
