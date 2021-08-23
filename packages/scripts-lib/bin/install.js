@@ -1,4 +1,5 @@
 'use strict';
+const { homdir, homedir } = require('os');
 const { execSync } = require('child_process');
 const { isCI } = require('ci-info');
 const {
@@ -10,20 +11,38 @@ const {
 	chmodSync,
 } = require('fs');
 const { join, relative } = require('path');
+const { format } = require('util');
 const { listProjects } = require('./list');
 require('./validate-env.js');
 const cwd = () => process.env.INIT_CWD ?? process.cwd();
-const exec = (x, work = cwd()) =>
-	execSync(x, { cwd: work, env: process.env, stdio: 'pipe' })
-		.toString('utf8')
-		.trim();
 
 const hooksDir = join(process.cwd(), 'hooks');
 
-const logFile = join(process.env.HOME, '.nti-install.log');
+const logFile = join(homedir(), '.nti-install.log');
 const log = existsSync(logFile)
 	? msg => appendFileSync(logFile, msg + '\n')
 	: x => console.log(x);
+
+const exec = (x, work = cwd()) => (
+	log(`exec <${work.replace(homdir(), '~')}> ${x}`),
+	execSync(x, {
+		cwd: work,
+		env: process.env,
+		stdio: 'pipe',
+	})
+		.toString('utf8')
+		.trim()
+);
+
+process
+	.on('unhandledRejection', reason => {
+		log(`Unhandled Rejection at Promise: ${format('%j', reason)}`);
+		process.exit(1);
+	})
+	.on('uncaughtException', err => {
+		log(`Uncaught Exception thrown: ${format('%j', err)}`);
+		process.exit(1);
+	});
 
 function usesScripts(dir) {
 	try {
@@ -61,11 +80,7 @@ function save(file, content) {
 
 async function install(root = cwd(), leaf = false) {
 	if (isCI || /\/\.npm|tmp\//.test(hooksDir)) {
-		log(
-			`Ignored install:\n\tINIT_CWD: ${
-				process.env.INIT_CWD
-			}\n\tCWD:      ${process.cwd()}\n\tHOOK_DIR: ${hooksDir}`
-		);
+		log(`Ignored install: ${process.env.INIT_CWD}`);
 		return;
 	}
 
@@ -104,10 +119,11 @@ async function install(root = cwd(), leaf = false) {
 
 		// This will fail when we are in a workspace (the root will not be a prefix of the hooks directory)
 		const result = execInRoot('husky install ' + hooksRelativeToRoot);
-		if (/(not a Git repository)|(not allowed)/.test(result)) {
+		// Husky does not output anything on some failures?
+		if (/(not a Git repository)|(not allowed)|(^$)/.test(result)) {
 			throw new Error('install workspace');
 		}
-		log(result);
+		log(`husky install results: "${result}"`);
 	} catch (e) {
 		if (/(.git can't be found)|(not allowed)|(install workspace)/.test(e)) {
 			if (root === cwd() && !leaf) {
