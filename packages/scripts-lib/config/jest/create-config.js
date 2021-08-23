@@ -69,11 +69,7 @@ module.exports = resolve => {
 					],
 			  ],
 		rootDir: paths.path,
-		roots: [
-			paths.appModules
-				? paths.appModules.replace(paths.path, '<rootDir>')
-				: '<rootDir>/src/',
-		],
+		roots: ['<rootDir>'],
 		globalSetup: resolve('config/jest/global-setup.js'),
 		setupFiles,
 		setupFilesAfterEnv,
