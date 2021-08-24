@@ -10,6 +10,7 @@ import ora from 'ora';
 const gitStatus = promisify(gitState.check);
 
 const find = promisify(glob);
+let cleanup = null;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
 
 async function clean() {
@@ -27,13 +28,16 @@ async function clean() {
 		})
 	);
 
-	// Don't wait for this, let it run in the background
-	fs.rm(tmpDir, { force: true, recursive: true }).catch(er =>
-		console.warn(
-			'[warn] Could not remove ${trash}\n\tbecause: ',
-			er.message
-		)
-	);
+	// Don't wait for this here, let it run in the background and
+	// set a package scope var to wait for it before exit.
+	cleanup = fs
+		.rm(tmpDir, { force: true, recursive: true })
+		.catch(er =>
+			console.warn(
+				'[warn] Could not remove ${trash}\n\tbecause: ',
+				er.message
+			)
+		);
 }
 
 async function update() {
@@ -112,6 +116,8 @@ async function update() {
 		},
 		stdio: 'inherit',
 	});
+
+	await cleanup;
 })();
 
 export async function exec(cwd, command) {
