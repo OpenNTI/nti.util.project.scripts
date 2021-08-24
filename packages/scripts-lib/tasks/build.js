@@ -2,7 +2,6 @@
 const path = require('path');
 
 const chalk = require('chalk');
-const ora = require('ora');
 
 const Cancelable = require('./utils/cancelable');
 const { exec, npx } = require('./utils/call-cmd');
@@ -30,8 +29,8 @@ process.on('unhandledRejection', err => {
 
 const activeScripts = path.dirname(process.argv[1]);
 
-if (WORKER) {
-	(async () => {
+(async () => {
+	if (WORKER) {
 		if (global.runBuild) {
 			await exec(
 				paths.path,
@@ -41,46 +40,47 @@ if (WORKER) {
 		} else {
 			console.log('This project is not built nor packaged individually.');
 		}
-	})();
-} else {
-	const spinner = ora('Building...').start();
-	const tasks = [];
-	const signal = new Cancelable();
-	const task = (p, label) => {
-		if (typeof p === 'string') {
-			p = exec(paths.path, p, signal).catch(
-				x =>
-					x !== 'canceled' &&
-					(console.error(x), signal.cancel(), Promise.reject(x))
+	} else {
+		const { default: ora } = await import('ora');
+		const spinner = ora('Building...').start();
+		const tasks = [];
+		const signal = new Cancelable();
+		const task = (p, label) => {
+			if (typeof p === 'string') {
+				p = exec(paths.path, p, signal).catch(
+					x =>
+						x !== 'canceled' &&
+						(console.error(x), signal.cancel(), Promise.reject(x))
+				);
+			}
+			ora.promise(p, label);
+			return p;
+		};
+		const subTask = (t, label) =>
+			task(`node ${path.resolve(activeScripts, t)}`, label);
+
+		if (!SKIP) {
+			tasks.push(
+				subTask('./check', 'Linting...'),
+				subTask('./test', 'Tests...'),
+				task(npx('@nti/gen-docs'), 'Generating docs...')
 			);
 		}
-		ora.promise(p, label);
-		return p;
-	};
-	const subTask = (t, label) =>
-		task(`node ${path.resolve(activeScripts, t)}`, label);
 
-	if (!SKIP) {
-		tasks.push(
-			subTask('./check', 'Linting...'),
-			subTask('./test', 'Tests...'),
-			task(npx('@nti/gen-docs'), 'Generating docs...')
-		);
+		tasks.push(task(process.argv.join(' '), 'Building...'));
+
+		await Promise.all(tasks)
+			.then(() => {
+				try {
+					spinner.succeed('Done.');
+				} catch (e) {
+					/* ignore */
+				}
+			})
+			.catch(er => {
+				spinner.fail('Failed');
+				console.log(er.stack || er.message || er);
+				process.exit(1);
+			});
 	}
-
-	tasks.push(task(process.argv.join(' '), 'Building...'));
-
-	Promise.all(tasks)
-		.then(() => {
-			try {
-				spinner.succeed('Done.');
-			} catch (e) {
-				/* ignore */
-			}
-		})
-		.catch(er => {
-			spinner.fail('Failed');
-			console.log(er.stack || er.message || er);
-			process.exit(1);
-		});
-}
+})();
