@@ -1,9 +1,11 @@
 #!/usr/bin/env node
-import { exec } from 'child_process';
+import * as childProcess from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, resolve } from 'path';
 import glob from 'glob';
 import ora from 'ora';
+
+const controller = new AbortController();
 
 if (!fs.rm) {
 	console.warn(
@@ -18,8 +20,14 @@ if (!fs.rm) {
 
 const { NTI_BUILDOUT_PATH = null, NTI_SKIP_DOCKER = null } = process.env;
 
-async function exitHandler(code) {
-	process.exitCode = code || 1;
+async function exitHandler(error, code) {
+	if (code) {
+		process.exitCode = code;
+	}
+	if (typeof error !== 'string') {
+		console.error(error?.stack || error);
+	}
+	controller.abort();
 }
 
 // process.on('exit', exitHandler);
@@ -27,47 +35,80 @@ process.on('SIGINT', exitHandler);
 process.on('SIGUSR1', exitHandler);
 process.on('SIGUSR2', exitHandler);
 process.on('uncaughtException', exitHandler);
+process.on('unhandledRejection', exitHandler);
 
-async function run(cwd, command, opts) {
+export async function exec(cwd, command) {
 	return new Promise((fulfill, reject) => {
-		exec(command, { cwd, ...opts }, (err, stdout, stderr) => {
-			if (err) {
-				console.error(stderr.toString('utf8'));
-				return reject(err);
-			}
+		childProcess.exec(
+			command,
+			{ cwd, signal: controller.signal },
+			(err, stdout, stderr) => {
+				if (err) {
+					return reject(stderr.toString('utf8'));
+					// return reject(err);
+				}
 
-			fulfill(stdout.toString('utf8').trim());
+				fulfill(stdout.toString('utf8').trim());
+			}
+		);
+	});
+}
+
+async function spawn(command, args, opts) {
+	return new Promise((fulfill, reject) => {
+		const p = childProcess.spawn(command, args, {
+			shell: true,
+			signal: controller.signal,
+			stdio: 'inherit',
+			...opts,
+		});
+		p.on('close', code => {
+			if (code) {
+				// code 0 = success, any other is failure
+				reject(code);
+			} else {
+				fulfill();
+			}
 		});
 	});
 }
 
 async function install(dir) {
-	await run(dir, 'npm install --no-progress --no-audit --silent').catch(e => {
-		process.exitCode = 1;
-		console.error(e);
-	});
+	await exec(dir, 'npm install --no-progress --no-audit --silent').catch(
+		e => {
+			process.exitCode = 1;
+			console.error(e);
+		}
+	);
 }
 
 // npm7 currently has a bug where it will install the GIT version of deps even when its linked in the workspace...
-function cleanDupes() {
-	const candidates = glob.sync('./!(node_modules)/**/node_modules/@nti/');
+async function cleanDupes() {
+	const candidates = await new Promise((f, e) =>
+		glob('./!(node_modules)/**/node_modules/@nti/', (err, matches) =>
+			err ? e(err) : f(matches)
+		)
+	);
 	const duplicates = candidates.filter(
 		(x, i, a) => !a.slice(0, i).find(y => x.startsWith(y))
 	);
 
-	for (const x of duplicates) {
-		// remove the duplicate
-		fs.rm(x, { force: true, recursive: true })
-			// Remove parent directory (node_modules) if its empty
-			.then(() => fs.rm(dirname(x), { force: true }))
-			// ignore errors
-			.catch(Boolean);
-	}
+	await Promise.all(
+		duplicates.map(x =>
+			// remove the duplicate
+			fs
+				.rm(x, { force: true, recursive: true })
+				// Remove parent directory (node_modules) if its empty
+				.then(() => fs.rm(dirname(x), { force: true }))
+				// ignore errors
+				.catch(Boolean)
+		)
+	);
 }
 
 (async function main() {
 	const spinner = ora('Processing...').start();
-	cleanDupes();
+	await cleanDupes();
 
 	await Promise.all([
 		// Lerna isn't compatible with this workspace layout, so we just install it by itself",
@@ -80,12 +121,12 @@ function cleanDupes() {
 
 	spinner.stop();
 
-	if (process.exitCode) {
+	if (process.exitCode || controller.signal.aborted) {
 		return;
 	}
 
-	await run(resolve('.'), 'npm run build', {
-		stdio: 'inherit',
+	await spawn('npm', ['run', 'build'], {
+		cwd: resolve('.'),
 	});
 
 	if (NTI_BUILDOUT_PATH != null || NTI_SKIP_DOCKER != null) {
@@ -93,11 +134,7 @@ function cleanDupes() {
 	}
 
 	// Server requires its dependencies (content packages/client settings) be locally present (under its own node_modules)
-	await run(
-		resolve('./server'),
-		'npm install --silent --no-audit --no-fund',
-		{
-			stdio: 'inherit',
-		}
-	);
+	await spawn('npm', ['install', '--silent', '--no-audit', '--no-fund'], {
+		cwd: resolve('./server'),
+	});
 })();

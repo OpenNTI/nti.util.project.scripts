@@ -9,22 +9,29 @@ import ora from 'ora';
 
 const gitStatus = promisify(gitState.check);
 
+const controller = new AbortController();
+
 const find = promisify(glob);
 const tmpDir = join(process.cwd(), '.trash');
 let cleanup = null;
 let exiting = false;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
 
-async function exitHandler(code) {
-	if (!exiting) {
-		console.log('Exiting...');
+async function exitHandler(error, code) {
+	if (exiting) {
+		return;
 	}
+	const spinner = ora('Exiting...').start();
 	exiting = true;
+	controller.abort();
 	if (cleanup) {
 		await cleanup;
-		// console.log('cleanup complete');
-		process.exit(code);
+		if (code) {
+			process.exitCode = code;
+		}
 	}
+	spinner.stop();
+	// process.exit()
 }
 
 process.on('exit', exitHandler);
@@ -96,9 +103,13 @@ async function update() {
 					await exec(repo, 'git pull --rebase --autostash');
 				}
 			} catch (er) {
-				console.warn('[warn] %s:\n%s', repo, er);
+				if (er) {
+					console.warn('[warn] %s:\n%s', repo, er);
+				}
 				// if we threw an error, abort any rebase in progress.
-				await exec(repo, 'git rebase --abort').catch(() => null);
+				await exec(repo, 'git rebase --abort', { signal: null }).catch(
+					() => null
+				);
 			}
 		})
 	);
@@ -117,29 +128,51 @@ async function update() {
 		process.exit(1);
 	}
 
-	if (exiting) {
+	if (exiting || controller.signal.aborted) {
 		return;
 	}
 
-	await exec(resolve('.'), 'npm install --no-audit --no-fund', {
-		env: {
-			...process.env,
-			NTI_WORKSPACE_REFRESH: true,
-		},
-		stdio: 'inherit',
-	});
+	await spawn('npm', ['install', '--no-audit', '--no-fund']);
 })();
 
-export async function exec(cwd, command, opts) {
+async function spawn(command, args, opts) {
 	return new Promise((fulfill, reject) => {
-		childProcess.exec(command, { cwd, ...opts }, (err, stdout, stderr) => {
-			if (err) {
-				return reject(stderr.toString('utf8'));
-				// return reject(err);
-			}
-
-			fulfill(stdout.toString('utf8').trim());
+		const p = childProcess.spawn(command, args, {
+			cwd: resolve('.'),
+			env: {
+				...process.env,
+				NTI_WORKSPACE_REFRESH: true,
+			},
+			signal: controller.signal,
+			stdio: 'inherit',
+			...opts,
 		});
+		const err = [];
+		p.stderr.on('data', data => err.push(data));
+		p.on('close', code => {
+			if (code) {
+				reject(err.join(''));
+			} else {
+				fulfill();
+			}
+		});
+	});
+}
+
+export async function exec(cwd, command) {
+	return new Promise((fulfill, reject) => {
+		childProcess.exec(
+			command,
+			{ cwd, signal: controller.signal },
+			(err, stdout, stderr) => {
+				if (err) {
+					return reject(stderr.toString('utf8'));
+					// return reject(err);
+				}
+
+				fulfill(stdout.toString('utf8').trim());
+			}
+		);
 	});
 }
 
