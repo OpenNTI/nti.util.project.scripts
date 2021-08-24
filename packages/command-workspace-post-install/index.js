@@ -6,6 +6,7 @@ import glob from 'glob';
 import ora from 'ora';
 
 const controller = new AbortController();
+controller.signal.setMaxListeners(0);
 
 if (!fs.rm) {
 	console.warn(

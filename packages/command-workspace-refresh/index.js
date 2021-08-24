@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import events from 'events';
 import * as childProcess from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, join, resolve } from 'path';
@@ -7,6 +8,7 @@ import gitState from '@nti/git-state';
 import glob from 'glob';
 import ora from 'ora';
 
+events.defaultMaxListeners = 0;
 const gitStatus = promisify(gitState.check);
 
 const controller = new AbortController();
@@ -124,6 +126,7 @@ async function update() {
 		await Promise.all([clean(), update()]);
 		spinner.stop();
 	} catch (e) {
+		spinner.stop();
 		console.error('Could not fully clean node_modules: ', e.message);
 		process.exit(1);
 	}
@@ -137,25 +140,29 @@ async function update() {
 
 async function spawn(command, args, opts) {
 	return new Promise((fulfill, reject) => {
-		const p = childProcess.spawn(command, args, {
-			cwd: resolve('.'),
-			env: {
-				...process.env,
-				NTI_WORKSPACE_REFRESH: true,
-			},
-			signal: controller.signal,
-			stdio: 'inherit',
-			...opts,
-		});
-		const err = [];
-		p.stderr.on('data', data => err.push(data));
-		p.on('close', code => {
-			if (code) {
-				reject(err.join(''));
-			} else {
-				fulfill();
-			}
-		});
+		try {
+			const p = childProcess.spawn(command, args, {
+				cwd: resolve('.'),
+				env: {
+					...process.env,
+					NTI_WORKSPACE_REFRESH: true,
+				},
+				signal: controller.signal,
+				stdio: 'inherit',
+				...opts,
+			});
+
+			p.on('close', code => {
+				if (code) {
+					reject(code);
+				} else {
+					fulfill();
+				}
+			});
+		} catch (e) {
+			console.log(e);
+			reject(e);
+		}
 	});
 }
 
