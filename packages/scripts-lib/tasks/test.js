@@ -60,7 +60,7 @@ if (isCI && !argv.includes('--coverage')) {
 	argv.push('--coverage');
 }
 
-if (!isDebug) {
+if (!isDebug && !argv.includes('--runInBand')) {
 	argv.push('--maxWorkers=' + cpus().length);
 }
 
