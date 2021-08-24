@@ -10,12 +10,30 @@ import ora from 'ora';
 const gitStatus = promisify(gitState.check);
 
 const find = promisify(glob);
+const tmpDir = join(process.cwd(), '.trash');
 let cleanup = null;
+let exiting = false;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
 
-async function clean() {
-	const tmpDir = join(process.cwd(), '.trash');
+async function exitHandler(code) {
+	if (!exiting) {
+		console.log('Exiting...');
+	}
+	exiting = true;
+	if (cleanup) {
+		await cleanup;
+		// console.log('cleanup complete');
+		process.exit(code);
+	}
+}
 
+process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
+process.on('SIGUSR1', exitHandler);
+process.on('SIGUSR2', exitHandler);
+process.on('uncaughtException', exitHandler);
+
+async function clean() {
 	const candidates = await find('**/node_modules');
 	const moduleDirs = candidates.filter(
 		(x, i, a) => !a.slice(0, i).find(y => x.startsWith(y))
@@ -28,16 +46,7 @@ async function clean() {
 		})
 	);
 
-	// Don't wait for this here, let it run in the background and
-	// set a package scope var to wait for it before exit.
-	cleanup = fs
-		.rm(tmpDir, { force: true, recursive: true })
-		.catch(er =>
-			console.warn(
-				'[warn] Could not remove ${trash}\n\tbecause: ',
-				er.message
-			)
-		);
+	cleanup = fs.rm(tmpDir, { force: true, recursive: true });
 }
 
 async function update() {
@@ -101,28 +110,29 @@ async function update() {
 		await findRoot();
 
 		spinner.info('Pulling & Cleaning...');
-		await Promise.all([update(), clean()]);
+		await Promise.all([clean(), update()]);
 		spinner.stop();
 	} catch (e) {
 		console.error('Could not fully clean node_modules: ', e.message);
 		process.exit(1);
 	}
 
-	childProcess.execSync('npm install --no-audit --no-fund', {
-		cwd: resolve('.'),
+	if (exiting) {
+		return;
+	}
+
+	await exec(resolve('.'), 'npm install --no-audit --no-fund', {
 		env: {
 			...process.env,
 			NTI_WORKSPACE_REFRESH: true,
 		},
 		stdio: 'inherit',
 	});
-
-	await cleanup;
 })();
 
-export async function exec(cwd, command) {
+export async function exec(cwd, command, opts) {
 	return new Promise((fulfill, reject) => {
-		childProcess.exec(command, { cwd }, (err, stdout, stderr) => {
+		childProcess.exec(command, { cwd, ...opts }, (err, stdout, stderr) => {
 			if (err) {
 				return reject(stderr.toString('utf8'));
 				// return reject(err);

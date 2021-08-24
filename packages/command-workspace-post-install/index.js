@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { exec, execSync } from 'child_process';
+import { exec } from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, resolve } from 'path';
 import glob from 'glob';
@@ -18,9 +18,19 @@ if (!fs.rm) {
 
 const { NTI_BUILDOUT_PATH = null, NTI_SKIP_DOCKER = null } = process.env;
 
-async function run(cwd, command) {
+async function exitHandler(code) {
+	process.exitCode = code || 1;
+}
+
+// process.on('exit', exitHandler);
+process.on('SIGINT', exitHandler);
+process.on('SIGUSR1', exitHandler);
+process.on('SIGUSR2', exitHandler);
+process.on('uncaughtException', exitHandler);
+
+async function run(cwd, command, opts) {
 	return new Promise((fulfill, reject) => {
-		exec(command, { cwd }, (err, stdout, stderr) => {
+		exec(command, { cwd, ...opts }, (err, stdout, stderr) => {
 			if (err) {
 				console.error(stderr.toString('utf8'));
 				return reject(err);
@@ -74,8 +84,7 @@ function cleanDupes() {
 		return;
 	}
 
-	execSync('npm run build', {
-		cwd: resolve('.'),
+	await run(resolve('.'), 'npm run build', {
 		stdio: 'inherit',
 	});
 
@@ -84,8 +93,11 @@ function cleanDupes() {
 	}
 
 	// Server requires its dependencies (content packages/client settings) be locally present (under its own node_modules)
-	execSync('npm install --silent --no-audit --no-fund', {
-		cwd: resolve('./server'),
-		stdio: 'inherit',
-	});
+	await run(
+		resolve('./server'),
+		'npm install --silent --no-audit --no-fund',
+		{
+			stdio: 'inherit',
+		}
+	);
 })();
