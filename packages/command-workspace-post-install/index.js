@@ -1,12 +1,13 @@
 #!/usr/bin/env node
+import events from 'events';
 import * as childProcess from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, resolve } from 'path';
 import glob from 'glob';
 import ora from 'ora';
 
+events.defaultMaxListeners = 0;
 const controller = new AbortController();
-controller.signal.setMaxListeners(0);
 
 if (!fs.rm) {
 	console.warn(
