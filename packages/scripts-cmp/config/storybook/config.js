@@ -4,7 +4,8 @@ const path = require('path');
 const { sync: glob } = require('glob');
 
 const paths = require('../paths');
-const CommonWebpackConfig = require('../webpack.config.js');
+const [CommonWebpackConfig] = require('@nti/app-scripts/config/webpack.config');
+
 const {
 	plugins: jsPlugins,
 	loaders: jsLoaders,

@@ -4,8 +4,8 @@ global.NTI_INIT_TO_REMOVE = [
 	'-test', //leave the test folder alone
 ];
 global.NTI_INIT_SCRIPTS = {
-	start: 'start-storybook -p 6006',
-	build: 'build-storybook',
+	start: 'cmp-scripts start',
+	build: 'cmp-scripts build',
 };
 
 global.NTI_INIT_DROP_DEPENDENCIES =
