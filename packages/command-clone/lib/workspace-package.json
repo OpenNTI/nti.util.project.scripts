@@ -21,8 +21,8 @@
 		"stop": "cd server; npm stop"
 	},
 	"engines": {
-		"npm": ">=7.5.2",
-		"node": ">=14.0.0"
+		"npm": ">=7.21.0",
+		"node": ">=16.0.0"
 	},
 	"dependencies": {
 		"@nti/eslint-config-app-scripts": "*",
