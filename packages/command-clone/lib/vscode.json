@@ -30,39 +30,51 @@
 			"wmaurer.change-case"
 		]
 	},
+	"folders": [],
 	"launch": {
+		"compounds": [],
 		"configurations": [
 			{
-				"type": "node",
-				"request": "launch",
-				"name": "Debug Jest on Current File",
-				"cwd": "${fileWorkspaceFolder}",
-				"program": "${fileWorkspaceFolder}../../../node_modules/.bin/jest",
-				"autoAttachChildProcesses": true,
-				"sourceMaps": true,
 				"args": [
 					"--runInBand",
 					"--no-cache",
 					"${fileBasenameNoExtension}"
-				]
+				],
+				"autoAttachChildProcesses": true,
+				"cwd": "${fileWorkspaceFolder}",
+				"name": "Debug Jest on Current File",
+				"program": "${fileWorkspaceFolder}../../../node_modules/.bin/jest",
+				"request": "launch",
+				"sourceMaps": true,
+				"type": "node"
 			}
-		],
-		"compounds": []
+		]
 	},
 	"settings": {
-		"cSpell.words": ["Savepoints", "Transcripted", "icomoon"],
+		"cSpell.words": [
+			"Savepoints",
+			"Transcripted",
+			"autofetch",
+			"gitlens",
+			"icomoon"
+		],
 		"css.validate": false,
 		"editor.codeActionsOnSave": {
 			"source.fixAll": true,
-			"source.fixAll.ts": false,
-			"source.fixAll.stylelint": false
+			"source.fixAll.stylelint": false,
+			"source.fixAll.ts": false
 		},
 		"editor.defaultFormatter": "esbenp.prettier-vscode",
 		"editor.formatOnSave": true,
-		"editor.linkedEditing": true,
-		"editor.renderControlCharacters": true,
-		"editor.suggest.showStatusBar": true,
 		"errorLens.enabledDiagnosticLevels": ["error", "warning"],
+		"emmet.excludeLanguages": [
+			"javascript",
+			"javascriptreact",
+			"css",
+			"markdown",
+			"typescript",
+			"typescriptreact"
+		],
 		"eslint.codeActionsOnSave.mode": "problems",
 		"eslint.lintTask.enable": true,
 		"eslint.validate": [
@@ -72,22 +84,33 @@
 			"typescriptreact"
 		],
 		"files.exclude": {
-			"**/node_modules/**": true
+			"**/node_modules/**": true,
+			"**/dist/**": true
 		},
-		"git.autofetch": true,
 		"git.autoStash": true,
+		"git.autofetch": true,
+		"git.enableSmartCommit": true,
 		"git.pruneOnFetch": true,
 		"git.pullTags": false,
 		"git.rebaseWhenSync": true,
+		"gitlens.advanced.fileHistoryFollowsRenames": true,
+		"gitlens.advanced.messages": {
+			"suppressLineUncommittedWarning": true
+		},
 		"javascript.updateImportsOnFileMove.enabled": "always",
 		"less.validate": false,
+		"npm-intellisense.packageSubfoldersIntellisense": true,
+		"npm.packageManager": "npm",
+		"npm.runSilent": true,
+		"npm.validate.enable": false,
+		"prettier.requireConfig": true,
 		"scm.alwaysShowRepositories": false,
 		"scm.repositories.visible": 0,
 		"scss.validate": false,
+		"search.useGlobalIgnoreFiles": true,
 		"stylelint.reportInvalidScopeDisables": true,
 		"stylelint.reportNeedlessDisables": true,
 		"typescript.enablePromptUseWorkspaceTsdk": true,
-		"typescript.tsdk": "node_modules/typescript/lib/",
-		"prettier.requireConfig": true
+		"typescript.tsdk": "node_modules/typescript/lib/"
 	}
 }
