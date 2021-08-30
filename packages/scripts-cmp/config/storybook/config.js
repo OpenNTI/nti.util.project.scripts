@@ -104,11 +104,16 @@ module.exports = {
 			CommonWebpackConfig.resolve.fallback
 		);
 
+		const devServer = (storybookConfig.devServer =
+			storybookConfig.devServer || {});
+
 		// Add dataserver proxy settings?
-		Object.assign(
-			storybookConfig.devServer?.proxy ?? {},
-			CommonWebpackConfig.devServer.proxy
-		);
+		devServer.proxy = [
+			{
+				context: ['/content', '/dataserver2'],
+				target: 'https://app.localhost',
+			},
+		];
 
 		// Now this is the sticky part...
 		let rules = storybookConfig.module.rules;
