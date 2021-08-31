@@ -41,7 +41,7 @@ const activeScripts = path.dirname(process.argv[1]);
 			console.log('This project is not built nor packaged individually.');
 		}
 	} else {
-		const { default: ora } = await import('ora');
+		const { default: ora, oraPromise } = await import('ora');
 		const spinner = ora('Building...').start();
 		const tasks = [];
 		const signal = new Cancelable();
@@ -53,7 +53,7 @@ const activeScripts = path.dirname(process.argv[1]);
 						(console.error(x), signal.cancel(), Promise.reject(x))
 				);
 			}
-			ora.promise(p, label);
+			oraPromise(p, label);
 			return p;
 		};
 		const subTask = (t, label) =>
