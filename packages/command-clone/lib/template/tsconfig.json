@@ -1,9 +1,12 @@
 {
 	"exclude": [".git", ".npm", "node_modules", "dist"],
 	"compilerOptions": {
+		"target": "ES2021",
 		"esModuleInterop": true,
+		"moduleResolution": "Node",
 		"allowJs": true,
 		"noEmit": true,
+		"jsx": "react",
 		"plugins": [
 			{
 				"name": "typescript-styled-plugin"
