@@ -29,7 +29,6 @@ async function exitHandler(error, code) {
 		process.exitCode = code;
 	}
 
-	process.stderr.write('\nExiting...');
 	exiting = true;
 	controller.abort();
 	try {
@@ -38,8 +37,6 @@ async function exitHandler(error, code) {
 		console.log(e);
 	}
 
-	process.stderr.clearLine();
-	process.stderr.write('\n');
 	// process.exit(code || 0);
 }
 
