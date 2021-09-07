@@ -15,6 +15,7 @@ const controller = new AbortController();
 
 const find = promisify(glob);
 const tmpDir = join(process.cwd(), '.trash');
+const altered = [];
 let cleanup = null;
 let exiting = false;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
@@ -23,17 +24,23 @@ async function exitHandler(error, code) {
 	if (exiting) {
 		return;
 	}
-	const spinner = ora('Exiting...').start();
+
+	if (code) {
+		process.exitCode = code;
+	}
+
+	process.stderr.write('\nExiting...');
 	exiting = true;
 	controller.abort();
-	if (cleanup) {
-		await cleanup;
-		if (code) {
-			process.exitCode = code;
-		}
+	try {
+		await Promise.all([cleanup?.catch(e => null), ...altered.map(restore)]);
+	} catch (e) {
+		console.log(e);
 	}
-	spinner.stop();
-	// process.exit()
+
+	process.stderr.clearLine();
+	process.stderr.write('\n');
+	// process.exit(code || 0);
 }
 
 process.on('exit', exitHandler);
@@ -104,6 +111,8 @@ async function update() {
 				if (status.remoteBranch && !hasDuplicates) {
 					await exec(repo, 'git pull --rebase --autostash');
 				}
+
+				await applyNpmWorkspaceTempFix(repo);
 			} catch (er) {
 				if (er) {
 					console.warn('[warn] %s:\n%s', repo, er);
@@ -201,4 +210,55 @@ async function findRoot() {
 
 	process.chdir(parent);
 	await findRoot();
+}
+
+async function restore(file) {
+	try {
+		await exec(dirname(file), `git checkout ${file}`);
+	} catch (e) {
+		console.warn(e);
+	}
+}
+
+async function applyNpmWorkspaceTempFix(repo) {
+	const pkg = join(repo, 'package.json');
+	let json;
+	try {
+		json = JSON.parse(await fs.readFile(pkg));
+	} catch (e) {
+		if (e.code !== 'ENOENT') {
+			console.warn(
+				'[NPM Workspace Hack] WARN: Skipping %s because: %j',
+				pkg,
+				e.message
+			);
+		}
+		return;
+	}
+
+	let mod = false;
+	for (const section of [
+		'dependencies',
+		'devDependencies',
+		'peerDependencies',
+	]) {
+		const sec = json[section] || {};
+		for (const [key, value] of Object.entries(sec)) {
+			if (value.startsWith('NextThought')) {
+				mod = true;
+				sec[key] = '*';
+			}
+		}
+	}
+
+	if (!mod) {
+		return;
+	}
+
+	try {
+		await fs.writeFile(pkg, JSON.stringify(json, null, '  ').trim());
+		altered.push(pkg);
+	} catch (e) {
+		console.warn('[NPM Workspace Hack] WARN: ', pkg, e.message);
+	}
 }

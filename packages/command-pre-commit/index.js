@@ -5,6 +5,7 @@ const { execSync } = require('child_process');
 const run = x => execSync(x, { stdio: 'pipe' }).toString('utf8');
 const isJS = RegExp.prototype.test.bind(/\.(t|m?j)sx?$/i);
 const isSs = RegExp.prototype.test.bind(/\.s?css$/);
+const isPackageJson = RegExp.prototype.test.bind(/package\.json$/i);
 const load = x => ({ file: x, content: run(`git show ":${x}"`) });
 
 process.env.NODE_ENV = 'production';
@@ -33,7 +34,9 @@ async function main() {
 	let errors = 0;
 	for (const change of files) {
 		const { file, content } =
-			isJS(change) || isSs(change) ? load(change) : {};
+			isJS(change) || isSs(change) || isPackageJson(change)
+				? load(change)
+				: {};
 
 		if (isJS(change)) {
 			const eslint = getESLint();
@@ -63,6 +66,25 @@ async function main() {
 				errors++;
 			}
 			process.stderr.write(results.output);
+		}
+
+		if (isPackageJson(change)) {
+			const json = JSON.parse(content);
+			for (const section of [
+				'dependencies',
+				'devDependencies',
+				'peerDependencies',
+			]) {
+				const sec = json[section] || {};
+				for (const [key, value] of Object.entries(sec)) {
+					if (/^@nti/.test(key) && value === '*') {
+						errors++;
+						process.stderr.write(
+							`[package.json] Invalid version/git-location for ${section}.${key}. Do not commit while a refresh is in progress.`
+						);
+					}
+				}
+			}
 		}
 	}
 
