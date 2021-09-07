@@ -109,6 +109,11 @@ async function cleanDupes() {
 }
 
 (async function main() {
+	const refreshPid = parseInt(process.env.NTI_WORKSPACE_REFRESH_PID, 10);
+	if (!isNaN(refreshPid)) {
+		process.kill(refreshPid, 'SIGUSR2');
+	}
+
 	const spinner = ora('Processing...').start();
 	await cleanDupes();
 

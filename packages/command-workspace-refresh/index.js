@@ -16,6 +16,7 @@ const controller = new AbortController();
 const find = promisify(glob);
 const tmpDir = join(process.cwd(), '.trash');
 const altered = [];
+const startTime = Date.now();
 let cleanup = null;
 let exiting = false;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
@@ -40,10 +41,19 @@ async function exitHandler(error, code) {
 	// process.exit(code || 0);
 }
 
+async function sigUsr2() {
+	console.log(
+		'Restoring modified files. Install took: %ds',
+		(Date.now() - startTime) / 1000
+	);
+	const list = altered.splice(0, altered.length);
+	list.map(restore);
+}
+
 process.on('exit', exitHandler);
 process.on('SIGINT', exitHandler);
 process.on('SIGUSR1', exitHandler);
-process.on('SIGUSR2', exitHandler);
+process.on('SIGUSR2', sigUsr2);
 process.on('uncaughtException', exitHandler);
 
 async function clean() {
@@ -151,6 +161,7 @@ async function spawn(command, args, opts) {
 				cwd: resolve('.'),
 				env: {
 					...process.env,
+					NTI_WORKSPACE_REFRESH_PID: process.pid,
 					NTI_WORKSPACE_REFRESH: true,
 				},
 				signal: controller.signal,
@@ -176,7 +187,15 @@ export async function exec(cwd, command) {
 	return new Promise((fulfill, reject) => {
 		childProcess.exec(
 			command,
-			{ cwd, signal: controller.signal },
+			{
+				cwd,
+				env: {
+					...process.env,
+					NTI_WORKSPACE_REFRESH_PID: process.pid,
+					NTI_WORKSPACE_REFRESH: true,
+				},
+				signal: controller.signal,
+			},
 			(err, stdout, stderr) => {
 				if (err) {
 					return reject(stderr.toString('utf8'));
