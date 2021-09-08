@@ -69,6 +69,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 			host: 'app.localhost',
 			port: devPort,
 			hot: false,
+			liveReload: false,
 
 			client: {
 				logging: 'error',
