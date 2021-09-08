@@ -7,6 +7,7 @@ import { promisify } from 'util';
 import gitState from '@nti/git-state';
 import glob from 'glob';
 import ora from 'ora';
+import ms from 'ms';
 
 events.defaultMaxListeners = 0;
 const gitStatus = promisify(gitState.check);
@@ -44,7 +45,7 @@ async function exitHandler(error, code) {
 async function sigUsr2() {
 	console.log(
 		'Restoring modified files. Install took: %ds',
-		(Date.now() - startTime) / 1000
+		ms(Date.now() - startTime)
 	);
 	const list = altered.splice(0, altered.length);
 	list.map(restore);
