@@ -44,7 +44,7 @@ async function exitHandler(error, code) {
 
 async function sigUsr2() {
 	console.log(
-		'Restoring modified files. Install took: %ds',
+		'Restoring modified files. Install took: %s',
 		ms(Date.now() - startTime)
 	);
 	const list = altered.splice(0, altered.length);
