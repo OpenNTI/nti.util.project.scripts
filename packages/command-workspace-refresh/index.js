@@ -3,11 +3,12 @@ import events from 'events';
 import * as childProcess from 'child_process';
 import { promises as fs } from 'fs';
 import { dirname, join, resolve } from 'path';
-import { promisify } from 'util';
+import { format, promisify } from 'util';
 import gitState from '@nti/git-state';
 import glob from 'glob';
 import ora from 'ora';
 import ms from 'ms';
+import { stdout } from 'process';
 
 events.defaultMaxListeners = 0;
 const gitStatus = promisify(gitState.check);
@@ -17,9 +18,10 @@ const controller = new AbortController();
 const find = promisify(glob);
 const tmpDir = join(process.cwd(), '.trash');
 const altered = [];
-const startTime = Date.now();
+let startTime = Date.now();
 let cleanup = null;
 let exiting = false;
+let skipped = false;
 // const skipClean = !~process.argv.findIndex(x => /skip-clean/i);
 
 async function exitHandler(error, code) {
@@ -73,85 +75,117 @@ async function clean() {
 	cleanup = fs.rm(tmpDir, { force: true, recursive: true });
 }
 
-async function update() {
+async function findRepos() {
 	const candidates = await find('**/.git');
-	const repos = candidates
+	return candidates
 		.filter(
 			(x, i, a) =>
 				!x.includes('node_modules') &&
 				!a.slice(0, i).find(y => x.startsWith(y))
 		)
 		.map(x => resolve(dirname(x)));
+}
 
-	await Promise.all(
-		repos.map(async repo => {
-			try {
-				// unset hooks just incase something interrupts re-installing them
-				const hookFile = join(repo, '.git/hooks/pre-commit');
-				const hookConfig = 'git config --unset core.hooksPath';
-				await Promise.all([
-					exec(repo, hookConfig).catch(() => {}),
-					fs.unlink(hookFile).catch(() => {}),
-				]);
+async function update(repos) {
+	async function pull(repo, retries = 0) {
+		try {
+			// unset hooks just incase something interrupts re-installing them
+			const hookFile = join(repo, '.git/hooks/pre-commit');
+			const hookConfig = 'git config --unset core.hooksPath';
+			await Promise.all([
+				exec(repo, hookConfig).catch(() => {}),
+				fs.unlink(hookFile).catch(() => {}),
+			]);
 
-				// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
-				const status = await gitStatus(repo);
-				let commits = [];
-				if (status.remoteBranch) {
-					commits = (
-						await exec(
-							repo,
-							// https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
-							`git log --oneline --cherry ${status.remoteBranch}...${status.branch}`
-						).catch(() => '')
-					).split(/[\r\n]+/);
-				}
-
-				// See https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
-				// Equivalent but distinct commits will be marked with '= ' prefix. (meaning
-				// the remote does not have the commit but is equivalent to another commit)
-				const hasDuplicates = commits.some(line =>
-					line.startsWith('= ')
-				);
-
-				// if a branch is in a rebased state, and has not force-pushed...it will
-				// have duplicated commits. If we're in this state, do not pull.
-				if (status.remoteBranch && !hasDuplicates) {
-					await exec(repo, 'git pull --rebase --autostash');
-				}
-
-				await applyNpmWorkspaceTempFix(repo);
-			} catch (er) {
-				if (er) {
-					console.warn('[warn] %s:\n%s', repo, er);
-				}
-				// if we threw an error, abort any rebase in progress.
-				await exec(repo, 'git rebase --abort', { signal: null }).catch(
-					() => null
-				);
+			// branch, remoteBranch, ahead, behind, dirty, untracked, stashes
+			const status = await gitStatus(repo);
+			let commits = [];
+			if (status.remoteBranch) {
+				commits = (
+					await exec(
+						repo,
+						// https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
+						`git log --oneline --cherry ${status.remoteBranch}...${status.branch}`
+					).catch(() => '')
+				).split(/[\r\n]+/);
 			}
-		})
-	);
+
+			// See https://git-scm.com/docs/git-log#Documentation/git-log.txt---cherry
+			// Equivalent but distinct commits will be marked with '= ' prefix. (meaning
+			// the remote does not have the commit but is equivalent to another commit)
+			const hasDuplicates = commits.some(line => line.startsWith('= '));
+
+			// if a branch is in a rebased state, and has not force-pushed...it will
+			// have duplicated commits. If we're in this state, do not pull.
+			if (status.remoteBranch && !hasDuplicates) {
+				await exec(repo, 'git pull --rebase --autostash');
+			}
+
+			await applyNpmWorkspaceTempFix(repo);
+		} catch (er) {
+			let retry = false;
+			if (er) {
+				if (!/Cannot rebase onto multiple branches/i.test(er)) {
+					console.warn('[warn] %s:\n%s', repo, er);
+				} else {
+					retry = true;
+				}
+			}
+			// if we threw an error, abort any rebase in progress.
+			await exec(repo, 'git rebase --abort', { signal: null }).catch(
+				() => null
+			);
+
+			// retry once
+			if (retry && retries < 1) {
+				return pull(repo, retries + 1);
+			}
+		}
+	}
+
+	await Promise.all(repos.map(repo => pull(repo)));
 }
 
 (async function main() {
 	const spinner = ora('Locating workspace root...').start();
+	const msg =
+		f =>
+		(...o) => {
+			const { text, isSpinning } = spinner;
+			spinner[f](format(...o));
+			if (isSpinning) {
+				stdout.write('\n');
+				spinner.start(text);
+			}
+		};
+	console.log = msg('info');
+	console.warn = msg('warn');
 	try {
 		await findRoot();
 
-		spinner.info('Pulling & Cleaning...');
-		await Promise.all([clean(), update()]);
+		spinner.start('Scaning for git repos...');
+		const repos = await findRepos();
+
+		spinner.start('Pulling...');
+		await update(repos);
+
+		if (skipped) {
+			throw new Error('Unexpected package.json states. Aborting');
+		}
+		spinner.start('Removing node_modules...');
+		await clean();
 		spinner.stop();
 	} catch (e) {
-		spinner.stop();
-		console.error('Could not fully clean node_modules: ', e.message);
+		spinner.fail(e.message);
 		process.exit(1);
+	} finally {
+		// spinner.info(`Pulling took: ${ms(Date.now() - startTime)}`);
 	}
 
 	if (exiting || controller.signal.aborted) {
 		return;
 	}
-
+	startTime = Date.now();
 	await spawn('npm', ['install', '--no-audit', '--no-fund']);
 })();
 
@@ -241,11 +275,19 @@ async function applyNpmWorkspaceTempFix(repo) {
 	const pkg = join(repo, 'package.json');
 	let json;
 	try {
+		const stat = await exec(repo, 'git diff --name-only HEAD');
+		if (stat.split('\n').includes('package.json')) {
+			throw new Error(
+				'package.json is currently modified (or not in a git repo).'
+			);
+		}
+
 		json = JSON.parse(await fs.readFile(pkg));
 	} catch (e) {
 		if (e.code !== 'ENOENT') {
+			skipped = true;
 			console.warn(
-				'[NPM Workspace Hack] WARN: Skipping %s because: %j',
+				'[NPM Workspace Hack] WARN: Skipping %s because: %o',
 				pkg,
 				e.message
 			);
