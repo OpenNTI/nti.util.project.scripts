@@ -23,7 +23,13 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 	config,
 	expressApp
 ) {
+	globalAgent.options.rejectUnauthorized = false;
 	global.NTI_DevServer = true;
+
+	if (config.webpack === false) {
+		return;
+	}
+
 	const { getHTTPS } = await import('@nti/dev-ssl-config');
 	for (let n of ['info', 'log', 'debug']) {
 		clearLine(n);
@@ -47,7 +53,6 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 	clientConfig.output.path = config.basepath;
 
 	const https = await getHTTPS();
-	globalAgent.options.rejectUnauthorized = false;
 
 	const serverBundleCompiler =
 		serverConfig &&
