@@ -87,13 +87,10 @@
 		"whatwg-fetch": "^3.0.0",
 		"worker-loader": "^3.0.0"
 	},
-	"optionalDependencies": {
-		"@nti/style-common": "NextThought/nti.style.common"
-	},
 	"peerDependencies": {
 		"@nti/dev-ssl-config": "^2.35.1",
-		"@nti/style-common": "NextThought/nti.style.common",
-		"@nti/web-service": "^1.42.0"
+		"@nti/style-common": "*",
+		"@nti/web-service": "^1.42.0 || *"
 	},
 	"peerDependenciesMeta": {
 		"@nti/dev-ssl-config": {
@@ -105,6 +102,5 @@
 		"@nti/web-service": {
 			"optional": true
 		}
-	},
-	"gitHead": "4b7987e296828865a7b72d9c6985ab9d40ab94d2"
+	}
 }
