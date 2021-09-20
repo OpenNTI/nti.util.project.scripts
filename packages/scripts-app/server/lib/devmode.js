@@ -66,7 +66,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 			allowedHosts: 'all',
 
 			https,
-			host: 'app.localhost',
+			host: '0.0.0.0',
 			port: devPort,
 			hot: false,
 			liveReload: false,
