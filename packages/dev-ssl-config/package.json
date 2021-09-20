@@ -20,7 +20,7 @@
 	"homepage": "https://github.com/NextThought/nti.util.project.scripts#readme",
 	"dependencies": {
 		"chalk": "^4.1.0",
-		"is-port-reachable": "^3.0.0",
+		"is-port-reachable": "^4.0.0",
 		"node-cleanup": "^2.1.2"
 	}
 }
