@@ -1,6 +1,5 @@
 /*eslint strict:0, import/no-commonjs:0, import/no-extraneous-dependencies:0*/
 'use strict';
-const path = require('path');
 const { globalAgent } = require('https');
 const { worker } = require('cluster');
 const readline = require('readline');
