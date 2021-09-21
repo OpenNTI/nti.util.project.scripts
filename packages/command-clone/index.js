@@ -114,6 +114,7 @@ const options = yargs(hideBin(process.argv))
 		describe:
 			'Build a vscode workspace file (defaults to the listed variant)',
 		type: 'boolean',
+		default: true,
 	})
 	.option('workspace.listed', {
 		group: 'Workspace:',
