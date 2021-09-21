@@ -10,7 +10,7 @@ import ora from 'ora';
 
 import { checkSSH, exec } from './exec.js';
 const { pathname } = new URL(import.meta.url);
-const vscodeSettings = JSON.parse(
+const vscodeTemplate = JSON.parse(
 	readFileSync(join(dirname(pathname), 'vscode.json'), 'utf-8')
 );
 const npmWorkspacePackage = JSON.parse(
@@ -84,7 +84,7 @@ export async function clone(options) {
 		cliProgress.Presets.rect
 	);
 	cloneProgress.start(repos.length, 0);
-	writeFile;
+
 	let folders = options.existing
 		.map(x => x.dir.replace(process.cwd() + '/', ''))
 		.filter(x => x && x !== '/');
@@ -148,32 +148,23 @@ export async function clone(options) {
 				];
 			}
 
-			folders.sort((a, b) =>
-				(a.name || a.path).localeCompare(b.name || b.path)
-			);
-
 			const workspaceFile = join(
 				process.cwd(),
 				'nextthought.code-workspace'
 			);
-			const { folders: ogFolders = [], ...ogSettings } =
-				readJSON(workspaceFile);
-			writeFile(
-				workspaceFile,
-				JSON.stringify(
-					{
-						folders: [
-							...ogFolders,
-							// append new clones
-							...folders,
-						],
-						...ogSettings,
-						...vscodeSettings,
-					},
-					null,
-					'  '
+
+			const workspaceData = await readJSON(workspaceFile);
+
+			(workspaceData.folders || (workspaceData.folders = [])).push(
+				// append new clones
+				...folders.sort((a, b) =>
+					(a.name || a.path).localeCompare(b.name || b.path)
 				)
 			);
+
+			applyTemplate(workspaceData, vscodeTemplate);
+
+			writeFile(workspaceFile, JSON.stringify(workspaceData, null, '  '));
 
 			writeFile(
 				join(process.cwd(), 'package.json'),
@@ -403,4 +394,33 @@ async function selectRepositories({
 	]);
 
 	return repos;
+}
+
+function applyTemplate(out, input) {
+	for (const [key, value] of Object.entries(input)) {
+		if (!(key in out)) {
+			// add value
+			out[key] = value;
+		} else {
+			//maybe update/append...
+			const o = out[key];
+			// if its non-object
+			if (typeof o !== 'object') {
+				// leave as is.
+			} else {
+				// its object like...
+				if (Array.isArray(o)) {
+					if (o.every(x => typeof x === 'object')) {
+						// complex structures like launch configs we will skip
+						continue;
+					}
+					// append new values
+					o.push(...value.filter(x => !o.includes(x)));
+				} else {
+					// nested object... recursively apply
+					applyTemplate(o, value);
+				}
+			}
+		}
+	}
 }
