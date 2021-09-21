@@ -152,9 +152,27 @@ export async function clone(options) {
 				(a.name || a.path).localeCompare(b.name || b.path)
 			);
 
+			const workspaceFile = join(
+				process.cwd(),
+				'nextthought.code-workspace'
+			);
+			const { folders: ogFolders = [], ...ogSettings } =
+				readJSON(workspaceFile);
 			writeFile(
-				join(process.cwd(), 'nextthought.code-workspace'),
-				JSON.stringify({ folders, ...vscodeSettings }, null, '  ')
+				workspaceFile,
+				JSON.stringify(
+					{
+						folders: [
+							...ogFolders,
+							// append new clones
+							...folders,
+						],
+						...ogSettings,
+						...vscodeSettings,
+					},
+					null,
+					'  '
+				)
 			);
 
 			writeFile(
@@ -188,6 +206,14 @@ export async function clone(options) {
 		}
 	} finally {
 		cloneProgress.stop();
+	}
+}
+
+async function readJSON(file) {
+	try {
+		return JSON.parse(await fs.readFile(file));
+	} catch {
+		return {};
 	}
 }
 
