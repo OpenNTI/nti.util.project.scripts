@@ -47,7 +47,7 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 
 	// const domain = 'app.localhost';
 
-	const devPort = config['webpack-dev-server'] || 'auto';
+	const devPort = await resolvePort(config);
 
 	clientConfig.output.path = config.basepath;
 
@@ -145,3 +145,23 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 		template: clientConfig[Symbol.for('template temp file')],
 	};
 };
+
+async function resolvePort(config) {
+	const cfg = config['webpack-dev-server'];
+	let port;
+	try {
+		// require in try block so existing workspaces do not blow up
+		const getPort = require('get-port');
+		port = cfg || (await getPort());
+	} catch {
+		port = 'auto';
+	}
+
+	if (port === config.port) {
+		throw new Error(
+			'webpack-dev-server port must be different than the main port'
+		);
+	}
+
+	return port;
+}
