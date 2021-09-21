@@ -25,7 +25,7 @@ async function checkFile(ext = 'crt') {
 }
 
 export default async function getDockerCert() {
-	if (!(await isPortReachable(80))) {
+	if (!(await isPortReachable(80, { host: 'localhost' }))) {
 		return false;
 	}
 
