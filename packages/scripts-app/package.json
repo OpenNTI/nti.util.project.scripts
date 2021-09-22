@@ -89,6 +89,9 @@
 		"whatwg-fetch": "^3.0.0",
 		"worker-loader": "^3.0.0"
 	},
+	"optionalDependencies": {
+		"@nti/style-common": "^1.13.0"
+	},
 	"peerDependencies": {
 		"@nti/style-common": "*",
 		"@nti/web-service": "^1.42.0 || *"
