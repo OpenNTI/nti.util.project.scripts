@@ -50,6 +50,10 @@ exports.setupDeveloperMode = async function setupDeveloperMode(
 	const devPort = await resolvePort(config);
 
 	clientConfig.output.path = config.basepath;
+	clientConfig.infrastructureLogging = {
+		...clientConfig.infrastructureLogging,
+		level: 'warn',
+	};
 
 	const https = await getHTTPS();
 
