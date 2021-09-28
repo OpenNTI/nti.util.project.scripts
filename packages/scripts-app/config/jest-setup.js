@@ -111,9 +111,16 @@ Object.defineProperty(global, 'styled', {
 			};
 
 			TagTemplate.attrs = p => {
-				const fill = x => ({
-					...(typeof p === 'function' ? p(x) : { ...x, ...p }),
-				});
+				const fill = x => {
+					const _ = typeof p === 'function' ? p(x) : p;
+
+					return {
+						...x,
+						..._,
+						className: cx(x.className, _.className) || undefined,
+					};
+				};
+
 				return (strings, ...values) => {
 					const cmp = TagTemplate(strings, values);
 					const X = React.forwardRef((props, ref) =>
