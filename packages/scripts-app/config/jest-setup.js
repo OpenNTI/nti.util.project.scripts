@@ -78,6 +78,9 @@ Object.defineProperty(global, 'styled', {
 					}
 				}
 
+				className =
+					className && [...new Set(className.split(' '))].join(' ');
+
 				if (className === '') {
 					className = undefined;
 				}
