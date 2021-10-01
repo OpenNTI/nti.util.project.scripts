@@ -120,7 +120,8 @@ Object.defineProperty(global, 'styled', {
 					return {
 						...x,
 						..._,
-						className: cx(x.className, _.className) || undefined,
+						// astroturf does not handle merging attrs({}) object values, thats left to the function form
+						className: _.className || x.className || undefined,
 					};
 				};
 
