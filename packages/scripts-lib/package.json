@@ -46,7 +46,7 @@
 		"husky": "^7.0.0",
 		"inquirer": "^8.0.0",
 		"jest": "^27.0.4",
-		"jest-junit": "^12.0.0",
+		"jest-junit": "^13.0.0",
 		"js-base64": "^3.7.0",
 		"lock-verify": "^2.2.0",
 		"ora": "^6.0.0",
