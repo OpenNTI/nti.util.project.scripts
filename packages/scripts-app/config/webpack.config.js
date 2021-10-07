@@ -44,7 +44,7 @@ const ContentGlobalDefinitions = new webpack.DefinePlugin({
 	SENTRY_RELEASE: JSON.stringify(projectRelease),
 });
 
-const USE_DEV_STYLE_LOADER = false; //global.NTI_DevServer;
+const USE_DEV_STYLE_LOADER = global.NTI_DevServer;
 const USE_DEV_BUILD_CACHE = global.NTI_DevServer;
 
 function isNTIPackage(x) {
