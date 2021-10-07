@@ -127,7 +127,7 @@ const plugins = (options = {}, inline = false) =>
 	[
 		(PROD || !inline) &&
 			new MiniCssExtractPlugin({
-				ignoreOrder: true,
+				// ignoreOrder: true,
 				filename: 'resources/[name]-[contenthash].css',
 				...(options.miniCssExtract || {}),
 			}),
