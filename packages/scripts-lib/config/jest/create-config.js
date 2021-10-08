@@ -85,11 +85,14 @@ module.exports = resolve => {
 		transform: {
 			'\\.[jt]sx?$': resolve('config/jest/babelTransform.js'),
 			'\\.s?[ac]ss$': resolve('config/jest/cssTransform.js'),
-			'\\.(ico|gif|png|jpg|svg|woff|ttf|eot|otf)$': resolve(
+			'\\.(csv|ico|gif|png|jpg|svg|woff|ttf|eot|otf)$': resolve(
 				'config/jest/fileTransform.js'
 			),
 		},
-		moduleNameMapper: {},
+		moduleNameMapper: {
+			// Strip query-strings from import paths
+			'(.*)\\?(.*)$': '$1',
+		},
 		// verbose: true,
 		bail: true,
 	};
