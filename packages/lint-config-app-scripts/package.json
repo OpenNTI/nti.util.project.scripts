@@ -1,6 +1,6 @@
 {
 	"name": "@nti/eslint-config-app-scripts",
-	"version": "2.51.2",
+	"version": "2.51.3",
 	"description": "NextThought code style standard",
 	"main": "index.js",
 	"repository": {
@@ -18,7 +18,7 @@
 		"registry": "https://npm.nextthought.com"
 	},
 	"dependencies": {
-		"@nti/eslint-config-lib-scripts": "^2.51.2",
+		"@nti/eslint-config-lib-scripts": "^2.51.3",
 		"eslint-plugin-react": "^7.20.5"
 	}
 }
