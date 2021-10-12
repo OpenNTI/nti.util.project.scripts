@@ -103,7 +103,7 @@ const loaders = (paths, options = {}) => {
 						exportLocalsConvention: 'camelCase',
 						localIdentName: PROD
 							? '[local]--[hash:base64]' //'[hash:base64]'
-							: '[name]__[local]--[hash:base64]',
+							: '[folder]__[name]__[local]--[hash:base64]',
 					},
 				}),
 				postCss(paths),
