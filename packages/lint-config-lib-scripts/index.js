@@ -167,10 +167,11 @@ function computeConfig() {
 			browser: true,
 		},
 
-		plugins: ['@babel', 'jsdoc', 'import', 'prettier'],
+		plugins: ['@babel', 'jsdoc', 'import', 'prettier', 'unused-imports'],
 
 		reportUnusedDisableDirectives: !DEV,
 		rules: {
+			'unused-imports/no-unused-imports': 'error',
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
 			'jsdoc/no-undefined-types': [
 				'warn',
