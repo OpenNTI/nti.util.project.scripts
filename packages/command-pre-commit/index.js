@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 'use strict';
 const { execSync } = require('child_process');
+const { readFile, writeFile } = require('fs').promises;
 
 const run = x => execSync(x, { stdio: 'pipe' }).toString('utf8');
 const isJS = RegExp.prototype.test.bind(/\.(t|m?j)sx?$/i);
@@ -27,11 +28,21 @@ function getStyleLint() {
 	return getStyleLint.instance;
 }
 
-async function main() {
-	const files =
-		run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? [];
+function getFilesInCommit() {
+	return (
+		run('git diff --diff-filter=d --cached --name-only')?.split('\n') ?? []
+	).filter(x => x?.length);
+}
 
+async function main() {
 	let errors = 0;
+	const files = getFilesInCommit();
+
+	if (files.length === 0) {
+		errors++;
+		process.stderr.write('Nothing to commit.\n');
+	}
+
 	for (const change of files) {
 		const { file, content } =
 			isJS(change) || isSS(change) || isPackageJson(change)
@@ -41,8 +52,24 @@ async function main() {
 		if (isJS(change)) {
 			const eslint = getESLint();
 			const results = await eslint.lintText(content, { filePath: file });
+			const [{ filePath, output }] = results;
 
-			errors = results.reduce((a, r) => a + r.errorCount, errors);
+			const changeErrors = results.reduce((a, r) => a + r.errorCount, 0);
+			errors += changeErrors;
+			// output is only set when eslint fixed something...
+			if (changeErrors === 0 && output) {
+				// capture the contents of the file on disk just incase the stage is partial...
+				const current = await readFile(filePath, { encoding: 'utf8' });
+				try {
+					await writeFile(filePath, output);
+					run(`git add ${filePath}`);
+				} finally {
+					// restore if staged content does not match on-disk content
+					if (content.trim() !== current.trim()) {
+						await writeFile(filePath, current);
+					}
+				}
+			}
 
 			const formatter = await eslint.loadFormatter('stylish');
 			const resultText = formatter.format(results);
@@ -86,6 +113,13 @@ async function main() {
 				}
 			}
 		}
+	}
+
+	if (files.length > 0 && getFilesInCommit().length === 0) {
+		errors++;
+		process.stderr.write(
+			'After fixes, the commit is now empty. Nothing to do.\n'
+		);
 	}
 
 	process.exitCode = errors > 0 ? 1 : 0;
