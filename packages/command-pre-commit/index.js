@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 
 const run = x => execSync(x, { stdio: 'pipe' }).toString('utf8');
 const isJS = RegExp.prototype.test.bind(/\.(t|m?j)sx?$/i);
-const isSs = RegExp.prototype.test.bind(/\.s?css$/);
+const isSS = RegExp.prototype.test.bind(/\.s?css$/);
 const isPackageJson = RegExp.prototype.test.bind(/package\.json$/i);
 const load = x => ({ file: x, content: run(`git show ":${x}"`) });
 
@@ -34,7 +34,7 @@ async function main() {
 	let errors = 0;
 	for (const change of files) {
 		const { file, content } =
-			isJS(change) || isSs(change) || isPackageJson(change)
+			isJS(change) || isSS(change) || isPackageJson(change)
 				? load(change)
 				: {};
 
@@ -49,7 +49,7 @@ async function main() {
 			process.stderr.write(resultText);
 		}
 
-		if (isSs(change)) {
+		if (isSS(change)) {
 			const stylelint = getStyleLint();
 			const results = await stylelint.lint({
 				config: require('@nti/stylelint-config-standard'),
