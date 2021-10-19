@@ -7,8 +7,18 @@ PRJS=("${PRJS1[@]}" "${PRJS2[@]}")
 set -e;
 
 function trim() {
+    INPUT=$1;
     if (( "${#1}" > "$2" )); then
-      echo "${1:0:$2}$3"
+        GAP_L=${#3};
+        PREFIX=$(echo $INPUT | awk '{ split($0,a,"."); print a[1]; }')
+        PREFIX_L=$(echo $PREFIX | wc -c - | awk '{ print $1; }')
+        LEAD_L=$(expr $COLUMNS - $PREFIX_L - $GAP_L)
+        LEAD_L=$(expr $LEAD_L / 2)
+        TAIL_L=$(expr $LEAD_L - $GAP_L)
+
+        LEAD=$(echo $INPUT | grep -o "^.\{$(expr $PREFIX_L + $GAP_L + $LEAD_L)\}")
+        TAIL=$(echo $INPUT | grep -o ".\{$TAIL_L\}$")
+        echo $LEAD$3$TAIL
     else
         echo "$1"
     fi
