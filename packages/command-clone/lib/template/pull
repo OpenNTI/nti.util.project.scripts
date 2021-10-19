@@ -1,9 +1,48 @@
 #!/usr/bin/env bash
 PWD="`dirname \"$0\"`"
-PRJS1=$PWD/*/.git
-PRJS2=$PWD/**/*/.git
+PRJS1=($PWD/*/.git)
+PRJS2=($PWD/**/*/.git)
+PRJS=("${PRJS1[@]}" "${PRJS2[@]}")
 
 set -e;
+
+function trim() {
+    if (( "${#1}" > "$2" )); then
+      echo "${1:0:$2}$3"
+    else
+      echo "$1"
+    fi
+}
+
+function getMaxWidth {
+    if command -v tput > /dev/null; then
+        COLUMNS=$(tput cols)
+    elif command -v docker > /dev/null; then
+        size=$(stty size)
+        COLUMNS=${size#* }
+    fi
+}
+
+
+function notify {
+    prjs=();
+    for f in $@;
+    do
+        line=$(dirname $f);
+        prjs+=("${line#*/}");
+    done
+
+    len=${#prjs[@]};
+    intro="Pulling $len repositories... ";
+    introLen=${#intro};
+
+    str="${prjs[@]}";
+
+    getMaxWidth
+    let max=${COLUMNS:-80}-3
+
+    trim "$intro$str)" $max '...'
+}
 
 function pull {
     for f in $@;
@@ -14,15 +53,19 @@ function pull {
             if [ $? -ne 0 ]; then
                 echo $OUT;
             fi
+            echo -n '.'
         ) &
     done
+
 }
 
-pull $PRJS1
-pull $PRJS2
-
+notify ${PRJS[@]}
+pull ${PRJS[@]}
 
 for job in `jobs -p`
 do
     wait $job || exit 1
 done
+
+echo '';
+echo 'Done';
