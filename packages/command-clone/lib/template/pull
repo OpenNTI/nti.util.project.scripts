@@ -10,14 +10,14 @@ function trim() {
     if (( "${#1}" > "$2" )); then
       echo "${1:0:$2}$3"
     else
-      echo "$1"
+        echo "$1"
     fi
 }
 
 function getMaxWidth {
     if command -v tput > /dev/null; then
         COLUMNS=$(tput cols)
-    elif command -v docker > /dev/null; then
+    elif command -v stty > /dev/null; then
         size=$(stty size)
         COLUMNS=${size#* }
     fi
@@ -27,7 +27,7 @@ function getMaxWidth {
 function notify {
     prjs=();
     for f in $@;
-    do
+    do  
         line=$(dirname $f);
         prjs+=("${line#*/}");
     done
@@ -37,11 +37,11 @@ function notify {
     introLen=${#intro};
 
     str="${prjs[@]}";
-
+    
     getMaxWidth
     let max=${COLUMNS:-80}-3
-
-    trim "$intro$str)" $max '...'
+    
+    trim "$intro($str)" $max ' … '
 }
 
 function pull {
