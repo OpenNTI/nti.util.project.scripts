@@ -130,6 +130,7 @@ const ClientConfig = {
 		? tempPage()
 		: void 0,
 	output: {
+		hashFunction: 'xxhash64',
 		path: paths.DIST_CLIENT,
 		filename: 'js/[name]-[contenthash:8].js',
 		chunkFilename: 'js/[name]-[contenthash:8].js',
