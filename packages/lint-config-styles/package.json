@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@nti/eslint-config-lib-scripts": "^2.52.0",
-		"stylelint": "^13.0.0",
+		"stylelint": "^14.0.0",
 		"stylelint-config-css-modules": "^2.2.0",
 		"stylelint-config-prettier": "^9.0.2",
 		"stylelint-config-standard": "^22.0.0"
