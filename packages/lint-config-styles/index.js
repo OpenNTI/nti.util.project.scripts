@@ -10,7 +10,6 @@ module.exports = {
 				'stylelint-config-prettier',
 			],
 		},
-
 		{
 			files: ['**/*.html'],
 			customSyntax: 'postcss-html',
