@@ -1,6 +1,6 @@
 {
 	"name": "@nti/stylelint-config-standard",
-	"version": "2.52.6",
+	"version": "2.52.7",
 	"description": "NextThought css style standard",
 	"main": "index.js",
 	"repository": {
@@ -15,8 +15,8 @@
 	"dependencies": {
 		"@nti/eslint-config-lib-scripts": "^2.52.6",
 		"@stylelint/postcss-css-in-js": ">=0.37.2",
-		"postcss-syntax": ">=0.36.2",
 		"postcss-html": "^1.1.1",
+		"postcss-syntax": ">=0.36.2",
 		"stylelint": "^14.0.0",
 		"stylelint-config-css-modules": "^2.2.0",
 		"stylelint-config-prettier": "^9.0.2",
