@@ -9,6 +9,9 @@ module.exports = {
 				'stylelint-config-standard-scss',
 				'stylelint-config-prettier',
 			],
+			rules: {
+				'color-function-notation': 'legacy',
+			},
 		},
 		{
 			files: ['**/*.html'],
