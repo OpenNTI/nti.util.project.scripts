@@ -6,7 +6,7 @@
 		"moduleResolution": "Node",
 		"allowJs": true,
 		"noEmit": true,
-		"jsx": "react",
+		"jsx": "react-jsx",
 		"plugins": [
 			{
 				"name": "typescript-styled-plugin"
