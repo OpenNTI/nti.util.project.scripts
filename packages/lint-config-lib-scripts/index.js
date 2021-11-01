@@ -178,6 +178,7 @@ function computeConfig() {
 				{
 					definedTypes: [
 						'Class',
+						'Iterable',
 						'Omit',
 						'Record',
 						'ReturnType',
