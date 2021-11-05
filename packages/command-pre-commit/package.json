@@ -1,6 +1,6 @@
 {
 	"name": "@nti/pre-commit",
-	"version": "2.52.9",
+	"version": "2.52.10",
 	"description": "Pre-commit hook",
 	"main": "index.js",
 	"author": "nextthought",
