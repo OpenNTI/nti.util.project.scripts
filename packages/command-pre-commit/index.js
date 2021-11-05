@@ -52,7 +52,7 @@ async function main() {
 		if (isJS(change)) {
 			const eslint = getESLint();
 			const results = await eslint.lintText(content, { filePath: file });
-			const [{ filePath, output }] = results;
+			const [{ filePath, output } = {}] = results;
 
 			const changeErrors = results.reduce((a, r) => a + r.errorCount, 0);
 			errors += changeErrors;
