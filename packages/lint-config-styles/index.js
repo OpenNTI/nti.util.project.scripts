@@ -50,6 +50,7 @@ module.exports = {
 		'max-empty-lines': null,
 		'no-descending-specificity': null,
 		'selector-list-comma-newline-after': null,
+		'selector-class-pattern': null,
 		'selector-type-no-unknown': null,
 	},
 };
