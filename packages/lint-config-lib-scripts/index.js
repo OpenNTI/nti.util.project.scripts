@@ -173,6 +173,10 @@ function computeConfig() {
 		rules: {
 			'unused-imports/no-unused-imports': 'error',
 			// 'prettier/prettier': IN_IDE ? 'warn' : 'off',
+			'jsdoc/check-tag-names': [
+				'warn',
+				{ jsxTags: true, definedTags: ['jest-environment'] },
+			],
 			'jsdoc/no-undefined-types': [
 				'warn',
 				{
