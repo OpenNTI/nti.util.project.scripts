@@ -184,6 +184,7 @@ function computeConfig() {
 						'Class',
 						'Iterable',
 						'Omit',
+						'Partial',
 						'Record',
 						'ReturnType',
 						'unknown',
