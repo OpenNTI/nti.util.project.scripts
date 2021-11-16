@@ -1,6 +1,49 @@
+<!-- markdownlint-disable MD030 MD033 -->
+
 # nti.util.project.scripts
 
-Repo of project scripts. These scripts manage releasing as well as dev dependencies.
+Repo of project scripts. These scripts manage dependencies as well as project life cycles.
+
+## Project structure
+
+This is a lerna mono-repo. The root package is a meta package and does not represent a single artifact. Its sole purpose is to manage lerna and common dependencies for releasing/testing the individual projects within.
+
+| dir                                                                     | purpose                                                                                                                                                                                            |
+| ----------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`.github`][.github]                                                    | This directory contains the configuration files for github features (dependabot, actions, etc)                                                                                                     |
+| [`actions/sync`][actions/sync]                                          | A custom github action step to synchronize project template files into all dependent projects within the NextThought org                                                                           |
+| [`packages`][packages]                                                  | The main directory of all leaf projects                                                                                                                                                            |
+| [`packages/command-clone`][cmd-clone]                                   | The main initialization command to clone all projects and install them into a workspace. Workspace template files are located here as well.                                                        |
+| [`packages/command-fix`][cmd-fix]                                       | The command to start a fix on a maintenance branch. This will create/checkout-head of the `maint-X.X` branch of the project.                                                                       |
+| [`packages/command-gen-docs`][cmd-gen-docs]                             | Prototype command to generate documents from jsdoc comments. Was never really used.                                                                                                                |
+| [`packages/command-pre-commit`][cmd-pre-commit]                         | Command run during a precommit event. Blocking code with lint errors.                                                                                                                              |
+| [`packages/command-release`][cmd-release]                               | The command that releases a new release from master or a new patch from maint.                                                                                                                     |
+| [`packages/command-rollup`][cmd-rollup]                                 | A tool to run rollup on a directory with just a rollup config. Was only used to babel / commonjs-ify the mobile server directory.                                                                  |
+| [`packages/command-snapshot`][cmd-snapshot]                             | This command will dispatch an event to github to start a snapshot build. This command is context aware of the current directory and will use the github origin to send the dispatch event details. |
+| [`packages/command-workspace-post-install`][cmd-workspace-post-install] | To workaround a limitation of npm7, this script performs some cleanup and invokes the workspace's 'build' script defined in the root package.json as well as run docker setup/update scripts.      |
+| [`packages/command-workspace-refresh`][cmd-workspace-refresh]           | Reinitialize the workspace, reinstalling node_modules.                                                                                                                                             |
+| [`packages/dev-ssl-config`][dev-ssl-config]                             | dev tool library to acquire the ssl cert from the docker container or the locally install buildout.                                                                                                |
+| [`packages/github-api`][github-api]                                     | API library wrapper for github. Used by various command line tools in this repo.                                                                                                                   |
+| [`packages/lint-config-app-scripts`][lint-config-app-scripts]           | Extends `lint-config-lib-scripts` to add/configure lint rules appropriate from React projects.                                                                                                     |
+| [`packages/lint-config-lib-scripts`][lint-config-lib-scripts]           | Sets the base lint rules for all js projects                                                                                                                                                       |
+| [`packages/lint-config-styles`][lint-config-styles]                     | Sets the base lint rules for all css in each project.                                                                                                                                              |
+| [`packages/scripts-app`][scripts-app]                                   | Extends lib-scripts to add webpack config and dev-server common runtime and overrides some templates                                                                                               |
+| [`packages/scripts-ci`][scripts-ci]                                     | Defines the steps used in Jenkinsfile pipelines and commands for GitHub Actions to test/lint/build projects                                                                                        |
+| [`packages/scripts-cmp`][scripts-cmp]                                   | Extends app-scripts to add storybook and templates/config/commands appropriate for component libraries that are not standalone apps.                                                               |
+| [`packages/scripts-lib`][scripts-lib]                                   | Defines the template files, common configs, and actions for js projects. (start, test, fix, snapshot, init, install, etc)                                                                          |
+
+### Core concepts
+
+1. Command hierarchy: lib -> app -> cmp. each overrides portions of the templates and commands in the package below it.
+2. These projects depend on a paths.js that makes the assumption that commands are executed by npm in the host project root.
+3. configs are passed to tools by wrappers. eg: test calls jest and passes a config. in app-scripts, start wraps web-service and passes a config.
+4. node_module resolution algorithm is heavily assumed
+
+### Common dependencies
+
+Dependencies needed by the build/test tools as well as shared (react) libraries are mananaged by specifying them in the lib/app scripts projects.
+
+---
 
 ## Build Statuses
 
@@ -56,3 +99,25 @@ Repo of project scripts. These scripts manage releasing as well as dev dependenc
 [![Health Check](https://github.com/NextThought/nti.web.storage/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.storage/actions) nti.web.storage<br/>
 [![Health Check](https://github.com/NextThought/nti.web.video/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.video/actions) nti.web.video<br/>
 [![Health Check](https://github.com/NextThought/nti.web.whiteboard/workflows/Project%20Health/badge.svg)](https://github.com/NextThought/nti.web.whiteboard/actions) nti.web.whiteboard<br/>
+
+[.github]: https://github.com/NextThought/nti.util.project.scripts/tree/master/.github
+[actions/sync]: https://github.com/NextThought/nti.util.project.scripts/tree/master/actions/sync
+[packages]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages
+[cmd-clone]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-clone
+[cmd-fix]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-fix
+[cmd-gen-docs]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-gen-docs
+[cmd-pre-commit]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-pre-commit
+[cmd-release]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-release
+[cmd-rollup]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-rollup
+[cmd-snapshot]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-snapshot
+[cmd-workspace-post-install]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-workspace-post-install
+[cmd-workspace-refresh]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/command-workspace-refresh
+[dev-ssl-config]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/dev-ssl-config
+[github-api]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/github-api
+[lint-config-app-scripts]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/lint-config-app-scripts
+[lint-config-lib-scripts]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/lint-config-lib-scripts
+[lint-config-styles]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/lint-config-styles
+[scripts-app]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/scripts-app
+[scripts-ci]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/scripts-ci
+[scripts-cmp]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/scripts-cmp
+[scripts-lib]: https://github.com/NextThought/nti.util.project.scripts/tree/master/packages/scripts-lib
