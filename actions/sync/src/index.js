@@ -16,7 +16,11 @@ async function main() {
 
 		await fs.mkdir('repos');
 
-		for (const repo of await list()) {
+		const repos = await list();
+
+		console.log('Syncing %d Repos', repos.length);
+
+		for (const repo of repos) {
 			await step(repo);
 		}
 	} catch (error) {
