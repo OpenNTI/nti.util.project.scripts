@@ -9,7 +9,7 @@
 	"type": "module",
 	"license": "UNLICENSED",
 	"dependencies": {
-		"glob": "^7.1.6",
+		"glob": "^10.2.4",
 		"ora": "^6.0.0"
 	}
 }

@@ -37,6 +37,6 @@
 		"@storybook/manager-webpack5": "^6.3.0",
 		"@storybook/react": "^6.3.0",
 		"core-js": "^3.6.5",
-		"glob": "^7.1.7"
+		"glob": "^10.2.4"
 	}
 }
