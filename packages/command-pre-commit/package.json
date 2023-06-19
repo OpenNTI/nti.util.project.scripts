@@ -11,6 +11,6 @@
 	"dependencies": {
 		"@nti/stylelint-config-standard": "^2.52.11",
 		"eslint": "^8.0.0",
-		"stylelint": "^14.0.0"
+		"stylelint": "^15.8.0"
 	}
 }
